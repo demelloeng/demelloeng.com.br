@@ -71,11 +71,19 @@ test('publish-guard rejects placeholder / non-https / placeholder-in-bundle', ()
   assert.equal(publishGuardCheck('https://site-intake.acme.workers.dev/api/site-intake', 'clean bundle text').length, 0);
 });
 
-test('this local checkpoint is NOT publish-ready: guard flags the endpoint placeholder', async () => {
-  // .env.production intentionally still carries the REPLACE-SUBDOMAIN placeholder on
-  // this branch. E8 must fill the real endpoint, rebuild, and see `pnpm publish-guard`
-  // exit 0 before deploying. Here it must report a problem.
+test('production config is publish-ready: real https endpoint, no placeholder', async () => {
   const env = await readFile(path.join(appRoot, '.env.production'), 'utf8');
   const endpoint = (env.match(/^\s*VITE_INTAKE_ENDPOINT\s*=\s*(.+?)\s*$/m) || [])[1] || '';
-  assert.ok(publishGuardCheck(endpoint, '').length > 0, 'guard should reject the current placeholder endpoint');
+  assert.match(endpoint, /^https:\/\/\S+\/api\/site-intake$/);
+  assert.doesNotMatch(endpoint, /REPLACE-SUBDOMAIN/);
+
+  const dir = path.join(routeRoot, 'assets');
+  const files = await readdir(dir);
+  let bundle = '';
+  for (const f of files.filter((n) => /^index-.*\.js$/.test(n))) {
+    bundle += await readFile(path.join(dir, f), 'utf8');
+  }
+  assert.equal(publishGuardCheck(endpoint, bundle).length, 0, 'guard must pass for the production build');
+  assert.ok(bundle.includes(endpoint), 'the real endpoint must be baked into the built bundle');
+  assert.doesNotMatch(bundle, /REPLACE-SUBDOMAIN/);
 });
