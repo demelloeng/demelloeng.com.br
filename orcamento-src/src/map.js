@@ -1,0 +1,462 @@
+// IT075: transcription of the user-approved state map. No new business nodes.
+export const map = {
+  "source": "IT075 | ST — especificação do usuário",
+  "status": "DESIGN_SPEC_ONLY_NOT_IMPLEMENTED",
+  "entry": "R0",
+  "external_destination": "CRM",
+  "constraints": {
+    "new_branches": false,
+    "sidebar_title": "Seu caso",
+    "one_question_per_state": true,
+    "skip_only_when_unequivocally_known": true,
+    "pricing": "motor determinístico, não IA",
+    "real_crm_writes": false
+  },
+  "nodes": [
+    {
+      "id": "R0",
+      "title": "Regularizar meu imóvel",
+      "component": "Entrada do fluxo",
+      "options_or_fields": "—",
+      "source_next": "R1",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "R1"
+        }
+      ]
+    },
+    {
+      "id": "R1",
+      "title": "O que está acontecendo com o imóvel?",
+      "component": "Cards, seleção única",
+      "options_or_fields": "A. Área do IPTU e matrícula não bate · B. Construí/ampliei e não regularizei · C. Falta documento · D. Prefeitura/cartório apontou pendência · E. Imóvel diferente da planta/projeto · F. Não sei exatamente · G. Outro caso",
+      "source_next": "C1, guardando o ramo escolhido",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "C1"
+        }
+      ]
+    },
+    {
+      "id": "C1",
+      "title": "Por que você precisa regularizar?",
+      "component": "Cards, seleção única",
+      "options_or_fields": "Venda · Inventário/partilha · Financiamento · Exigência prefeitura · Exigência cartório · Quero deixar regular · Outro",
+      "source_next": "C2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "C2"
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "title": "Onde fica o imóvel?",
+      "component": "Campos",
+      "options_or_fields": "Cidade · UF",
+      "source_next": "C3",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "C3"
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "title": "Que tipo de imóvel é?",
+      "component": "Cards, seleção única",
+      "options_or_fields": "Casa/sobrado · Apartamento · Comercial · Industrial · Terreno com construção · Outro",
+      "source_next": "C4",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "C4"
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "title": "O que você já tem?",
+      "component": "Multi-select",
+      "options_or_fields": "Matrícula · IPTU · Planta/projeto · Habite-se/CVCO ou equivalente · Exigência/notificação · Não sei/não tenho agora",
+      "source_next": "ramo A–G escolhido em R1",
+      "internal": false,
+      "transitions": [
+        {
+          "when": "ramo escolhido em R1 = A",
+          "to": "A1"
+        },
+        {
+          "when": "ramo escolhido em R1 = B",
+          "to": "B1"
+        },
+        {
+          "when": "ramo escolhido em R1 = C",
+          "to": "C-R1"
+        },
+        {
+          "when": "ramo escolhido em R1 = D",
+          "to": "D1"
+        },
+        {
+          "when": "ramo escolhido em R1 = E",
+          "to": "E1"
+        },
+        {
+          "when": "ramo escolhido em R1 = F",
+          "to": "F1"
+        },
+        {
+          "when": "ramo escolhido em R1 = G",
+          "to": "G1"
+        }
+      ]
+    },
+    {
+      "id": "A1",
+      "title": "Qual área aparece no IPTU?",
+      "component": "Campo numérico",
+      "options_or_fields": "____ m² · Não sei",
+      "source_next": "A2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "A2"
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "title": "Qual área aparece na matrícula?",
+      "component": "Campo numérico",
+      "options_or_fields": "____ m² · Não sei",
+      "source_next": "A3",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "A3"
+        }
+      ]
+    },
+    {
+      "id": "A3",
+      "title": "Você sabe por que existe essa diferença?",
+      "component": "Cards",
+      "options_or_fields": "Ampliação/construção · Imóvel já era assim · Possível diferença cadastral/documental · Não sei",
+      "source_next": "X1",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X1"
+        }
+      ]
+    },
+    {
+      "id": "B1",
+      "title": "O que foi feito?",
+      "component": "Cards",
+      "options_or_fields": "Ampliação · Nova construção · Fechamento/cobertura · Reforma com alteração · Outro",
+      "source_next": "B2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "B2"
+        }
+      ]
+    },
+    {
+      "id": "B2",
+      "title": "Qual a área aproximada dessa alteração?",
+      "component": "Campo numérico",
+      "options_or_fields": "____ m² · Não sei",
+      "source_next": "B3",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "B3"
+        }
+      ]
+    },
+    {
+      "id": "B3",
+      "title": "Existe planta ou projeto dessa alteração?",
+      "component": "Cards",
+      "options_or_fields": "Sim · Não · Não sei",
+      "source_next": "X1",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X1"
+        }
+      ]
+    },
+    {
+      "id": "C-R1",
+      "title": "Qual documento parece estar faltando?",
+      "component": "Cards",
+      "options_or_fields": "Planta/projeto · Habite-se/CVCO · Averbação/matrícula atualizada · Documento da prefeitura · Não sei",
+      "source_next": "C-R2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "C-R2"
+        }
+      ]
+    },
+    {
+      "id": "C-R2",
+      "title": "Quem apontou essa falta?",
+      "component": "Cards",
+      "options_or_fields": "Cartório · Prefeitura · Banco · Advogado · Nós percebemos · Não sei",
+      "source_next": "X1",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X1"
+        }
+      ]
+    },
+    {
+      "id": "D1",
+      "title": "Quem apontou a pendência?",
+      "component": "Cards",
+      "options_or_fields": "Prefeitura · Cartório",
+      "source_next": "D2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "D2"
+        }
+      ]
+    },
+    {
+      "id": "D2",
+      "title": "Você tem a exigência ou notificação?",
+      "component": "Cards",
+      "options_or_fields": "Sim · Não",
+      "source_next": "D3",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "D3"
+        }
+      ]
+    },
+    {
+      "id": "D3",
+      "title": "Ela fala principalmente de quê?",
+      "component": "Cards",
+      "options_or_fields": "Área · Construção/ampliação · Planta/projeto · Documento · Não sei",
+      "source_next": "X1",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X1"
+        }
+      ]
+    },
+    {
+      "id": "E1",
+      "title": "O que mudou?",
+      "component": "Cards",
+      "options_or_fields": "Ampliação · Ambientes/layout · Fechamento/cobertura · Demolição · Não sei",
+      "source_next": "E2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "E2"
+        }
+      ]
+    },
+    {
+      "id": "E2",
+      "title": "Qual a área aproximada afetada?",
+      "component": "Campo numérico",
+      "options_or_fields": "____ m² · Não sei",
+      "source_next": "E3",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "E3"
+        }
+      ]
+    },
+    {
+      "id": "E3",
+      "title": "Sabe quando essa alteração aconteceu?",
+      "component": "Cards",
+      "options_or_fields": "Sim · Aproximadamente · Não",
+      "source_next": "X1",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X1"
+        }
+      ]
+    },
+    {
+      "id": "F1",
+      "title": "Como você descobriu que pode haver um problema?",
+      "component": "Cards",
+      "options_or_fields": "Venda · Inventário · Financiamento · Prefeitura · Cartório · Advogado · Outro",
+      "source_next": "F2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "F2"
+        }
+      ]
+    },
+    {
+      "id": "F2",
+      "title": "Você tem IPTU e matrícula?",
+      "component": "Cards",
+      "options_or_fields": "Os dois · Só IPTU · Só matrícula · Nenhum/não sei",
+      "source_next": "F3",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "F3"
+        }
+      ]
+    },
+    {
+      "id": "F3",
+      "title": "Alguém já explicou o que pode estar errado?",
+      "component": "Cards",
+      "options_or_fields": "Sim · Não",
+      "source_next": "X1",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X1"
+        }
+      ]
+    },
+    {
+      "id": "G1",
+      "title": "Explique em uma frase o que está acontecendo",
+      "component": "Campo de texto curto",
+      "options_or_fields": "Texto livre",
+      "source_next": "G2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "G2"
+        }
+      ]
+    },
+    {
+      "id": "G2",
+      "title": "Classificação silenciosa",
+      "component": "Sem tela de chatbot",
+      "options_or_fields": "Tentar enquadrar em A–F usando somente o que já foi informado",
+      "source_next": "ramo A–F correspondente ou X1 se não houver enquadramento seguro",
+      "internal": true,
+      "transitions": [
+        {
+          "when": "enquadramento seguro em A",
+          "to": "A1"
+        },
+        {
+          "when": "enquadramento seguro em B",
+          "to": "B1"
+        },
+        {
+          "when": "enquadramento seguro em C",
+          "to": "C-R1"
+        },
+        {
+          "when": "enquadramento seguro em D",
+          "to": "D1"
+        },
+        {
+          "when": "enquadramento seguro em E",
+          "to": "E1"
+        },
+        {
+          "when": "enquadramento seguro em F",
+          "to": "F1"
+        },
+        {
+          "when": "sem enquadramento seguro",
+          "to": "X1"
+        }
+      ]
+    },
+    {
+      "id": "X1",
+      "title": "Seu caso, organizado",
+      "component": "Resumo consolidado",
+      "options_or_fields": "Situação · Finalidade · Imóvel · Local · Dados relevantes · Documentos disponíveis",
+      "source_next": "X2",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X2"
+        }
+      ]
+    },
+    {
+      "id": "X2",
+      "title": "Há dados suficientes para uma prévia?",
+      "component": "Gate interno, não pergunta ao usuário",
+      "options_or_fields": "SIM / NÃO",
+      "source_next": "X3A ou X3B",
+      "internal": true,
+      "transitions": [
+        {
+          "when": "SIM",
+          "to": "X3A"
+        },
+        {
+          "when": "NÃO",
+          "to": "X3B"
+        }
+      ]
+    },
+    {
+      "id": "X3A",
+      "title": "Já dá para fazer uma primeira conta",
+      "component": "Card de resultado",
+      "options_or_fields": "Prévia de investimento R$ X – R$ Y",
+      "source_next": "X4",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X4"
+        }
+      ]
+    },
+    {
+      "id": "X3B",
+      "title": "Já conseguimos organizar seu caso",
+      "component": "Card informativo",
+      "options_or_fields": "Mostrar somente as informações críticas ainda faltantes",
+      "source_next": "X4",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "X4"
+        }
+      ]
+    },
+    {
+      "id": "X4",
+      "title": "Quer salvar/receber esta análise?",
+      "component": "Formulário mínimo",
+      "options_or_fields": "Nome · WhatsApp · E-mail",
+      "source_next": "CRM",
+      "internal": false,
+      "transitions": [
+        {
+          "to": "CRM"
+        }
+      ]
+    }
+  ]
+};

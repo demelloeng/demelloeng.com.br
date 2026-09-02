@@ -1,0 +1,21 @@
+{
+  "name": "demelloeng-orcamento",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.mjs",
+    "build": "vite build --config vite.config.mjs",
+    "preview": "vite preview",
+    "test": "node --test tests/flow.test.mjs tests/journey.test.mjs tests/pricing.test.mjs tests/payload_v2.test.mjs tests/integration.test.mjs"
+  },
+  "dependencies": {
+    "@fontsource/archivo": "^5.3.0",
+    "@fontsource/source-sans-3": "^5.3.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "@vitejs/plugin-react": "5.0.4",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "vite": "6.4.2"
+  }
+}

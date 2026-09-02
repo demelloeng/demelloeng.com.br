@@ -1,0 +1,79 @@
+{
+  "table_version": "DEMELLO_V1",
+  "factor_demello": "0.80",
+  "currency": "BRL",
+  "note": "TABELA DEMELLO V1. Valores em R$/m2 como string para calculo Decimal exato. valor_demello = MIN(referencias aplicaveis) x factor_demello, arredondado somente no total monetario final. Nao usar media. Nao inventar fonte faltante.",
+  "sources": {
+    "SECID_PR": "SECID/PR — Resolucao 009/2026",
+    "ALTOQI": "AltoQi — Pesquisa de Precificacao de Projetos 2026"
+  },
+  "q_bases": ["Q_NOVA", "Q_TOTAL", "Q_ATENDIDA", "Q_TERRENO", "Q_ESCOPO", "Q_REGULARIZACAO"],
+  "typologies": ["CASA", "PREDIO", "COMERCIAL"],
+  "structural_systems": ["CONCRETO_ARMADO", "METALICA", "MADEIRA"],
+  "services": {
+    "ESTRUTURAL": {
+      "q_basis": "Q_NOVA",
+      "structural_system_default": "CONCRETO_ARMADO",
+      "secid_pr": {
+        "components": {
+          "FUNDACAO": "10.73",
+          "SUPERESTRUTURA_CONCRETO_ARMADO": "16.10",
+          "SUPERESTRUTURA_METALICA": "14.75",
+          "SUPERESTRUTURA_MADEIRA": "14.75"
+        },
+        "by_structural_system": {
+          "CONCRETO_ARMADO": "26.83",
+          "METALICA": "25.48",
+          "MADEIRA": "25.48"
+        }
+      },
+      "altoqi": { "by_typology": { "CASA": "17.60", "PREDIO": "14.40", "COMERCIAL": "34.50" } }
+    },
+    "HIDROSSANITARIO": {
+      "q_basis": "Q_NOVA",
+      "q_basis_if_scope_includes_existing": "Q_ATENDIDA",
+      "secid_pr": { "unit_value": "12.07" },
+      "altoqi": { "by_typology": { "CASA": "8.70", "PREDIO": "6.40", "COMERCIAL": "15.60" } }
+    },
+    "INCENDIO": {
+      "q_basis": "Q_TOTAL",
+      "secid_pr": { "unit_value": "3.35" },
+      "altoqi": { "by_typology": { "PREDIO": "5.60", "COMERCIAL": "10.50" } }
+    },
+    "GAS_GLP": {
+      "q_basis": "Q_ATENDIDA",
+      "secid_pr": { "unit_value": "1.07" },
+      "altoqi": { "by_typology": { "CASA": "4.50", "PREDIO": "3.50", "COMERCIAL": "6.60" } }
+    },
+    "ARQUITETURA": {
+      "q_basis": "Q_NOVA",
+      "secid_pr": { "unit_value": "35.41" }
+    },
+    "REGULARIZACAO": {
+      "q_basis": "Q_REGULARIZACAO",
+      "no_universal_bundle": true,
+      "secid_pr": {
+        "components": {
+          "ARQUITETONICO": { "unit_value": "35.41", "always_applicable_when_q_present": true },
+          "LEVANTAMENTO": { "unit_value": "3.541", "coefficient": "0.10", "base": "35.41" },
+          "PROJETO_LEGAL": { "unit_value": "3.541", "coefficient": "0.10", "base": "35.41" }
+        }
+      }
+    },
+    "ORCAMENTO": {
+      "q_basis": "Q_ESCOPO",
+      "secid_pr": { "unit_value": "6.71" }
+    },
+    "TERRAPLENAGEM": {
+      "q_basis": "Q_TERRENO",
+      "secid_pr": { "unit_value": "0.36" }
+    },
+    "COMPATIBILIZACAO": {
+      "q_basis": "Q_ESCOPO",
+      "secid_pr": {
+        "unit_value": "5.3115",
+        "derivation": { "architecture_secid": "35.41", "coefficient": "0.15" }
+      }
+    }
+  }
+}
