@@ -3,6 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { check as publishGuardCheck } from '../scripts/publish-guard.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
@@ -14,7 +15,9 @@ test('production route keeps the approved local-only behavior', async () => {
 
   assert.match(app, /const mode='preview'/);
   assert.doesNotMatch(app, /setMode|Controles de demonstração|CRM simulado/);
-  assert.match(app, /Nada é enviado automaticamente/);
+  // X4 sends via submitToCRM (capture-first); the payload object still carries sent_to_crm:false
+  assert.match(app, /submitToCRM/);
+  assert.match(app, /Veja Privacidade/);
   assert.match(payload, /schema:\s*'site-intake\/payload\/2'/);
   assert.match(payload, /V2_SOURCE\s*=\s*'DEMELLO_SITE'/);
   assert.match(payload, /source:\s*V2_SOURCE/);
@@ -58,4 +61,21 @@ test('site navigation and sitemap expose /orcamento without changing the domain'
 
   assert.equal((await readFile(path.join(siteRoot, 'CNAME'), 'utf8')).trim(), 'demelloeng.com.br');
   assert.match(await readFile(path.join(siteRoot, 'sitemap.xml'), 'utf8'), /https:\/\/demelloeng\.com\.br\/orcamento\//);
+});
+
+test('publish-guard rejects placeholder / non-https / placeholder-in-bundle', () => {
+  assert.ok(publishGuardCheck('https://site-intake.REPLACE-SUBDOMAIN.workers.dev/api/site-intake', '').length > 0);
+  assert.ok(publishGuardCheck('http://real.example/api/site-intake', '').length > 0);
+  assert.ok(publishGuardCheck('', '').length > 0);
+  assert.ok(publishGuardCheck('https://x.acme.workers.dev/api', 'const e="https://x.REPLACE-SUBDOMAIN.dev"').length > 0);
+  assert.equal(publishGuardCheck('https://site-intake.acme.workers.dev/api/site-intake', 'clean bundle text').length, 0);
+});
+
+test('this local checkpoint is NOT publish-ready: guard flags the endpoint placeholder', async () => {
+  // .env.production intentionally still carries the REPLACE-SUBDOMAIN placeholder on
+  // this branch. E8 must fill the real endpoint, rebuild, and see `pnpm publish-guard`
+  // exit 0 before deploying. Here it must report a problem.
+  const env = await readFile(path.join(appRoot, '.env.production'), 'utf8');
+  const endpoint = (env.match(/^\s*VITE_INTAKE_ENDPOINT\s*=\s*(.+?)\s*$/m) || [])[1] || '';
+  assert.ok(publishGuardCheck(endpoint, '').length > 0, 'guard should reject the current placeholder endpoint');
 });

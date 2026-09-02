@@ -85,5 +85,8 @@ test('active experience does not promise automatic contact', async () => {
   assert.match(summaryModule, /Para avançar, entre em contato com a DEMELLO/);
   assert.match(app, /NEXT_STEP/);
   assert.doesNotMatch(app, />Entraremos em contato|>Iremos verificar/);
-  assert.match(app, /Nada é enviado automaticamente/);
+  // capture-first consent copy - transparent about the send, never overclaims the CRM
+  assert.match(app, /você envia estes dados e as respostas do seu caso para a DEMELLO Engenharia/);
+  assert.match(app, /Recebemos as informações do seu caso/);
+  assert.doesNotMatch(app, /registramos seu caso no CRM|proposta enviada/i);
 });
