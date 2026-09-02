@@ -3,6 +3,7 @@ import {ArrowLeft,ArrowRight,Check,CaretDown,PencilSimple,X,DownloadSimple,Clipb
 import {nodes,routes,starts,keyOf,titleOf,isProject,valid,toggle,updateAnswer,switchRoute,advance,routeNodes,summary,suggestedServices,safetyHold,missingData,ufs} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
 import {brlStr} from './pricing/decimal.mjs';
+import {buildClientSummary,friendlyServiceName as serviceName,NEXT_STEP} from './client_summary.mjs';
 import '@fontsource/archivo/600.css';
 import '@fontsource/archivo/700.css';
 import '@fontsource/source-sans-3/400.css';
@@ -11,9 +12,8 @@ import '@fontsource/source-sans-3/600.css';
 const descriptions={build:'Projetos para uma obra nova, reforma ou ampliação.',regularize:'Diferenças de área ou pendências nos documentos.',problem:'Entender uma situação no imóvel ou na obra.',known:'Ir direto ao projeto ou serviço que preciso.'};
 function Dialog({title,onClose,children}){const ref=useRef(null);useEffect(()=>{const dialog=ref.current;dialog.showModal();return()=>dialog.close();},[]);return <dialog ref={ref} aria-labelledby="dialog-title" onCancel={onClose} onClick={e=>{if(e.target===ref.current)onClose();}}><header><h2 id="dialog-title">{title}</h2><button onClick={onClose} className="icon-button" aria-label="Fechar"><X size={24}/></button></header>{children}</dialog>;}
 function Summary({rows,onEdit}){return <dl className="summary-list">{rows.map((row,i)=><div className={`summary-row ${row.id?'':'derived'}`} key={`${row.id}-${i}`}><dt>{row.label}</dt><dd>{row.value}</dd>{row.id&&<button type="button" className="edit-button" aria-label={`Editar ${row.label}`} onClick={()=>onEdit(row.id)}><PencilSimple size={17}/></button>}</div>)}</dl>;}
-const SERVICE_PT={ESTRUTURAL:'Estrutural',HIDROSSANITARIO:'Água, esgoto e drenagem',INCENDIO:'Incêndio',GAS_GLP:'Gás',ARQUITETURA:'Arquitetura',REGULARIZACAO:'Regularização',ORCAMENTO:'Orçamento',TERRAPLENAGEM:'Terraplenagem',COMPATIBILIZACAO:'Compatibilização BIM'};
 const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida',Q_TERRENO:'área do terreno',Q_ESCOPO:'área do escopo',Q_REGULARIZACAO:'diferença de área'};
-const serviceName=s=>s.pricing_context?.structural_scope==='FOUNDATION_ONLY'?'Fundações':(SERVICE_PT[s.service]??s.service);
+const pricingText=pv=>pv.presented_to_customer.text.replace(/Entraremos em contato para confirmar as particularidades e o escopo\./,NEXT_STEP);
 function Result({answers,isPreview}){
  const held=safetyHold(answers),missing=missingData(answers);
  const pv=packageForCRMv2(answers).pricing_preview;
@@ -22,7 +22,7 @@ function Result({answers,isPreview}){
   return <div className="result-card">
    <span className="eyebrow">PREVISÃO DEMELLO</span>
    <p className="investment">{brlStr(pv.total_demello)}</p>
-   <p>{pv.presented_to_customer.text}</p>
+   <p>{pricingText(pv)}</p>
    <details className="pricing-breakdown"><summary>Como chegamos a esse valor</summary>
     <ul>{calc.map(s=><li key={s.service}><strong>{serviceName(s)}</strong> · {Q_PT[s.q_basis]??s.q_basis} {s.q} m² · SECID/PR {brlStr(s.references.secid_pr.total)}{s.references.altoqi?` · AltoQi ${brlStr(s.references.altoqi.total)}`:''} · DEMELLO {brlStr(s.demello.total)}</li>)}</ul>
     <p className="small-note">Previsão inicial pela TABELA DEMELLO V1 (fator 0,80 sobre a menor referência pública aplicável, calculada offline nesta página). Não é proposta nem contrato. O escopo final é confirmado pela equipe.</p>
@@ -31,7 +31,7 @@ function Result({answers,isPreview}){
  }
  return <div className={`result-card ${held?'needs-review':''}`}>
   {held?<><h2>Esse caso precisa de avaliação antes de uma estimativa.</h2><p>Procure a equipe DEMELLO para avaliar o caso. Esta interface não confirma a segurança do imóvel.</p></>
-   :isPreview?<><h2>Ainda não dá para calcular uma previsão automática.</h2><p>{pv.presented_to_customer.text}</p></>
+   :isPreview?<><h2>Ainda não dá para calcular uma previsão automática.</h2><p>{NEXT_STEP}</p></>
    :<><h2>{missing.length?'Falta confirmar:':'O escopo precisa ser confirmado antes da estimativa.'}</h2>{missing.length>0&&<ul>{missing.map(x=><li key={x}>{x}</li>)}</ul>}</>}
  </div>;}
 
@@ -57,7 +57,7 @@ export function App(){
    patch({photos:next});setError(issue);
  }
  function removePhoto(index){const photos=answers.photos??[];URL.revokeObjectURL(photos[index].url);patch({photos:photos.filter((_,i)=>i!==index)});}
- function download(){const url=URL.createObjectURL(new Blob([JSON.stringify(packageForCRMv2(answers),null,2)],{type:'application/json'}));const anchor=document.createElement('a');anchor.href=url;anchor.download='demello-caso-v2.json';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ function download(){const payload=packageForCRMv2(answers);const text=buildClientSummary(payload);const url=URL.createObjectURL(new Blob([`\uFEFF${text}`],{type:'text/plain;charset=utf-8'}));const anchor=document.createElement('a');anchor.href=url;anchor.download='demello-resumo-do-seu-caso.txt';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
  async function copy(){try{await navigator.clipboard.writeText(rows.map(r=>`${r.label}: ${r.value}`).join('\n'));setCopied(true);}catch{setError('Selecione o texto do resumo para copiar.');}}
  const selectCards=()=>{const multi=node.type==='multi';return <fieldset className={`choices ${home?'entry-grid':''} ${node.options.length>5&&!home?'compact':''} ${id==='S1'?'service-grid':''}`}><legend className="sr-only">{node.title}</legend>{node.options.map(option=><label className={`choice ${(multi?value?.includes(option.value):value===option.value)?'selected':''}`} key={option.value}><span>{home?<><strong>{option.label}</strong><small>{descriptions[option.value]}</small></>:option.label}</span><input type={multi?'checkbox':'radio'} name={id} checked={multi?!!value?.includes(option.value):value===option.value} onChange={()=>change(multi?toggle(value,option.value,id==='REG_C4'?'Não sei/não tenho agora':id==='CA7'?'Não sei quais preciso':undefined):option.value)}/></label>)}</fieldset>;};
  const stage=home?0:id==='X4'?3:id.startsWith('X3')?2:id==='X1'?1:1;
@@ -83,7 +83,7 @@ export function App(){
  {id==='X1'&&<div className="review-summary"><Summary rows={rows} onEdit={edit}/></div>}
  {(id==='X3A'||id==='X3B')&&<Result answers={answers} isPreview={id==='X3A'}/>}
  {id==='X4'&&!submitted&&<><p className="helper">Seu nome e pelo menos um meio de contato.</p><div className="contact-fields">{[['name','Nome','text'],['whatsapp','WhatsApp','tel'],['email','E-mail','email']].map(([field,label,type])=><label key={field}>{label}<input type={type} autoComplete={field==='whatsapp'?'tel':field} maxLength={field==='whatsapp'?24:160} value={value?.[field]??''} onChange={e=>change({...value,[field]:e.target.value})}/></label>)}</div><p className="small-note">Esses dados permanecem somente nesta página e no arquivo que você decidir baixar. Nada é enviado automaticamente.</p></>}
- {id==='X4'&&submitted&&<div className="result-card success" role="status"><Check size={36}/><h2>Seu caso foi organizado.</h2><p>Nada foi enviado. Você pode baixar o caso estruturado; fotos não são incluídas no arquivo.</p><button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar caso estruturado</button></div>}
+ {id==='X4'&&submitted&&<div className="result-card success" role="status"><Check size={36}/><h2>Seu caso foi organizado.</h2><p>Nada foi enviado. Baixe um resumo legível para consultar ou compartilhar por sua escolha; fotos não são incluídas.</p><p>{NEXT_STEP}</p><button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar resumo do seu caso</button></div>}
  </form>
  {home&&<div className="auxiliary"><button type="button" className="text-button" onClick={()=>setAux(x=>!x)} aria-expanded={aux}>Meu caso é outro<ArrowRight size={18}/></button>{aux&&<div className="aux-content"><p>Use “Avaliar um problema” para relatar o que precisa entender, sem escolher um serviço técnico.</p><button className="secondary-button" onClick={()=>redirect('problem')}>Ir para Avaliar um problema<ArrowRight size={18}/></button></div>}</div>}
  {id==='REG_C4'&&<p className="small-note">Não precisa enviar os documentos agora.</p>}
@@ -96,6 +96,6 @@ export function App(){
  </div>
  <footer className="site-footer"><ol className="progress" aria-label="Etapas">{['Seu caso','Escopo','Prévia',...(home?[]:['Contato'])].map((label,i)=><li key={label} className={`${i===stage?'active':''} ${i<stage?'done':''}`} aria-current={i===stage?'step':undefined}><span className="step-number">{i<stage?<Check size={12}/>:i+1}</span><span>{label}</span></li>)}</ol><nav aria-label="Informações"><button onClick={()=>setModal('how')}>Como funciona</button><button onClick={()=>setModal('privacy')}>Privacidade</button></nav></footer>
  <div className="demo-bar">Previsão inicial DEMELLO · Cálculo offline pela TABELA V1 · Sem envio de dados</div>
- {modal&&<Dialog title={modal==='privacy'?'Privacidade':'Como funciona'} onClose={()=>setModal(null)}>{modal==='privacy'?<><p>Respostas e fotos ficam somente na memória desta página. Não há envio para servidor, IA, WhatsApp, e-mail ou CRM.</p><p>Recomeçar ou atualizar a página apaga o conteúdo. O arquivo baixado contém respostas e metadados das fotos, não as imagens.</p></>:<><p>Escolha uma das quatro entradas e responda apenas às perguntas do seu percurso. Todas chegam ao mesmo resumo, resultado e contato.</p><p>O lápis permite revisar respostas. Informações compatíveis podem ser reaproveitadas; áreas e escopos não são transferidos automaticamente entre rotas.</p><p>A previsão é calculada nesta página pela TABELA DEMELLO V1, por serviço, com um motor determinístico — nunca a IA. É uma previsão inicial, não uma proposta; o escopo final é confirmado pela equipe.</p></>}</Dialog>}
+ {modal&&<Dialog title={modal==='privacy'?'Privacidade':'Como funciona'} onClose={()=>setModal(null)}>{modal==='privacy'?<><p>Respostas e fotos ficam somente na memória desta página. Não há envio para servidor, IA, WhatsApp, e-mail ou CRM.</p><p>Recomeçar ou atualizar a página apaga o conteúdo. O arquivo baixado é um resumo humano do caso e não inclui fotos nem dados técnicos internos.</p></>:<><p>Escolha uma das quatro entradas e responda apenas às perguntas do seu percurso. Todas chegam ao mesmo resumo, resultado e contato.</p><p>O lápis permite revisar respostas. Informações compatíveis podem ser reaproveitadas; áreas e escopos não são transferidos automaticamente entre rotas.</p><p>A previsão é calculada nesta página pela TABELA DEMELLO V1, por serviço, com um motor determinístico — nunca a IA. É uma previsão inicial, não uma proposta; o escopo final é confirmado pela equipe.</p></>}</Dialog>}
  </div>;
 }

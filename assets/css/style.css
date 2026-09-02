@@ -27,6 +27,12 @@ h1,h2,h3{font-family:Archivo,sans-serif;letter-spacing:-.02em;margin:0}
 .nav a{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-bottom:4px;border-bottom:2px solid transparent;white-space:nowrap}
 .nav a:hover{color:var(--ink)}
 .nav a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--steel)}
+.nav a.nav-budget{background:var(--steel);color:#fff;border:1px solid var(--steel);padding:10px 15px;box-shadow:0 4px 14px rgba(29,43,59,.16);animation:budget-cta-entry .7s ease-in-out 2;transform-origin:center}
+.nav a.nav-budget:hover{background:var(--navy);border-color:var(--navy);color:#fff}
+.nav a.nav-whatsapp{color:var(--steel);border:1px solid var(--steel);padding:9px 13px}
+.nav a.nav-whatsapp:hover{background:#fff;color:var(--navy);border-color:var(--navy)}
+@keyframes budget-cta-entry{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@media(prefers-reduced-motion:reduce){.nav-budget{animation:none}}
 .nav-toggle{display:none;background:none;border:0;padding:8px;cursor:pointer}
 .nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{content:"";display:block;width:22px;height:2px;background:var(--ink);position:relative;transition:transform .2s,opacity .2s}
 .nav-toggle span::before{position:absolute;top:-7px}
@@ -188,7 +194,8 @@ three-d-stage:not(:defined){visibility:hidden}
  .nav{position:fixed;top:68px;left:0;right:0;bottom:0;background:var(--paper);flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:24px clamp(20px,6vw,48px);gap:22px;overflow-y:auto;transform:translateX(100%);transition:transform .25s ease;z-index:49}
  .nav.is-open{transform:translateX(0)}
  .nav a{font-size:16px;padding-bottom:2px}
- .nav .btn-solid{margin-top:8px;padding:16px 24px;font-size:14px}
+ .nav .nav-budget,.nav .nav-whatsapp{padding:14px 20px;font-size:14px}
+ .nav .nav-whatsapp{margin-top:4px}
 }
 @media(max-width:520px){
  .hero-mark{padding:28px}

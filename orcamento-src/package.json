@@ -7,7 +7,7 @@
     "dev": "vite --config vite.config.mjs",
     "build": "vite build --config vite.config.mjs",
     "preview": "vite preview",
-    "test": "node --test tests/flow.test.mjs tests/journey.test.mjs tests/pricing.test.mjs tests/payload_v2.test.mjs tests/integration.test.mjs"
+    "test": "node --test tests/flow.test.mjs tests/journey.test.mjs tests/pricing.test.mjs tests/payload_v2.test.mjs tests/integration.test.mjs tests/hotfix.test.mjs"
   },
   "dependencies": {
     "@fontsource/archivo": "^5.3.0",
