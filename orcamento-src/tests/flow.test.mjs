@@ -69,3 +69,16 @@ test('Contato mínimo válido; pacote declara simulação e não envio',()=>{
  assert.equal(a.sent_to_crm,false);assert.equal(a.preview.simulated,true);assert.equal(a.answers._derivedF2,undefined);assert.equal(a.answers.X4,undefined);
  assert.deepEqual(a.preview,localPackage({...trunk,A1:{value:'9000'}},'preview').preview);
 });
+
+// --- REG_A2 = 0: area() aceita zero somente sob allowZero (patch matrícula) ---
+test('area(): default rejeita 0; allowZero aceita 0, mantém o resto',()=>{
+ assert.equal(area({value:'0'}),null);                       // default (todo campo de área)
+ assert.equal(area({value:'0'},{allowZero:true}),0);
+ assert.equal(area({value:'0,00'},{allowZero:true}),0);
+ assert.equal(area({value:'0.5'},{allowZero:true}),0.5);
+ assert.equal(area({value:'0.5'}),0.5);                      // não regride
+ assert.equal(area({value:'-1'},{allowZero:true}),null);     // negativo continua inválido
+ assert.equal(area({value:''},{allowZero:true}),null);       // vazio = ausência
+ assert.equal(area({unknown:true},{allowZero:true}),null);   // desconhecido
+ assert.equal(area({value:'238,25'},{allowZero:true}),238.25);
+});

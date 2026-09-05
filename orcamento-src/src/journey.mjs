@@ -1,6 +1,11 @@
 import {map} from './map.js';
 import {area, classify, ufs} from './flow.mjs';
 export {ufs,area};
+// Nós de área onde 0 é semanticamente válido (ex.: matrícula sem área averbada).
+// Todo o resto de área mantém a regra atual (0 inválido) até decisão específica.
+const ZERO_VALID_AREA_NODES=new Set(['REG_A2']);
+export const areaZeroValid=nodeId=>ZERO_VALID_AREA_NODES.has(nodeId);
+export const areaFor=(nodeId,answer)=>area(answer,{allowZero:areaZeroValid(nodeId)});
 export const routes={build:'Construir ou ampliar',regularize:'Regularizar meu imóvel',problem:'Avaliar um problema',known:'Já sei o serviço'};
 export const starts={build:'CA1',regularize:'REG_R1',problem:'P1',known:'S1'};
 const opts=list=>list.map(x=>typeof x==='string'?{value:x,label:x}:x);
@@ -68,7 +73,7 @@ export function valid(id,a){
  const node=nodes[id],v=a[keyOf(id)];
  if(['summary','result'].includes(node.type))return true;
  if(node.type==='location')return !!v?.city?.trim()&&ufs.includes(v.uf);
- if(node.type==='area')return v?.unknown===true||area(v)!==null;
+ if(node.type==='area')return v?.unknown===true||areaFor(id,v)!==null;
  if(node.type==='integer')return v?.unknown===true||(/^\d+$/.test(v?.value??'')&&Number(v.value)>0&&Number(v.value)<=200);
  if(node.type==='story')return !!v?.trim()||!!a.photos?.length;
  if(node.type==='text')return !!v?.trim();
@@ -177,7 +182,7 @@ export function summary(a){
  if(a.route==='problem'&&a.photos?.length)rows.push({id:'P2',label:'Fotos',value:`${a.photos.length} foto(s) adicionada(s) localmente`});
  if(a.originalRequest)rows.push({id:null,label:'Pedido original',value:a.originalRequest});
  if(a.carriedServices?.length)rows.push({id:null,label:'Serviços também informados',value:a.carriedServices.join(' · ')});
- if(a.route==='regularize'&&area(a.REG_A1)!==null&&area(a.REG_A2)!==null)rows.push({id:null,label:'Diferença entre as áreas',value:`${Math.abs(area(a.REG_A1)-area(a.REG_A2)).toLocaleString('pt-BR',{maximumFractionDigits:2})} m²`});
+ if(a.route==='regularize'&&areaFor('REG_A1',a.REG_A1)!==null&&areaFor('REG_A2',a.REG_A2)!==null)rows.push({id:null,label:'Diferença entre as áreas',value:`${Math.abs(areaFor('REG_A1',a.REG_A1)-areaFor('REG_A2',a.REG_A2)).toLocaleString('pt-BR',{maximumFractionDigits:2})} m²`});
  if(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1)&&a.REG_G1)rows.push({id:null,label:'Encaminhamento',value:'Análise necessária'});
  return rows;
 }

@@ -103,3 +103,15 @@ test('derivePricingInputs: rota problem -> sem serviços; texto livre não vira 
     [],
   );
 });
+
+test('REG_A2 = 0 -> regularizacao.area_matricula = "0"; diferença IPTU-matrícula preservada', () => {
+  const a = { route: 'regularize', REG_R1: 'A', REG_A1: area('100'), REG_A2: area('0'), REG_C1: 'Venda',
+    REG_C2: { city: 'Curitiba', uf: 'PR' }, contact };
+  const pi = derivePricingInputs(a);
+  assert.equal(pi.regularizacao.area_matricula, '0');       // areaValue já preserva "0"
+  assert.equal(pi.regularizacao.area_iptu, '100');
+  const preview = buildPricingPreview(pi);
+  const reg = preview.services.find((s) => s.service === 'REGULARIZACAO');
+  assert.ok(reg, 'serviço REGULARIZACAO presente');
+  assert.equal(reg.q, 100);                                  // |100 - 0|
+});

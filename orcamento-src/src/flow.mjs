@@ -7,9 +7,14 @@ export const numeric = ['A1','A2','B2','E2'];
 export const unknownDocuments = 'Não sei/não tenho agora';
 export const ufs = 'AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' ');
 export function options(id) { return nodes[id].options_or_fields.split(' · ').map((label,i) => ({ value:id==='R1' ? 'ABCDEFG'[i] : label, label:id==='R1' ? label.replace(/^[A-G]\. /,'') : label })); }
-export function area(answer) {
+// allowZero=false (default): 0 é rejeitado, como todo campo de área historicamente.
+// allowZero=true: 0 é valor numérico válido (só onde faz sentido semântico, ex.: área na matrícula).
+// O regex já garante não-negativo e <= 2 casas; nenhum caller existente muda de comportamento.
+export function area(answer, { allowZero = false } = {}) {
   if (!answer || answer.unknown || !/^\d+(?:[.,]\d{1,2})?$/.test(answer.value?.trim() ?? '')) return null;
-  const n=Number(answer.value.replace(',','.')); return Number.isFinite(n) && n>0 ? n : null;
+  const n=Number(answer.value.replace(',','.'));
+  if (!Number.isFinite(n)) return null;
+  return (allowZero ? n>=0 : n>0) ? n : null;
 }
 export function difference(answers) {
   const a=area(answers.A1), b=area(answers.A2);

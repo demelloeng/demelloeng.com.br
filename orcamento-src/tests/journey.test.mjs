@@ -43,3 +43,20 @@ test('Desmarcar o serviço limpa a área condicional correspondente',()=>{
   a=updateAnswer(a,'CA7',['Estrutural']);
   assert.equal(a.area_atendida,undefined);
 });
+
+// --- REG_A2 = 0 (Área na matrícula): zero é válido; demais áreas inalteradas ---
+const regA2ctx=(a2)=>({route:'regularize',REG_R1:'A',REG_C1:'Venda',REG_C2:{city:'Curitiba',uf:'PR'},REG_C3:nodes.REG_C3.options[0].value,REG_C4:[nodes.REG_C4.options[0].value],REG_A1:{value:'100',unknown:false},REG_A2:a2});
+test('REG_A2 = 0 é válido, a jornada avança e o resumo mostra "0 m²"',()=>{
+ const a=regA2ctx({value:'0',unknown:false});
+ assert.equal(valid('REG_A2',a),true);
+ assert.equal(advance('REG_A2',a).id,'REG_A3');
+ const rows=summary(a);
+ assert.ok(rows.some(r=>r.label==='Área na matrícula'&&r.value==='0 m²'),'linha "0 m²"');
+ assert.ok(rows.some(r=>r.label==='Diferença entre as áreas'&&r.value==='100 m²'),'diferença 100 m²');
+});
+test('controle: 0 continua inválido nos demais campos de área',()=>{
+ assert.equal(valid('REG_A1',{route:'regularize',REG_R1:'A',REG_A1:{value:'0',unknown:false}}),false); // REG_A1 (IPTU)
+ assert.equal(valid('REG_A2',regA2ctx({value:'0.5'})),true);                          // REG_A2 com valor normal segue ok
+ assert.equal(valid('CA_NEW',{route:'build',CA1:'Ampliar um imóvel existente',CA_NEW:{value:'0',unknown:false}}),false); // área nova
+ assert.equal(valid('S3',{route:'known',S3:{value:'0',unknown:false}}),false);        // área informada (known)
+});
