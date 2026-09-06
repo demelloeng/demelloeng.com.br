@@ -130,7 +130,9 @@ test('buildPreviewLayout: valores vêm SÓ do registro; sem PII; ressalvas prese
   assert.equal(L.forecast_value, 'R$ 4.249,20');            // = canonical.preview.total_demello
   assert.equal(L.verification_code, 'k3m7q9r2t5w8x4z6');
   assert.equal(L.verify_url, 'https://demelloeng.com.br/verificar/?codigo=k3m7q9r2t5w8x4z6');
-  assert.ok(L.references.some((r) => r.includes('SECID/PR') && r.includes('5.311,50')));
+  assert.ok(L.references.some((r) => r === 'SECID/PR — Regularização: R$ 5.311,50'),
+    'referência com nome de serviço legível (não o código)');
+  assert.match(L.criterion, /fator DEMELLO 0,80\.$/, 'critério com fator pt-BR "0,80"');
   assert.ok(L.disclaimers[0].includes('Não constitui proposta comercial, contrato'));
   assert.ok(L.disclaimers[1].includes('fornecidas pelo usuário'));
   const blob = JSON.stringify(L);
@@ -154,9 +156,9 @@ test('QR da peça = URL de verificação com o código', () => {
 test('renderPreviewPng: desenha o valor do registro e devolve Blob PNG', async () => {
   const drawn = [];
   const fakeCtx = {
-    fillStyle: '', strokeStyle: '', font: '', textBaseline: '',
+    fillStyle: '', strokeStyle: '', font: '', textBaseline: '', lineWidth: 1,
     fillRect() {}, strokeRect() {}, beginPath() {}, moveTo() {}, lineTo() {}, stroke() {},
-    drawImage() {}, measureText: (t) => ({ width: String(t).length * 8 }),
+    arc() {}, ellipse() {}, drawImage() {}, measureText: (t) => ({ width: String(t).length * 8 }),
     fillText(t) { drawn.push(String(t)); },
   };
   const fakeCanvas = {
@@ -172,11 +174,21 @@ test('renderPreviewPng: desenha o valor do registro e devolve Blob PNG', async (
   assert.equal(fakeCanvas.width, 1080);
   assert.equal(fakeCanvas.height, 1350);
   const text = drawn.join('\n');
-  assert.ok(text.includes('R$ 4.249,20'));
-  assert.ok(text.includes('k3m7q9r2t5w8x4z6'));
+  assert.ok(text.includes('R$ 4.249,20'));                       // valor do registro
+  assert.ok(text.includes('k3m7q9r2t5w8x4z6'));                  // código
   assert.ok(text.includes('PRÉVIA INICIAL DEMELLO'));
+  assert.ok(text.includes('PREVISÃO DEMELLO'));
+  assert.ok(text.includes('SEU CASO'));
+  assert.ok(text.includes('SECID/PR — Regularização: R$ 5.311,50'));
+  assert.ok(text.includes('fator DEMELLO 0,80.'));
+  for (const cell of ['ÁREA IPTU', 'ÁREA MATRÍCULA', 'DIFERENÇA', '150 m²', '0 m²']) {
+    assert.ok(text.includes(cell), `célula/medida "${cell}" presente`);
+  }
+  assert.ok(text.includes('Código:'));
+  assert.ok(text.includes('demelloeng.com.br/verificar'));
+  assert.ok(/Emitida em 06\/09\/2026 12:34 UTC/.test(text));      // issued_at formatado do registro
   assert.ok(/Não constitui proposta comercial/.test(text));
-  assert.ok(!/@|whatsapp/i.test(text));
+  assert.ok(!/@|whatsapp/i.test(text));                          // sem PII / e-mail
 });
 
 test('renderPreviewPng falha se o registro não é confirmado (sem PNG)', async () => {
