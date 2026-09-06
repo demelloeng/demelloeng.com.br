@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./assets/css/style.css?v=4">
+<link rel="stylesheet" href="./assets/css/style.css?v=5">
 <script type="importmap">
 {
   "imports": {
@@ -81,29 +81,55 @@
 })();
 </script>
 
-<section class="white bb">
+<!--
+  situation-entry — as quatro entradas vigentes de /orcamento/ (build · regularize · problem · known).
+  Rótulos e descrições vêm da própria jornada (journey.routes / descriptions). Exatamente quatro; sem quinta entrada; destino /orcamento/ sem parâmetro (deep-link não implementado).
+-->
+<section class="sec-sm white bb" data-block="situation-entry">
+  <div class="wrap">
+    <p class="eyebrow">Por onde começar</p>
+    <h2 style="font-weight:700;font-size:clamp(28px,3.2vw,38px);line-height:1.12;max-width:16em">Comece pela situação. O nome técnico vem depois.</h2>
+    <div class="cards" style="margin-top:36px">
+      <a class="card" href="./orcamento/"><span class="n">01</span><h2>Construir ou ampliar</h2><p class="p">Projetos para uma obra nova, reforma ou ampliação.</p></a>
+      <a class="card" href="./orcamento/"><span class="n">02</span><h2>Regularizar meu imóvel</h2><p class="p">Diferenças de área ou pendências nos documentos.</p></a>
+      <a class="card" href="./orcamento/"><span class="n">03</span><h2>Avaliar um problema</h2><p class="p">Entender uma situação no imóvel ou na obra.</p></a>
+      <a class="card" href="./orcamento/"><span class="n">04</span><h2>Já sei o serviço</h2><p class="p">Ir direto ao projeto ou serviço que preciso.</p></a>
+    </div>
+    <div class="note" style="margin-top:28px"><p>São as quatro entradas de <a href="./orcamento/">Faça seu orçamento</a>. Você responde só as perguntas do seu caso e recebe uma previsão inicial — não é proposta nem contrato.</p></div>
+  </div>
+</section>
+
+<section class="white bb" data-block="technical-proof">
   <div class="wrap grid4">
     <div class="stat"><div class="stat-n">60</div><div class="stat-l">ARTs documentadas</div></div>
     <div class="stat"><div class="stat-n">23</div><div class="stat-l">Municípios atendidos</div></div>
     <div class="stat"><div class="stat-n">2</div><div class="stat-l">Estados — PR e SP</div></div>
     <div class="stat" style="display:flex;align-items:flex-end"><p class="p" style="color:var(--ink)">Presença técnica consolidada no Sul e Sudeste.</p></div>
   </div>
-  <div class="wrap"><div class="note" style="margin-top:32px"><p>Acervo profissional do fundador — não o acervo operacional da DEMELLO ENG.</p></div></div>
+  <div class="wrap"><div class="note" style="margin-top:32px"><p>Acervo profissional do fundador — não o acervo operacional da DEMELLO ENG. <a href="./experiencia-tecnica/">Ver a experiência técnica →</a></p></div></div>
 </section>
 
-<section class="sec">
+<!--
+  service-summary — nove frentes do catálogo DEMELLO V1 (H1: nome público é camada editorial, SERVICE_ID inalterado).
+  Sem página individual validada, os itens não recebem link próprio (não se inventa slug). Detalhe em /servicos/; enquadramento em /orcamento/.
+-->
+<section class="sec" data-block="service-summary">
   <div class="wrap" style="display:grid;grid-template-columns:minmax(240px,300px) 1fr;gap:clamp(32px,5vw,72px);align-items:start">
     <div>
       <p class="eyebrow">O que fazemos</p>
-      <h2 style="font-weight:700;font-size:clamp(28px,3.2vw,38px);line-height:1.12">Cinco frentes, um só fluxo de decisão.</h2>
+      <h2 style="font-weight:700;font-size:clamp(28px,3.2vw,38px);line-height:1.12">Nove frentes técnicas, um só fluxo de decisão.</h2>
       <a class="link-arrow" style="margin-top:28px" href="./servicos/">Todos os serviços →</a>
     </div>
     <div class="rowlist">
-      <div class="row"><span class="row-n">01</span><span class="row-t">Projeta</span><span class="row-d">Estruturas, água, esgoto, drenagem, incêndio e gás.</span></div>
-      <div class="row"><span class="row-n">02</span><span class="row-t">Integra</span><span class="row-d">Tudo em BIM, para que as disciplinas se encontrem no projeto e não no meio da obra.</span></div>
-      <div class="row"><span class="row-n">03</span><span class="row-t">Organiza</span><span class="row-d">Orçamento, cronograma, memoriais, laudos e a documentação que tira o projeto do papel.</span></div>
-      <div class="row"><span class="row-n">04</span><span class="row-t">Resolve</span><span class="row-d">As complicações de reforma e ampliação que você não quer decidir com a obra andando.</span></div>
-      <div class="row"><span class="row-n">05</span><span class="row-t">Centraliza</span><span class="row-d">Projeto arquitetônico, regularização e as demais disciplinas, num fluxo só.</span></div>
+      <div class="row"><span class="row-n">01</span><span class="row-t">Projeto estrutural</span><span class="row-d">Estrutura de obra nova, ampliação ou fundação isolada.</span></div>
+      <div class="row"><span class="row-n">02</span><span class="row-t">Projeto hidrossanitário</span><span class="row-d">Água, esgoto e drenagem — inclusive integrando o que já existe.</span></div>
+      <div class="row"><span class="row-n">03</span><span class="row-t">Prevenção contra incêndio</span><span class="row-d">A disciplina de incêndio coordenada no projeto.</span></div>
+      <div class="row"><span class="row-n">04</span><span class="row-t">Projeto de gás / GLP</span><span class="row-d">A disciplina de gás no escopo, sem se fundir com incêndio.</span></div>
+      <div class="row"><span class="row-n">05</span><span class="row-t">Projeto de arquitetura</span><span class="row-d">Intenção e restrições transformadas em projeto coordenável.</span></div>
+      <div class="row"><span class="row-n">06</span><span class="row-t">Regularização</span><span class="row-d">Divergência de área ou exigência de prefeitura ou cartório.</span></div>
+      <div class="row"><span class="row-n">07</span><span class="row-t">Orçamento técnico</span><span class="row-d">O serviço de orçamento de um escopo — diferente de “Faça seu orçamento”.</span></div>
+      <div class="row"><span class="row-n">08</span><span class="row-t">Projeto de terraplenagem</span><span class="row-d">A relação entre terreno e implantação, sem executar a obra.</span></div>
+      <div class="row"><span class="row-n">09</span><span class="row-t">Compatibilização BIM</span><span class="row-d">Coordenação das disciplinas e interfaces do projeto.</span></div>
     </div>
   </div>
 </section>
@@ -125,6 +151,24 @@
       <p class="eyebrow">Metodologia</p>
       <p class="lead" style="margin-bottom:20px">Entender antes de projetar. Resolver antes de executar. A DEMELLO trabalha em BIM do primeiro traço à entrega — o projeto inteiro se mantém coordenado, o tempo todo.</p>
       <a class="link-arrow" href="./metodologia/">Ver as seis etapas →</a>
+    </div>
+  </div>
+</section>
+
+<!--
+  preview-explainer — distingue porta, prévia e limites. Texto reorganizado de conteúdo já sustentado
+  (contrato terminológico + "Como funciona" / "Privacidade" da própria experiência /orcamento/). Sem copy comercial nova.
+-->
+<section class="sec-sm white bt" data-block="preview-explainer">
+  <div class="wrap grid2" style="align-items:start">
+    <div>
+      <p class="eyebrow">Faça seu orçamento</p>
+      <h2 style="font-weight:700;font-size:clamp(26px,3vw,34px);line-height:1.15">Primeiro a prévia. Depois o seu contato.</h2>
+    </div>
+    <div>
+      <p class="lead" style="margin-bottom:18px">Você escolhe uma das quatro situações e responde só as perguntas do seu caso. No fim, uma previsão inicial calculada na própria página pela tabela DEMELLO — não é proposta, contrato nem garantia de preço.</p>
+      <p class="lead" style="margin-bottom:24px">Alguns casos precisam de avaliação técnica antes de um valor. O envio para a DEMELLO só acontece quando você conclui e confirma — receber o caso não é aceite comercial.</p>
+      <a class="btn btn-solid" href="./orcamento/">Começar agora</a>
     </div>
   </div>
 </section>
