@@ -38,7 +38,7 @@ const INTERNAL_HREF_WHITELIST = new Set([
   './empresa/', '../empresa/', './metodologia/', '../metodologia/',
   './experiencia-tecnica/', '../experiencia-tecnica/', './contato/', '../contato/',
   './trajetoria-do-fundador.html', '#conteudo', '#site-nav',
-  ...SERVICE_SLUGS.map((s) => `./${s}/`), // /servicos/ -> páginas individuais das nove frentes
+  ...SERVICE_SLUGS.flatMap((s) => [`./${s}/`, `./servicos/${s}/`]), // /servicos/ e HOME -> páginas individuais das nove frentes
 ]);
 const EXTERNAL_HREF_ALLOWED = [
   /^https:\/\/wa\.me\/5541985124056$/,
@@ -70,17 +70,18 @@ test('HOME: exatamente quatro entradas de situação, todas para /orcamento/', a
   }
 });
 
-test('HOME: catálogo de nove serviços com H1, sem link ou slug inventado', async () => {
+test('HOME: catálogo de nove frentes, cada uma com link para a página individual', async () => {
   const html = await read('index.html');
   const block = html.match(/<section[^>]*data-block="service-summary"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.ok(block, 'bloco service-summary presente');
-  const rows = [...block.matchAll(/<div class="row">/g)];
-  assert.equal(rows.length, 9, 'nove frentes');
-  // nenhum link individual por serviço: os únicos <a> do bloco são o "Todos os serviços"
-  const anchors = block.match(/<a\b[^>]*>/g) ?? [];
-  assert.equal(anchors.length, 1, 'um único link no bloco (catálogo)');
-  assert.ok(block.includes('href="./servicos/"'), 'card leva ao catálogo /servicos/');
-  assert.doesNotMatch(html, /href="\.\/servicos\/[a-z-]+\/?"/, 'nenhum slug de serviço inventado');
+  assert.equal([...block.matchAll(/<div class="row">/g)].length, 9, 'nove frentes');
+  assert.ok(block.includes('href="./servicos/"'), 'link do catálogo /servicos/ preservado');
+  // cada nome de frente enlaça a sua página individual sob /servicos/<slug>/
+  for (const s of SERVICE_SLUGS) {
+    assert.match(block, new RegExp(`<span class="row-t"><a href="\\./servicos/${s}/">`), `frente enlaça ./servicos/${s}/`);
+  }
+  const linked = [...block.matchAll(/href="\.\/servicos\/([a-z-]+)\/"/g)].map((m) => m[1]);
+  assert.deepEqual([...new Set(linked)].sort(), [...SERVICE_SLUGS].sort(), 'somente os nove slugs canônicos');
 });
 
 test('SERVIÇOS: nove serviços, H1, destino /orcamento/, sem lista de entregáveis universal', async () => {
