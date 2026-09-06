@@ -3,6 +3,8 @@ import {ArrowLeft,ArrowRight,Check,CaretDown,PencilSimple,X,DownloadSimple,Clipb
 import {nodes,routes,starts,keyOf,titleOf,isProject,valid,toggle,updateAnswer,switchRoute,advance,routeNodes,summary,suggestedServices,safetyHold,missingData,ufs,areaZeroValid} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
 import {submitToCRM} from './submit.mjs';
+import {issuePreview,caseSummaryFromRows} from './preview.mjs';
+import {renderPreviewPng} from './preview_png.mjs';
 import {brlStr} from './pricing/decimal.mjs';
 import {buildClientSummary,friendlyServiceName as serviceName,NEXT_STEP} from './client_summary.mjs';
 import '@fontsource/archivo/600.css';
@@ -17,8 +19,23 @@ const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida
 const pricingText=pv=>pv.presented_to_customer.text.replace(/Entraremos em contato para confirmar as particularidades e o escopo\./,NEXT_STEP);
 function Result({answers,isPreview}){
  const held=safetyHold(answers),missing=missingData(answers);
- const pv=packageForCRMv2(answers).pricing_preview;
+ const payload=packageForCRMv2(answers);
+ const pv=payload.pricing_preview;
  const calc=pv.services.filter(s=>s.status==='CALCULATED');
+ const [pState,setPState]=useState('idle');
+ const [pRecord,setPRecord]=useState(null);
+ const [pngUrl,setPngUrl]=useState('');
+ useEffect(()=>()=>{if(pngUrl)URL.revokeObjectURL(pngUrl);},[pngUrl]);
+ async function gerarPrevia(){
+  if(pState==='issuing')return;
+  setPState('issuing');
+  const cs=caseSummaryFromRows(payload.summary,pv.services.map(serviceName));
+  const r=await issuePreview(payload.pricing_inputs,cs);
+  if(!r.ok){setPState('error');return;}
+  setPRecord(r.record);
+  try{const blob=await renderPreviewPng(r.record);setPngUrl(URL.createObjectURL(blob));setPState('ready');}
+  catch{setPState('error');}
+ }
  if(isPreview&&pv.status==='CALCULATED'){
   return <div className="result-card">
    <span className="eyebrow">PREVISÃO DEMELLO</span>
@@ -28,6 +45,15 @@ function Result({answers,isPreview}){
     <ul>{calc.map(s=><li key={s.service}><strong>{serviceName(s)}</strong> · {Q_PT[s.q_basis]??s.q_basis} {s.q} m² · SECID/PR {brlStr(s.references.secid_pr.total)}{s.references.altoqi?` · AltoQi ${brlStr(s.references.altoqi.total)}`:''} · DEMELLO {brlStr(s.demello.total)}</li>)}</ul>
     <p className="small-note">Previsão inicial pela TABELA DEMELLO V1 (fator 0,80 sobre a menor referência pública aplicável, calculada offline nesta página). Não é proposta nem contrato. O escopo final é confirmado pela equipe.</p>
    </details>
+   <div className="preview-issue">
+    {pState!=='ready'&&<button type="button" className="secondary-button" disabled={pState==='issuing'} onClick={gerarPrevia}>{pState==='issuing'?'Gerando prévia…':'Gerar prévia DEMELLO'}</button>}
+    {pState==='error'&&<p className="field-error" role="alert">Não foi possível gerar a prévia agora. A previsão acima continua disponível.</p>}
+    {pState==='ready'&&pRecord&&<div className="preview-ready" role="status">
+     <p>Prévia emitida · código <strong>{pRecord.verification_code}</strong></p>
+     <p className="small-note">Registro verificável em demelloeng.com.br/verificar. A imagem é uma representação da prévia registrada — não é proposta, contrato nem orçamento de obra.</p>
+     <a className="secondary-button" href={pngUrl} download={`demello-previa-${pRecord.verification_code}.png`}><DownloadSimple size={20}/>Baixar prévia</a>
+    </div>}
+   </div>
   </div>;
  }
  return <div className={`result-card ${held?'needs-review':''}`}>

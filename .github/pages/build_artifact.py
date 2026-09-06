@@ -37,7 +37,7 @@ FORBIDDEN_EXACT = [
 FORBIDDEN_PREFIX = ["orcamento-src/", ".github/"]
 
 # G5 anchors — bytes that must survive untouched (no rebuild / rename / minify).
-RUNTIME_BUNDLE = "orcamento/assets/index-D7vSPTuU.js"
+RUNTIME_BUNDLE = "orcamento/assets/index-DbY-sgmJ.js"
 RUNTIME_CSS = "orcamento/assets/index-B9z1Kqrw.css"
 
 # §8 positive smoke surface (paths, mapped to URLs by the caller).
@@ -56,7 +56,7 @@ SMOKE_POSITIVE_URLS = [
     "/experiencia-tecnica/", "/contato/", "/sitemap.xml", "/robots.txt",
     "/assets/css/style.css", "/assets/js/nav.js", "/assets/js/three-d-stage.js",
     "/assets/models/guatupe.obj",
-    "/orcamento/assets/index-D7vSPTuU.js", "/orcamento/assets/index-B9z1Kqrw.css",
+    "/orcamento/assets/index-DbY-sgmJ.js", "/orcamento/assets/index-B9z1Kqrw.css",
 ]
 
 # §9 negative smoke — must be 404 after the new pipeline.
@@ -251,7 +251,7 @@ def cmd_smoke_local(a) -> int:
     orc = os.path.join(artifact, "orcamento", "index.html")
     if os.path.isfile(orc):
         html = open(orc, encoding="utf-8", errors="replace").read()
-        for asset in ("index-D7vSPTuU.js", "index-B9z1Kqrw.css"):
+        for asset in ("index-DbY-sgmJ.js", "index-B9z1Kqrw.css"):
             if asset not in html:
                 fails.append(f"/orcamento/index.html does not reference {asset}")
             if not os.path.isfile(os.path.join(artifact, "orcamento", "assets", asset)):

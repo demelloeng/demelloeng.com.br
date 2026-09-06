@@ -5,13 +5,14 @@
 # Um único padrão recursivo permitido: "orcamento/assets/**". Todos os demais são caminhos exatos.
 # Comentários com "#". Linhas em branco ignoradas.
 #
-# 40 caminhos exatos + a subárvore runtime orcamento/assets/** (43 arquivos em 024c60e).
+# 41 caminhos exatos + a subárvore runtime orcamento/assets/** (43 arquivos em 024c60e).
 
 # --- raiz institucional ---
 CNAME
 index.html
 robots.txt
 sitemap.xml
+verificar/index.html
 
 # --- páginas institucionais ---
 contato/index.html

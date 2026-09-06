@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { check as publishGuardCheck } from '../scripts/publish-guard.mjs';
+import { check as publishGuardCheck, checkPreview as publishGuardCheckPreview } from '../scripts/publish-guard.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
@@ -86,4 +86,10 @@ test('production config is publish-ready: real https endpoint, no placeholder', 
   assert.equal(publishGuardCheck(endpoint, bundle).length, 0, 'guard must pass for the production build');
   assert.ok(bundle.includes(endpoint), 'the real endpoint must be baked into the built bundle');
   assert.doesNotMatch(bundle, /REPLACE-SUBDOMAIN/);
+
+  // PRÉVIA DEMELLO VERIFICÁVEL V1: mesmo padrão para o Worker de emissão
+  const previewEndpoint = (env.match(/^\s*VITE_PREVIEW_ENDPOINT\s*=\s*(.+?)\s*$/m) || [])[1] || '';
+  assert.match(previewEndpoint, /^https:\/\/\S+\/api\/previews\/v1$/);
+  assert.equal(publishGuardCheckPreview(previewEndpoint, bundle).length, 0, 'preview guard must pass');
+  assert.ok(bundle.includes(previewEndpoint), 'preview endpoint baked into the built bundle');
 });
