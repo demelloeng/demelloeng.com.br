@@ -43,6 +43,23 @@ test('built /orcamento route is self-contained and indexable', async () => {
   assert.doesNotMatch(bundle, /CRM simulado|Controles de demonstração/);
 });
 
+test('a regra interna DEMELLO não aparece na superfície pública do /orcamento/', async () => {
+  const app = await readFile(path.join(appRoot, 'src', 'GlobalApp.jsx'), 'utf8');
+  const png = await readFile(path.join(appRoot, 'src', 'preview_png.mjs'), 'utf8');
+  assert.doesNotMatch(app, /fator\s*0[.,]80/i);
+  assert.doesNotMatch(png, /fator DEMELLO|× fator|factor_demello/i);
+
+  const dir = path.join(routeRoot, 'assets');
+  const files = await readdir(dir);
+  let bundle = '';
+  for (const f of files.filter((n) => /^index-.*\.js$/.test(n))) bundle += await readFile(path.join(dir, f), 'utf8');
+  assert.ok(!/fator\s+DEMELLO/i.test(bundle), 'bundle sem "fator DEMELLO"');
+  assert.ok(!/×\s*fator/i.test(bundle), 'bundle sem a fórmula "× fator"');
+  assert.ok(!/0[.,]80\s+sobre a menor/i.test(bundle), 'bundle sem "0,80 sobre a menor referência"');
+  assert.ok(!/MIN\(referencias/i.test(bundle), 'bundle sem a fórmula interna MIN(referencias…)');
+  assert.ok(!bundle.includes('menor referência pública aplicável × fator'), 'bundle sem o critério antigo');
+});
+
 test('site navigation and sitemap expose /orcamento without changing the domain', async () => {
   const pages = [
     'index.html',

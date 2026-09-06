@@ -1,7 +1,9 @@
 // renderPreviewPng - desenha a peça 1080x1350 da PRÉVIA DEMELLO VERIFICÁVEL V1.
 //
-// Recebe SOMENTE o PREVIEW_RECORD confirmado pelo Worker. Nunca lê `answers`
-// vivos. Todo valor visível vem de record.canonical / record.verification_code.
+// Recebe SOMENTE o PUBLIC_PREVIEW_V1 confirmado pelo Worker (já sanitizado:
+// sem o fator, sem a regra interna, sem inputs, sem a assinatura interna).
+// Nunca lê `answers` vivos. Todo valor visível vem de record.preview /
+// record.verification_code.
 //
 // buildPreviewLayout(record) -> estrutura de texto + dados do QR (testável, puro).
 // renderPreviewPng(record, opts) -> Promise<Blob> (PNG), desenho fino sobre canvas.
@@ -16,8 +18,10 @@ const H = 1350;
 
 function assertConfirmed(record) {
   if (!record || typeof record !== 'object' ||
-      !record.verification_code || !record.fingerprint ||
-      !record.canonical || record.canonical.schema_version !== 'PREVIEW_RECORD_V1') {
+      record.schema !== 'PUBLIC_PREVIEW_V1' ||
+      !record.verification_code ||
+      !record.preview || typeof record.preview !== 'object' ||
+      record.preview.schema_version !== 'PREVIEW_RECORD_V1') {
     throw new Error('renderPreviewPng: registro não confirmado');
   }
 }
@@ -56,13 +60,13 @@ function fmtIssuedAt(iso) {
 
 export function buildPreviewLayout(record) {
   assertConfirmed(record);
-  const c = record.canonical;
-  const preview = c.preview || {};
-  const calc = (preview.services || []).filter((s) => s.status === 'CALCULATED');
+  const view = record.preview;
+  const pricing = view.pricing || {};
+  const calc = (pricing.services || []).filter((s) => s.status === 'CALCULATED');
 
   const caseRows = [];
   for (const key of CASE_ORDER) {
-    const v = c.case_summary ? c.case_summary[key] : undefined;
+    const v = view.case_summary ? view.case_summary[key] : undefined;
     if (v === undefined || v === null || v === '') continue;
     caseRows.push({ key, label: CASE_LABELS[key] || key, value: Array.isArray(v) ? v.join(', ') : String(v) });
   }
@@ -77,7 +81,6 @@ export function buildPreviewLayout(record) {
       references.push(`AltoQi — ${name}: ${brlStr(s.references.altoqi.total)}`);
     }
   }
-  const factor = String((c.methodology && c.methodology.factor_demello) || '0.80').replace('.', ',');
 
   return {
     width: W,
@@ -86,13 +89,13 @@ export function buildPreviewLayout(record) {
     title: 'PRÉVIA INICIAL DEMELLO',
     case_rows: caseRows,
     forecast_label: 'PREVISÃO DEMELLO',
-    forecast_value: preview.status === 'CALCULATED' && preview.total_demello
-      ? brlStr(preview.total_demello)
+    forecast_value: pricing.status === 'CALCULATED' && pricing.total_demello
+      ? brlStr(pricing.total_demello)
       : 'Avaliação humana necessária',
     references,
-    criterion: `Critério: menor referência pública aplicável × fator DEMELLO ${factor}.`,
-    disclaimers: Array.isArray(c.disclaimers) ? c.disclaimers : [],
-    issued_at_label: `Emitida em ${fmtIssuedAt(c.issued_at)}`,
+    criterion: 'Critério: previsão calculada a partir da referência pública aplicável, conforme metodologia DEMELLO.',
+    disclaimers: Array.isArray(view.disclaimers) ? view.disclaimers : [],
+    issued_at_label: `Emitida em ${fmtIssuedAt(record.issued_at)}`,
     verification_code: record.verification_code,
     verify_url: verifyUrl(record.verification_code),
     qr: encodeQr(verifyUrl(record.verification_code)),

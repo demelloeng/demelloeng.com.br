@@ -2,8 +2,10 @@
 //
 // POST { pricing_inputs, case_summary } -> Worker ma-demello-preview. O Worker
 // RECALCULA o pricing (o preço do browser não é autoridade), monta o
-// PREVIEW_RECORD_V1, persiste em D1 e devolve o registro confirmado. Só então o
-// PNG é gerado (renderPreviewPng recebe SOMENTE este registro).
+// PREVIEW_RECORD_V1 interno, persiste em D1, confere a integridade no servidor
+// e devolve SOMENTE a projeção pública PUBLIC_PREVIEW_V1. O browser nunca recebe
+// o canonical interno nem o fingerprint. Só então o PNG é gerado
+// (renderPreviewPng recebe SOMENTE este PUBLIC_PREVIEW_V1).
 //
 // Estrutura espelha submit.mjs: uma retentativa em 5xx/rede, nunca lança para a
 // UI, retorna { ok, status, record?, error? }.
@@ -100,7 +102,7 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
   }
 
   const p = attempt.payload || {};
-  if (attempt.status === 201 && p.verification_code && p.fingerprint && p.canonical) {
+  if (attempt.status === 201 && p.schema === 'PUBLIC_PREVIEW_V1' && p.verification_code && p.preview) {
     return { ok: true, status: 201, record: p };
   }
   return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed' };

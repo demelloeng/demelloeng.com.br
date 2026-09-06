@@ -89,6 +89,10 @@
 <script>
 (function () {
   "use strict";
+  // A integridade é conferida NO SERVIDOR (ma-demello-preview): 200 => já
+  // verificado (integrity.status === "VERIFIED"); 409 => não confere. Esta
+  // página só apresenta o PUBLIC_PREVIEW_V1 sanitizado — nunca recebe o
+  // registro interno, a assinatura interna nem o fator da metodologia.
   var ENDPOINT = "https://ma-demello-preview.ma-demello.workers.dev/api/previews/v1/";
   var out = document.getElementById("vf-out");
 
@@ -102,31 +106,6 @@
     return '<div class="vf-status ' + kind + '"><h2>' + esc(title) + "</h2><p>" + esc(msg) + "</p></div>";
   }
 
-  // canonicalize: idêntico a integrations/cloudflare/*/src/canonical_hash.mjs
-  function cmpCp(a, b) {
-    var ai = Array.from(a), bi = Array.from(b), n = Math.min(ai.length, bi.length);
-    for (var i = 0; i < n; i++) { var d = ai[i].codePointAt(0) - bi[i].codePointAt(0); if (d) return d; }
-    return ai.length - bi.length;
-  }
-  function canonicalize(v) {
-    if (v === null) return "null";
-    var t = typeof v;
-    if (t === "number") { if (!isFinite(v)) throw new Error("num"); return String(v); }
-    if (t === "boolean") return v ? "true" : "false";
-    if (t === "string") return JSON.stringify(v);
-    if (Array.isArray(v)) return "[" + v.map(canonicalize).join(",") + "]";
-    if (t === "object") {
-      var keys = Object.keys(v).sort(cmpCp);
-      return "{" + keys.map(function (k) { return JSON.stringify(k) + ":" + canonicalize(v[k]); }).join(",") + "}";
-    }
-    throw new Error("type");
-  }
-  function sha256Hex(text) {
-    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)).then(function (buf) {
-      return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
-    });
-  }
-
   function fmtDate(iso) {
     var m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/.exec(String(iso || ""));
     return m ? m[3] + "/" + m[2] + "/" + m[1] + " " + m[4] + ":" + m[5] + " UTC" : String(iso || "");
@@ -137,10 +116,11 @@
     return "R$ " + n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  function show(rec, integ) {
-    var c = rec.canonical || {};
-    var pv = c.preview || {};
-    var cs = c.case_summary || {};
+  function show(rec) {
+    var view = rec.preview || {};
+    var pv = view.pricing || {};
+    var cs = view.case_summary || {};
+    var disclaimers = Array.isArray(view.disclaimers) ? view.disclaimers : [];
     var rows = "";
     var order = ["necessidade", "situacao", "finalidade", "localizacao", "tipo_imovel", "documentos",
       "motivo_diferenca", "servicos", "area_iptu", "area_matricula", "diferenca",
@@ -165,24 +145,20 @@
     });
     var total = pv.status === "CALCULATED" && pv.total_demello ? brl(pv.total_demello) : "Avaliação humana necessária";
 
-    var head = integ.ok
-      ? box("ok", "Prévia DEMELLO verificada", "Conteúdo íntegro: o registro não foi alterado desde a emissão.")
-      : box("bad", "Integridade não confere", "O conteúdo recebido não corresponde à assinatura do registro. Não confie nesta prévia.");
-
     render(
-      head +
+      box("ok", "Prévia DEMELLO verificada",
+        "Este registro foi emitido pela DEMELLO Engenharia e não foi alterado desde a emissão.") +
       '<dl class="vf-dl">' +
         "<dt>Código</dt><dd class=\"vf-code\">" + esc(rec.verification_code) + "</dd>" +
-        "<dt>Emitida em</dt><dd>" + esc(fmtDate(c.issued_at)) + "</dd>" +
+        "<dt>Emitida em</dt><dd>" + esc(fmtDate(rec.issued_at)) + "</dd>" +
         "<dt>Situação</dt><dd>" + esc(rec.status || "ISSUED") + "</dd>" +
-        (c.methodology ? "<dt>Metodologia</dt><dd>Tabela " + esc(c.methodology.table_version) + " · fator " + esc(c.methodology.factor_demello) + "</dd>" : "") +
+        "<dt>Metodologia</dt><dd>Tabela DEMELLO V1</dd>" +
       "</dl>" +
       "<p class=\"eyebrow\" style=\"margin:24px 0 4px\">Previsão DEMELLO</p>" +
       '<p class="vf-total">' + esc(total) + "</p>" +
       (refs ? '<dl class="vf-dl"><dt>Referências</dt><dd>' + refs.replace(/^<dd>/, "").replace(/<\/dd><dd>/g, "<br>").replace(/<\/dd>$/, "") + "</dd></dl>" : "") +
       (rows ? "<p class=\"eyebrow\" style=\"margin:24px 0 4px\">Informações do caso (fornecidas pelo usuário)</p><dl class=\"vf-dl\">" + rows + "</dl>" : "") +
-      (Array.isArray(c.disclaimers) ? '<div class="vf-note">' + c.disclaimers.map(function (d) { return "<p>" + esc(d) + "</p>"; }).join("") + "</div>" : "") +
-      "<p class=\"vf-code\" style=\"font-size:12px;color:var(--muted);margin-top:24px;word-break:break-all\">fingerprint " + esc(rec.fingerprint) + "</p>"
+      (disclaimers.length ? '<div class="vf-note">' + disclaimers.map(function (d) { return "<p>" + esc(d) + "</p>"; }).join("") + "</div>" : "")
     );
   }
 
@@ -195,15 +171,17 @@
   fetch(ENDPOINT + encodeURIComponent(code), { headers: { Accept: "application/json" } })
     .then(function (res) {
       if (res.status === 404) { render(box("bad", "Código não encontrado", "Nenhuma prévia DEMELLO corresponde a este código.")); return null; }
+      if (res.status === 409) { render(box("bad", "Integridade não confere", "O conteúdo deste registro não corresponde ao que foi emitido. Não confie nesta prévia.")); return null; }
       if (!res.ok) { render(box("bad", "Serviço temporariamente indisponível", "Não foi possível verificar a prévia agora. Tente novamente em instantes.")); return null; }
       return res.json();
     })
     .then(function (rec) {
       if (!rec) return;
-      if (!rec.canonical || !rec.fingerprint) { render(box("bad", "Registro inválido", "A resposta do serviço de verificação está incompleta.")); return; }
-      return sha256Hex(canonicalize(rec.canonical)).then(function (h) {
-        show(rec, { ok: h === rec.fingerprint });
-      });
+      if (rec.schema !== "PUBLIC_PREVIEW_V1" || !rec.integrity || rec.integrity.status !== "VERIFIED" || !rec.preview) {
+        render(box("bad", "Registro inválido", "A resposta do serviço de verificação está incompleta ou não pôde ser confirmada."));
+        return;
+      }
+      show(rec);
     })
     .catch(function () {
       render(box("bad", "Serviço temporariamente indisponível", "Não foi possível contatar o serviço de verificação. Tente novamente em instantes."));

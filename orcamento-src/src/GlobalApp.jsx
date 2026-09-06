@@ -43,7 +43,7 @@ function Result({answers,isPreview}){
    <p>{pricingText(pv)}</p>
    <details className="pricing-breakdown"><summary>Como chegamos a esse valor</summary>
     <ul>{calc.map(s=><li key={s.service}><strong>{serviceName(s)}</strong> · {Q_PT[s.q_basis]??s.q_basis} {s.q} m² · SECID/PR {brlStr(s.references.secid_pr.total)}{s.references.altoqi?` · AltoQi ${brlStr(s.references.altoqi.total)}`:''} · DEMELLO {brlStr(s.demello.total)}</li>)}</ul>
-    <p className="small-note">Previsão inicial pela TABELA DEMELLO V1 (fator 0,80 sobre a menor referência pública aplicável, calculada offline nesta página). Não é proposta nem contrato. O escopo final é confirmado pela equipe.</p>
+    <p className="small-note">Previsão calculada a partir da referência pública aplicável e da metodologia DEMELLO. Não é proposta nem contrato; o escopo final é confirmado pela equipe.</p>
    </details>
    <div className="preview-issue">
     {pState!=='ready'&&<button type="button" className="secondary-button" disabled={pState==='issuing'} onClick={gerarPrevia}>{pState==='issuing'?'Gerando prévia…':'Gerar prévia DEMELLO'}</button>}
