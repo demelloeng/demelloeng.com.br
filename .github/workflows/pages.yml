@@ -1,0 +1,90 @@
+name: Publicar site (artefato allowlisted)
+
+# Migração one-time: GitHub Pages deixa de servir a branch main / raiz e passa a
+# servir EXCLUSIVAMENTE .pages-artifact/ montado aqui a partir da allowlist fechada
+# (.github/pages/allowlist.txt). Sem rebuild, sem transformação — só o subconjunto
+# publicado muda, não os bytes. Ver .github/pages/build_artifact.py.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # G1 — testes/guards existentes do site e do /orcamento/ (sem build, sem npm install:
+      # a suíte importa só builtins node:). Nenhum teste novo muda comportamento do produto.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: G1 - guards existentes (node --test + publish-guard)
+        working-directory: orcamento-src
+        run: |
+          node --test \
+            tests/flow.test.mjs tests/journey.test.mjs tests/pricing.test.mjs \
+            tests/payload_v2.test.mjs tests/integration.test.mjs tests/hotfix.test.mjs \
+            tests/submit.test.mjs tests/site_ux.test.mjs
+          node scripts/publish-guard.mjs
+
+      # Montagem determinística — copia só o allowlisted, bytes crus do commit.
+      - name: Montar artefato Pages (allowlist V1)
+        run: |
+          python3 .github/pages/build_artifact.py build "$GITHUB_SHA" \
+            --out .pages-artifact \
+            --report "$RUNNER_TEMP/pages-hashes.json"
+
+      # G2 (integridade da allowlist) + G3 (proibição absoluta) + G4 (byte-equivalence,
+      # MISMATCHES/MISSING/EXTRA = 0) + G5 (runtime bundle/css intactos).
+      - name: Gates G2/G3/G4/G5
+        run: |
+          python3 .github/pages/build_artifact.py validate "$GITHUB_SHA" \
+            --artifact .pages-artifact
+
+      # Smoke local: o artefato serve a superfície exigida e nenhum arquivo dev/interno.
+      - name: Smoke local do artefato
+        run: python3 .github/pages/build_artifact.py smoke-local --artifact .pages-artifact
+
+      - name: Guardar relatório de hashes (CI)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-hashes
+          path: ${{ runner.temp }}/pages-hashes.json
+          if-no-files-found: warn
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .pages-artifact
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  smoke-live:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/pages
+      - name: Smoke HTTP live (positivo + negativo)
+        run: python3 .github/pages/build_artifact.py smoke-live https://demelloeng.com.br

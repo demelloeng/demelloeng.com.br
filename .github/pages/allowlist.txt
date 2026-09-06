@@ -1,0 +1,55 @@
+# GitHub Pages — PUBLIC_REQUIRED allowlist V1  (demelloeng/demelloeng.com.br)
+#
+# FECHADA. UNKNOWN = 0.
+# Regra: NÃO ESTÁ NA ALLOWLIST -> NÃO ENTRA NO ARTEFATO (mesmo se adicionado ao repo depois).
+# Um único padrão recursivo permitido: "orcamento/assets/**". Todos os demais são caminhos exatos.
+# Comentários com "#". Linhas em branco ignoradas.
+#
+# 30 caminhos exatos + a subárvore runtime orcamento/assets/** (43 arquivos em 024c60e).
+
+# --- raiz institucional ---
+CNAME
+index.html
+robots.txt
+sitemap.xml
+
+# --- páginas institucionais ---
+contato/index.html
+empresa/index.html
+empresa/trajetoria-do-fundador.html
+experiencia-tecnica/index.html
+metodologia/index.html
+servicos/index.html
+
+# --- estilo + scripts institucionais (dependência comprovada nas páginas atuais) ---
+assets/css/style.css
+assets/js/nav.js
+assets/js/three-d-stage.js
+
+# --- modelo 3D (HOME / Experiência) ---
+assets/models/guatupe.obj
+
+# --- vídeos (HOME: projeto-01/02 ; Experiência: djalma-marinho) ---
+assets/videos/djalma-marinho.mp4
+assets/videos/projeto-01.mp4
+assets/videos/projeto-02.mp4
+
+# --- imagens: identidade ---
+assets/images/favicon.png
+assets/images/logo.png
+assets/images/logo-branca.png
+
+# --- imagens: Trajetória do fundador (fundador-*) ---
+assets/images/fundador-aldeia.png
+assets/images/fundador-formatura.png
+assets/images/fundador-mangue-casa.png
+assets/images/fundador-mangue-retrato.png
+assets/images/fundador-mercado.png
+assets/images/fundador-obra-estaca.jpg
+assets/images/fundador-obra-grupo.jpg
+assets/images/fundador-trainee.png
+assets/images/fundador-treliça.png
+
+# --- experiência /orcamento/ (runtime autocontido, já compilado) ---
+orcamento/index.html
+orcamento/assets/**
