@@ -5,7 +5,7 @@
 # Um único padrão recursivo permitido: "orcamento/assets/**". Todos os demais são caminhos exatos.
 # Comentários com "#". Linhas em branco ignoradas.
 #
-# 30 caminhos exatos + a subárvore runtime orcamento/assets/** (43 arquivos em 024c60e).
+# 40 caminhos exatos + a subárvore runtime orcamento/assets/** (43 arquivos em 024c60e).
 
 # --- raiz institucional ---
 CNAME
@@ -21,8 +21,20 @@ experiencia-tecnica/index.html
 metodologia/index.html
 servicos/index.html
 
+# --- páginas individuais das nove frentes de serviço (sob /servicos/) ---
+servicos/projeto-estrutural/index.html
+servicos/projeto-hidrossanitario/index.html
+servicos/projeto-prevencao-incendio/index.html
+servicos/projeto-gas-glp/index.html
+servicos/projeto-arquitetura/index.html
+servicos/regularizacao/index.html
+servicos/orcamento-tecnico/index.html
+servicos/projeto-terraplenagem/index.html
+servicos/compatibilizacao-bim/index.html
+
 # --- estilo + scripts institucionais (dependência comprovada nas páginas atuais) ---
 assets/css/style.css
+assets/css/servicos.css
 assets/js/nav.js
 assets/js/three-d-stage.js
 

@@ -1,7 +1,7 @@
 // Frente UX comercial (IT112/114/115/117) — estrutura + estados editoriais + invariantes.
-// Cobre: H1 aplicado, exatamente 4 entradas, catálogo de 9 serviços sem link/slug inventado,
-// HIDDEN honesto (sem case/prova/depoimento/FAQ falsos), CTA só para destinos reais,
-// e nenhuma alteração de árvore/rotas/payload/pricing do intake.
+// Cobre: H1 aplicado, exatamente 4 entradas, catálogo de 9 serviços com página própria
+// (slugs canônicos; nenhum slug fora do conjunto), HIDDEN honesto (sem case/prova/depoimento/FAQ
+// falsos), CTA só para destinos reais, e nenhuma alteração de árvore/rotas/payload/pricing do intake.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -26,11 +26,19 @@ const H1_NAMES = [
   'Compatibilização BIM',
 ];
 
+// Slugs canônicos das nove páginas individuais de serviço (sob /servicos/). Congelado.
+const SERVICE_SLUGS = [
+  'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio',
+  'projeto-gas-glp', 'projeto-arquitetura', 'regularizacao',
+  'orcamento-tecnico', 'projeto-terraplenagem', 'compatibilizacao-bim',
+];
+
 const INTERNAL_HREF_WHITELIST = new Set([
   './', '../', './orcamento/', '../orcamento/', './servicos/', '../servicos/',
   './empresa/', '../empresa/', './metodologia/', '../metodologia/',
   './experiencia-tecnica/', '../experiencia-tecnica/', './contato/', '../contato/',
   './trajetoria-do-fundador.html', '#conteudo', '#site-nav',
+  ...SERVICE_SLUGS.map((s) => `./${s}/`), // /servicos/ -> páginas individuais das nove frentes
 ]);
 const EXTERNAL_HREF_ALLOWED = [
   /^https:\/\/wa\.me\/5541985124056$/,
@@ -85,7 +93,25 @@ test('SERVIÇOS: nove serviços, H1, destino /orcamento/, sem lista de entregáv
   assert.doesNotMatch(block, /<ul\b|<ol\b/, 'sem lista de entregáveis renderizada');
   assert.doesNotMatch(block, /O que (normalmente )?faz parte|entregáveis|entregamos|você recebe/i,
     'sem promessa de entregável universal');
-  assert.doesNotMatch(html, /href="\.\.\/servicos\/[a-z-]+\/?"/, 'nenhum slug de serviço inventado');
+  // cada frente enlaça a sua página individual; nada além dos nove slugs canônicos
+  for (const s of SERVICE_SLUGS) {
+    assert.match(block, new RegExp(`<h2><a href="\\./${s}/">`), `frente enlaça ./${s}/`);
+  }
+  const linked = [...block.matchAll(/<h2><a href="\.\/([a-z-]+)\/">/g)].map((m) => m[1]);
+  assert.deepEqual(linked.sort(), [...SERVICE_SLUGS].sort(), 'somente os nove slugs canônicos');
+  assert.doesNotMatch(html, /href="\.\.\/servicos\/[a-z-]+\/?"/, 'nenhum slug de serviço absoluto inventado');
+});
+
+test('nove páginas individuais de serviço existem, com H1 único e CTA canônica para /orcamento/', async () => {
+  for (const slug of SERVICE_SLUGS) {
+    const html = await read(`servicos/${slug}/index.html`);
+    const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map((m) => m[1].trim());
+    assert.equal(h1s.length, 1, `${slug}: H1 único`);
+    assert.match(html, /<link rel="canonical" href="https:\/\/demelloeng\.com\.br\/servicos\/[a-z-]+\/">/, `${slug}: canonical`);
+    assert.match(html, /href="\.\.\/\.\.\/orcamento\/"[^>]*>Conte o que você precisa →<\/a>/, `${slug}: CTA canônica`);
+    // as nove páginas de serviço não reabrem números/afirmações fora da copy congelada
+    assert.doesNotMatch(html, /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, `${slug}: sem número proibido`);
+  }
 });
 
 test('estados HIDDEN honestos: sem case, depoimento, prova sem contexto ou FAQ sem resposta', async () => {
