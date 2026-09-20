@@ -36,7 +36,9 @@ jobs:
           node --test \
             tests/flow.test.mjs tests/journey.test.mjs tests/pricing.test.mjs \
             tests/payload_v2.test.mjs tests/integration.test.mjs tests/hotfix.test.mjs \
-            tests/submit.test.mjs tests/site_ux.test.mjs tests/preview.test.mjs \n            tests/structural_foundations.test.mjs tests/foundation_area.test.mjs tests/python_parity.test.mjs
+            tests/submit.test.mjs tests/site_ux.test.mjs tests/preview.test.mjs \
+            tests/structural_foundations.test.mjs tests/foundation_area.test.mjs tests/python_parity.test.mjs \
+            tests/hourly_services.test.mjs
           node scripts/publish-guard.mjs
 
       # Montagem determinística — copia só o allowlisted, bytes crus do commit.

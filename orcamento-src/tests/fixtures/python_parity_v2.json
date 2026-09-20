@@ -6187,5 +6187,870 @@
    "table_version": "DEMELLO_V2",
    "total_demello": "1804.92"
   }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "5",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA 5h",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.081,03. A referência institucional FUNDEPAR resulta em aproximadamente R$ 1.075,49. Outras referências aplicáveis: MaxiCAD R$ 1.400,00; Receita Federal R$ 1.900,00; IBAPE-PR R$ 2.650,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 860,39. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "860.39",
+      "unrounded_total": "860.392000"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 5,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 5
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "total": "1075.49",
+       "unit_value": "215.0980"
+      },
+      "ibape_pr": {
+       "total": "2650.00",
+       "unit_value": "530.00"
+      },
+      "maxicad_bim": {
+       "total": "1400.00",
+       "unit_value": "280.00"
+      },
+      "rfb_bim": {
+       "total": "1900.00",
+       "unit_value": "380.00"
+      },
+      "secid_pr": {
+       "total": "1081.03",
+       "unit_value": "216.206582"
+      }
+     },
+     "service": "CONSULTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "860.39"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "10",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "MENTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "MENTORIA_TECNICA 10h",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Outras referências aplicáveis: Receita Federal R$ 3.800,00; CIM-AMUNESC R$ 2.726,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 2.181,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "CIM_AMUNESC_2026",
+     "demello": {
+      "total": "2181.20",
+      "unrounded_total": "2181.2000"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 10,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 10
+     },
+     "references": {
+      "cim_amunesc_2026": {
+       "total": "2726.50",
+       "unit_value": "272.65"
+      },
+      "rfb_bim": {
+       "total": "3800.00",
+       "unit_value": "380.00"
+      }
+     },
+     "service": "MENTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "2181.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA sem horas",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": null
+     },
+     "reason": "quantidade essencial (Q_HORAS) não informada",
+     "service": "CONSULTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "MENTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "MENTORIA_TECNICA sem horas",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": null
+     },
+     "reason": "quantidade essencial (Q_HORAS) não informada",
+     "service": "MENTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "0",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA hours=0",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 0
+     },
+     "reason": "quantidade essencial (Q_HORAS) não informada",
+     "service": "CONSULTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "abc",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA hours inválido",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": null
+     },
+     "reason": "quantidade essencial (Q_HORAS) não informada",
+     "service": "CONSULTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "5",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA",
+    "MENTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA + MENTORIA_TECNICA hours=5 (fail-closed)",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 5
+     },
+     "reason": "quantidade horária (Q_HORAS) insuficientemente discriminada entre os serviços horários",
+     "service": "CONSULTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    },
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 5
+     },
+     "reason": "quantidade horária (Q_HORAS) insuficientemente discriminada entre os serviços horários",
+     "service": "MENTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA",
+    "MENTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA + MENTORIA_TECNICA sem horas",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": null
+     },
+     "reason": "quantidade horária (Q_HORAS) insuficientemente discriminada entre os serviços horários",
+     "service": "CONSULTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    },
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": null
+     },
+     "reason": "quantidade horária (Q_HORAS) insuficientemente discriminada entre os serviços horários",
+     "service": "MENTORIA_TECNICA",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": "5",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL",
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "CONSULTORIA_TECNICA + ESTRUTURAL (bases próprias)",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 5.159,43. Pela tabela DEMELLO, nossa previsão inicial é de R$ 4.123,11. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3262.72",
+      "unrounded_total": "3262.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": true,
+      "typology": "COMERCIAL"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "ALTOQI",
+         "unit_value": "34.50"
+        }
+       },
+       "total": "7758.40"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "4078.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    },
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "860.39",
+      "unrounded_total": "860.392000"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 5,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 5
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "total": "1075.49",
+       "unit_value": "215.0980"
+      },
+      "ibape_pr": {
+       "total": "2650.00",
+       "unit_value": "530.00"
+      },
+      "maxicad_bim": {
+       "total": "1400.00",
+       "unit_value": "280.00"
+      },
+      "rfb_bim": {
+       "total": "1900.00",
+       "unit_value": "380.00"
+      },
+      "secid_pr": {
+       "total": "1081.03",
+       "unit_value": "216.206582"
+      }
+     },
+     "service": "CONSULTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "4123.11"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": "5",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL",
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "CONSULTORIA_TECNICA + ESTRUTURAL sem Q_FUNDACAO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": true,
+      "typology": "COMERCIAL"
+     },
+     "q": null,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": null,
+      "area_new": null
+     },
+     "reason": "quantidade essencial (Q_FUNDACAO) não informada",
+     "service": "ESTRUTURAL",
+     "status": "NEEDS_HUMAN_REVIEW"
+    },
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "860.39",
+      "unrounded_total": "860.392000"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 5,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 5
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "total": "1075.49",
+       "unit_value": "215.0980"
+      },
+      "ibape_pr": {
+       "total": "2650.00",
+       "unit_value": "530.00"
+      },
+      "maxicad_bim": {
+       "total": "1400.00",
+       "unit_value": "280.00"
+      },
+      "rfb_bim": {
+       "total": "1900.00",
+       "unit_value": "380.00"
+      },
+      "secid_pr": {
+       "total": "1081.03",
+       "unit_value": "216.206582"
+      }
+     },
+     "service": "CONSULTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": "100",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "2",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "HIDROSSANITARIO",
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "CONSULTORIA_TECNICA + HIDROSSANITARIO (controle)",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.639,41. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.040,16. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "ALTOQI",
+     "demello": {
+      "total": "696.00",
+      "unrounded_total": "696.0000"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 100,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 100
+     },
+     "references": {
+      "altoqi": {
+       "total": "870.00",
+       "unit_value": "8.70"
+      },
+      "secid_pr": {
+       "total": "1207.00",
+       "unit_value": "12.07"
+      }
+     },
+     "service": "HIDROSSANITARIO",
+     "status": "CALCULATED"
+    },
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "344.16",
+      "unrounded_total": "344.156800"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 2,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 100,
+      "hours": 2
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "total": "430.20",
+       "unit_value": "215.0980"
+      },
+      "ibape_pr": {
+       "total": "1060.00",
+       "unit_value": "530.00"
+      },
+      "maxicad_bim": {
+       "total": "560.00",
+       "unit_value": "280.00"
+      },
+      "rfb_bim": {
+       "total": "760.00",
+       "unit_value": "380.00"
+      },
+      "secid_pr": {
+       "total": "432.41",
+       "unit_value": "216.206582"
+      }
+     },
+     "service": "CONSULTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1040.16"
+  }
  }
 ]

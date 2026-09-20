@@ -6,7 +6,7 @@
 // prototype:false, pricing_preview determinístico. Nenhum proposal_value, nenhum
 // MA_ACOES / gate / APPROVED / CONTACT / SEND. Nada é enviado: o payload só é
 // serializado para download local.
-import { summary, safetyHold, terreoDeclared } from './journey.mjs';
+import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf } from './journey.mjs';
 import { buildPricingPreview } from './pricing/engine.mjs';
 import { dec, add, toStr } from './pricing/decimal.mjs';
 
@@ -20,6 +20,8 @@ const SERVICE_LABEL_TO_CODE = {
   Incêndio: 'INCENDIO',
   Gás: 'GAS_GLP',
   'Compatibilização BIM': 'COMPATIBILIZACAO',
+  'Consultoria Técnica': 'CONSULTORIA_TECNICA', // Q_HORAS
+  'Mentoria Técnica': 'MENTORIA_TECNICA', // Q_HORAS
 };
 const FOUNDATION_LABEL = 'Fundações';
 const SERVICES_NOT_OFFERED = new Set(['Elétrica']); // fora do catálogo DEMELLO — nunca precificado
@@ -51,6 +53,7 @@ export function derivePricingInputs(a) {
 
   if (route === 'regularize') services = ['REGULARIZACAO'];
   else if (route === 'problem') services = [];
+  else if (route === 'support') services = hourlyServices(a).map((label) => SERVICE_LABEL_TO_CODE[label]);
   else if (route === 'build' || route === 'known') {
     let raw = Array.isArray(a.services) ? [...a.services] : [];
     if (raw.includes('Não sei quais preciso')) {
@@ -105,6 +108,11 @@ export function derivePricingInputs(a) {
     if (areaFundacao === null && terreoDeclared(a)) areaFundacao = areaNew;
   }
 
+  // Q_HORAS: `hours` é um ÚNICO escalar. Só é preenchido com exatamente UM serviço horário e horas declaradas pelo cliente;
+  // nunca inferido, dividido ou replicado. Com 2+ serviços horários o motor força NEEDS_HUMAN_REVIEW.
+  const hourly = services.filter((s) => s === 'CONSULTORIA_TECNICA' || s === 'MENTORIA_TECNICA');
+  const hours = hourly.length === 1 && a.hours_known === 'sim' ? hoursOf(a.hours) : null;
+
   const reg = { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' };
   if (route === 'regularize' && a.REG_R1 === 'A') {
     reg.area_iptu = areaValue(a.REG_A1);
@@ -128,7 +136,7 @@ export function derivePricingInputs(a) {
     area_terreno: null,
     area_escopo: services.includes('COMPATIBILIZACAO') ? areaValue(a.area_escopo) : null,
     area_fundacao: areaFundacao,
-    hours: null,
+    hours,
     regularizacao: reg,
     hidro_scope_includes_existing: null,
   };
@@ -143,7 +151,8 @@ export function packageForCRMv2(a, mode) {
     source: V2_SOURCE,
     prototype: false,
     sent_to_crm: false,
-    route: a.route,
+    // A entrada "apoio técnico" é UX; o contrato/CRM só conhece as 4 rotas (origin_detail): serviço escolhido = known; "ainda não sei" = problem.
+    route: a.route === 'support' ? (hourlyServices(a).length ? 'known' : 'problem') : a.route,
     summary: summary(a),
     answers: data,
     pricing_inputs,

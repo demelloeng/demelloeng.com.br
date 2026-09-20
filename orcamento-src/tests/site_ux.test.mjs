@@ -155,11 +155,12 @@ test('navegação compartilhada permanece com os oito itens congelados', async (
   }
 });
 
-test('INVARIANTES do intake: 4 rotas, 9 SERVICE_IDs, árvore/pricing/payload intactos, REG_A2=0 preservado', async () => {
+test('INVARIANTES do intake: 4 rotas originais + entrada de apoio técnico, 9 SERVICE_IDs, árvore/pricing/payload intactos, REG_A2=0 preservado', async () => {
   const journey = await readSrc('journey.mjs');
   const routesLine = journey.match(/export const routes=\{([^}]*)\}/)?.[1] ?? '';
   const routeKeys = [...routesLine.matchAll(/(\w+):/g)].map((m) => m[1]);
-  assert.deepEqual(routeKeys, ['build', 'regularize', 'problem', 'known'], 'exatamente quatro rotas');
+  // A 5a entrada ("Preciso de orientação ou apoio técnico") foi APROVADA por Marcos; as 4 rotas originais seguem intactas e em ordem.
+  assert.deepEqual(routeKeys, ['build', 'regularize', 'problem', 'known', 'support'], 'quatro rotas originais + apoio técnico');
   assert.match(journey, /ZERO_VALID_AREA_NODES=new Set\(\['REG_A2'\]\)/, 'patch REG_A2 preservado');
 
   const table = JSON.parse(await readSrc('pricing/pricing-table.v2.json'));

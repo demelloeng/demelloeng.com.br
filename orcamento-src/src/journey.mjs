@@ -6,15 +6,15 @@ export {ufs,area};
 const ZERO_VALID_AREA_NODES=new Set(['REG_A2']);
 export const areaZeroValid=nodeId=>ZERO_VALID_AREA_NODES.has(nodeId);
 export const areaFor=(nodeId,answer)=>area(answer,{allowZero:areaZeroValid(nodeId)});
-export const routes={build:'Construir ou ampliar',regularize:'Regularizar meu imóvel',problem:'Avaliar um problema',known:'Já sei o serviço'};
-export const starts={build:'CA1',regularize:'REG_R1',problem:'P1',known:'S1'};
+export const routes={build:'Construir ou ampliar',regularize:'Regularizar meu imóvel',problem:'Avaliar um problema',known:'Já sei o serviço',support:'Preciso de orientação ou apoio técnico'};
+export const starts={build:'CA1',regularize:'REG_R1',problem:'P1',known:'S1',support:'SUP1'};
 const opts=list=>list.map(x=>typeof x==='string'?{value:x,label:x}:x);
 const n=(title,type,choices=[],extra={})=>({title,type,options:opts(choices),...extra});
 export const properties=['Casa/sobrado','Residencial multifamiliar','Comercial','Industrial','Outro'];
 export const phases=['Só uma ideia / estudo','Arquitetura em desenvolvimento','Arquitetura pronta','Obra já começou'];
 export const deadlines=['Até 30 dias','1–3 meses','3–6 meses','Mais de 6 meses','Ainda sem prazo'];
 // "Elétrica" foi extirpada do catálogo DEMELLO: referência de preço existir != serviço ofertável.
-export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem','Incêndio','Gás','Compatibilização BIM','Outro'];
+export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem','Incêndio','Gás','Compatibilização BIM','Consultoria Técnica','Mentoria Técnica','Outro'];
 const buildServices=[{value:'Estrutural',label:'Estruturas'},{value:'Hidrossanitário',label:'Água e esgoto'},'Drenagem','Incêndio','Gás','Compatibilização BIM','Não sei quais preciso'];
 export const nodes={
  HOME:n('O que você precisa resolver?','entry',Object.entries(routes).map(([value,label])=>({value,label})),{key:'route'}),
@@ -46,7 +46,12 @@ export const nodes={
  Q_COMPAT:n('Qual a área total de projeto a compatibilizar?','area',[],{key:'area_escopo',label:'Área do escopo (compatibilização)'}),
  // Q_FUNDACAO: área de PROJEÇÃO (footprint) da edificação — base das fundações (SECID/PR 009/2026 item 9.1; FUNDEPAR/SECID 028/2024 item 6.1).
  // Nunca é estimada a partir da área total nem do tipo do imóvel; sem ela o estrutural vai a avaliação humana.
- Q_FUND:n('Qual a área aproximada de projeção da edificação no terreno?','area',[],{key:'area_fundacao',label:'Área de projeção (fundações)'})
+ Q_FUND:n('Qual a área aproximada de projeção da edificação no terreno?','area',[],{key:'area_fundacao',label:'Área de projeção (fundações)'}),
+ // Serviços horários (Q_HORAS): Consultoria/Mentoria Técnica. Horas só quando o cliente sabe; nunca inferidas.
+ SUP1:n('Como podemos ajudar?','single',[{value:'consultoria',label:'Preciso resolver, revisar ou decidir uma questão técnica'},{value:'mentoria',label:'Quero aprender, desenvolver uma ferramenta/processo ou ter acompanhamento técnico'},{value:'nao_sei',label:'Ainda não sei qual se encaixa'}],{key:'support_kind',label:'Tipo de apoio'}),
+ HRS_Q:n('Você já sabe aproximadamente quantas horas de apoio precisa?','single',[{value:'sim',label:'Sim, sei aproximadamente'},{value:'nao',label:'Ainda não sei'}],{key:'hours_known',label:'Horas de apoio conhecidas'}),
+ HRS_V:n('Quantas horas, aproximadamente?','hours',[],{key:'hours',label:'Horas de apoio'}),
+ HRS_CTX:n('Conte em poucas palavras o que você precisa','text',[],{key:'support_context',label:'O que você precisa'})
 };
 // Nós condicionais inseridos logo após a seleção de serviços (CA7 / S1).
 // Térreo DECLARADO pelo cliente (construir do zero, "Quantos pavimentos?" = 1): a área de projeção coincide com a área
@@ -55,9 +60,17 @@ export const terreoDeclared=a=>a.route==='build'&&a.CA1==='Construir do zero'&&a
 // Serviços efetivos: os marcados + os sugeridos já confirmados ("Não sei quais preciso").
 const effectiveServices=a=>[...(a.services||[]),...((a.services||[]).includes('Não sei quais preciso')&&a.suggestionConfirmed?(a.confirmedSuggestions||[]):[])];
 export const needsFoundationArea=a=>{const s=effectiveServices(a);return (s.includes('Estrutural')||s.includes('Fundações'))&&!terreoDeclared(a);};
-const serviceExtraNodes=a=>{const s=a.services||[];return [...(needsFoundationArea(a)?['Q_FUND']:[]),...(s.includes('Gás')?['Q_GAS']:[]),...(s.includes('Compatibilização BIM')?['Q_COMPAT']:[])];};
+export const HOURLY=['Consultoria Técnica','Mentoria Técnica'];
+// Serviços horários efetivamente escolhidos: pela lista do "Já sei o serviço" ou pela entrada de apoio técnico.
+export const hourlyServices=a=>a.route==='support'?(a.support_kind==='consultoria'?['Consultoria Técnica']:a.support_kind==='mentoria'?['Mentoria Técnica']:[]):a.route==='known'?(a.services||[]).filter(s=>HOURLY.includes(s)):[];
+// Só serviço horário (sem projeto por área): S2/S3/S5 não se aplicam.
+export const hourlyOnly=a=>a.route==='support'||(a.route==='known'&&(a.services||[]).length>0&&(a.services||[]).every(s=>HOURLY.includes(s)));
+export const hoursOf=v=>{const t=String(v?.value??'').trim();return /^\d+(?:[.,]\d{1,2})?$/.test(t)&&Number(t.replace(',','.'))>0?t:null;};
+// 1 serviço horário: pergunta as horas (com contexto se não souber). 2+ (Consultoria + Mentoria): não há como discriminar horas -> contexto e revisão humana.
+const hourNodes=a=>{const h=hourlyServices(a).length;if(h===0)return a.route==='support'?['HRS_CTX']:[];if(h>=2)return ['HRS_CTX'];return ['HRS_Q',...(a.hours_known==='sim'?['HRS_V']:a.hours_known==='nao'?['HRS_CTX']:[])];};
+const serviceExtraNodes=a=>{const s=a.services||[];return [...(needsFoundationArea(a)?['Q_FUND']:[]),...(s.includes('Gás')?['Q_GAS']:[]),...(s.includes('Compatibilização BIM')?['Q_COMPAT']:[]),...(a.route==='known'?hourNodes(a):[])];};
 function afterServices(a,from){
- const extras=serviceExtraNodes(a),cont=a.route==='build'?'CA8':'S2';
+ const extras=serviceExtraNodes(a),cont=a.route==='build'?'CA8':hourlyOnly(a)?'S4':'S2';
  const idx=from==='CA7'||from==='S1'?-1:extras.indexOf(from);
  return extras[idx+1]??cont;
 }
@@ -77,12 +90,13 @@ for(const [id,label] of Object.entries(detailLabels))nodes['REG_'+id].label=labe
 const regStarts={A:'REG_A1',B:'REG_B1',C:'REG_C-R1',D:'REG_D1',E:'REG_E1',F:'REG_F1',G:'REG_G1'};
 export const keyOf=id=>nodes[id].key??id;
 export const isProject=a=>['build','known'].includes(a.route);
-export const titleOf=(id,a)=>id==='X1'?(isProject(a)?'Seu projeto, organizado':'Seu caso, organizado'):nodes[id].title;
+export const titleOf=(id,a)=>id==='X1'?(isProject(a)?'Seu projeto, organizado':'Seu caso, organizado'):hourlyOnly(a)&&id==='S4'?'Onde você está?':hourlyOnly(a)&&id==='S6'?'Quando pretende precisar desse apoio?':nodes[id].title;
 export function valid(id,a){
  const node=nodes[id],v=a[keyOf(id)];
  if(['summary','result'].includes(node.type))return true;
  if(node.type==='location')return !!v?.city?.trim()&&ufs.includes(v.uf);
  if(node.type==='area')return v?.unknown===true||areaFor(id,v)!==null;
+ if(node.type==='hours')return hoursOf(v)!==null;
  if(node.type==='integer')return v?.unknown===true||(/^\d+$/.test(v?.value??'')&&Number(v.value)>0&&Number(v.value)<=200);
  if(node.type==='story')return !!v?.trim()||!!a.photos?.length;
  if(node.type==='text')return !!v?.trim();
@@ -105,7 +119,7 @@ export function switchRoute(a,route,{redirect=false}={}){
  if(redirect){next.redirectedFrom=a.route;const selected=(a.services??[]).filter(x=>x!=='Outro'&&x!=='Não sei quais preciso');if(selected.length)next.carriedServices=selected;if(a.otherService)next.originalRequest=a.otherService;}
  // Keep only property values that are actually offered by the new route.
  const propertyNode={build:'CA2',known:'S2',regularize:'REG_C3',problem:'P3'}[route];
- if(next.property&&!nodes[propertyNode].options.some(o=>o.value===next.property))delete next.property;
+ if(next.property&&!(propertyNode&&nodes[propertyNode].options.some(o=>o.value===next.property)))delete next.property;
  return next;
 }
 export function updateAnswer(a,id,value){
@@ -124,6 +138,8 @@ export function updateAnswer(a,id,value){
    if(!Array.isArray(value)||!value.includes('Compatibilização BIM'))delete next.area_escopo;
    if(!needsFoundationArea(next))delete next.area_fundacao;
  }
+ if(id==='S1'||id==='SUP1'){if(hourlyServices(next).length!==1){delete next.hours_known;delete next.hours;}if(hourlyServices(next).length===0&&next.route==='known')delete next.support_context;}
+ if(id==='HRS_Q'&&value!=='sim')delete next.hours;
  // A resposta de projeção depende de construir/ampliar e de quantos pavimentos: mudou -> pergunta de novo (nunca reaproveita).
  if(id==='CA1'||id==='CA5')delete next.area_fundacao;
  return next;
@@ -141,14 +157,17 @@ export function safetyHold(a){
  const t=normalized(a.P2);
  return /desab|colapso|desmoron|caindo|caiu|soltando|cedendo|aumentou|aumentando|piorou|rapida|de repente/.test(t);
 }
-export function needsReview(a){return safetyHold(a)||(a.route==='problem'&&a.photos?.length&&!a.P2?.trim())||(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))||(a.route==='known'&&a.services?.includes('Outro'))||!!a.carriedServices?.length;}
+export function needsReview(a){return safetyHold(a)||(a.route==='problem'&&a.photos?.length&&!a.P2?.trim())||(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))||(a.route==='known'&&a.services?.includes('Outro'))||!!a.carriedServices?.length||(a.route==='support'&&a.support_kind==='nao_sei')||hourlyServices(a).length>=2||(hourlyServices(a).length===1&&a.hours_known==='nao');}
 export function resultFor(a,mode){return !needsReview(a)&&mode==='preview'?'X3A':'X3B';}
 function direct(id,a){
  if(id==='HOME')return starts[a.route];
  if(id==='CA1')return a.CA1==='Construir do zero'?'CA_AREA':a.CA1==='Ampliar um imóvel existente'?'CA_EXISTING':'CA2';
  if(id==='REG_C4')return regStarts[a.REG_R1];
  if(id==='REG_G1')return regStarts[classify(a.REG_G1)]??'X1';
- if(id==='CA7'||id==='S1'||id==='Q_FUND'||id==='Q_GAS'||id==='Q_COMPAT')return afterServices(a,id);
+ if(id==='SUP1')return hourlyServices(a).length?'HRS_Q':'HRS_CTX';
+ if(a.route==='support'&&['HRS_Q','HRS_V','HRS_CTX'].includes(id))return id==='HRS_Q'?(a.hours_known==='sim'?'HRS_V':'HRS_CTX'):'S4';
+ if(id==='S4'&&hourlyOnly(a))return 'S6';
+ if(['CA7','S1','Q_FUND','Q_GAS','Q_COMPAT','HRS_Q','HRS_V','HRS_CTX'].includes(id))return afterServices(a,id);
  return nodes[id]?.next;
 }
 export function advance(id,answers,mode='missing'){
@@ -170,7 +189,8 @@ export function advance(id,answers,mode='missing'){
 }
 export function routeNodes(a){
  if(a.route==='build')return ['CA1',...(a.CA1==='Construir do zero'?['CA_AREA']:a.CA1==='Ampliar um imóvel existente'?['CA_EXISTING','CA_NEW']:[]),'CA2','CA3','CA4','CA5','CA6','CA7',...serviceExtraNodes(a),'CA8'];
- if(a.route==='known')return ['S1',...serviceExtraNodes(a),'S2','S3','S4','S5','S6'];
+ if(a.route==='known')return ['S1',...serviceExtraNodes(a),...(hourlyOnly(a)?['S4','S6']:['S2','S3','S4','S5','S6'])];
+ if(a.route==='support')return ['SUP1',...hourNodes(a),'S4','S6'];
  if(a.route==='problem')return ['P1','P2','P3','P4','P5'];
  if(a.route==='regularize'){
    const branch=a.REG_R1==='G'?classify(a.REG_G1):a.REG_R1;
@@ -185,6 +205,7 @@ export function summary(a){
    const node=nodes[id],key=keyOf(id),v=a[key];if(v===undefined||v===''||seen.has(key))continue;seen.add(key);
    let label=node.label??node.title,value;
    if(node.type==='location'){label='Localização';value=[v.city,v.uf].filter(Boolean).join(' / ');}
+   else if(node.type==='hours')value=v?.value?`${String(v.value).trim()} h`:'';
    else if(['area','integer'].includes(node.type))value=v.unknown?'Não sei':v.value?`${v.value}${node.type==='area'?' m²':''}`:'';
    else if(node.type==='multi'){value=(v.includes('Não sei quais preciso')?(a.suggestionConfirmed?a.confirmedSuggestions:['A definir']):v).map(s=>node.options.find(o=>o.value===s)?.label??s).join(' · ');}
    else value=node.options.find(o=>o.value===v)?.label??v;
@@ -205,6 +226,9 @@ export function missingData(a){
   const node=nodes[id],v=a[keyOf(id)];
   if(['area','integer'].includes(node.type)&&(!v||v.unknown))list.push(node.label??node.title);
  }
+ if(a.route==='support'&&a.support_kind==='nao_sei')list.push('Definição do tipo de apoio');
+ if(hourlyServices(a).length>=2)list.push('Dimensionamento do atendimento pela equipe DEMELLO');
+ else if(hourlyServices(a).length===1&&a.hours_known==='nao')list.push('Quantidade aproximada de horas de apoio');
  if(a.route==='build'&&a.CA1==='Ainda estou definindo')list.push('Definição entre construção e ampliação');
  if(a.route==='build'&&a.services?.includes('Não sei quais preciso')&&!a.suggestionConfirmed)list.push('Confirmação dos projetos a avaliar');
  if(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))list.push('Enquadramento do caso para avaliação');

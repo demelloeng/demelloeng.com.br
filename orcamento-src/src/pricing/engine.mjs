@@ -312,7 +312,14 @@ function referenceUnit(service, ref, ctx) {
   return ctx.typology && Object.prototype.hasOwnProperty.call(byTyp, ctx.typology) ? dec(byTyp[ctx.typology]) : null;
 }
 
-export function priceService(service, inp) {
+// `hours` é um ÚNICO escalar: com 2 ou mais serviços horários (Q_HORAS) ele não pode ser aplicado a
+// nenhum deles (nem dividido) — fail-closed, paridade com scripts/site_intake_pricing.py.
+export const REASON_HOURLY_NOT_DISCRIMINATED = 'quantidade horária (Q_HORAS) insuficientemente discriminada entre os serviços horários';
+export function hourlyServiceCount(inp) {
+  return inp.services.filter((s) => (TABLE.services[s] || {}).q_basis === 'Q_HORAS').length;
+}
+
+export function priceService(service, inp, hourlyCount = 0) {
   const svcTbl = TABLE.services[service];
   const qBaseInputs = { area_existing: numberOut(inp.area_existing), area_new: numberOut(inp.area_new) };
   if (!svcTbl) {
@@ -325,6 +332,10 @@ export function priceService(service, inp) {
   const qInputs = { ...qBaseInputs };
   if (basis === 'Q_HORAS') qInputs.hours = numberOut(inp.hours);
   const ctx = serviceContext(service, inp);
+  if (basis === 'Q_HORAS' && hourlyCount >= 2) {
+    return { service, status: REVIEW, q: null, q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
+      reason: REASON_HOURLY_NOT_DISCRIMINATED };
+  }
   if (q === null) {
     return { service, status: REVIEW, q: null, q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
       reason: `quantidade essencial (${basis}) não informada` };
@@ -400,7 +411,8 @@ export function buildCustomerPricingText(preview) {
 
 export function buildPricingPreview(pricingInputs) {
   const inp = extractPricingInputs(pricingInputs);
-  const servicesOut = inp.services.map((service) => priceService(service, inp));
+  const hourlyCount = hourlyServiceCount(inp);
+  const servicesOut = inp.services.map((service) => priceService(service, inp, hourlyCount));
   const calculated = servicesOut.filter((s) => s.status === CALC);
   const needsReview = servicesOut.some((s) => s.status !== CALC) || calculated.length === 0;
   const status = needsReview ? REVIEW : CALC;
