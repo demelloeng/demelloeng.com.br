@@ -1,0 +1,6191 @@
+[
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/CONCRETO_ARMADO Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.703,71. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 1.798,96. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.362,96. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1362.96",
+      "unrounded_total": "1362.96400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "ALTOQI",
+         "unit_value": "17.60"
+        }
+       },
+       "total": "1798.96"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "1703.71"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1362.96"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/CONCRETO_ARMADO Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 4.078,40. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 4.378,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.262,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3262.72",
+      "unrounded_total": "3262.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "ALTOQI",
+         "unit_value": "17.60"
+        }
+       },
+       "total": "4378.40"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "4078.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3262.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/CONCRETO_ARMADO Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 22.539,00. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 24.339,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 18.031,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "18031.20",
+      "unrounded_total": "18031.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "ALTOQI",
+         "unit_value": "17.60"
+        }
+       },
+       "total": "24339.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "22539.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "18031.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/METALICA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.294,38. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1294.38",
+      "unrounded_total": "1294.38400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1294.38"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/METALICA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.046,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3046.72",
+      "unrounded_total": "3046.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3046.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/METALICA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.735,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "16735.20",
+      "unrounded_total": "16735.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16735.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/MADEIRA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.294,38. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1294.38",
+      "unrounded_total": "1294.38400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1294.38"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/MADEIRA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.046,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3046.72",
+      "unrounded_total": "3046.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3046.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "CASA"
+  },
+  "name": "ESTRUTURAL CASA/MADEIRA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.735,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "16735.20",
+      "unrounded_total": "16735.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "CASA"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16735.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/CONCRETO_ARMADO Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.703,71. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 1.595,76. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.276,60. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "ALTOQI_COMPOSTA",
+     "demello": {
+      "total": "1276.60",
+      "unrounded_total": "1276.60400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "ALTOQI",
+         "unit_value": "14.40"
+        }
+       },
+       "total": "1595.76"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "1703.71"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1276.60"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/CONCRETO_ARMADO Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 4.078,40. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 3.738,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 2.990,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "ALTOQI_COMPOSTA",
+     "demello": {
+      "total": "2990.72",
+      "unrounded_total": "2990.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "ALTOQI",
+         "unit_value": "14.40"
+        }
+       },
+       "total": "3738.40"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "4078.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "2990.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/CONCRETO_ARMADO Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 22.539,00. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 20.499,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.399,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "ALTOQI_COMPOSTA",
+     "demello": {
+      "total": "16399.20",
+      "unrounded_total": "16399.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "ALTOQI",
+         "unit_value": "14.40"
+        }
+       },
+       "total": "20499.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "22539.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16399.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/METALICA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.294,38. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1294.38",
+      "unrounded_total": "1294.38400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1294.38"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/METALICA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.046,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3046.72",
+      "unrounded_total": "3046.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3046.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/METALICA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.735,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "16735.20",
+      "unrounded_total": "16735.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16735.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/MADEIRA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.294,38. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1294.38",
+      "unrounded_total": "1294.38400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1294.38"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/MADEIRA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.046,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3046.72",
+      "unrounded_total": "3046.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3046.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL PREDIO/MADEIRA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.735,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "16735.20",
+      "unrounded_total": "16735.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "PREDIO"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16735.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/CONCRETO_ARMADO Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.703,71. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 2.872,11. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.362,96. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1362.96",
+      "unrounded_total": "1362.96400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "ALTOQI",
+         "unit_value": "34.50"
+        }
+       },
+       "total": "2872.11"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "1703.71"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1362.96"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/CONCRETO_ARMADO Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 4.078,40. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 7.758,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.262,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3262.72",
+      "unrounded_total": "3262.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "ALTOQI",
+         "unit_value": "34.50"
+        }
+       },
+       "total": "7758.40"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "4078.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3262.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/CONCRETO_ARMADO Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 22.539,00. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 44.619,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 18.031,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "18031.20",
+      "unrounded_total": "18031.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "ALTOQI",
+         "unit_value": "34.50"
+        }
+       },
+       "total": "44619.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "22539.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "18031.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/METALICA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.294,38. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1294.38",
+      "unrounded_total": "1294.38400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1294.38"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/METALICA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.046,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3046.72",
+      "unrounded_total": "3046.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3046.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/METALICA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.735,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "16735.20",
+      "unrounded_total": "16735.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16735.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/MADEIRA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.294,38. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1294.38",
+      "unrounded_total": "1294.38400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1294.38"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/MADEIRA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.046,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3046.72",
+      "unrounded_total": "3046.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3046.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "COMERCIAL"
+  },
+  "name": "ESTRUTURAL COMERCIAL/MADEIRA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.735,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "16735.20",
+      "unrounded_total": "16735.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "SYSTEM_SCOPE_UNDOCUMENTED",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "COMERCIAL"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16735.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/CONCRETO_ARMADO Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.703,71. A referência institucional FUNDEPAR resulta em aproximadamente R$ 1.593,85. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.275,08. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "1275.08",
+      "unrounded_total": "1275.08000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "FUNDEPAR_001_2025"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "9.35"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "15.75"
+        }
+       },
+       "total": "1593.85"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "1703.71"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1275.08"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/CONCRETO_ARMADO Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 4.078,40. A referência institucional FUNDEPAR resulta em aproximadamente R$ 3.898,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.118,40. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "3118.40",
+      "unrounded_total": "3118.4000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "FUNDEPAR_001_2025"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "9.35"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "15.75"
+        }
+       },
+       "total": "3898.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "4078.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3118.40"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "CONCRETO_ARMADO",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/CONCRETO_ARMADO Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 22.539,00. A referência institucional FUNDEPAR resulta em aproximadamente R$ 21.705,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 17.364,00. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "17364.00",
+      "unrounded_total": "17364.0000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "FUNDEPAR_001_2025"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "9.35"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "15.75"
+        }
+       },
+       "total": "21705.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "22539.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "17364.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/METALICA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. A referência institucional FUNDEPAR resulta em aproximadamente R$ 1.464,31. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.171,45. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "1171.45",
+      "unrounded_total": "1171.44800"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "FUNDEPAR_001_2025"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "9.35"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "13.71"
+        }
+       },
+       "total": "1464.31"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1171.45"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/METALICA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. A referência institucional FUNDEPAR resulta em aproximadamente R$ 3.490,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 2.792,00. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "2792.00",
+      "unrounded_total": "2792.0000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "FUNDEPAR_001_2025"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "9.35"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "13.71"
+        }
+       },
+       "total": "3490.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "2792.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "METALICA",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/METALICA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. A referência institucional FUNDEPAR resulta em aproximadamente R$ 11.601,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 9.280,80. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "9280.80",
+      "unrounded_total": "9280.8000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "FUNDEPAR_001_2025"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "METALICA",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "9.35"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "7.33"
+        }
+       },
+       "total": "11601.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "9280.80"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63.5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63.5",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/MADEIRA Q_SUP=63.5 Q_FUN=63.5",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.617,98. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.294,38. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1294.38",
+      "unrounded_total": "1294.38400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "SYSTEM_NOT_INCORPORATED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "1617.98"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1294.38"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/MADEIRA Q_SUP=200 Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 3.808,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.046,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3046.72",
+      "unrounded_total": "3046.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "SYSTEM_NOT_INCORPORATED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "3808.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3046.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "300",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "1200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": "MADEIRA",
+   "typology": "EDUCACIONAL"
+  },
+  "name": "ESTRUTURAL EDUCACIONAL/MADEIRA Q_SUP=1200 Q_FUN=300",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 20.919,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 16.735,20. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "16735.20",
+      "unrounded_total": "16735.2000"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "NO_REFERENCE_FOR_TYPOLOGY",
+        "source": "ALTOQI_COMPOSTA"
+       },
+       {
+        "reason": "SYSTEM_NOT_INCORPORATED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "MADEIRA",
+      "structural_system_default_used": false,
+      "typology": "EDUCACIONAL"
+     },
+     "q": 1200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 300,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 300,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 300,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 1200,
+         "source": "SECID_PR",
+         "unit_value": "14.75"
+        }
+       },
+       "total": "20919.00"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "16735.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": "80",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": "FOUNDATION_ONLY",
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "FUNDACOES isoladas CASA Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 858,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 686,72. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "686.72",
+      "unrounded_total": "686.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "FUNDACAO_ISOLADA"
+     },
+     "pricing_context": {
+      "structural_scope": "FOUNDATION_ONLY",
+      "typology": "CASA"
+     },
+     "q": 80,
+     "q_basis": "Q_FUNDACAO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": 80
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        }
+       },
+       "total": "858.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "686.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": "80",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": "FOUNDATION_ONLY",
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "FUNDACOES isoladas PREDIO Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 858,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 686,72. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "686.72",
+      "unrounded_total": "686.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "FUNDACAO_ISOLADA"
+     },
+     "pricing_context": {
+      "structural_scope": "FOUNDATION_ONLY",
+      "typology": "PREDIO"
+     },
+     "q": 80,
+     "q_basis": "Q_FUNDACAO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": 80
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        }
+       },
+       "total": "858.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "686.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": "80",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": "FOUNDATION_ONLY",
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "FUNDACOES isoladas COMERCIAL Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 858,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 686,72. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "686.72",
+      "unrounded_total": "686.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_CONFIRMED",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "FUNDACAO_ISOLADA"
+     },
+     "pricing_context": {
+      "structural_scope": "FOUNDATION_ONLY",
+      "typology": "COMERCIAL"
+     },
+     "q": 80,
+     "q_basis": "Q_FUNDACAO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": 80
+     },
+     "references": {
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        }
+       },
+       "total": "858.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "686.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": "80",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": "FOUNDATION_ONLY",
+   "structural_system": null,
+   "typology": "EDUCACIONAL"
+  },
+  "name": "FUNDACOES isoladas EDUCACIONAL Q_FUN=80",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 858,40. A referência institucional FUNDEPAR resulta em aproximadamente R$ 748,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 598,40. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "598.40",
+      "unrounded_total": "598.4000"
+     },
+     "package": {
+      "excluded_references": [],
+      "references_compared": [
+       "SECID_PR",
+       "FUNDEPAR_001_2025"
+      ],
+      "scope": "FUNDACAO_ISOLADA"
+     },
+     "pricing_context": {
+      "structural_scope": "FOUNDATION_ONLY",
+      "typology": "EDUCACIONAL"
+     },
+     "q": 80,
+     "q_basis": "Q_FUNDACAO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": 80
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "FUNDEPAR_001_2025",
+         "unit_value": "9.35"
+        }
+       },
+       "total": "748.00"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        }
+       },
+       "total": "858.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "598.40"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": "100",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "HIDROSSANITARIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "HIDROSSANITARIO CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.207,00. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 870,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 696,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "ALTOQI",
+     "demello": {
+      "total": "696.00",
+      "unrounded_total": "696.0000"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 100,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 100
+     },
+     "references": {
+      "altoqi": {
+       "total": "870.00",
+       "unit_value": "8.70"
+      },
+      "secid_pr": {
+       "total": "1207.00",
+       "unit_value": "12.07"
+      }
+     },
+     "service": "HIDROSSANITARIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "696.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "290",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "INCENDIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "INCENDIO CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 971,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 777,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "777.20",
+      "unrounded_total": "777.2000"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 290,
+     "q_basis": "Q_TOTAL",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "971.50",
+       "unit_value": "3.35"
+      }
+     },
+     "service": "INCENDIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "777.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": "90",
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "GAS_GLP"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "GAS_GLP CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 96,30. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 405,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 77,04. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "77.04",
+      "unrounded_total": "77.0400"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 90,
+     "q_basis": "Q_ATENDIDA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "405.00",
+       "unit_value": "4.50"
+      },
+      "secid_pr": {
+       "total": "96.30",
+       "unit_value": "1.07"
+      }
+     },
+     "service": "GAS_GLP",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "77.04"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": "120",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ARQUITETURA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "ARQUITETURA CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 4.249,20. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.399,36. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3399.36",
+      "unrounded_total": "3399.3600"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 120,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 120
+     },
+     "references": {
+      "secid_pr": {
+       "total": "4249.20",
+       "unit_value": "35.41"
+      }
+     },
+     "service": "ARQUITETURA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3399.36"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": "150",
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ORCAMENTO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "ORCAMENTO CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.006,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 805,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "805.20",
+      "unrounded_total": "805.2000"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 150,
+     "q_basis": "Q_ESCOPO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "1006.50",
+       "unit_value": "6.71"
+      }
+     },
+     "service": "ORCAMENTO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "805.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": "500",
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "TERRAPLENAGEM"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "TERRAPLENAGEM CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 180,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 144,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "144.00",
+      "unrounded_total": "144.0000"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 500,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "180.00",
+       "unit_value": "0.36"
+      }
+     },
+     "service": "TERRAPLENAGEM",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "144.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": "100",
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "COMPATIBILIZACAO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "COMPATIBILIZACAO CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 531,15. Pela tabela DEMELLO, nossa previsão inicial é de R$ 424,92. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "424.92",
+      "unrounded_total": "424.920000"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 100,
+     "q_basis": "Q_ESCOPO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "531.15",
+       "unit_value": "5.3115"
+      }
+     },
+     "service": "COMPATIBILIZACAO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "424.92"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": "150",
+    "area_matricula": "0",
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "REGULARIZACAO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "REGULARIZACAO CASA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 5.311,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 4.249,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "4249.20",
+      "unrounded_total": "4249.2000"
+     },
+     "pricing_context": {
+      "components": {
+       "arquitetonico": "DETERMINED",
+       "levantamento": "UNDETERMINED",
+       "projeto_legal": "UNDETERMINED"
+      }
+     },
+     "q": 150,
+     "q_basis": "Q_REGULARIZACAO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "5311.50",
+       "unit_value": "35.41"
+      }
+     },
+     "service": "REGULARIZACAO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "4249.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": "100",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "HIDROSSANITARIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "HIDROSSANITARIO PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.207,00. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 640,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 512,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "ALTOQI",
+     "demello": {
+      "total": "512.00",
+      "unrounded_total": "512.0000"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 100,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 100
+     },
+     "references": {
+      "altoqi": {
+       "total": "640.00",
+       "unit_value": "6.40"
+      },
+      "secid_pr": {
+       "total": "1207.00",
+       "unit_value": "12.07"
+      }
+     },
+     "service": "HIDROSSANITARIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "512.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "290",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "INCENDIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "INCENDIO PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 971,50. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 1.624,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 777,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "777.20",
+      "unrounded_total": "777.2000"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 290,
+     "q_basis": "Q_TOTAL",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "1624.00",
+       "unit_value": "5.60"
+      },
+      "secid_pr": {
+       "total": "971.50",
+       "unit_value": "3.35"
+      }
+     },
+     "service": "INCENDIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "777.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": "90",
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "GAS_GLP"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "GAS_GLP PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 96,30. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 315,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 77,04. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "77.04",
+      "unrounded_total": "77.0400"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 90,
+     "q_basis": "Q_ATENDIDA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "315.00",
+       "unit_value": "3.50"
+      },
+      "secid_pr": {
+       "total": "96.30",
+       "unit_value": "1.07"
+      }
+     },
+     "service": "GAS_GLP",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "77.04"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": "120",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ARQUITETURA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "ARQUITETURA PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 4.249,20. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.399,36. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3399.36",
+      "unrounded_total": "3399.3600"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 120,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 120
+     },
+     "references": {
+      "secid_pr": {
+       "total": "4249.20",
+       "unit_value": "35.41"
+      }
+     },
+     "service": "ARQUITETURA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3399.36"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": "150",
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ORCAMENTO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "ORCAMENTO PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.006,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 805,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "805.20",
+      "unrounded_total": "805.2000"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 150,
+     "q_basis": "Q_ESCOPO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "1006.50",
+       "unit_value": "6.71"
+      }
+     },
+     "service": "ORCAMENTO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "805.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": "500",
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "TERRAPLENAGEM"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "TERRAPLENAGEM PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 180,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 144,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "144.00",
+      "unrounded_total": "144.0000"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 500,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "180.00",
+       "unit_value": "0.36"
+      }
+     },
+     "service": "TERRAPLENAGEM",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "144.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": "100",
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "COMPATIBILIZACAO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "COMPATIBILIZACAO PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 531,15. Pela tabela DEMELLO, nossa previsão inicial é de R$ 424,92. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "424.92",
+      "unrounded_total": "424.920000"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 100,
+     "q_basis": "Q_ESCOPO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "531.15",
+       "unit_value": "5.3115"
+      }
+     },
+     "service": "COMPATIBILIZACAO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "424.92"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": "150",
+    "area_matricula": "0",
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "REGULARIZACAO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "REGULARIZACAO PREDIO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 5.311,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 4.249,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "4249.20",
+      "unrounded_total": "4249.2000"
+     },
+     "pricing_context": {
+      "components": {
+       "arquitetonico": "DETERMINED",
+       "levantamento": "UNDETERMINED",
+       "projeto_legal": "UNDETERMINED"
+      }
+     },
+     "q": 150,
+     "q_basis": "Q_REGULARIZACAO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "5311.50",
+       "unit_value": "35.41"
+      }
+     },
+     "service": "REGULARIZACAO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "4249.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": "100",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "HIDROSSANITARIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "HIDROSSANITARIO COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.207,00. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 1.560,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 965,60. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "965.60",
+      "unrounded_total": "965.6000"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 100,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 100
+     },
+     "references": {
+      "altoqi": {
+       "total": "1560.00",
+       "unit_value": "15.60"
+      },
+      "secid_pr": {
+       "total": "1207.00",
+       "unit_value": "12.07"
+      }
+     },
+     "service": "HIDROSSANITARIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "965.60"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "290",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "INCENDIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "INCENDIO COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 971,50. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 3.045,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 777,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "777.20",
+      "unrounded_total": "777.2000"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 290,
+     "q_basis": "Q_TOTAL",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "3045.00",
+       "unit_value": "10.50"
+      },
+      "secid_pr": {
+       "total": "971.50",
+       "unit_value": "3.35"
+      }
+     },
+     "service": "INCENDIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "777.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": "90",
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "GAS_GLP"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "GAS_GLP COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 96,30. A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente R$ 594,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 77,04. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "77.04",
+      "unrounded_total": "77.0400"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 90,
+     "q_basis": "Q_ATENDIDA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "594.00",
+       "unit_value": "6.60"
+      },
+      "secid_pr": {
+       "total": "96.30",
+       "unit_value": "1.07"
+      }
+     },
+     "service": "GAS_GLP",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "77.04"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": "120",
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ARQUITETURA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "ARQUITETURA COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 4.249,20. Pela tabela DEMELLO, nossa previsão inicial é de R$ 3.399,36. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "3399.36",
+      "unrounded_total": "3399.3600"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 120,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": 120
+     },
+     "references": {
+      "secid_pr": {
+       "total": "4249.20",
+       "unit_value": "35.41"
+      }
+     },
+     "service": "ARQUITETURA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "3399.36"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": "150",
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ORCAMENTO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "ORCAMENTO COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.006,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 805,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "805.20",
+      "unrounded_total": "805.2000"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 150,
+     "q_basis": "Q_ESCOPO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "1006.50",
+       "unit_value": "6.71"
+      }
+     },
+     "service": "ORCAMENTO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "805.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": "500",
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "TERRAPLENAGEM"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "TERRAPLENAGEM COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 180,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 144,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "144.00",
+      "unrounded_total": "144.0000"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 500,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "180.00",
+       "unit_value": "0.36"
+      }
+     },
+     "service": "TERRAPLENAGEM",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "144.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": "100",
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "COMPATIBILIZACAO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "COMPATIBILIZACAO COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 531,15. Pela tabela DEMELLO, nossa previsão inicial é de R$ 424,92. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "424.92",
+      "unrounded_total": "424.920000"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 100,
+     "q_basis": "Q_ESCOPO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "531.15",
+       "unit_value": "5.3115"
+      }
+     },
+     "service": "COMPATIBILIZACAO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "424.92"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": "150",
+    "area_matricula": "0",
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "REGULARIZACAO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "COMERCIAL"
+  },
+  "name": "REGULARIZACAO COMERCIAL",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 5.311,50. Pela tabela DEMELLO, nossa previsão inicial é de R$ 4.249,20. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "4249.20",
+      "unrounded_total": "4249.2000"
+     },
+     "pricing_context": {
+      "components": {
+       "arquitetonico": "DETERMINED",
+       "levantamento": "UNDETERMINED",
+       "projeto_legal": "UNDETERMINED"
+      }
+     },
+     "q": 150,
+     "q_basis": "Q_REGULARIZACAO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "5311.50",
+       "unit_value": "35.41"
+      }
+     },
+     "service": "REGULARIZACAO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "4249.20"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "1",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA 1h",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 216,21. A referência institucional FUNDEPAR resulta em aproximadamente R$ 215,10. Outras referências aplicáveis: MaxiCAD R$ 280,00; Receita Federal R$ 380,00; IBAPE-PR R$ 530,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 172,08. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "172.08",
+      "unrounded_total": "172.078400"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 1,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 1
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "total": "215.10",
+       "unit_value": "215.0980"
+      },
+      "ibape_pr": {
+       "total": "530.00",
+       "unit_value": "530.00"
+      },
+      "maxicad_bim": {
+       "total": "280.00",
+       "unit_value": "280.00"
+      },
+      "rfb_bim": {
+       "total": "380.00",
+       "unit_value": "380.00"
+      },
+      "secid_pr": {
+       "total": "216.21",
+       "unit_value": "216.206582"
+      }
+     },
+     "service": "CONSULTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "172.08"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "3",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "CONSULTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "CONSULTORIA_TECNICA 3h",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 648,62. A referência institucional FUNDEPAR resulta em aproximadamente R$ 645,29. Outras referências aplicáveis: MaxiCAD R$ 840,00; Receita Federal R$ 1.140,00; IBAPE-PR R$ 1.590,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 516,24. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "FUNDEPAR_001_2025",
+     "demello": {
+      "total": "516.24",
+      "unrounded_total": "516.235200"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 3,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 3
+     },
+     "references": {
+      "fundepar_001_2025": {
+       "total": "645.29",
+       "unit_value": "215.0980"
+      },
+      "ibape_pr": {
+       "total": "1590.00",
+       "unit_value": "530.00"
+      },
+      "maxicad_bim": {
+       "total": "840.00",
+       "unit_value": "280.00"
+      },
+      "rfb_bim": {
+       "total": "1140.00",
+       "unit_value": "380.00"
+      },
+      "secid_pr": {
+       "total": "648.62",
+       "unit_value": "216.206582"
+      }
+     },
+     "service": "CONSULTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "516.24"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": null,
+   "hidro_scope_includes_existing": null,
+   "hours": "1",
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "MENTORIA_TECNICA"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": null
+  },
+  "name": "MENTORIA_TECNICA 1h",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Outras referências aplicáveis: Receita Federal R$ 380,00; CIM-AMUNESC R$ 272,65. Pela tabela DEMELLO, nossa previsão inicial é de R$ 218,12. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "CIM_AMUNESC_2026",
+     "demello": {
+      "total": "218.12",
+      "unrounded_total": "218.1200"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 1,
+     "q_basis": "Q_HORAS",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null,
+      "hours": 1
+     },
+     "references": {
+      "cim_amunesc_2026": {
+       "total": "272.65",
+       "unit_value": "272.65"
+      },
+      "rfb_bim": {
+       "total": "380.00",
+       "unit_value": "380.00"
+      }
+     },
+     "service": "MENTORIA_TECNICA",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "218.12"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": null,
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "120",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "sem Q_FUNDACAO",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": true,
+      "typology": "CASA"
+     },
+     "q": null,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": null,
+      "area_new": null
+     },
+     "reason": "quantidade essencial (Q_FUNDACAO) não informada",
+     "service": "ESTRUTURAL",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "120",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "100",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "Q_FUNDACAO > Q_SUPERESTRUTURA",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": true,
+      "typology": "CASA"
+     },
+     "q": null,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 120,
+      "area_new": null
+     },
+     "reason": "Q_FUNDACAO maior que Q_SUPERESTRUTURA: inconsistência de escopo",
+     "service": "ESTRUTURAL",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "80",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "200",
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL",
+    "HIDROSSANITARIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "PREDIO"
+  },
+  "name": "ESTRUTURAL + HIDRO PREDIO multi-pavimento",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 6.492,40. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 5.018,40. Pela tabela DEMELLO, nossa previsão inicial é de R$ 4.014,72. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "ALTOQI_COMPOSTA",
+     "demello": {
+      "total": "2990.72",
+      "unrounded_total": "2990.7200"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "IMPLIED_BY_STRUCTURAL",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": true,
+      "typology": "PREDIO"
+     },
+     "q": 200,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 80,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 80,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "ALTOQI",
+         "unit_value": "14.40"
+        }
+       },
+       "total": "3738.40"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 80,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 200,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "4078.40"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    },
+    {
+     "base_reference": "ALTOQI",
+     "demello": {
+      "total": "1024.00",
+      "unrounded_total": "1024.0000"
+     },
+     "pricing_context": {
+      "typology": "PREDIO"
+     },
+     "q": 200,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "1280.00",
+       "unit_value": "6.40"
+      },
+      "secid_pr": {
+       "total": "2414.00",
+       "unit_value": "12.07"
+      }
+     },
+     "service": "HIDROSSANITARIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "4014.72"
+  }
+ },
+ {
+  "inputs": {
+   "area_atendida": null,
+   "area_escopo": null,
+   "area_existing": null,
+   "area_fundacao": "63,5",
+   "area_new": null,
+   "area_terreno": null,
+   "area_total": "63,5",
+   "foundations_selected": true,
+   "hidro_scope_includes_existing": null,
+   "hours": null,
+   "regularizacao": {
+    "area_iptu": null,
+    "area_matricula": null,
+    "levantamento": "UNDETERMINED",
+    "projeto_legal": "UNDETERMINED"
+   },
+   "services": [
+    "ESTRUTURAL",
+    "HIDROSSANITARIO"
+   ],
+   "structural_scope": null,
+   "structural_system": null,
+   "typology": "CASA"
+  },
+  "name": "primeiro lead real (entradas) com projeção",
+  "preview": {
+   "currency": "BRL",
+   "factor_demello": 0.8,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 2.470,16. A referência de mercado para esse tipo de projeto é de aproximadamente R$ 2.351,41. Pela tabela DEMELLO, nossa previsão inicial é de R$ 1.804,92. O projeto estrutural contempla estrutura e fundações. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R1",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "1362.96",
+      "unrounded_total": "1362.96400"
+     },
+     "package": {
+      "excluded_references": [
+       {
+        "reason": "TYPOLOGY_NOT_APPLICABLE",
+        "source": "FUNDEPAR_001_2025"
+       }
+      ],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI_COMPOSTA"
+      ],
+      "scope": "ESTRUTURA_COMPLETA_COM_FUNDACOES"
+     },
+     "pricing_context": {
+      "foundations_included": true,
+      "foundations_selection": "EXPLICIT",
+      "structural_scope": "FULL",
+      "structural_system": "CONCRETO_ARMADO",
+      "structural_system_default_used": true,
+      "typology": "CASA"
+     },
+     "q": 63.5,
+     "q_basis": "Q_SUPERESTRUTURA",
+     "q_fundacao": 63.5,
+     "q_inputs": {
+      "area_existing": null,
+      "area_fundacao": 63.5,
+      "area_new": null
+     },
+     "references": {
+      "altoqi_composta": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "ALTOQI",
+         "unit_value": "17.60"
+        }
+       },
+       "total": "1798.96"
+      },
+      "secid_pr": {
+       "components": {
+        "fundacao": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "10.73"
+        },
+        "superestrutura": {
+         "q": 63.5,
+         "source": "SECID_PR",
+         "unit_value": "16.10"
+        }
+       },
+       "total": "1703.71"
+      }
+     },
+     "service": "ESTRUTURAL",
+     "status": "CALCULATED"
+    },
+    {
+     "base_reference": "ALTOQI",
+     "demello": {
+      "total": "441.96",
+      "unrounded_total": "441.96000"
+     },
+     "pricing_context": {
+      "typology": "CASA"
+     },
+     "q": 63.5,
+     "q_basis": "Q_NOVA",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "552.45",
+       "unit_value": "8.70"
+      },
+      "secid_pr": {
+       "total": "766.45",
+       "unit_value": "12.07"
+      }
+     },
+     "service": "HIDROSSANITARIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "1804.92"
+  }
+ }
+]

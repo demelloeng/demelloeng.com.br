@@ -12,7 +12,7 @@ const svc = (pv, name) => pv.services.find((s) => s.service === name);
 
 test('BUILD 320 comercial -> total 9958.40', () => {
   const pv = preview({
-    route: 'build', CA1: 'Construir do zero', CA_AREA: area('320'),
+    route: 'build', CA1: 'Construir do zero', CA_AREA: area('320'), CA5: area('1'), // térreo declarado: projeção = 320
     property: 'Comercial', services: ['Estrutural', 'Hidrossanitário'],
   });
   assert.equal(pv.status, 'CALCULATED');
@@ -34,37 +34,46 @@ test('REGULARIZAÇÃO 80/110 -> total 849.84', () => {
   assert.equal(pv.total_demello, '849.84');
 });
 
-test('AMPLIAÇÃO 200 + 90, Estrutural + Incêndio -> Q_NOVA 90 / Q_TOTAL 290', () => {
+test('AMPLIAÇÃO 200 + 90, Estrutural + Incêndio -> Q_SUPERESTRUTURA 90 / Q_TOTAL 290', () => {
   const pi = derivePricingInputs({
     route: 'build', CA1: 'Ampliar um imóvel existente',
-    CA_EXISTING: area('200'), CA_NEW: area('90'),
+    CA_EXISTING: area('200'), CA_NEW: area('90'), area_fundacao: area('90'),
     property: 'Comercial', services: ['Estrutural', 'Incêndio'],
   });
   assert.equal(pi.area_existing, '200');
   assert.equal(pi.area_new, '90');
   assert.equal(pi.area_total, '290');
+  assert.equal(pi.area_fundacao, '90');
   const pv = buildPricingPreview(pi);
-  assert.equal(svc(pv, 'ESTRUTURAL').q_basis, 'Q_NOVA');
+  assert.equal(svc(pv, 'ESTRUTURAL').q_basis, 'Q_SUPERESTRUTURA');
   assert.equal(svc(pv, 'ESTRUTURAL').q, 90);
+  assert.equal(svc(pv, 'ESTRUTURAL').q_fundacao, 90);
   assert.equal(svc(pv, 'INCENDIO').q_basis, 'Q_TOTAL');
   assert.equal(svc(pv, 'INCENDIO').q, 290);
 });
 
-test('FUNDAÇÕES isoladas -> ESTRUTURAL FOUNDATION_ONLY, SECID fundação (10,73) x 0,80', () => {
+test('FUNDAÇÕES isoladas -> ESTRUTURAL FOUNDATION_ONLY, SECID fundação (10,73) x 0,80 sobre Q_FUNDACAO', () => {
   const pi = derivePricingInputs({
-    route: 'known', services: ['Fundações'], property: 'Comercial', S3: area('1500'),
+    route: 'known', services: ['Fundações'], property: 'Comercial', S3: area('1500'), area_fundacao: area('1500'),
   });
   assert.deepEqual(pi.services, ['ESTRUTURAL']);
   assert.equal(pi.structural_scope, 'FOUNDATION_ONLY');
   assert.equal(pi.area_total, '1500'); // S3 -> area_total
+  assert.equal(pi.area_fundacao, '1500');
   const pv = buildPricingPreview(pi);
   const est = svc(pv, 'ESTRUTURAL');
   assert.equal(est.status, 'CALCULATED');
+  assert.equal(est.q_basis, 'Q_FUNDACAO');
   assert.equal(est.q, 1500);
-  assert.equal(est.references.secid_pr.unit_value, '10.73');
+  assert.equal(est.references.secid_pr.components.fundacao.unit_value, '10.73');
   assert.equal(est.references.altoqi, undefined);
+  assert.equal(est.references.altoqi_composta, undefined);
   assert.equal(est.demello.total, '12876.00'); // 1500 * 10.73 * 0.80
   assert.equal(est.pricing_context.structural_scope, 'FOUNDATION_ONLY');
+  // sem a área de projeção a fundação isolada NUNCA é aproximada pela área total (S3)
+  const noFoot = buildPricingPreview(derivePricingInputs({ route: 'known', services: ['Fundações'], property: 'Comercial', S3: area('1500') }));
+  assert.equal(noFoot.status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(noFoot.total_demello, null);
   // "Fundações" junto de "Estrutural" = escopo cheio
   const full = derivePricingInputs({ route: 'known', services: ['Estrutural', 'Fundações'], property: 'Comercial' });
   assert.equal(full.structural_scope, null);
@@ -126,10 +135,10 @@ test('T04 precisão: só o total monetário final é arredondado (COMPATIBILIZAC
 
 test('menor referência aplicável (T01/T02) na ampliação comercial', () => {
   const pv = buildPricingPreview(derivePricingInputs({
-    route: 'build', CA1: 'Ampliar um imóvel existente', CA_EXISTING: area('200'), CA_NEW: area('90'),
+    route: 'build', CA1: 'Ampliar um imóvel existente', CA_EXISTING: area('200'), CA_NEW: area('90'), area_fundacao: area('90'),
     property: 'Comercial', services: ['Estrutural', 'Incêndio'],
   }));
-  assert.equal(svc(pv, 'ESTRUTURAL').base_reference, 'SECID_PR'); // 26.83 < 34.50
+  assert.equal(svc(pv, 'ESTRUTURAL').base_reference, 'SECID_PR'); // total SECID 26,83 < composta AltoQi 34,50 + 10,73
   assert.equal(svc(pv, 'INCENDIO').base_reference, 'SECID_PR'); // 3.35 < 10.50
 });
 

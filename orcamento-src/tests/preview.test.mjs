@@ -239,7 +239,10 @@ test('/verificar/index.html: estática, consome PUBLIC_PREVIEW_V1, sem hash-no-b
   assert.match(html, /PUBLIC_PREVIEW_V1/);
   assert.match(html, /integrity/);
   assert.match(html, /res\.status === 409/);
-  assert.match(html, /Tabela DEMELLO V1/);
+  assert.match(html, /Tabela DEMELLO " \+ m\[1\]/); // versão da tabela GRAVADA no registro (V1 histórico ou V2 corrente)
+  assert.doesNotMatch(html, /Tabela DEMELLO V1<\/dd>/); // não fixa mais a versão
+  assert.doesNotMatch(html, /altoqi_composta|composta/); // a composição nunca chega à página pública
+  assert.match(html, /mercado: "Referência de mercado"/);
   // estados
   assert.match(html, /Prévia DEMELLO verificada/);
   assert.match(html, /Código não encontrado/);

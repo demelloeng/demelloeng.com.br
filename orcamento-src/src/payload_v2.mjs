@@ -1,12 +1,12 @@
 // PAYLOAD V2 REAL da experiência ativa — jornada -> pricing_inputs -> site-intake/payload/2
-// com pricing_preview DEMELLO V1 calculado offline no browser.
+// com pricing_preview DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R1) calculado offline no browser.
 //
 // Separação explícita: journey.packageForCRM() (source IT083, prototype:true, faixa
 // fictícia) é LEGADO de regressão. Esta emissão é a real: source DEMELLO_SITE,
 // prototype:false, pricing_preview determinístico. Nenhum proposal_value, nenhum
 // MA_ACOES / gate / APPROVED / CONTACT / SEND. Nada é enviado: o payload só é
 // serializado para download local.
-import { summary, safetyHold } from './journey.mjs';
+import { summary, safetyHold, terreoDeclared } from './journey.mjs';
 import { buildPricingPreview } from './pricing/engine.mjs';
 import { dec, add, toStr } from './pricing/decimal.mjs';
 
@@ -97,6 +97,14 @@ export function derivePricingInputs(a) {
     areaTotal = areaValue(a.S3);
   }
 
+  // Q_FUNDACAO (área de projeção): só do que o cliente informou (Q_FUND) ou de térreo DECLARADO (pavimentos = 1).
+  // Nunca é estimada a partir da área total nem deduzida do tipo de imóvel; ausente => avaliação humana.
+  let areaFundacao = null;
+  if (services.includes('ESTRUTURAL')) {
+    areaFundacao = areaValue(a.area_fundacao);
+    if (areaFundacao === null && terreoDeclared(a)) areaFundacao = areaNew;
+  }
+
   const reg = { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' };
   if (route === 'regularize' && a.REG_R1 === 'A') {
     reg.area_iptu = areaValue(a.REG_A1);
@@ -119,6 +127,8 @@ export function derivePricingInputs(a) {
     area_atendida: services.includes('GAS_GLP') ? areaValue(a.area_atendida) : null,
     area_terreno: null,
     area_escopo: services.includes('COMPATIBILIZACAO') ? areaValue(a.area_escopo) : null,
+    area_fundacao: areaFundacao,
+    hours: null,
     regularizacao: reg,
     hidro_scope_includes_existing: null,
   };

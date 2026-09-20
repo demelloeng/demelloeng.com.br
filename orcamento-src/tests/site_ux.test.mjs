@@ -162,11 +162,11 @@ test('INVARIANTES do intake: 4 rotas, 9 SERVICE_IDs, árvore/pricing/payload int
   assert.deepEqual(routeKeys, ['build', 'regularize', 'problem', 'known'], 'exatamente quatro rotas');
   assert.match(journey, /ZERO_VALID_AREA_NODES=new Set\(\['REG_A2'\]\)/, 'patch REG_A2 preservado');
 
-  const table = JSON.parse(await readSrc('pricing/pricing-table.v1.json'));
+  const table = JSON.parse(await readSrc('pricing/pricing-table.v2.json'));
   assert.deepEqual(Object.keys(table.services).sort(), [
-    'ARQUITETURA', 'COMPATIBILIZACAO', 'ESTRUTURAL', 'GAS_GLP', 'HIDROSSANITARIO',
-    'INCENDIO', 'ORCAMENTO', 'REGULARIZACAO', 'TERRAPLENAGEM',
-  ], 'nove SERVICE_IDs na tabela de preço');
+    'ARQUITETURA', 'COMPATIBILIZACAO', 'CONSULTORIA_TECNICA', 'ESTRUTURAL', 'GAS_GLP', 'HIDROSSANITARIO',
+    'INCENDIO', 'MENTORIA_TECNICA', 'ORCAMENTO', 'REGULARIZACAO', 'TERRAPLENAGEM',
+  ], 'nove SERVICE_IDs originais + CONSULTORIA_TECNICA/MENTORIA_TECNICA na tabela V2');
 
   const payload = await readSrc('payload_v2.mjs');
   assert.match(payload, /schema:\s*'site-intake\/payload\/2'/);

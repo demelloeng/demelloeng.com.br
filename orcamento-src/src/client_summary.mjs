@@ -1,4 +1,5 @@
 import { brlStr } from './pricing/decimal.mjs';
+import { referenceEntries } from './references.mjs';
 
 export const NEXT_STEP =
   'Para avançar, entre em contato com a DEMELLO para confirmarmos as particularidades e o escopo do seu projeto.';
@@ -13,6 +14,8 @@ const SERVICE_PT = {
   ORCAMENTO: 'Orçamento',
   TERRAPLENAGEM: 'Terraplenagem',
   COMPATIBILIZACAO: 'Compatibilização BIM',
+  CONSULTORIA_TECNICA: 'Consultoria técnica',
+  MENTORIA_TECNICA: 'Mentoria técnica',
 };
 
 export const friendlyServiceName = (service) =>
@@ -36,11 +39,7 @@ export function buildClientSummary(payload) {
     .filter((service) => service.status === 'CALCULATED' && service.references)
     .flatMap((service) => {
       const name = friendlyServiceName(service);
-      const lines = service.references.secid_pr
-        ? [`SECID/PR — ${name}: ${brlStr(service.references.secid_pr.total)}`]
-        : [];
-      if (service.references.altoqi) lines.push(`AltoQi — ${name}: ${brlStr(service.references.altoqi.total)}`);
-      return lines;
+      return referenceEntries(service.references).map(({ label, total }) => `${label} — ${name}: ${brlStr(total)}`);
     });
   const contact = filledContact(payload?.contact);
   const total = preview.status === 'CALCULATED' && preview.total_demello

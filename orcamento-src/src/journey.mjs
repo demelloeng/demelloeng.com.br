@@ -43,10 +43,19 @@ export const nodes={
  X1:n('Seu caso, organizado','summary'),X3A:n('Já dá para fazer uma primeira conta.','result'),X3B:n('Já conseguimos organizar seu caso.','result'),X4:n('Quer receber esta análise?','contact',[],{key:'contact'}),
  // Perguntas condicionais de área, só quando o serviço as exige (Gás -> Q_ATENDIDA; Compatibilização -> Q_ESCOPO).
  Q_GAS:n('Qual a área aproximada atendida pela instalação de gás?','area',[],{key:'area_atendida',label:'Área atendida (gás)'}),
- Q_COMPAT:n('Qual a área total de projeto a compatibilizar?','area',[],{key:'area_escopo',label:'Área do escopo (compatibilização)'})
+ Q_COMPAT:n('Qual a área total de projeto a compatibilizar?','area',[],{key:'area_escopo',label:'Área do escopo (compatibilização)'}),
+ // Q_FUNDACAO: área de PROJEÇÃO (footprint) da edificação — base das fundações (SECID/PR 009/2026 item 9.1; FUNDEPAR/SECID 028/2024 item 6.1).
+ // Nunca é estimada a partir da área total nem do tipo do imóvel; sem ela o estrutural vai a avaliação humana.
+ Q_FUND:n('Qual a área aproximada de projeção da edificação no terreno?','area',[],{key:'area_fundacao',label:'Área de projeção (fundações)'})
 };
 // Nós condicionais inseridos logo após a seleção de serviços (CA7 / S1).
-const serviceExtraNodes=a=>{const s=a.services||[];return [...(s.includes('Gás')?['Q_GAS']:[]),...(s.includes('Compatibilização BIM')?['Q_COMPAT']:[])];};
+// Térreo DECLARADO pelo cliente (construir do zero, "Quantos pavimentos?" = 1): a área de projeção coincide com a área
+// estrutural informada. Só esta declaração explícita dispensa a pergunta; tipo de imóvel (casa/sobrado) nunca prova térreo.
+export const terreoDeclared=a=>a.route==='build'&&a.CA1==='Construir do zero'&&a.CA5?.unknown!==true&&String(a.CA5?.value??'').trim()==='1';
+// Serviços efetivos: os marcados + os sugeridos já confirmados ("Não sei quais preciso").
+const effectiveServices=a=>[...(a.services||[]),...((a.services||[]).includes('Não sei quais preciso')&&a.suggestionConfirmed?(a.confirmedSuggestions||[]):[])];
+export const needsFoundationArea=a=>{const s=effectiveServices(a);return (s.includes('Estrutural')||s.includes('Fundações'))&&!terreoDeclared(a);};
+const serviceExtraNodes=a=>{const s=a.services||[];return [...(needsFoundationArea(a)?['Q_FUND']:[]),...(s.includes('Gás')?['Q_GAS']:[]),...(s.includes('Compatibilização BIM')?['Q_COMPAT']:[])];};
 function afterServices(a,from){
  const extras=serviceExtraNodes(a),cont=a.route==='build'?'CA8':'S2';
  const idx=from==='CA7'||from==='S1'?-1:extras.indexOf(from);
@@ -113,7 +122,10 @@ export function updateAnswer(a,id,value){
  if(id==='CA7'||id==='S1'){
    if(!Array.isArray(value)||!value.includes('Gás'))delete next.area_atendida;
    if(!Array.isArray(value)||!value.includes('Compatibilização BIM'))delete next.area_escopo;
+   if(!needsFoundationArea(next))delete next.area_fundacao;
  }
+ // A resposta de projeção depende de construir/ampliar e de quantos pavimentos: mudou -> pergunta de novo (nunca reaproveita).
+ if(id==='CA1'||id==='CA5')delete next.area_fundacao;
  return next;
 }
 export function suggestedServices(a){
@@ -136,7 +148,7 @@ function direct(id,a){
  if(id==='CA1')return a.CA1==='Construir do zero'?'CA_AREA':a.CA1==='Ampliar um imóvel existente'?'CA_EXISTING':'CA2';
  if(id==='REG_C4')return regStarts[a.REG_R1];
  if(id==='REG_G1')return regStarts[classify(a.REG_G1)]??'X1';
- if(id==='CA7'||id==='S1'||id==='Q_GAS'||id==='Q_COMPAT')return afterServices(a,id);
+ if(id==='CA7'||id==='S1'||id==='Q_FUND'||id==='Q_GAS'||id==='Q_COMPAT')return afterServices(a,id);
  return nodes[id]?.next;
 }
 export function advance(id,answers,mode='missing'){

@@ -1,30 +1,58 @@
-// Motor de previsão DEMELLO V1 no browser — porte fiel de scripts/site_intake_pricing.py.
+// Motor de previsão DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R1) no browser — porte fiel de scripts/site_intake_pricing.py.
 // Determinístico, sem rede. Mesmo pricing_inputs => mesmo pricing_preview do Python.
-import TABLE from './pricing-table.v1.json' with { type: 'json' };
+import TABLE from './pricing-table.v2.json' with { type: 'json' };
 import { dec, num, add, sub, mul, absD, cmp, toStr, money, brl, numberOut } from './decimal.mjs';
 
-const TYPOLOGIES = ['CASA', 'PREDIO', 'COMERCIAL'];
+// Regime CORRENTE (única EMISSÃO): table_version DEMELLO_V2 + pricing_rule STRUCT_COMPOSITE_REFS_R1.
+// Regimes históricos (DEMELLO_V1 legado e STRUCT_INCL_FOUNDATIONS_V2) são só REPRODUZIDOS pelo motor Python
+// canônico (validate_payload_v2); este motor JAMAIS os emite.
+const TABLE_VERSION = 'DEMELLO_V2';
+const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R1';
 const STRUCTURAL_SYSTEMS = ['CONCRETO_ARMADO', 'METALICA', 'MADEIRA'];
 const STRUCTURAL_SCOPES = ['FULL', 'FOUNDATION_ONLY'];
 const COMPONENT_STATES = ['DETERMINED', 'NOT_REQUIRED', 'UNDETERMINED'];
-// Regra de composição do ESTRUTURAL (paridade com scripts/site_intake_pricing.py). Este motor só
-// EMITE previsões novas; previsões históricas (sem marcador = regra LEGADA) são revalidadas no
-// motor Python canônico, nunca recalculadas aqui.
-const PRICING_RULE = 'STRUCT_INCL_FOUNDATIONS_V2';
 const CALC = 'CALCULATED';
 const REVIEW = 'NEEDS_HUMAN_REVIEW';
+
+const REASON_SYSTEM_SCOPE_UNDOCUMENTED = 'SYSTEM_SCOPE_UNDOCUMENTED';
+const REASON_TYPOLOGY_NOT_APPLICABLE = 'TYPOLOGY_NOT_APPLICABLE';
+const REASON_TYPOLOGY_NOT_CONFIRMED = 'TYPOLOGY_NOT_CONFIRMED';
+const REASON_SYSTEM_NOT_INCORPORATED = 'SYSTEM_NOT_INCORPORATED';
+const REASON_NO_REFERENCE_FOR_TYPOLOGY = 'NO_REFERENCE_FOR_TYPOLOGY';
 
 const CUSTOMER_FALLBACK_TEXT =
   'A DEMELLO precisa entrar em contato para entender melhor o seu problema. ' +
   'Iremos verificar as informações fornecidas e retornar assim que possível.';
 
-if (TABLE.table_version !== 'DEMELLO_V1') throw new Error('pricing-table.v1.json: table_version inesperada');
+if (TABLE.table_version !== TABLE_VERSION) throw new Error('pricing-table.v2.json: table_version inesperada');
 const FACTOR = dec(String(TABLE.factor_demello));
+const TYPOLOGIES = TABLE.typologies;
 
-const STATIC_Q_BASIS = {
-  ESTRUTURAL: 'Q_NOVA', INCENDIO: 'Q_TOTAL', GAS_GLP: 'Q_ATENDIDA', ARQUITETURA: 'Q_NOVA',
-  REGULARIZACAO: 'Q_REGULARIZACAO', ORCAMENTO: 'Q_ESCOPO', TERRAPLENAGEM: 'Q_TERRENO', COMPATIBILIZACAO: 'Q_ESCOPO',
-};
+// Componentes (superestrutura + fundação) precisam bater com o total publicado (mesmo pacote, uma vez).
+function verifyStructuralTotals(table) {
+  const est = table.services.ESTRUTURAL;
+  const sup = est.components.SUPERESTRUTURA;
+  const fun = est.components.FUNDACAO;
+  const chk = est.published_totals_check;
+  for (const [system, published] of Object.entries(chk.SECID_PR)) {
+    const total = add(dec(sup.SECID_PR.by_structural_system[system]), dec(fun.SECID_PR.unit_value));
+    if (cmp(total, dec(published)) !== 0) throw new Error(`ESTRUTURAL: componentes SECID/PR ${system} != total publicado`);
+  }
+  const fundFp = dec(fun.FUNDEPAR_001_2025.unit_value);
+  const fp = sup.FUNDEPAR_001_2025;
+  if (cmp(add(dec(fp.by_structural_system.CONCRETO_ARMADO), fundFp), dec(chk.FUNDEPAR_001_2025.CONCRETO_ARMADO)) !== 0) {
+    throw new Error('ESTRUTURAL: componentes FUNDEPAR CA != total publicado');
+  }
+  const bands = chk.FUNDEPAR_001_2025.METALICA_BY_AREA;
+  if (bands) {
+    fp.metalica_by_area.forEach((band, i) => {
+      if (cmp(add(dec(band.unit_value), fundFp), dec(bands[i])) !== 0) {
+        throw new Error('ESTRUTURAL: componentes FUNDEPAR metalica != total publicado');
+      }
+    });
+  }
+}
+verifyStructuralTotals(TABLE);
 
 function upper(v) { return typeof v === 'string' && v.trim() ? v.trim().toUpperCase() : null; }
 
@@ -57,6 +85,8 @@ export function extractPricingInputs(pi) {
     area_atendida: num(pi.area_atendida),
     area_terreno: num(pi.area_terreno),
     area_escopo: num(pi.area_escopo),
+    area_fundacao: num(pi.area_fundacao), // Q_FUNDACAO: área de projeção (footprint); nunca estimada
+    hours: num(pi.hours), // Q_HORAS
     reg_area_matricula: num(reg.area_matricula),
     reg_area_iptu: num(reg.area_iptu),
     reg_levantamento: componentState(reg.levantamento),
@@ -67,18 +97,15 @@ export function extractPricingInputs(pi) {
   };
 }
 
-function qBasis(service, inp) {
-  if (service === 'HIDROSSANITARIO') return inp.hidro_scope_includes_existing === true ? 'Q_ATENDIDA' : 'Q_NOVA';
-  return STATIC_Q_BASIS[service] || 'Q_NOVA';
-}
+const isPositive = (d) => d !== null && d !== undefined && d.n > 0n;
 
-export function resolveQ(service, inp) {
-  const basis = qBasis(service, inp);
+// Quantidade de uma base Q_*. Nunca infere área inexistente.
+function qFromBasis(basis, inp) {
   const ae = inp.area_existing;
   const an = inp.area_new;
   const at = inp.area_total;
   let q = null;
-  if (basis === 'Q_NOVA') {
+  if (basis === 'Q_NOVA' || basis === 'Q_SUPERESTRUTURA') {
     if (an !== null) q = an;
     else if (ae === null && at !== null) q = at;
   } else if (basis === 'Q_TOTAL') {
@@ -89,201 +116,293 @@ export function resolveQ(service, inp) {
   } else if (basis === 'Q_ATENDIDA') q = inp.area_atendida;
   else if (basis === 'Q_TERRENO') q = inp.area_terreno;
   else if (basis === 'Q_ESCOPO') q = inp.area_escopo;
+  else if (basis === 'Q_FUNDACAO') q = isPositive(inp.area_fundacao) ? inp.area_fundacao : null;
+  else if (basis === 'Q_HORAS') q = isPositive(inp.hours) ? inp.hours : null;
   else if (basis === 'Q_REGULARIZACAO') {
     if (inp.reg_area_matricula !== null && inp.reg_area_iptu !== null) {
       q = absD(sub(inp.reg_area_iptu, inp.reg_area_matricula));
     }
   }
+  return q;
+}
+
+function bandValue(bands, q) {
+  for (const band of bands) {
+    const lo = 'q_min_exclusive' in band ? dec(band.q_min_exclusive) : null;
+    const hi = 'q_max' in band ? dec(band.q_max) : null;
+    if (lo !== null && !(cmp(q, lo) > 0)) continue;
+    if (hi !== null && !(cmp(q, hi) <= 0)) continue;
+    return dec(band.unit_value);
+  }
+  return null;
+}
+
+// null se a referência se aplica à tipologia; senão o código do motivo (nunca infere aplicabilidade).
+function typologyGate(ref, typology) {
+  const allowed = ref.applicable_typologies;
+  if (!allowed || allowed.includes(typology)) return null;
+  if ((ref.not_confirmed_typologies || []).includes(typology)) return REASON_TYPOLOGY_NOT_CONFIRMED;
+  return REASON_TYPOLOGY_NOT_APPLICABLE;
+}
+
+// [unit, null] ou [null, motivo]
+function superUnit(source, supTbl, ctx, qSup) {
+  const ref = supTbl[source];
+  const typology = ctx.typology;
+  const system = ctx.structural_system;
+  const gate = typologyGate(ref, typology);
+  if (gate) return [null, gate];
+  if (source === 'SECID_PR') return [dec(ref.by_structural_system[system]), null];
+  if (source === 'ALTOQI') {
+    if (!Object.prototype.hasOwnProperty.call(ref.by_typology, typology)) return [null, REASON_NO_REFERENCE_FOR_TYPOLOGY];
+    if (!ref.applicable_structural_systems.includes(system)) return [null, REASON_SYSTEM_SCOPE_UNDOCUMENTED];
+    return [dec(ref.by_typology[typology]), null];
+  }
+  // FUNDEPAR_001_2025
+  if (ref.by_structural_system && Object.prototype.hasOwnProperty.call(ref.by_structural_system, system)) {
+    return [dec(ref.by_structural_system[system]), null];
+  }
+  if (system === 'METALICA') {
+    const value = bandValue(ref.metalica_by_area, qSup);
+    return value !== null ? [value, null] : [null, REASON_SYSTEM_NOT_INCORPORATED];
+  }
+  return [null, REASON_SYSTEM_NOT_INCORPORATED];
+}
+
+function foundationUnit(source, funTbl, ctx) {
+  const ref = funTbl[source];
+  const gate = typologyGate(ref, ctx.typology);
+  if (gate) return [null, gate];
+  return [dec(ref.unit_value), null];
+}
+
+function structuralContext(inp) {
+  if (inp.structural_scope === 'FOUNDATION_ONLY') {
+    // Só fundação: o sistema da superestrutura não entra no preço nem gera gap.
+    return { typology: inp.typology, structural_scope: 'FOUNDATION_ONLY' };
+  }
+  const declared = inp.structural_system;
   return {
-    q,
-    q_basis: basis,
-    status: q !== null ? 'OK' : 'MISSING',
-    q_inputs: { area_existing: numberOut(ae), area_new: numberOut(an) },
+    typology: inp.typology,
+    structural_system: declared || 'CONCRETO_ARMADO',
+    structural_system_default_used: declared === null,
+    structural_scope: 'FULL',
+    foundations_included: true,
+    foundations_selection: inp.foundations_selected ? 'EXPLICIT' : 'IMPLIED_BY_STRUCTURAL',
   };
 }
 
-export function resolveServiceContext(service, inp) {
-  if (service === 'ESTRUTURAL') {
-    if (inp.structural_scope === 'FOUNDATION_ONLY') {
-      return { typology: inp.typology, structural_scope: 'FOUNDATION_ONLY' };
+function qInputsStructural(inp) {
+  return {
+    area_existing: numberOut(inp.area_existing),
+    area_new: numberOut(inp.area_new),
+    area_fundacao: numberOut(inp.area_fundacao),
+  };
+}
+
+function structuralReview(inp, ctx, basis, reason) {
+  return {
+    service: 'ESTRUTURAL', status: REVIEW, q: null, q_basis: basis,
+    q_inputs: qInputsStructural(inp), pricing_context: ctx, reason,
+  };
+}
+
+// ESTRUTURAL: MIN entre TOTAIS de mesmo escopo, com Q_SUPERESTRUTURA e Q_FUNDACAO distintos.
+// TOTAL = SUPER x Q_SUPERESTRUTURA + FUNDACAO x Q_FUNDACAO (cada componente na sua própria fonte); a AltoQi é
+// referência de superestrutura e entra como referência composta (+ fundação SECID/PR).
+// Quantidade ausente/inconsistente => NEEDS_HUMAN_REVIEW (nunca preço aproximado).
+function priceStructural(inp) {
+  const svcTbl = TABLE.services.ESTRUTURAL;
+  const ctx = structuralContext(inp);
+  const foundationOnly = ctx.structural_scope === 'FOUNDATION_ONLY';
+  const qFun = qFromBasis('Q_FUNDACAO', inp);
+  const qSup = foundationOnly ? null : qFromBasis('Q_SUPERESTRUTURA', inp);
+  let basis;
+  if (foundationOnly) {
+    basis = 'Q_FUNDACAO';
+    if (qFun === null) return structuralReview(inp, ctx, basis, 'quantidade essencial (Q_FUNDACAO) não informada');
+  } else {
+    basis = 'Q_SUPERESTRUTURA';
+    const missing = [['Q_SUPERESTRUTURA', qSup], ['Q_FUNDACAO', qFun]].filter(([, v]) => v === null).map(([n]) => n);
+    if (missing.length) return structuralReview(inp, ctx, basis, `quantidade essencial (${missing.join(', ')}) não informada`);
+    if (cmp(qFun, qSup) > 0) {
+      return structuralReview(inp, ctx, basis, 'Q_FUNDACAO maior que Q_SUPERESTRUTURA: inconsistência de escopo');
     }
-    const declared = inp.structural_system;
-    // Regra STRUCT_INCL_FOUNDATIONS_V2 (emissões novas): o pacote estrutural COMPLETO inclui
-    // as fundações. A seleção explícita de "Fundações" é preservada como intenção, nunca vira
-    // uma 2a cobrança.
-    return {
-      typology: inp.typology,
-      structural_system: declared || 'CONCRETO_ARMADO',
-      structural_system_default_used: declared === null,
-      structural_scope: 'FULL',
-      foundations_included: true,
-      foundations_selection: inp.foundations_selected ? 'EXPLICIT' : 'IMPLIED_BY_STRUCTURAL',
-    };
   }
+
+  const supTbl = svcTbl.components.SUPERESTRUTURA;
+  const funTbl = svcTbl.components.FUNDACAO;
+  const candidates = [];
+  const excluded = [];
+  if (foundationOnly) {
+    for (const ref of svcTbl.foundation_only_references) {
+      const [unit, why] = foundationUnit(ref.fundacao_source, funTbl, ctx);
+      if (unit === null) { excluded.push({ source: ref.id, reason: why }); continue; }
+      candidates.push({
+        id: ref.id, key: ref.public_key, total: mul(unit, qFun),
+        components: { fundacao: { source: ref.fundacao_source, unit_value: toStr(unit), q: numberOut(qFun) } },
+      });
+    }
+  } else {
+    for (const ref of svcTbl.complete_scope_references) {
+      const [sUnit, sWhy] = superUnit(ref.superestrutura_source, supTbl, ctx, qSup);
+      const [fUnit, fWhy] = foundationUnit(ref.fundacao_source, funTbl, ctx);
+      if (sUnit === null || fUnit === null) { excluded.push({ source: ref.id, reason: sWhy || fWhy }); continue; }
+      candidates.push({
+        id: ref.id, key: ref.public_key, total: add(mul(sUnit, qSup), mul(fUnit, qFun)),
+        components: {
+          superestrutura: { source: ref.superestrutura_source, unit_value: toStr(sUnit), q: numberOut(qSup) },
+          fundacao: { source: ref.fundacao_source, unit_value: toStr(fUnit), q: numberOut(qFun) },
+        },
+      });
+    }
+  }
+  if (candidates.length === 0) return structuralReview(inp, ctx, basis, 'nenhuma referência externa aplicável');
+
+  let winner = candidates[0];
+  for (const cand of candidates.slice(1)) if (cmp(cand.total, winner.total) < 0) winner = cand;
+  const demelloUnrounded = mul(winner.total, FACTOR);
+  const references = {};
+  for (const c of candidates) references[c.key] = { total: money(c.total), components: c.components };
+  const entry = {
+    service: 'ESTRUTURAL', status: CALC,
+    q: numberOut(foundationOnly ? qFun : qSup), q_basis: basis, q_inputs: qInputsStructural(inp),
+    pricing_context: ctx, references, base_reference: winner.id,
+    demello: { unrounded_total: toStr(demelloUnrounded), total: money(demelloUnrounded) },
+    package: {
+      scope: foundationOnly ? 'FUNDACAO_ISOLADA' : 'ESTRUTURA_COMPLETA_COM_FUNDACOES',
+      references_compared: candidates.map((c) => c.id),
+      excluded_references: excluded,
+    },
+  };
+  if (!foundationOnly) entry.q_fundacao = numberOut(qFun);
+  return entry;
+}
+
+function serviceContext(service, inp) {
   if (service === 'REGULARIZACAO') {
     return {
-      components: {
-        arquitetonico: 'DETERMINED',
-        levantamento: inp.reg_levantamento,
-        projeto_legal: inp.reg_projeto_legal,
-      },
+      components: { arquitetonico: 'DETERMINED', levantamento: inp.reg_levantamento, projeto_legal: inp.reg_projeto_legal },
     };
   }
   return { typology: inp.typology };
 }
 
-function altoqiUnit(svcTbl, typ) {
-  const map = (svcTbl.altoqi && svcTbl.altoqi.by_typology) || {};
-  return typ && Object.prototype.hasOwnProperty.call(map, typ) ? dec(map[typ]) : null;
+function qBasisFor(service, inp, svcTbl) {
+  if (service === 'HIDROSSANITARIO' && inp.hidro_scope_includes_existing === true) {
+    return svcTbl.q_basis_if_scope_includes_existing || svcTbl.q_basis || 'Q_NOVA';
+  }
+  return svcTbl.q_basis || 'Q_NOVA';
 }
 
-// Pacote estrutural COMPLETO (estrutura + fundações), sem dupla contagem. SECID/PR publica
-// componentes separados -> soma FUNDAÇÃO + SUPERESTRUTURA(sistema) e confere contra o total
-// publicado. AltoQi só entra se a tabela documentar que o valor já inclui fundações;
-// cobertura não determinada nunca é tratada como equivalente.
-export function structuralFullPackage(svcTbl, ctx) {
-  const system = ctx.structural_system;
-  const comps = svcTbl.secid_pr.components;
-  const parts = {};
-  parts[`SUPERESTRUTURA_${system}`] = comps[`SUPERESTRUTURA_${system}`];
-  parts.FUNDACAO = comps.FUNDACAO;
-  let secid = dec('0');
-  for (const v of Object.values(parts)) secid = add(secid, dec(v));
-  const published = dec(svcTbl.secid_pr.by_structural_system[system]);
-  if (cmp(secid, published) !== 0) {
-    throw new Error(`ESTRUTURAL: componentes SECID/PR (${toStr(secid)}) != total publicado (${toStr(published)})`);
-  }
-  const altoqiTbl = svcTbl.altoqi || {};
-  const coverage = altoqiTbl.foundation_coverage || 'UNDETERMINED';
-  let altoqi = null;
-  const excluded = [];
-  const map = altoqiTbl.by_typology || {};
-  if (ctx.typology && Object.prototype.hasOwnProperty.call(map, ctx.typology)) {
-    if (coverage === 'INCLUDED') altoqi = dec(map[ctx.typology]);
-    else excluded.push({ source: 'ALTOQI', reason: `FOUNDATION_COVERAGE_${coverage}` });
-  }
-  return { secid, altoqi, components: parts, excluded_references: excluded };
-}
-
-function secidAndAltoqiUnits(service, svcTbl, ctx) {
-  if (service === 'ESTRUTURAL') {
-    if (ctx.structural_scope === 'FOUNDATION_ONLY') {
-      return [dec(svcTbl.secid_pr.components.FUNDACAO), null];
-    }
-    if (ctx.foundations_included) {
-      const pkg = structuralFullPackage(svcTbl, ctx);
-      return [pkg.secid, pkg.altoqi];
-    }
-    return [dec(svcTbl.secid_pr.by_structural_system[ctx.structural_system]), altoqiUnit(svcTbl, ctx.typology)];
-  }
+// Valor unitário de uma fonte para um serviço NÃO estrutural (null = não aplicável).
+function referenceUnit(service, ref, ctx) {
+  const allowed = ref.applicable_typologies;
+  if (allowed && !allowed.includes(ctx.typology)) return null;
   if (service === 'REGULARIZACAO') {
-    const comps = svcTbl.secid_pr.components;
-    let secid = dec(comps.ARQUITETONICO.unit_value);
-    if (ctx.components.levantamento === 'DETERMINED') secid = add(secid, dec(comps.LEVANTAMENTO.unit_value));
-    if (ctx.components.projeto_legal === 'DETERMINED') secid = add(secid, dec(comps.PROJETO_LEGAL.unit_value));
-    return [secid, null];
+    const comps = ref.components || {};
+    if (!('ARQUITETONICO' in comps)) return null;
+    let total = dec(comps.ARQUITETONICO.unit_value);
+    if (ctx.components.levantamento === 'DETERMINED' && 'LEVANTAMENTO' in comps) total = add(total, dec(comps.LEVANTAMENTO.unit_value));
+    if (ctx.components.projeto_legal === 'DETERMINED' && 'PROJETO_LEGAL' in comps) total = add(total, dec(comps.PROJETO_LEGAL.unit_value));
+    return total;
   }
-  return [dec(svcTbl.secid_pr.unit_value), altoqiUnit(svcTbl, ctx.typology)];
+  if ('unit_value' in ref) return dec(ref.unit_value);
+  const byTyp = ref.by_typology || {};
+  return ctx.typology && Object.prototype.hasOwnProperty.call(byTyp, ctx.typology) ? dec(byTyp[ctx.typology]) : null;
 }
 
-export function priceService(service, qResult, ctx) {
+export function priceService(service, inp) {
   const svcTbl = TABLE.services[service];
+  const qBaseInputs = { area_existing: numberOut(inp.area_existing), area_new: numberOut(inp.area_new) };
   if (!svcTbl) {
-    return {
-      service, status: REVIEW, q: null, q_basis: qResult.q_basis ?? null,
-      q_inputs: qResult.q_inputs || {}, reason: 'serviço fora da TABELA DEMELLO V1',
-    };
+    return { service, status: REVIEW, q: null, q_basis: null, q_inputs: qBaseInputs, reason: 'serviço fora da TABELA DEMELLO V2' };
   }
-  if (qResult.status !== 'OK') {
-    return {
-      service, status: REVIEW, q: null, q_basis: qResult.q_basis, q_inputs: qResult.q_inputs,
-      pricing_context: ctx, reason: `quantidade essencial (${qResult.q_basis}) não informada`,
-    };
+  if (service === 'ESTRUTURAL') return priceStructural(inp);
+
+  const basis = qBasisFor(service, inp, svcTbl);
+  const q = qFromBasis(basis, inp);
+  const qInputs = { ...qBaseInputs };
+  if (basis === 'Q_HORAS') qInputs.hours = numberOut(inp.hours);
+  const ctx = serviceContext(service, inp);
+  if (q === null) {
+    return { service, status: REVIEW, q: null, q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
+      reason: `quantidade essencial (${basis}) não informada` };
   }
-  const q = qResult.q;
-  const [secidUnit, altoqi] = secidAndAltoqiUnits(service, svcTbl, ctx);
-  const applicable = [['SECID_PR', secidUnit]];
-  if (altoqi !== null) applicable.push(['ALTOQI', altoqi]);
-  let baseRef = applicable[0][0];
-  let baseUnit = applicable[0][1];
-  for (const [name, unit] of applicable) if (cmp(unit, baseUnit) < 0) { baseRef = name; baseUnit = unit; }
+  const applicable = [];
+  for (const [sourceId, ref] of Object.entries(svcTbl.references)) {
+    const unit = referenceUnit(service, ref, ctx);
+    if (unit !== null) applicable.push([sourceId, unit]);
+  }
+  if (applicable.length === 0) {
+    return { service, status: REVIEW, q: numberOut(q), q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
+      reason: 'nenhuma referência externa aplicável' };
+  }
+  let [baseRef, baseUnit] = applicable[0];
+  for (const [name, unit] of applicable.slice(1)) if (cmp(unit, baseUnit) < 0) { baseRef = name; baseUnit = unit; }
   const demelloUnrounded = mul(mul(q, baseUnit), FACTOR);
-  const references = { secid_pr: { unit_value: toStr(secidUnit), total: money(mul(q, secidUnit)) } };
-  if (altoqi !== null) references.altoqi = { unit_value: toStr(altoqi), total: money(mul(q, altoqi)) };
-  const entry = {
-    service, status: CALC, q: numberOut(q), q_basis: qResult.q_basis, q_inputs: qResult.q_inputs,
-    pricing_context: ctx, references, base_reference: baseRef,
+  const references = {};
+  for (const [sid, unit] of applicable) references[sid.toLowerCase()] = { unit_value: toStr(unit), total: money(mul(q, unit)) };
+  return {
+    service, status: CALC, q: numberOut(q), q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
+    references, base_reference: baseRef,
     demello: { unrounded_total: toStr(demelloUnrounded), total: money(demelloUnrounded) },
   };
-  if (service === 'ESTRUTURAL' && ctx.foundations_included) {
-    const pkg = structuralFullPackage(svcTbl, ctx);
-    entry.package = {
-      scope: 'ESTRUTURA_COMPLETA_COM_FUNDACOES',
-      secid_pr_components: { ...pkg.components },
-      excluded_references: pkg.excluded_references,
-    };
-  }
-  return entry;
 }
+
+// Texto ao cliente — sem fórmula, fator, MIN, regime ou composição interna.
+const TEXT_LABEL = { maxicad_bim: 'MaxiCAD', rfb_bim: 'Receita Federal', cim_amunesc_2026: 'CIM-AMUNESC', ibape_pr: 'IBAPE-PR' };
 
 export function buildCustomerPricingText(preview) {
   const calculated = preview.services.filter((s) => s.status === CALC);
   if (preview.status !== CALC || calculated.length === 0) return CUSTOMER_FALLBACK_TEXT;
-  let secidTotal = dec('0');
-  for (const s of calculated) secidTotal = add(secidTotal, dec(s.references.secid_pr.total));
-  const altoqiTotals = calculated.filter((s) => s.references.altoqi).map((s) => dec(s.references.altoqi.total));
-  const demelloTotal = dec(preview.total_demello);
-  if (preview.pricing_rule === PRICING_RULE) {
-    // Só cita a AltoQi quando ela cobre TODOS os serviços calculados (soma parcial não é
-    // comparável) e deixa claro que o estrutural contempla fundações.
-    const foundations = calculated.some((s) => s.pricing_context && s.pricing_context.foundations_included);
-    const parts = [
-      'Para as informações fornecidas, a referência pública SECID/PR resulta em ' +
-        `aproximadamente ${brl(secidTotal)}.`,
-    ];
-    if (altoqiTotals.length && altoqiTotals.length === calculated.length) {
-      let altoqiTotal = dec('0');
-      for (const t of altoqiTotals) altoqiTotal = add(altoqiTotal, t);
-      parts.push(
-        `A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente ${brl(altoqiTotal)}.`,
-      );
+  // Soma da referência (primeira chave presente) só se cobrir TODOS os serviços calculados.
+  const coveredTotal = (keys) => {
+    let total = dec('0');
+    const used = [];
+    for (const svc of calculated) {
+      const refs = svc.references || {};
+      const key = keys.find((k) => refs[k]);
+      if (key === undefined) return [null, []];
+      total = add(total, dec(refs[key].total));
+      used.push(key);
     }
-    parts.push(`Pela tabela DEMELLO, nossa previsão inicial é de ${brl(demelloTotal)}.`);
-    if (foundations) parts.push('O projeto estrutural contempla estrutura e fundações.');
-    parts.push('Entraremos em contato para confirmar as particularidades e o escopo.');
-    return parts.join(' ');
+    return [total, used];
+  };
+  const parts = [];
+  const [secid] = coveredTotal(['secid_pr']);
+  if (secid !== null) {
+    parts.push(`Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente ${brl(secid)}.`);
   }
-  if (altoqiTotals.length) {
-    let altoqiTotal = dec('0');
-    for (const t of altoqiTotals) altoqiTotal = add(altoqiTotal, t);
-    return (
-      'Para as informações fornecidas, a referência pública SECID/PR resulta em ' +
-      `aproximadamente ${brl(secidTotal)}. A referência de mercado AltoQi para esse tipo ` +
-      `de projeto é de aproximadamente ${brl(altoqiTotal)}. Pela tabela DEMELLO, nossa ` +
-      `previsão inicial é de ${brl(demelloTotal)}. Entraremos em contato para confirmar ` +
-      'as particularidades e o escopo.'
-    );
+  const [fundepar] = coveredTotal(['fundepar_001_2025']);
+  if (fundepar !== null) parts.push(`A referência institucional FUNDEPAR resulta em aproximadamente ${brl(fundepar)}.`);
+  const [market, used] = coveredTotal(['altoqi', 'altoqi_composta']);
+  if (market !== null) {
+    if (used.includes('altoqi_composta')) {
+      parts.push(`A referência de mercado para esse tipo de projeto é de aproximadamente ${brl(market)}.`);
+    } else {
+      parts.push(`A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente ${brl(market)}.`);
+    }
   }
-  return (
-    'Para as informações fornecidas, a referência pública SECID/PR resulta em ' +
-    `aproximadamente ${brl(secidTotal)}. Pela tabela DEMELLO, nossa previsão inicial é de ` +
-    `${brl(demelloTotal)}. Entraremos em contato para confirmar as particularidades e o escopo.`
-  );
+  const others = [];
+  for (const key of ['maxicad_bim', 'rfb_bim', 'cim_amunesc_2026', 'ibape_pr']) {
+    const [total] = coveredTotal([key]);
+    if (total !== null) others.push(`${TEXT_LABEL[key]} ${brl(total)}`);
+  }
+  if (others.length) parts.push(`Outras referências aplicáveis: ${others.join('; ')}.`);
+  parts.push(`Pela tabela DEMELLO, nossa previsão inicial é de ${brl(dec(preview.total_demello))}.`);
+  if (calculated.some((s) => s.pricing_context && s.pricing_context.foundations_included)) {
+    parts.push('O projeto estrutural contempla estrutura e fundações.');
+  }
+  parts.push('Entraremos em contato para confirmar as particularidades e o escopo.');
+  return parts.join(' ');
 }
 
 export function buildPricingPreview(pricingInputs) {
   const inp = extractPricingInputs(pricingInputs);
-  const servicesOut = [];
-  let needsReview = false;
-  for (const service of inp.services) {
-    const qResult = resolveQ(service, inp);
-    const ctx = resolveServiceContext(service, inp);
-    const entry = priceService(service, qResult, ctx);
-    if (entry.status !== CALC) needsReview = true;
-    servicesOut.push(entry);
-  }
+  const servicesOut = inp.services.map((service) => priceService(service, inp));
   const calculated = servicesOut.filter((s) => s.status === CALC);
-  if (calculated.length === 0) needsReview = true;
+  const needsReview = servicesOut.some((s) => s.status !== CALC) || calculated.length === 0;
   const status = needsReview ? REVIEW : CALC;
   let totalDemello = null;
   if (status === CALC) {

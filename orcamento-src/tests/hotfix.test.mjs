@@ -64,6 +64,7 @@ test('human summary contains only friendly case, price and applicable reference 
     services: ['Fundações'],
     property: 'Comercial',
     S3: area('1500'),
+    area_fundacao: area('1500'),
     location: { city: 'Curitiba', uf: 'PR' },
     contact: { name: 'Cliente Teste', whatsapp: '41999999999', email: '' },
   });

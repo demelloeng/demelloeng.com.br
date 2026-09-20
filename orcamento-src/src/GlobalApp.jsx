@@ -6,6 +6,7 @@ import {submitToCRM} from './submit.mjs';
 import {issuePreview,caseSummaryFromRows} from './preview.mjs';
 import {renderPreviewPng} from './preview_png.mjs';
 import {brlStr} from './pricing/decimal.mjs';
+import {referenceEntries} from './references.mjs';
 import {buildClientSummary,friendlyServiceName as serviceName,NEXT_STEP} from './client_summary.mjs';
 import '@fontsource/archivo/600.css';
 import '@fontsource/archivo/700.css';
@@ -15,7 +16,8 @@ import '@fontsource/source-sans-3/600.css';
 const descriptions={build:'Projetos para uma obra nova, reforma ou ampliação.',regularize:'Diferenças de área ou pendências nos documentos.',problem:'Entender uma situação no imóvel ou na obra.',known:'Ir direto ao projeto ou serviço que preciso.'};
 function Dialog({title,onClose,children}){const ref=useRef(null);useEffect(()=>{const dialog=ref.current;dialog.showModal();return()=>dialog.close();},[]);return <dialog ref={ref} aria-labelledby="dialog-title" onCancel={onClose} onClick={e=>{if(e.target===ref.current)onClose();}}><header><h2 id="dialog-title">{title}</h2><button onClick={onClose} className="icon-button" aria-label="Fechar"><X size={24}/></button></header>{children}</dialog>;}
 function Summary({rows,onEdit}){return <dl className="summary-list">{rows.map((row,i)=><div className={`summary-row ${row.id?'':'derived'}`} key={`${row.id}-${i}`}><dt>{row.label}</dt><dd>{row.value}</dd>{row.id&&<button type="button" className="edit-button" aria-label={`Editar ${row.label}`} onClick={()=>onEdit(row.id)}><PencilSimple size={17}/></button>}</div>)}</dl>;}
-const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida',Q_TERRENO:'área do terreno',Q_ESCOPO:'área do escopo',Q_REGULARIZACAO:'diferença de área'};
+const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida',Q_TERRENO:'área do terreno',Q_ESCOPO:'área do escopo',Q_REGULARIZACAO:'diferença de área',Q_SUPERESTRUTURA:'área estrutural total',Q_FUNDACAO:'área de projeção',Q_HORAS:'horas técnicas'};
+const qUnit=s=>s.q_basis==='Q_HORAS'?'h':'m²';
 const pricingText=pv=>pv.presented_to_customer.text.replace(/Entraremos em contato para confirmar as particularidades e o escopo\./,NEXT_STEP);
 function Result({answers,isPreview}){
  const held=safetyHold(answers),missing=missingData(answers);
@@ -42,7 +44,7 @@ function Result({answers,isPreview}){
    <p className="investment">{brlStr(pv.total_demello)}</p>
    <p>{pricingText(pv)}</p>
    <details className="pricing-breakdown"><summary>Como chegamos a esse valor</summary>
-    <ul>{calc.map(s=><li key={s.service}><strong>{serviceName(s)}</strong> · {Q_PT[s.q_basis]??s.q_basis} {s.q} m² · SECID/PR {brlStr(s.references.secid_pr.total)}{s.references.altoqi?` · AltoQi ${brlStr(s.references.altoqi.total)}`:''} · DEMELLO {brlStr(s.demello.total)}</li>)}</ul>
+    <ul>{calc.map(s=><li key={s.service}><strong>{serviceName(s)}</strong> · {Q_PT[s.q_basis]??s.q_basis} {s.q} {qUnit(s)}{s.q_fundacao!=null?` · área de projeção ${s.q_fundacao} m²`:''}{referenceEntries(s.references).map(r=>` · ${r.label} ${brlStr(r.total)}`).join('')} · DEMELLO {brlStr(s.demello.total)}</li>)}</ul>
     <p className="small-note">Previsão calculada a partir da referência pública aplicável e da metodologia DEMELLO. Não é proposta nem contrato; o escopo final é confirmado pela equipe.</p>
    </details>
    <div className="preview-issue">
@@ -99,6 +101,7 @@ export function App(){
  {home&&<p className="helper entry-helper">Escolha o que mais se aproxima do seu caso. Não precisa saber o nome técnico.</p>}
  {node.type==='multi'&&!suggesting&&<p className="helper">Pode marcar mais de uma opção.</p>}
  {id==='P2'&&<p className="helper">Não precisa saber o nome técnico. Explique do seu jeito ou envie uma foto.</p>}
+ {id==='Q_FUND'&&<p className="helper">É a área que a construção ocupa no chão. Em um térreo, é igual à área construída; com mais de um pavimento, informe só a área do pavimento que toca o solo.</p>}
  {id==='X1'&&<p className="helper">Confira as informações. Você pode editar qualquer resposta.</p>}
  <form id="question-form" onSubmit={next} noValidate>
  {['entry','single','multi'].includes(node.type)&&!suggesting&&selectCards()}
@@ -126,7 +129,7 @@ export function App(){
  <aside className={`case-panel ${expanded?'expanded':''}`} aria-label="Resumo"><div className="case-heading"><h2>{home?'Seu caso, organizado.':project?'Seu projeto':'Seu caso'}</h2>{!home&&<button className="mobile-summary-toggle" onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded} aria-controls="case-body">{expanded?'Recolher':'Expandir'}<CaretDown size={18}/></button>}</div>{home?<><p className="entry-summary-intro">Suas escolhas vão formar o escopo da sua prévia.</p><div className="entry-promise"><ClipboardText size={38}/><div><strong>Primeiro, a prévia.<br/>Depois, seu contato.</strong><p>Alguns casos precisam de avaliação técnica antes do valor.</p></div></div></>:<><p className="case-subtitle">{routes[answers.route]}</p><div className="case-body" id="case-body"><Summary rows={rows} onEdit={edit}/></div></>}</aside>
  </div>
  <footer className="site-footer"><ol className="progress" aria-label="Etapas">{['Seu caso','Escopo','Prévia',...(home?[]:['Contato'])].map((label,i)=><li key={label} className={`${i===stage?'active':''} ${i<stage?'done':''}`} aria-current={i===stage?'step':undefined}><span className="step-number">{i<stage?<Check size={12}/>:i+1}</span><span>{label}</span></li>)}</ol><nav aria-label="Informações"><button onClick={()=>setModal('how')}>Como funciona</button><button onClick={()=>setModal('privacy')}>Privacidade</button></nav></footer>
- <div className="demo-bar">Previsão inicial DEMELLO · Cálculo offline pela TABELA V1 · Envio só ao concluir</div>
+ <div className="demo-bar">Previsão inicial DEMELLO · Cálculo offline pela TABELA V2 · Envio só ao concluir</div>
  {modal&&<Dialog title={modal==='privacy'?'Privacidade':'Como funciona'} onClose={()=>setModal(null)}>{modal==='privacy'?<><p>As respostas e a previsão ficam nesta página enquanto você a usa. Quando você conclui e confirma o envio, os dados do seu caso e o contato informado são enviados à DEMELLO Engenharia para análise e eventual retorno. As fotos não são enviadas. A previsão é uma estimativa inicial calculada nesta página — não é proposta nem contrato.</p><p>Recomeçar ou atualizar a página apaga o conteúdo. O arquivo baixado é um resumo humano do caso e não inclui fotos nem dados técnicos internos.</p></>:<><p>Escolha uma das quatro entradas e responda apenas às perguntas do seu percurso. Todas chegam ao mesmo resumo, resultado e contato.</p><p>O lápis permite revisar respostas. Informações compatíveis podem ser reaproveitadas; áreas e escopos não são transferidos automaticamente entre rotas.</p><p>A previsão é calculada nesta página pela TABELA DEMELLO V1, por serviço, com um motor determinístico — nunca a IA. É uma previsão inicial, não uma proposta; o escopo final é confirmado pela equipe.</p></>}</Dialog>}
  </div>;
 }

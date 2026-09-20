@@ -12,6 +12,7 @@ import { brlStr } from './pricing/decimal.mjs';
 import { friendlyServiceName } from './client_summary.mjs';
 import { encodeQr } from './qr.mjs';
 import { verifyUrl } from './preview.mjs';
+import { referenceEntries } from './references.mjs';
 
 const W = 1080;
 const H = 1350;
@@ -37,6 +38,7 @@ const CASE_LABELS = {
   area_iptu: 'Área IPTU',
   area_matricula: 'Área matrícula',
   diferenca: 'Diferença',
+  area_projecao: 'Área de projeção',
   area_nova: 'Área nova',
   area_existente: 'Área existente',
   area_total: 'Área total',
@@ -49,7 +51,7 @@ const CASE_ORDER = [
   'necessidade', 'situacao', 'finalidade', 'localizacao', 'tipo_imovel', 'documentos',
   'motivo_diferenca', 'servicos',
   'area_iptu', 'area_matricula', 'diferenca',
-  'area_nova', 'area_existente', 'area_total', 'area_atendida', 'area_terreno', 'area_escopo',
+  'area_nova', 'area_existente', 'area_total', 'area_projecao', 'area_atendida', 'area_terreno', 'area_escopo',
 ];
 
 function fmtIssuedAt(iso) {
@@ -74,11 +76,8 @@ export function buildPreviewLayout(record) {
   const references = [];
   for (const s of calc) {
     const name = friendlyServiceName(s);
-    if (s.references && s.references.secid_pr) {
-      references.push(`SECID/PR — ${name}: ${brlStr(s.references.secid_pr.total)}`);
-    }
-    if (s.references && s.references.altoqi) {
-      references.push(`AltoQi — ${name}: ${brlStr(s.references.altoqi.total)}`);
+    for (const { label, total } of referenceEntries(s.references)) {
+      references.push(`${label} — ${name}: ${brlStr(total)}`);
     }
   }
 

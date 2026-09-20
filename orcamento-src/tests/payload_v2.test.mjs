@@ -29,12 +29,42 @@ test('packageForCRMv2: envelope V2 explícito, sem V1, sem proposta', () => {
   assert.equal(p.answers.contact, undefined);
 });
 
-test('packageForCRMv2: pricing_preview == recomputo determinístico do motor', () => {
-  const p = packageForCRMv2(BUILD);
+test('packageForCRMv2: pricing_preview == recomputo determinístico do motor (regime corrente)', () => {
+  const p = packageForCRMv2({ ...BUILD, area_fundacao: area('120') }); // 3 pavimentos: Q_SUPERESTRUTURA 320 > Q_FUNDACAO 120
   assert.deepEqual(p.pricing_preview, buildPricingPreview(p.pricing_inputs));
+  assert.equal(p.pricing_preview.table_version, 'DEMELLO_V2');
+  assert.equal(p.pricing_preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R1');
+  assert.equal(p.pricing_inputs.area_fundacao, '120');
   assert.equal(p.pricing_preview.status, 'CALCULATED');
-  assert.equal(p.pricing_preview.total_demello, '9958.40');
+  // ESTRUTURAL: SECID (16,10 x 320 + 10,73 x 120) x 0,80 = 5151.68 ; HIDRO 320 x 12,07 x 0,80 = 3089.92
+  assert.equal(p.pricing_preview.total_demello, '8241.60');
   assert.equal(p.result, 'X3A');
+});
+
+test('packageForCRMv2: 3 pavimentos SEM área de projeção -> NEEDS_HUMAN_REVIEW (nunca aproxima o footprint)', () => {
+  const p = packageForCRMv2(BUILD);
+  assert.equal(p.pricing_inputs.area_fundacao, null);
+  assert.equal(p.pricing_preview.status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(p.pricing_preview.total_demello, null);
+  assert.equal(p.result, 'X3B');
+  const est = p.pricing_preview.services.find((s) => s.service === 'ESTRUTURAL');
+  assert.equal(est.reason, 'quantidade essencial (Q_FUNDACAO) não informada');
+});
+
+test('packageForCRMv2: térreo DECLARADO (1 pavimento) -> Q_FUNDACAO = área informada; CASA/sobrado nunca prova térreo', () => {
+  const terreo = packageForCRMv2({ ...BUILD, CA5: area('1') });
+  assert.equal(terreo.pricing_inputs.area_fundacao, '320');
+  assert.equal(terreo.pricing_preview.status, 'CALCULATED');
+  assert.equal(terreo.pricing_preview.total_demello, '9958.40');
+  const casa = packageForCRMv2({ ...BUILD, property: 'Casa/sobrado', CA5: area('2') });
+  assert.equal(casa.pricing_inputs.area_fundacao, null);
+  const semPavimentos = packageForCRMv2({ ...BUILD, property: 'Casa/sobrado', CA5: undefined });
+  assert.equal(semPavimentos.pricing_inputs.area_fundacao, null);
+  const naoSei = packageForCRMv2({ ...BUILD, CA5: { value: '', unknown: true } });
+  assert.equal(naoSei.pricing_inputs.area_fundacao, null);
+  const ampliacao = packageForCRMv2({ route: 'build', CA1: 'Ampliar um imóvel existente', CA_EXISTING: area('100'), CA_NEW: area('60'),
+    CA5: area('1'), property: 'Comercial', services: ['Estrutural'], location: BUILD.location, contact });
+  assert.equal(ampliacao.pricing_inputs.area_fundacao, null); // térreo declarado só vale para "construir do zero"
 });
 
 test('packageForCRMv2: NEEDS_HUMAN_REVIEW -> fallback humano + result X3B', () => {
@@ -86,7 +116,7 @@ test('derivePricingInputs: campos indeterminados nunca inventados', () => {
 test('packageForCRMv2: rota "known" com S3 -> area_total, previsão calculável', () => {
   const p = packageForCRMv2({
     route: 'known', services: ['Estrutural'], property: 'Comercial',
-    location: { city: 'Curitiba', uf: 'PR' }, S3: area('1500'),
+    location: { city: 'Curitiba', uf: 'PR' }, S3: area('1500'), area_fundacao: area('1500'),
     phase: 'Arquitetura pronta', deadline: '1–3 meses', contact,
   });
   assert.equal(p.pricing_inputs.area_total, '1500');
