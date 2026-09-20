@@ -230,3 +230,30 @@ test('superfície pública: a jornada nova não expõe regime, fator, MIN nem co
   const shown = p.pricing_preview.presented_to_customer.text;
   for (const forbidden of ['pricing_rule', 'STRUCT_', 'fator', 'MIN(', 'composta']) assert.ok(!shown.includes(forbidden), forbidden);
 });
+
+test('hours_by_service (paridade com o motor canônico): Consultoria 1h + Mentoria 2h = 608,32; incompleto/zero/escalar seguem fail-closed', () => {
+  const C = 'CONSULTORIA_TECNICA', M = 'MENTORIA_TECNICA';
+  const ok = buildPricingPreview({ services: [C, M], hours_by_service: { [C]: '1', [M]: '2' } });
+  assert.equal(ok.status, 'CALCULATED');
+  assert.equal(ok.total_demello, '608.32');
+  assert.equal(ok.services[0].q_inputs.hours_source, 'hours_by_service');
+  for (const inputs of [
+    { services: [C, M], hours_by_service: { [C]: '1' } },
+    { services: [C, M], hours_by_service: { [C]: '1', [M]: '0' } },
+    { services: [C, M], hours: '5' },
+    { services: [C, M], hours: '5', hours_by_service: { [C]: '1' } },
+  ]) {
+    const pv = buildPricingPreview(inputs);
+    assert.equal(pv.status, 'NEEDS_HUMAN_REVIEW', JSON.stringify(inputs));
+    assert.equal(pv.total_demello, null);
+  }
+  assert.equal(buildPricingPreview({ services: [C], hours: '5' }).total_demello, '860.39');            // compatibilidade
+  assert.equal(buildPricingPreview({ services: [C], hours: '5', hours_by_service: { [C]: '3' } }).total_demello, '516.24'); // precedência
+  assert.equal(buildPricingPreview({ services: [C], hours: '5', hours_by_service: { [C]: 'abc' } }).status, 'NEEDS_HUMAN_REVIEW');
+});
+
+test('a jornada do site NÃO emite hours_by_service (UX inalterada): o payload continua igual', () => {
+  const p = packageForCRMv2({ route: 'support', support_kind: 'consultoria', hours_known: 'sim', hours: { value: '5' }, location: LOC, contact });
+  assert.equal('hours_by_service' in p.pricing_inputs, false);
+  assert.equal(p.pricing_preview.total_demello, '860.39');
+});

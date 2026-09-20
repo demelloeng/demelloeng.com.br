@@ -63,6 +63,17 @@ function componentState(v) {
   return COMPONENT_STATES.includes(t) ? t : 'UNDETERMINED';
 }
 
+// `hours_by_service` = { CODIGO_DO_SERVICO: horas }. Ausente/não-objeto => null. Valor inválido => null (nunca inferido).
+function hoursByService(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const out = {};
+  for (const [k, v] of Object.entries(raw)) {
+    const key = upper(k);
+    if (key) out[key] = num(v);
+  }
+  return out;
+}
+
 export function extractPricingInputs(pi) {
   pi = pi && typeof pi === 'object' ? pi : {};
   const reg = pi.regularizacao && typeof pi.regularizacao === 'object' ? pi.regularizacao : {};
@@ -87,6 +98,7 @@ export function extractPricingInputs(pi) {
     area_escopo: num(pi.area_escopo),
     area_fundacao: num(pi.area_fundacao), // Q_FUNDACAO: área de projeção (footprint); nunca estimada
     hours: num(pi.hours), // Q_HORAS
+    hours_by_service: hoursByService(pi.hours_by_service), // Q_HORAS discriminado por serviço (opcional)
     reg_area_matricula: num(reg.area_matricula),
     reg_area_iptu: num(reg.area_iptu),
     reg_levantamento: componentState(reg.levantamento),
@@ -312,14 +324,28 @@ function referenceUnit(service, ref, ctx) {
   return ctx.typology && Object.prototype.hasOwnProperty.call(byTyp, ctx.typology) ? dec(byTyp[ctx.typology]) : null;
 }
 
-// `hours` é um ÚNICO escalar: com 2 ou mais serviços horários (Q_HORAS) ele não pode ser aplicado a
-// nenhum deles (nem dividido) — fail-closed, paridade com scripts/site_intake_pricing.py.
+// `hours` é um ÚNICO escalar: só vale com exatamente UM serviço horário (Q_HORAS); nunca é dividido nem replicado.
+// `hours_by_service` (opcional) discrimina as horas por serviço: com 2+ serviços horários só calcula se cobrir TODOS
+// com valores > 0; incompleto => NEEDS_HUMAN_REVIEW. Com 1 serviço horário tem precedência sobre `hours`.
+// Paridade com scripts/site_intake_pricing.py (_resolve_hours).
 export const REASON_HOURLY_NOT_DISCRIMINATED = 'quantidade horária (Q_HORAS) insuficientemente discriminada entre os serviços horários';
-export function hourlyServiceCount(inp) {
-  return inp.services.filter((s) => (TABLE.services[s] || {}).q_basis === 'Q_HORAS').length;
+export function hourlyServices(inp) {
+  return inp.services.filter((s) => (TABLE.services[s] || {}).q_basis === 'Q_HORAS');
+}
+export function resolveHours(service, inp, hourly) {
+  const hbs = inp.hours_by_service;
+  if (new Set(hourly).size !== hourly.length) return { q: null, source: null, review: REASON_HOURLY_NOT_DISCRIMINATED };
+  if (hourly.length >= 2) {
+    if (!hbs || hourly.some((s) => !isPositive(hbs[s]))) return { q: null, source: null, review: REASON_HOURLY_NOT_DISCRIMINATED };
+    return { q: hbs[service], source: 'hours_by_service', review: null };
+  }
+  if (hbs && Object.prototype.hasOwnProperty.call(hbs, service)) {
+    return { q: isPositive(hbs[service]) ? hbs[service] : null, source: 'hours_by_service', review: null };
+  }
+  return { q: isPositive(inp.hours) ? inp.hours : null, source: 'hours', review: null };
 }
 
-export function priceService(service, inp, hourlyCount = 0) {
+export function priceService(service, inp, hourly = null) {
   const svcTbl = TABLE.services[service];
   const qBaseInputs = { area_existing: numberOut(inp.area_existing), area_new: numberOut(inp.area_new) };
   if (!svcTbl) {
@@ -328,13 +354,20 @@ export function priceService(service, inp, hourlyCount = 0) {
   if (service === 'ESTRUTURAL') return priceStructural(inp);
 
   const basis = qBasisFor(service, inp, svcTbl);
-  const q = qFromBasis(basis, inp);
+  let q = qFromBasis(basis, inp);
   const qInputs = { ...qBaseInputs };
-  if (basis === 'Q_HORAS') qInputs.hours = numberOut(inp.hours);
+  let hoursReview = null;
+  if (basis === 'Q_HORAS') {
+    const h = resolveHours(service, inp, hourly || [service]);
+    q = h.q;
+    hoursReview = h.review;
+    qInputs.hours = numberOut(h.source === 'hours_by_service' ? h.q : inp.hours);
+    if (h.source === 'hours_by_service') qInputs.hours_source = 'hours_by_service';
+  }
   const ctx = serviceContext(service, inp);
-  if (basis === 'Q_HORAS' && hourlyCount >= 2) {
+  if (basis === 'Q_HORAS' && hoursReview) {
     return { service, status: REVIEW, q: null, q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
-      reason: REASON_HOURLY_NOT_DISCRIMINATED };
+      reason: hoursReview };
   }
   if (q === null) {
     return { service, status: REVIEW, q: null, q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
@@ -411,8 +444,8 @@ export function buildCustomerPricingText(preview) {
 
 export function buildPricingPreview(pricingInputs) {
   const inp = extractPricingInputs(pricingInputs);
-  const hourlyCount = hourlyServiceCount(inp);
-  const servicesOut = inp.services.map((service) => priceService(service, inp, hourlyCount));
+  const hourly = hourlyServices(inp);
+  const servicesOut = inp.services.map((service) => priceService(service, inp, hourly));
   const calculated = servicesOut.filter((s) => s.status === CALC);
   const needsReview = servicesOut.some((s) => s.status !== CALC) || calculated.length === 0;
   const status = needsReview ? REVIEW : CALC;
