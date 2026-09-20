@@ -7,6 +7,10 @@ const TYPOLOGIES = ['CASA', 'PREDIO', 'COMERCIAL'];
 const STRUCTURAL_SYSTEMS = ['CONCRETO_ARMADO', 'METALICA', 'MADEIRA'];
 const STRUCTURAL_SCOPES = ['FULL', 'FOUNDATION_ONLY'];
 const COMPONENT_STATES = ['DETERMINED', 'NOT_REQUIRED', 'UNDETERMINED'];
+// Regra de composição do ESTRUTURAL (paridade com scripts/site_intake_pricing.py). Este motor só
+// EMITE previsões novas; previsões históricas (sem marcador = regra LEGADA) são revalidadas no
+// motor Python canônico, nunca recalculadas aqui.
+const PRICING_RULE = 'STRUCT_INCL_FOUNDATIONS_V2';
 const CALC = 'CALCULATED';
 const REVIEW = 'NEEDS_HUMAN_REVIEW';
 
@@ -41,6 +45,7 @@ export function extractPricingInputs(pi) {
   const structuralSystem = upper(pi.structural_system);
   const structuralScope = upper(pi.structural_scope);
   const hidro = pi.hidro_scope_includes_existing;
+  const foundationsSelected = pi.foundations_selected;
   return {
     services,
     typology: TYPOLOGIES.includes(typology) ? typology : null,
@@ -57,6 +62,8 @@ export function extractPricingInputs(pi) {
     reg_levantamento: componentState(reg.levantamento),
     reg_projeto_legal: componentState(reg.projeto_legal),
     hidro_scope_includes_existing: hidro === null || hidro === undefined ? null : Boolean(hidro),
+    foundations_selected:
+      foundationsSelected === null || foundationsSelected === undefined ? null : Boolean(foundationsSelected),
   };
 }
 
@@ -101,10 +108,16 @@ export function resolveServiceContext(service, inp) {
       return { typology: inp.typology, structural_scope: 'FOUNDATION_ONLY' };
     }
     const declared = inp.structural_system;
+    // Regra STRUCT_INCL_FOUNDATIONS_V2 (emissões novas): o pacote estrutural COMPLETO inclui
+    // as fundações. A seleção explícita de "Fundações" é preservada como intenção, nunca vira
+    // uma 2a cobrança.
     return {
       typology: inp.typology,
       structural_system: declared || 'CONCRETO_ARMADO',
       structural_system_default_used: declared === null,
+      structural_scope: 'FULL',
+      foundations_included: true,
+      foundations_selection: inp.foundations_selected ? 'EXPLICIT' : 'IMPLIED_BY_STRUCTURAL',
     };
   }
   if (service === 'REGULARIZACAO') {
@@ -124,10 +137,42 @@ function altoqiUnit(svcTbl, typ) {
   return typ && Object.prototype.hasOwnProperty.call(map, typ) ? dec(map[typ]) : null;
 }
 
+// Pacote estrutural COMPLETO (estrutura + fundações), sem dupla contagem. SECID/PR publica
+// componentes separados -> soma FUNDAÇÃO + SUPERESTRUTURA(sistema) e confere contra o total
+// publicado. AltoQi só entra se a tabela documentar que o valor já inclui fundações;
+// cobertura não determinada nunca é tratada como equivalente.
+export function structuralFullPackage(svcTbl, ctx) {
+  const system = ctx.structural_system;
+  const comps = svcTbl.secid_pr.components;
+  const parts = {};
+  parts[`SUPERESTRUTURA_${system}`] = comps[`SUPERESTRUTURA_${system}`];
+  parts.FUNDACAO = comps.FUNDACAO;
+  let secid = dec('0');
+  for (const v of Object.values(parts)) secid = add(secid, dec(v));
+  const published = dec(svcTbl.secid_pr.by_structural_system[system]);
+  if (cmp(secid, published) !== 0) {
+    throw new Error(`ESTRUTURAL: componentes SECID/PR (${toStr(secid)}) != total publicado (${toStr(published)})`);
+  }
+  const altoqiTbl = svcTbl.altoqi || {};
+  const coverage = altoqiTbl.foundation_coverage || 'UNDETERMINED';
+  let altoqi = null;
+  const excluded = [];
+  const map = altoqiTbl.by_typology || {};
+  if (ctx.typology && Object.prototype.hasOwnProperty.call(map, ctx.typology)) {
+    if (coverage === 'INCLUDED') altoqi = dec(map[ctx.typology]);
+    else excluded.push({ source: 'ALTOQI', reason: `FOUNDATION_COVERAGE_${coverage}` });
+  }
+  return { secid, altoqi, components: parts, excluded_references: excluded };
+}
+
 function secidAndAltoqiUnits(service, svcTbl, ctx) {
   if (service === 'ESTRUTURAL') {
     if (ctx.structural_scope === 'FOUNDATION_ONLY') {
       return [dec(svcTbl.secid_pr.components.FUNDACAO), null];
+    }
+    if (ctx.foundations_included) {
+      const pkg = structuralFullPackage(svcTbl, ctx);
+      return [pkg.secid, pkg.altoqi];
     }
     return [dec(svcTbl.secid_pr.by_structural_system[ctx.structural_system]), altoqiUnit(svcTbl, ctx.typology)];
   }
@@ -165,11 +210,20 @@ export function priceService(service, qResult, ctx) {
   const demelloUnrounded = mul(mul(q, baseUnit), FACTOR);
   const references = { secid_pr: { unit_value: toStr(secidUnit), total: money(mul(q, secidUnit)) } };
   if (altoqi !== null) references.altoqi = { unit_value: toStr(altoqi), total: money(mul(q, altoqi)) };
-  return {
+  const entry = {
     service, status: CALC, q: numberOut(q), q_basis: qResult.q_basis, q_inputs: qResult.q_inputs,
     pricing_context: ctx, references, base_reference: baseRef,
     demello: { unrounded_total: toStr(demelloUnrounded), total: money(demelloUnrounded) },
   };
+  if (service === 'ESTRUTURAL' && ctx.foundations_included) {
+    const pkg = structuralFullPackage(svcTbl, ctx);
+    entry.package = {
+      scope: 'ESTRUTURA_COMPLETA_COM_FUNDACOES',
+      secid_pr_components: { ...pkg.components },
+      excluded_references: pkg.excluded_references,
+    };
+  }
+  return entry;
 }
 
 export function buildCustomerPricingText(preview) {
@@ -179,6 +233,26 @@ export function buildCustomerPricingText(preview) {
   for (const s of calculated) secidTotal = add(secidTotal, dec(s.references.secid_pr.total));
   const altoqiTotals = calculated.filter((s) => s.references.altoqi).map((s) => dec(s.references.altoqi.total));
   const demelloTotal = dec(preview.total_demello);
+  if (preview.pricing_rule === PRICING_RULE) {
+    // Só cita a AltoQi quando ela cobre TODOS os serviços calculados (soma parcial não é
+    // comparável) e deixa claro que o estrutural contempla fundações.
+    const foundations = calculated.some((s) => s.pricing_context && s.pricing_context.foundations_included);
+    const parts = [
+      'Para as informações fornecidas, a referência pública SECID/PR resulta em ' +
+        `aproximadamente ${brl(secidTotal)}.`,
+    ];
+    if (altoqiTotals.length && altoqiTotals.length === calculated.length) {
+      let altoqiTotal = dec('0');
+      for (const t of altoqiTotals) altoqiTotal = add(altoqiTotal, t);
+      parts.push(
+        `A referência de mercado AltoQi para esse tipo de projeto é de aproximadamente ${brl(altoqiTotal)}.`,
+      );
+    }
+    parts.push(`Pela tabela DEMELLO, nossa previsão inicial é de ${brl(demelloTotal)}.`);
+    if (foundations) parts.push('O projeto estrutural contempla estrutura e fundações.');
+    parts.push('Entraremos em contato para confirmar as particularidades e o escopo.');
+    return parts.join(' ');
+  }
   if (altoqiTotals.length) {
     let altoqiTotal = dec('0');
     for (const t of altoqiTotals) altoqiTotal = add(altoqiTotal, t);
@@ -225,6 +299,7 @@ export function buildPricingPreview(pricingInputs) {
     services: servicesOut,
     total_demello: totalDemello,
     presented_to_customer: { text: '' },
+    pricing_rule: PRICING_RULE,
   };
   preview.presented_to_customer.text = buildCustomerPricingText(preview);
   return preview;

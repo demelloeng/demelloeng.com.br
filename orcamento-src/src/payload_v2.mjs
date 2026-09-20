@@ -108,6 +108,11 @@ export function derivePricingInputs(a) {
     typology,
     structural_system: null, // nunca coletado -> motor usa CONCRETO_ARMADO default + gap
     structural_scope: structuralScope,
+    // Intenção explícita do cliente ("Fundações" marcada). Preservada; o motor a reconhece como
+    // parte do pacote estrutural completo e nunca a cobra duas vezes.
+    foundations_selected: services.length > 0 && (route === 'build' || route === 'known')
+      ? (Array.isArray(a.services) && a.services.includes(FOUNDATION_LABEL))
+      : null,
     area_existing: areaExisting,
     area_new: areaNew,
     area_total: areaTotal,

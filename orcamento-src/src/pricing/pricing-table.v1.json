@@ -25,9 +25,15 @@
           "CONCRETO_ARMADO": "26.83",
           "METALICA": "25.48",
           "MADEIRA": "25.48"
-        }
+        },
+        "foundation_coverage": "COMPONENT_SEPARATE",
+        "total_by_structural_system_includes_foundation": true
       },
-      "altoqi": { "by_typology": { "CASA": "17.60", "PREDIO": "14.40", "COMERCIAL": "34.50" } }
+      "altoqi": {
+        "by_typology": { "CASA": "17.60", "PREDIO": "14.40", "COMERCIAL": "34.50" },
+        "foundation_coverage": "UNDETERMINED",
+        "foundation_coverage_note": "Cobertura de fundacoes da Pesquisa AltoQi NAO documentada nas fontes consolidadas do projeto. Ate ser documentada como INCLUDED, a AltoQi nao e comparada ao pacote estrutural completo (estrutura + fundacoes)."
+      }
     },
     "HIDROSSANITARIO": {
       "q_basis": "Q_NOVA",
