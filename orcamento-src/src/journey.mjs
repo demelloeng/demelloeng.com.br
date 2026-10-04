@@ -1,5 +1,7 @@
 import {map} from './map.js';
 import {area, classify, ufs} from './flow.mjs';
+import {needsArchitectureTerrain, needsArchitectureProgram, architectureMissing, architectureEstimate} from './architecture.mjs';
+import {programError, programSummaryText, SOURCE as ARQ_SOURCE} from './architecture_estimator.mjs';
 export {ufs,area};
 // Nós de área onde 0 é semanticamente válido (ex.: matrícula sem área averbada).
 // Todo o resto de área mantém a regra atual (0 inválido) até decisão específica.
@@ -14,11 +16,14 @@ export const properties=['Casa/sobrado','Residencial multifamiliar','Comercial',
 export const phases=['Só uma ideia / estudo','Arquitetura em desenvolvimento','Arquitetura pronta','Obra já começou'];
 export const deadlines=['Até 30 dias','1–3 meses','3–6 meses','Mais de 6 meses','Ainda sem prazo'];
 // "Elétrica" foi extirpada do catálogo DEMELLO: referência de preço existir != serviço ofertável.
-export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem','Incêndio','Gás','Compatibilização BIM','Consultoria Técnica','Mentoria Técnica','Outro'];
+export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem','Incêndio','Gás','Compatibilização BIM','Arquitetura','Orçamento técnico','Terraplenagem','Consultoria Técnica','Mentoria Técnica','Outro'];
 const buildServices=[{value:'Estrutural',label:'Estruturas'},{value:'Hidrossanitário',label:'Água e esgoto'},'Drenagem','Incêndio','Gás','Compatibilização BIM','Não sei quais preciso'];
+// Reforma SEM aumento de área: não existe "área nova"; só a área existente é perguntada.
+export const REFORMA='Reformar sem aumentar a área';
 export const nodes={
  HOME:n('O que você precisa resolver?','entry',Object.entries(routes).map(([value,label])=>({value,label})),{key:'route'}),
- CA1:n('O que você vai fazer?','single',['Construir do zero','Ampliar um imóvel existente','Ainda estou definindo']),
+ CA1:n('O que você vai fazer?','single',['Construir do zero','Ampliar um imóvel existente',REFORMA,'Ainda estou definindo']),
+ CA_REFORMA:n('Qual a área do imóvel a reformar?','area',[],{label:'Área a reformar',next:'CA2'}),
  CA_AREA:n('Qual será a área aproximada?','area',[],{label:'Área total',next:'CA2'}),
  CA_EXISTING:n('Quanto existe hoje?','area',[],{label:'Área existente',next:'CA_NEW'}),
  CA_NEW:n('Quanto pretende ampliar?','area',[],{label:'Área nova',next:'CA2'}),
@@ -44,6 +49,13 @@ export const nodes={
  // Perguntas condicionais de área, só quando o serviço as exige (Gás -> Q_ATENDIDA; Compatibilização -> Q_ESCOPO).
  Q_GAS:n('Qual a área aproximada atendida pela instalação de gás?','area',[],{key:'area_atendida',label:'Área atendida (gás)'}),
  Q_COMPAT:n('Qual a área total de projeto a compatibilizar?','area',[],{key:'area_escopo',label:'Área do escopo (compatibilização)'}),
+ // Orçamento técnico (ORCAMENTO, base Q_ESCOPO): área abrangida pelo orçamento técnico — não é a estimativa do site nem o orçamento final da obra.
+ Q_ORC:n('Qual a área abrangida pelo orçamento técnico?','area',[],{key:'area_orcamento',label:'Área do orçamento técnico'}),
+ // Terraplenagem (TERRAPLENAGEM, base Q_TERRENO): somente a área do terreno; nunca convertida de área construída, nova, total ou volume.
+ Q_TERR:n('Qual a área do terreno?','area',[],{key:'area_terreno',label:'Área do terreno'}),
+ // Arquitetura sem área do projeto (ramificação condicional): terreno (opcional) e programa de necessidades (opcional). Sem base municipal.
+ Q_TERR_ARQ:n('Qual a área do terreno?','area',[],{key:'area_terreno',label:'Área do terreno',next:'S4'}),
+ ARQ_PROG:n('O que você imagina para a casa?','program',[],{key:'arq_programa',label:'Programa de necessidades',next:'S4'}),
  // Q_FUNDACAO: área de PROJEÇÃO (footprint) da edificação — base das fundações (SECID/PR 009/2026 item 9.1; FUNDEPAR/SECID 028/2024 item 6.1).
  // Nunca é estimada a partir da área total nem do tipo do imóvel; sem ela o estrutural vai a avaliação humana.
  Q_FUND:n('Qual a área aproximada de projeção da edificação no terreno?','area',[],{key:'area_fundacao',label:'Área de projeção (fundações)'}),
@@ -68,7 +80,7 @@ export const hourlyOnly=a=>a.route==='support'||(a.route==='known'&&(a.services|
 export const hoursOf=v=>{const t=String(v?.value??'').trim();return /^\d+(?:[.,]\d{1,2})?$/.test(t)&&Number(t.replace(',','.'))>0?t:null;};
 // 1 serviço horário: pergunta as horas (com contexto se não souber). 2+ (Consultoria + Mentoria): não há como discriminar horas -> contexto e revisão humana.
 const hourNodes=a=>{const h=hourlyServices(a).length;if(h===0)return a.route==='support'?['HRS_CTX']:[];if(h>=2)return ['HRS_CTX'];return ['HRS_Q',...(a.hours_known==='sim'?['HRS_V']:a.hours_known==='nao'?['HRS_CTX']:[])];};
-const serviceExtraNodes=a=>{const s=a.services||[];return [...(needsFoundationArea(a)?['Q_FUND']:[]),...(s.includes('Gás')?['Q_GAS']:[]),...(s.includes('Compatibilização BIM')?['Q_COMPAT']:[]),...(a.route==='known'?hourNodes(a):[])];};
+const serviceExtraNodes=a=>{const s=a.services||[];return [...(needsFoundationArea(a)?['Q_FUND']:[]),...(s.includes('Gás')?['Q_GAS']:[]),...(s.includes('Compatibilização BIM')?['Q_COMPAT']:[]),...(s.includes('Orçamento técnico')?['Q_ORC']:[]),...(s.includes('Terraplenagem')?['Q_TERR']:[]),...(a.route==='known'?hourNodes(a):[])];};
 function afterServices(a,from){
  const extras=serviceExtraNodes(a),cont=a.route==='build'?'CA8':hourlyOnly(a)?'S4':'S2';
  const idx=from==='CA7'||from==='S1'?-1:extras.indexOf(from);
@@ -90,7 +102,8 @@ for(const [id,label] of Object.entries(detailLabels))nodes['REG_'+id].label=labe
 const regStarts={A:'REG_A1',B:'REG_B1',C:'REG_C-R1',D:'REG_D1',E:'REG_E1',F:'REG_F1',G:'REG_G1'};
 export const keyOf=id=>nodes[id].key??id;
 export const isProject=a=>['build','known'].includes(a.route);
-export const titleOf=(id,a)=>id==='X1'?(isProject(a)?'Seu projeto, organizado':'Seu caso, organizado'):hourlyOnly(a)&&id==='S4'?'Onde você está?':hourlyOnly(a)&&id==='S6'?'Quando pretende precisar desse apoio?':nodes[id].title;
+const X4_TITLE={proposal:'Para onde enviamos sua proposta?',scope_question:'Como podemos responder à sua dúvida?'};
+export const titleOf=(id,a)=>id==='X4'&&X4_TITLE[a.request_intent]?X4_TITLE[a.request_intent]:id==='X1'?(isProject(a)?'Seu projeto, organizado':'Seu caso, organizado'):hourlyOnly(a)&&id==='S4'?'Onde você está?':hourlyOnly(a)&&id==='S6'?'Quando pretende precisar desse apoio?':nodes[id].title;
 export function valid(id,a){
  const node=nodes[id],v=a[keyOf(id)];
  if(['summary','result'].includes(node.type))return true;
@@ -98,6 +111,7 @@ export function valid(id,a){
  if(node.type==='area')return v?.unknown===true||areaFor(id,v)!==null;
  if(node.type==='hours')return hoursOf(v)!==null;
  if(node.type==='integer')return v?.unknown===true||(/^\d+$/.test(v?.value??'')&&Number(v.value)>0&&Number(v.value)<=200);
+ if(node.type==='program')return v?.unknown===true||programError(v)===null;
  if(node.type==='story')return !!v?.trim()||!!a.photos?.length;
  if(node.type==='text')return !!v?.trim();
  if(node.type==='contact'){const p=v?.whatsapp?.replace(/\D/g,'')??'';return !!v?.name?.trim()&&!!(p||v?.email?.trim())&&(!v?.whatsapp?.trim()||/^\d{10,13}$/.test(p))&&(!v?.email?.trim()||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim()));}
@@ -122,10 +136,17 @@ export function switchRoute(a,route,{redirect=false}={}){
  if(next.property&&!(propertyNode&&nodes[propertyNode].options.some(o=>o.value===next.property)))delete next.property;
  return next;
 }
+// Chaves gravadas em answers pela escolha pós-resultado (ver funnel.mjs). Nunca são perguntas da jornada.
+export const FUNNEL_KEYS=['request_intent','estimate_state','lead_stage','scope_question'];
 export function updateAnswer(a,id,value){
+ // Programa de necessidades só vale enquanto a área do projeto de Arquitetura for desconhecida.
+ const dropProgram=id==='S3'&&!(value&&value.unknown===true);
  if(id==='HOME')return switchRoute(a,value);
  const key=keyOf(id),next={...a,[key]:value};
- if(id==='CA1'&&a.CA1!==value)for(const k of ['CA_AREA','CA_EXISTING','CA_NEW'])delete next[k];
+ // A escolha pós-resultado (proposta / dúvida / avaliação) só vale para o resultado em que foi feita: qualquer resposta alterada a invalida.
+ if(id!=='X4')for(const k of FUNNEL_KEYS)delete next[k];
+ if(dropProgram)delete next.arq_programa;
+ if(id==='CA1'&&a.CA1!==value)for(const k of ['CA_AREA','CA_EXISTING','CA_NEW','CA_REFORMA'])delete next[k];
  if((id==='REG_R1'&&a.REG_R1!==value)||(id==='REG_G1'&&a.REG_G1!==value)){
    for(const k of Object.keys(next))if(k.startsWith('REG_')&&!['REG_R1','REG_C1','REG_C4',...(id==='REG_G1'?['REG_G1']:[])].includes(k))delete next[k];
  }
@@ -137,6 +158,9 @@ export function updateAnswer(a,id,value){
    if(!Array.isArray(value)||!value.includes('Gás'))delete next.area_atendida;
    if(!Array.isArray(value)||!value.includes('Compatibilização BIM'))delete next.area_escopo;
    if(!needsFoundationArea(next))delete next.area_fundacao;
+   if(!Array.isArray(value)||!value.includes('Orçamento técnico'))delete next.area_orcamento;
+   if(!Array.isArray(value)||!(value.includes('Terraplenagem')||value.includes('Arquitetura')))delete next.area_terreno;
+   if(!Array.isArray(value)||!value.includes('Arquitetura'))delete next.arq_programa;
  }
  if(id==='S1'||id==='SUP1'){if(hourlyServices(next).length!==1){delete next.hours_known;delete next.hours;}if(hourlyServices(next).length===0&&next.route==='known')delete next.support_context;}
  if(id==='HRS_Q'&&value!=='sim')delete next.hours;
@@ -161,13 +185,15 @@ export function needsReview(a){return safetyHold(a)||(a.route==='problem'&&a.pho
 export function resultFor(a,mode){return !needsReview(a)&&mode==='preview'?'X3A':'X3B';}
 function direct(id,a){
  if(id==='HOME')return starts[a.route];
- if(id==='CA1')return a.CA1==='Construir do zero'?'CA_AREA':a.CA1==='Ampliar um imóvel existente'?'CA_EXISTING':'CA2';
+ if(id==='CA1')return a.CA1==='Construir do zero'?'CA_AREA':a.CA1==='Ampliar um imóvel existente'?'CA_EXISTING':a.CA1===REFORMA?'CA_REFORMA':'CA2';
+ if(id==='S3')return needsArchitectureTerrain(a)?'Q_TERR_ARQ':needsArchitectureProgram(a)?'ARQ_PROG':'S4';
+ if(id==='Q_TERR_ARQ')return needsArchitectureProgram(a)?'ARQ_PROG':'S4';
  if(id==='REG_C4')return regStarts[a.REG_R1];
  if(id==='REG_G1')return regStarts[classify(a.REG_G1)]??'X1';
  if(id==='SUP1')return hourlyServices(a).length?'HRS_Q':'HRS_CTX';
  if(a.route==='support'&&['HRS_Q','HRS_V','HRS_CTX'].includes(id))return id==='HRS_Q'?(a.hours_known==='sim'?'HRS_V':'HRS_CTX'):'S4';
  if(id==='S4'&&hourlyOnly(a))return 'S6';
- if(['CA7','S1','Q_FUND','Q_GAS','Q_COMPAT','HRS_Q','HRS_V','HRS_CTX'].includes(id))return afterServices(a,id);
+ if(['CA7','S1','Q_FUND','Q_GAS','Q_COMPAT','Q_ORC','Q_TERR','HRS_Q','HRS_V','HRS_CTX'].includes(id))return afterServices(a,id);
  return nodes[id]?.next;
 }
 export function advance(id,answers,mode='missing'){
@@ -188,8 +214,8 @@ export function advance(id,answers,mode='missing'){
  throw Error('Navigation loop');
 }
 export function routeNodes(a){
- if(a.route==='build')return ['CA1',...(a.CA1==='Construir do zero'?['CA_AREA']:a.CA1==='Ampliar um imóvel existente'?['CA_EXISTING','CA_NEW']:[]),'CA2','CA3','CA4','CA5','CA6','CA7',...serviceExtraNodes(a),'CA8'];
- if(a.route==='known')return ['S1',...serviceExtraNodes(a),...(hourlyOnly(a)?['S4','S6']:['S2','S3','S4','S5','S6'])];
+ if(a.route==='build')return ['CA1',...(a.CA1==='Construir do zero'?['CA_AREA']:a.CA1==='Ampliar um imóvel existente'?['CA_EXISTING','CA_NEW']:a.CA1===REFORMA?['CA_REFORMA']:[]),'CA2','CA3','CA4','CA5','CA6','CA7',...serviceExtraNodes(a),'CA8'];
+ if(a.route==='known')return ['S1',...serviceExtraNodes(a),...(hourlyOnly(a)?['S4','S6']:['S2','S3',...(needsArchitectureTerrain(a)?['Q_TERR_ARQ']:[]),...(needsArchitectureProgram(a)?['ARQ_PROG']:[]),'S4','S5','S6'])];
  if(a.route==='support')return ['SUP1',...hourNodes(a),'S4','S6'];
  if(a.route==='problem')return ['P1','P2','P3','P4','P5'];
  if(a.route==='regularize'){
@@ -208,11 +234,13 @@ export function summary(a){
    else if(node.type==='hours')value=v?.value?`${String(v.value).trim()} h`:'';
    else if(['area','integer'].includes(node.type))value=v.unknown?'Não sei':v.value?`${v.value}${node.type==='area'?' m²':''}`:'';
    else if(node.type==='multi'){value=(v.includes('Não sei quais preciso')?(a.suggestionConfirmed?a.confirmedSuggestions:['A definir']):v).map(s=>node.options.find(o=>o.value===s)?.label??s).join(' · ');}
+   else if(node.type==='program')value=programSummaryText(v);
    else value=node.options.find(o=>o.value===v)?.label??v;
    if(value)rows.push({id,label,value});
  }
  if(a.route==='known'&&a.services?.includes('Outro')&&a.otherService)rows.push({id:'S1',label:'Outro serviço informado',value:a.otherService});
  if(a.route==='problem'&&a.photos?.length)rows.push({id:'P2',label:'Fotos',value:`${a.photos.length} foto(s) adicionada(s) localmente`});
+ {const est=architectureEstimate(a);if(est&&est.source!==ARQ_SOURCE.USER_DECLARED)rows.push({id:null,label:'Área de referência da Arquitetura (estimada, não informada por você)',value:est.source===ARQ_SOURCE.HUMAN_REVIEW_REQUIRED?'A confirmar com a equipe':`${est.reference} m² (faixa de ${est.min} a ${est.max} m²)`});}
  if(a.originalRequest)rows.push({id:null,label:'Pedido original',value:a.originalRequest});
  if(a.carriedServices?.length)rows.push({id:null,label:'Serviços também informados',value:a.carriedServices.join(' · ')});
  if(a.route==='regularize'&&areaFor('REG_A1',a.REG_A1)!==null&&areaFor('REG_A2',a.REG_A2)!==null)rows.push({id:null,label:'Diferença entre as áreas',value:`${Math.abs(areaFor('REG_A1',a.REG_A1)-areaFor('REG_A2',a.REG_A2)).toLocaleString('pt-BR',{maximumFractionDigits:2})} m²`});
@@ -230,6 +258,8 @@ export function missingData(a){
  if(hourlyServices(a).length>=2)list.push('Dimensionamento do atendimento pela equipe DEMELLO');
  else if(hourlyServices(a).length===1&&a.hours_known==='nao')list.push('Quantidade aproximada de horas de apoio');
  if(a.route==='build'&&a.CA1==='Ainda estou definindo')list.push('Definição entre construção e ampliação');
+ if(a.route==='build'&&a.CA1===REFORMA)list.push('Dados suficientes para calcular a reforma sem aumento de área');
+ list.push(...architectureMissing(a));
  if(a.route==='build'&&a.services?.includes('Não sei quais preciso')&&!a.suggestionConfirmed)list.push('Confirmação dos projetos a avaliar');
  if(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))list.push('Enquadramento do caso para avaliação');
  if(a.route==='known'&&a.services?.includes('Outro'))list.push('Definição do escopo do serviço informado');

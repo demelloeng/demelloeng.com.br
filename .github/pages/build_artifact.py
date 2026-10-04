@@ -11,7 +11,7 @@ Subcommands
   smoke-local --artifact DIR                    the artifact serves the required surface
   smoke-live  <base-url>                        positive + negative HTTP smoke
 
-Allowlist: .github/pages/allowlist.txt  (30 exact paths + one "orcamento/assets/**").
+Allowlist: .github/pages/allowlist.txt  (caminhos exatos + um único "orcamento/assets/**"; ver o arquivo).
 """
 from __future__ import annotations
 
@@ -37,8 +37,8 @@ FORBIDDEN_EXACT = [
 FORBIDDEN_PREFIX = ["orcamento-src/", ".github/"]
 
 # G5 anchors — bytes that must survive untouched (no rebuild / rename / minify).
-RUNTIME_BUNDLE = "orcamento/assets/index-DjK7ST-z.js"
-RUNTIME_CSS = "orcamento/assets/index-B9z1Kqrw.css"
+RUNTIME_BUNDLE = "orcamento/assets/index-DzwQD7Lx.js"
+RUNTIME_CSS = "orcamento/assets/index-CN6JBlmB.css"
 
 # §8 positive smoke surface (paths, mapped to URLs by the caller).
 SMOKE_POSITIVE = [
@@ -46,7 +46,9 @@ SMOKE_POSITIVE = [
     "empresa/index.html", "empresa/trajetoria-do-fundador.html",
     "metodologia/index.html", "experiencia-tecnica/index.html",
     "contato/index.html", "sitemap.xml", "robots.txt",
+    "construir-ou-ampliar/index.html", "avaliar-um-problema/index.html",
     "assets/css/style.css", "assets/js/nav.js", "assets/js/three-d-stage.js",
+    "assets/js/analytics.mjs", "assets/js/site-analytics.mjs",
     "assets/models/guatupe.obj",
     RUNTIME_BUNDLE, RUNTIME_CSS,
 ]
@@ -54,9 +56,11 @@ SMOKE_POSITIVE_URLS = [
     "/", "/servicos/", "/orcamento/", "/empresa/",
     "/empresa/trajetoria-do-fundador.html", "/metodologia/",
     "/experiencia-tecnica/", "/contato/", "/sitemap.xml", "/robots.txt",
+    "/construir-ou-ampliar/", "/avaliar-um-problema/",
     "/assets/css/style.css", "/assets/js/nav.js", "/assets/js/three-d-stage.js",
+    "/assets/js/analytics.mjs", "/assets/js/site-analytics.mjs",
     "/assets/models/guatupe.obj",
-    "/orcamento/assets/index-DjK7ST-z.js", "/orcamento/assets/index-B9z1Kqrw.css",
+    "/orcamento/assets/index-DzwQD7Lx.js", "/orcamento/assets/index-CN6JBlmB.css",
 ]
 
 # §9 negative smoke — must be 404 after the new pipeline.
@@ -252,7 +256,7 @@ def cmd_smoke_local(a) -> int:
     orc = os.path.join(artifact, "orcamento", "index.html")
     if os.path.isfile(orc):
         html = open(orc, encoding="utf-8", errors="replace").read()
-        for asset in ("index-DjK7ST-z.js", "index-B9z1Kqrw.css"):
+        for asset in ("index-DzwQD7Lx.js", "index-CN6JBlmB.css"):
             if asset not in html:
                 fails.append(f"/orcamento/index.html does not reference {asset}")
             if not os.path.isfile(os.path.join(artifact, "orcamento", "assets", asset)):

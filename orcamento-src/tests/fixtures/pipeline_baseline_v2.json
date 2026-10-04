@@ -1,0 +1,2961 @@
+{
+ "origem": "código aprovado da baseline V2 aprovado, antes da ramificação de estimativa da Arquitetura",
+ "cases": [
+  {
+   "name": "build|Construir do zero|Estrutural",
+   "answers": {
+    "route": "build",
+    "CA1": "Construir do zero",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "1"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Estrutural"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_AREA",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Construir do zero"
+    },
+    {
+     "id": "CA_AREA",
+     "label": "Área total",
+     "value": "120 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "1"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Estruturas"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "2146.48",
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": "120",
+    "area_total": "120",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Construir do zero|Hidrossanitário+Incêndio",
+   "answers": {
+    "route": "build",
+    "CA1": "Construir do zero",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "1"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Hidrossanitário",
+     "Incêndio"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_AREA",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Construir do zero"
+    },
+    {
+     "id": "CA_AREA",
+     "label": "Área total",
+     "value": "120 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "1"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Água e esgoto · Incêndio"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1156.80",
+   "pricing_inputs": {
+    "services": [
+     "HIDROSSANITARIO",
+     "INCENDIO"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": "120",
+    "area_total": "120",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Construir do zero|Gás+Compatibilização BIM",
+   "answers": {
+    "route": "build",
+    "CA1": "Construir do zero",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "1"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Gás",
+     "Compatibilização BIM"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_AREA",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "Q_GAS",
+    "Q_COMPAT",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Construir do zero"
+    },
+    {
+     "id": "CA_AREA",
+     "label": "Área total",
+     "value": "120 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "1"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Gás · Compatibilização BIM"
+    },
+    {
+     "id": "Q_GAS",
+     "label": "Área atendida (gás)",
+     "value": "90 m²"
+    },
+    {
+     "id": "Q_COMPAT",
+     "label": "Área do escopo (compatibilização)",
+     "value": "300 m²"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1351.80",
+   "pricing_inputs": {
+    "services": [
+     "GAS_GLP",
+     "COMPATIBILIZACAO"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": "120",
+    "area_total": "120",
+    "area_atendida": "90",
+    "area_terreno": null,
+    "area_escopo": "300",
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Construir do zero|Fundações",
+   "answers": {
+    "route": "build",
+    "CA1": "Construir do zero",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "1"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Fundações"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_AREA",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Construir do zero"
+    },
+    {
+     "id": "CA_AREA",
+     "label": "Área total",
+     "value": "120 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "1"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Fundações"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "600.88",
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": "FOUNDATION_ONLY",
+    "foundations_selected": true,
+    "area_existing": null,
+    "area_new": "120",
+    "area_total": "120",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ampliar um imóvel existente|Estrutural",
+   "answers": {
+    "route": "build",
+    "CA1": "Ampliar um imóvel existente",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Estrutural"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_EXISTING",
+    "CA_NEW",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "Q_FUND",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ampliar um imóvel existente"
+    },
+    {
+     "id": "CA_EXISTING",
+     "label": "Área existente",
+     "value": "80 m²"
+    },
+    {
+     "id": "CA_NEW",
+     "label": "Área nova",
+     "value": "40 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Estruturas"
+    },
+    {
+     "id": "Q_FUND",
+     "label": "Área de projeção (fundações)",
+     "value": "70 m²"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "NEEDS_HUMAN_REVIEW",
+   "total": null,
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": "80",
+    "area_new": "40",
+    "area_total": "120",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ampliar um imóvel existente|Hidrossanitário+Incêndio",
+   "answers": {
+    "route": "build",
+    "CA1": "Ampliar um imóvel existente",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Hidrossanitário",
+     "Incêndio"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_EXISTING",
+    "CA_NEW",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ampliar um imóvel existente"
+    },
+    {
+     "id": "CA_EXISTING",
+     "label": "Área existente",
+     "value": "80 m²"
+    },
+    {
+     "id": "CA_NEW",
+     "label": "Área nova",
+     "value": "40 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Água e esgoto · Incêndio"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "600.00",
+   "pricing_inputs": {
+    "services": [
+     "HIDROSSANITARIO",
+     "INCENDIO"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": "80",
+    "area_new": "40",
+    "area_total": "120",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ampliar um imóvel existente|Gás+Compatibilização BIM",
+   "answers": {
+    "route": "build",
+    "CA1": "Ampliar um imóvel existente",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Gás",
+     "Compatibilização BIM"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_EXISTING",
+    "CA_NEW",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "Q_GAS",
+    "Q_COMPAT",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ampliar um imóvel existente"
+    },
+    {
+     "id": "CA_EXISTING",
+     "label": "Área existente",
+     "value": "80 m²"
+    },
+    {
+     "id": "CA_NEW",
+     "label": "Área nova",
+     "value": "40 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Gás · Compatibilização BIM"
+    },
+    {
+     "id": "Q_GAS",
+     "label": "Área atendida (gás)",
+     "value": "90 m²"
+    },
+    {
+     "id": "Q_COMPAT",
+     "label": "Área do escopo (compatibilização)",
+     "value": "300 m²"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1351.80",
+   "pricing_inputs": {
+    "services": [
+     "GAS_GLP",
+     "COMPATIBILIZACAO"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": "80",
+    "area_new": "40",
+    "area_total": "120",
+    "area_atendida": "90",
+    "area_terreno": null,
+    "area_escopo": "300",
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ampliar um imóvel existente|Fundações",
+   "answers": {
+    "route": "build",
+    "CA1": "Ampliar um imóvel existente",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Fundações"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA_EXISTING",
+    "CA_NEW",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "Q_FUND",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ampliar um imóvel existente"
+    },
+    {
+     "id": "CA_EXISTING",
+     "label": "Área existente",
+     "value": "80 m²"
+    },
+    {
+     "id": "CA_NEW",
+     "label": "Área nova",
+     "value": "40 m²"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Fundações"
+    },
+    {
+     "id": "Q_FUND",
+     "label": "Área de projeção (fundações)",
+     "value": "70 m²"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "600.88",
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": "FOUNDATION_ONLY",
+    "foundations_selected": true,
+    "area_existing": "80",
+    "area_new": "40",
+    "area_total": "120",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ainda estou definindo|Estrutural",
+   "answers": {
+    "route": "build",
+    "CA1": "Ainda estou definindo",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Estrutural"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "Q_FUND",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ainda estou definindo"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Estruturas"
+    },
+    {
+     "id": "Q_FUND",
+     "label": "Área de projeção (fundações)",
+     "value": "70 m²"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "NEEDS_HUMAN_REVIEW",
+   "total": null,
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ainda estou definindo|Hidrossanitário+Incêndio",
+   "answers": {
+    "route": "build",
+    "CA1": "Ainda estou definindo",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Hidrossanitário",
+     "Incêndio"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ainda estou definindo"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Água e esgoto · Incêndio"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "NEEDS_HUMAN_REVIEW",
+   "total": null,
+   "pricing_inputs": {
+    "services": [
+     "HIDROSSANITARIO",
+     "INCENDIO"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ainda estou definindo|Gás+Compatibilização BIM",
+   "answers": {
+    "route": "build",
+    "CA1": "Ainda estou definindo",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Gás",
+     "Compatibilização BIM"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "Q_GAS",
+    "Q_COMPAT",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ainda estou definindo"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Gás · Compatibilização BIM"
+    },
+    {
+     "id": "Q_GAS",
+     "label": "Área atendida (gás)",
+     "value": "90 m²"
+    },
+    {
+     "id": "Q_COMPAT",
+     "label": "Área do escopo (compatibilização)",
+     "value": "300 m²"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1351.80",
+   "pricing_inputs": {
+    "services": [
+     "GAS_GLP",
+     "COMPATIBILIZACAO"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": "90",
+    "area_terreno": null,
+    "area_escopo": "300",
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "build|Ainda estou definindo|Fundações",
+   "answers": {
+    "route": "build",
+    "CA1": "Ainda estou definindo",
+    "CA_AREA": {
+     "value": "120"
+    },
+    "CA_EXISTING": {
+     "value": "80"
+    },
+    "CA_NEW": {
+     "value": "40"
+    },
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "phase": "Arquitetura pronta",
+    "CA5": {
+     "value": "2"
+    },
+    "CA6": "Médio",
+    "services": [
+     "Fundações"
+    ],
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "deadline": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "CA1",
+    "CA2",
+    "CA3",
+    "CA4",
+    "CA5",
+    "CA6",
+    "CA7",
+    "Q_FUND",
+    "CA8"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Construir ou ampliar"
+    },
+    {
+     "id": "CA1",
+     "label": "O que você vai fazer?",
+     "value": "Ainda estou definindo"
+    },
+    {
+     "id": "CA2",
+     "label": "Empreendimento",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "CA3",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "CA4",
+     "label": "Fase do projeto",
+     "value": "Arquitetura pronta"
+    },
+    {
+     "id": "CA5",
+     "label": "Pavimentos",
+     "value": "2"
+    },
+    {
+     "id": "CA6",
+     "label": "Padrão",
+     "value": "Médio"
+    },
+    {
+     "id": "CA7",
+     "label": "Projetos selecionados",
+     "value": "Fundações"
+    },
+    {
+     "id": "Q_FUND",
+     "label": "Área de projeção (fundações)",
+     "value": "70 m²"
+    },
+    {
+     "id": "CA8",
+     "label": "Prazo",
+     "value": "Ainda sem prazo"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "600.88",
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": "FOUNDATION_ONLY",
+    "foundations_selected": true,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Estrutural",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Estrutural"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "Q_FUND",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Estrutural"
+    },
+    {
+     "id": "Q_FUND",
+     "label": "Área de projeção (fundações)",
+     "value": "70 m²"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "200 m²"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "3176.88",
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Hidrossanitário",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Hidrossanitário"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Hidrossanitário"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "200 m²"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1931.20",
+   "pricing_inputs": {
+    "services": [
+     "HIDROSSANITARIO"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Incêndio+Gás",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Incêndio",
+     "Gás"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "Q_GAS",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Incêndio · Gás"
+    },
+    {
+     "id": "Q_GAS",
+     "label": "Área atendida (gás)",
+     "value": "90 m²"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "200 m²"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "613.04",
+   "pricing_inputs": {
+    "services": [
+     "INCENDIO",
+     "GAS_GLP"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": "90",
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Compatibilização BIM",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Compatibilização BIM"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "Q_COMPAT",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Compatibilização BIM"
+    },
+    {
+     "id": "Q_COMPAT",
+     "label": "Área do escopo (compatibilização)",
+     "value": "300 m²"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "200 m²"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1274.76",
+   "pricing_inputs": {
+    "services": [
+     "COMPATIBILIZACAO"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": "300",
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Orçamento técnico",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Orçamento técnico"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "Q_ORC",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Orçamento técnico"
+    },
+    {
+     "id": "Q_ORC",
+     "label": "Área do orçamento técnico",
+     "value": "300 m²"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "200 m²"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1610.40",
+   "pricing_inputs": {
+    "services": [
+     "ORCAMENTO"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": "300",
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Terraplenagem",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Terraplenagem"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "Q_TERR",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Terraplenagem"
+    },
+    {
+     "id": "Q_TERR",
+     "label": "Área do terreno",
+     "value": "500 m²"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "200 m²"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "144.00",
+   "pricing_inputs": {
+    "services": [
+     "TERRAPLENAGEM"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": "500",
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Consultoria Técnica",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Consultoria Técnica"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "HRS_Q",
+    "HRS_V",
+    "S4",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Consultoria Técnica"
+    },
+    {
+     "id": "HRS_Q",
+     "label": "Horas de apoio conhecidas",
+     "value": "Sim, sei aproximadamente"
+    },
+    {
+     "id": "HRS_V",
+     "label": "Horas de apoio",
+     "value": "5 h"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "860.39",
+   "pricing_inputs": {
+    "services": [
+     "CONSULTORIA_TECNICA"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": "5",
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Mentoria Técnica",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Mentoria Técnica"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "HRS_Q",
+    "HRS_V",
+    "S4",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Mentoria Técnica"
+    },
+    {
+     "id": "HRS_Q",
+     "label": "Horas de apoio conhecidas",
+     "value": "Sim, sei aproximadamente"
+    },
+    {
+     "id": "HRS_V",
+     "label": "Horas de apoio",
+     "value": "5 h"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "1090.60",
+   "pricing_inputs": {
+    "services": [
+     "MENTORIA_TECNICA"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": "5",
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Consultoria Técnica+Mentoria Técnica",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Consultoria Técnica",
+     "Mentoria Técnica"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "HRS_CTX",
+    "S4",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Consultoria Técnica · Mentoria Técnica"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "NEEDS_HUMAN_REVIEW",
+   "total": null,
+   "pricing_inputs": {
+    "services": [
+     "CONSULTORIA_TECNICA",
+     "MENTORIA_TECNICA"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3B"
+  },
+  {
+   "name": "known|Estrutural+Terraplenagem+Orçamento técnico",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Estrutural",
+     "Terraplenagem",
+     "Orçamento técnico"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "200"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "Só uma ideia / estudo",
+    "S6": "Ainda sem prazo",
+    "area_atendida": {
+     "value": "90"
+    },
+    "area_escopo": {
+     "value": "300"
+    },
+    "area_orcamento": {
+     "value": "300"
+    },
+    "area_terreno": {
+     "value": "500"
+    },
+    "area_fundacao": {
+     "value": "70"
+    },
+    "hours_known": "sim",
+    "hours": {
+     "value": "5"
+    }
+   },
+   "route_nodes": [
+    "S1",
+    "Q_FUND",
+    "Q_ORC",
+    "Q_TERR",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Estrutural · Terraplenagem · Orçamento técnico"
+    },
+    {
+     "id": "Q_FUND",
+     "label": "Área de projeção (fundações)",
+     "value": "70 m²"
+    },
+    {
+     "id": "Q_ORC",
+     "label": "Área do orçamento técnico",
+     "value": "300 m²"
+    },
+    {
+     "id": "Q_TERR",
+     "label": "Área do terreno",
+     "value": "500 m²"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "200 m²"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "4931.28",
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL",
+     "TERRAPLENAGEM",
+     "ORCAMENTO"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": "200",
+    "area_atendida": null,
+    "area_terreno": "500",
+    "area_escopo": "300",
+    "area_fundacao": "70",
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "known|Estrutural|S3 desconhecida",
+   "answers": {
+    "route": "known",
+    "services": [
+     "Estrutural"
+    ],
+    "S2": "Casa/sobrado",
+    "S3": {
+     "value": "",
+     "unknown": true
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S5": "x",
+    "S6": "y"
+   },
+   "route_nodes": [
+    "S1",
+    "Q_FUND",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Já sei o serviço"
+    },
+    {
+     "id": "S1",
+     "label": "Serviços selecionados",
+     "value": "Estrutural"
+    },
+    {
+     "id": "S3",
+     "label": "Área informada",
+     "value": "Não sei"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "NEEDS_HUMAN_REVIEW",
+   "total": null,
+   "pricing_inputs": {
+    "services": [
+     "ESTRUTURAL"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": false,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "problem",
+   "answers": {
+    "route": "problem",
+    "P1": "Apareceu algo no imóvel e quero entender o que é",
+    "P2": "rachadura",
+    "property": "Casa/sobrado",
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "P5": "Entender o que está acontecendo"
+   },
+   "route_nodes": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Avaliar um problema"
+    },
+    {
+     "id": "P1",
+     "label": "O que precisa avaliar",
+     "value": "Apareceu algo no imóvel e quero entender o que é"
+    },
+    {
+     "id": "P2",
+     "label": "Você informou",
+     "value": "rachadura"
+    },
+    {
+     "id": "P3",
+     "label": "Imóvel",
+     "value": "Casa / sobrado"
+    },
+    {
+     "id": "P4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    },
+    {
+     "id": "P5",
+     "label": "Objetivo",
+     "value": "Entender o que está acontecendo"
+    }
+   ],
+   "pricing_status": "NEEDS_HUMAN_REVIEW",
+   "total": null,
+   "pricing_inputs": {
+    "services": [],
+    "typology": "CASA",
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": null,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "regularize|A",
+   "answers": {
+    "route": "regularize",
+    "REG_R1": "A",
+    "REG_A1": {
+     "value": "100"
+    },
+    "REG_A2": {
+     "value": "80"
+    },
+    "REG_C1": "Venda",
+    "REG_C2": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "REG_C3": "Casa / sobrado",
+    "REG_C4": [
+     "Matrícula"
+    ]
+   },
+   "route_nodes": [
+    "REG_R1",
+    "REG_C1",
+    "REG_C2",
+    "REG_C3",
+    "REG_C4",
+    "REG_A1",
+    "REG_A2",
+    "REG_A3"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Regularizar meu imóvel"
+    },
+    {
+     "id": "REG_R1",
+     "label": "Situação",
+     "value": "A área do IPTU e da matrícula não bate"
+    },
+    {
+     "id": "REG_C1",
+     "label": "Finalidade",
+     "value": "Venda"
+    },
+    {
+     "id": "REG_C4",
+     "label": "Documentos disponíveis",
+     "value": "Matrícula"
+    },
+    {
+     "id": "REG_A1",
+     "label": "Área no IPTU",
+     "value": "100 m²"
+    },
+    {
+     "id": "REG_A2",
+     "label": "Área na matrícula",
+     "value": "80 m²"
+    },
+    {
+     "id": null,
+     "label": "Diferença entre as áreas",
+     "value": "20 m²"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "566.56",
+   "pricing_inputs": {
+    "services": [
+     "REGULARIZACAO"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": null,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": null,
+    "regularizacao": {
+     "area_matricula": "80",
+     "area_iptu": "100",
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  },
+  {
+   "name": "support|consultoria",
+   "answers": {
+    "route": "support",
+    "support_kind": "consultoria",
+    "hours_known": "sim",
+    "hours": {
+     "value": "4"
+    },
+    "location": {
+     "city": "Curitiba",
+     "uf": "PR"
+    },
+    "S6": "Ainda sem prazo"
+   },
+   "route_nodes": [
+    "SUP1",
+    "HRS_Q",
+    "HRS_V",
+    "S4",
+    "S6"
+   ],
+   "summary": [
+    {
+     "id": "HOME",
+     "label": "Necessidade",
+     "value": "Preciso de orientação ou apoio técnico"
+    },
+    {
+     "id": "SUP1",
+     "label": "Tipo de apoio",
+     "value": "Preciso resolver, revisar ou decidir uma questão técnica"
+    },
+    {
+     "id": "HRS_Q",
+     "label": "Horas de apoio conhecidas",
+     "value": "Sim, sei aproximadamente"
+    },
+    {
+     "id": "HRS_V",
+     "label": "Horas de apoio",
+     "value": "4 h"
+    },
+    {
+     "id": "S4",
+     "label": "Localização",
+     "value": "Curitiba / PR"
+    }
+   ],
+   "pricing_status": "CALCULATED",
+   "total": "688.31",
+   "pricing_inputs": {
+    "services": [
+     "CONSULTORIA_TECNICA"
+    ],
+    "typology": null,
+    "structural_system": null,
+    "structural_scope": null,
+    "foundations_selected": null,
+    "area_existing": null,
+    "area_new": null,
+    "area_total": null,
+    "area_atendida": null,
+    "area_terreno": null,
+    "area_escopo": null,
+    "area_fundacao": null,
+    "hours": "4",
+    "regularizacao": {
+     "area_matricula": null,
+     "area_iptu": null,
+     "levantamento": "UNDETERMINED",
+     "projeto_legal": "UNDETERMINED"
+    },
+    "hidro_scope_includes_existing": null
+   },
+   "advance_x1": "X3A"
+  }
+ ]
+}

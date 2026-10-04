@@ -3,99 +3,154 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DEMELLO Engenharia | Projetos possíveis, planos reais</title>
-<meta name="description" content="Engenharia civil com projetos integrados em BIM, planejamento técnico e responsabilidade do primeiro traço à entrega.">
+<title>Vai construir ou ampliar? Calcule sua estimativa | DEMELLO Engenharia</title>
+<meta name="description" content="Descubra quais projetos sua obra pode precisar e veja uma estimativa inicial. Sem compromisso: o contato só é pedido no final.">
 <meta name="theme-color" content="#1d2b3b">
 <link rel="canonical" href="https://demelloeng.com.br/">
-<meta property="og:title" content="DEMELLO Engenharia | Projetos possíveis, planos reais">
-<meta property="og:description" content="Engenharia civil com projetos integrados em BIM, planejamento técnico e responsabilidade do primeiro traço à entrega.">
+<meta property="og:title" content="Vai construir ou ampliar? Calcule sua estimativa | DEMELLO Engenharia">
+<meta property="og:description" content="Descubra quais projetos sua obra pode precisar e veja uma estimativa inicial. Sem compromisso: o contato só é pedido no final.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://demelloeng.com.br/">
 <meta property="og:image" content="https://demelloeng.com.br/assets/images/logo.png">
 <link rel="icon" href="./assets/images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./assets/css/style.css?v=5">
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
-    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
-    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
-    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js",
-    "three/addons/loaders/OBJLoader.js": "https://unpkg.com/three@0.184.0/examples/jsm/loaders/OBJLoader.js"
-  }
-}
-</script>
-<script src="./assets/js/three-d-stage.js"></script>
+<link rel="stylesheet" href="./assets/css/style.css?v=7">
+<link rel="preload" as="image" href="./assets/images/hero-djalma-marinho.jpg" media="(min-width:761px)">
 </head>
 <body>
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <header class="site-header">
+  <div class="topbar"><div class="wrap topbar-in">
+    <a href="./contato/">Contato</a>
+    <a class="nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a>
+  </div></div>
   <div class="wrap header-in">
     <a class="logo" href="./"><img src="./assets/images/logo.png" alt="DEMELLO Engenharia" width="760" height="196"></a>
     <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
     <nav class="nav" id="site-nav" aria-label="Principal">
       <a href="./" aria-current="page">Início</a>
-      <a class="nav-budget" href="./orcamento/">Orçamento</a>
-      <a href="./servicos/">Serviços</a>
-      <a href="./empresa/">Empresa</a>
-      <a href="./metodologia/">Metodologia</a>
+      <a href="./construir-ou-ampliar/">Construir ou ampliar</a>
+      <a href="./servicos/">Outros serviços</a>
       <a href="./experiencia-tecnica/">Experiência</a>
-      <a href="./contato/">Contato</a>
-      <a class="nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="./metodologia/">Como trabalhamos</a>
+      <a class="nav-budget" href="./orcamento/">Calcular estimativa</a>
+      <a class="nav-extra" href="./contato/">Contato</a>
+      <a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a>
     </nav>
   </div>
 </header>
 <main id="conteudo">
 
-<section class="hero dark">
-  <div class="wrap hero-in">
-    <div>
-      <p class="eyebrow eyebrow-l">Engenharia civil · Projetos integrados em BIM</p>
-      <h1>Projeto que funciona antes de impressionar.</h1>
-      <p class="lead" style="margin-top:28px;max-width:30em">Estruturas, hidrossanitário, incêndio e gás coordenados no mesmo modelo, do primeiro traço à entrega. Você fala com quem projeta, decide e assina.</p>
-      <div class="cta-row">
-        <a class="btn btn-white" href="./orcamento/">Faça sua prévia agora</a>
-        <a class="btn btn-ghost" href="./metodologia/">Ver a metodologia</a>
-      </div>
-    </div>
-    <div>
-      <div>
-      <div class="hero-mark" style="padding:0"><three-d-stage name="guatupe-hero" background="#16222f" autorotate style="width:100%;height:100%;display:block"></three-d-stage></div>
-      <p class="mono" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;margin-top:16px">BIM é a ferramenta. Não a personalidade.</p>
+<!--
+  situation-entry (primeira dobra): faz só três coisas — identifica a situação, apresenta a promessa, gera o primeiro clique.
+  Fora da primeira dobra por decisão comercial: disciplinas, BIM, ARTs, histórico, municípios e texto institucional.
+  CTA principal -> /orcamento/?situacao=build (rota "Construir ou ampliar" da estimativa).
+  Imagem: modelo do Djalma Marinho (acervo do fundador), tratamento esboço → modelo; não é fotografia de obra.
+-->
+<section class="hs" data-block="situation-entry">
+  <picture class="hs-media">
+    <source media="(max-width:760px)" srcset="./assets/images/hero-djalma-marinho-900.jpg">
+    <img src="./assets/images/hero-djalma-marinho.jpg" alt="" width="1800" height="999" fetchpriority="high">
+  </picture>
+  <div class="wrap hs-in">
+    <p class="hs-eyebrow">DEMELLO Engenharia</p>
+    <h1 class="hs-h1-wide">Vai construir ou ampliar?</h1>
+    <p class="hs-promise">Descubra quais projetos sua obra pode precisar e veja uma estimativa inicial.</p>
+    <div class="cta-line">
+      <a class="btn-cta" href="./orcamento/?situacao=build">Calcular minha estimativa<svg class="hs-ico-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p class="cta-micro">Sem compromisso · contato somente no final</p>
     </div>
   </div>
 </section>
 
-<script type="module">
-(async () => {
-  const { OBJLoader } = await import('three/addons/loaders/OBJLoader.js');
-  const stage = document.querySelector('three-d-stage[name="guatupe-hero"]');
-  const { THREE } = await stage.ready;
-  new OBJLoader().load('./assets/models/guatupe.obj', (obj) => {
-    obj.traverse((c) => { if (c.isMesh) c.material = new THREE.MeshStandardMaterial({ color: 0x8fa6c2, roughness: 0.75, metalness: 0.1 }); });
-    stage.setObject(obj);
-  });
-})();
-</script>
+<!--
+  situations — eixo prioritário: construir uma casa e ampliar/reformar (dois cartões de destaque).
+  As demais situações são rotas alternativas, sem o mesmo peso visual. A entrada de apoio técnico (consultoria/mentoria)
+  fica como link secundário e continua abrindo /orcamento/?situacao=support.
+-->
+<section class="sec-sm" data-block="situations" id="situacoes">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Escolha a sua situação</p>
+      <h2>O que você precisa resolver?</h2>
+      <p>Comece pela situação. O nome técnico vem depois.</p>
+    </div>
+    <div class="sit-axis">
+      <a class="sit-main" href="./construir-ou-ampliar/#construir">
+        <h3>Construir uma casa</h3>
+        <p>Com a arquitetura pronta ou só com a ideia. Veja quais projetos a obra pode precisar — e uma estimativa inicial.</p>
+        <span class="sit-go">Ver como funciona →</span>
+      </a>
+      <a class="sit-main" href="./construir-ou-ampliar/#ampliar">
+        <h3>Ampliar ou reformar</h3>
+        <p>O imóvel já existe e vai mudar. Diga o que tem e o que quer mudar. A estimativa vem primeiro.</p>
+        <span class="sit-go">Ver como funciona →</span>
+      </a>
+    </div>
+    <p class="sit-alt-title">Outras situações</p>
+    <div class="sit-alt">
+      <a class="sit-alt-item" href="./servicos/regularizacao/"><strong>Regularizar um imóvel</strong><span>Divergência de área, exigência de prefeitura ou cartório.</span></a>
+      <a class="sit-alt-item" href="./avaliar-um-problema/"><strong>Avaliar um problema</strong><span>Algo apareceu no imóvel ou na obra, ou você tem uma dúvida técnica.</span></a>
+      <a class="sit-alt-item" href="./servicos/"><strong>Já sei o serviço</strong><span>Vá direto ao projeto ou serviço de que precisa.</span></a>
+    </div>
+    <p class="sit-support">Precisa de orientação ou apoio técnico por hora? <a href="./orcamento/?situacao=support">Consultoria e mentoria técnica</a>.</p>
+  </div>
+</section>
 
 <!--
-  situation-entry — as quatro entradas vigentes de /orcamento/ (build · regularize · problem · known).
-  Rótulos e descrições vêm da própria jornada (journey.routes / descriptions). Exatamente quatro; sem quinta entrada; destino /orcamento/ sem parâmetro (deep-link não implementado).
+  preview-explainer — como funciona a estimativa. Mantém o contrato terminológico: estimativa ≠ proposta ≠ contrato ≠ garantia de preço;
+  receber o caso ≠ aceite comercial. O contato só é pedido depois do resultado.
 -->
-<section class="sec-sm white bb" data-block="situation-entry">
+<section class="sec-sm white bt bb" data-block="preview-explainer">
   <div class="wrap">
-    <p class="eyebrow">Por onde começar</p>
-    <h2 style="font-weight:700;font-size:clamp(28px,3.2vw,38px);line-height:1.12;max-width:16em">Comece pela situação. O nome técnico vem depois.</h2>
-    <div class="cards" style="margin-top:36px">
-      <a class="card" href="./orcamento/"><span class="n">01</span><h2>Construir ou ampliar</h2><p class="p">Projetos para uma obra nova, reforma ou ampliação.</p></a>
-      <a class="card" href="./orcamento/"><span class="n">02</span><h2>Regularizar meu imóvel</h2><p class="p">Diferenças de área ou pendências nos documentos.</p></a>
-      <a class="card" href="./orcamento/"><span class="n">03</span><h2>Avaliar um problema</h2><p class="p">Entender uma situação no imóvel ou na obra.</p></a>
-      <a class="card" href="./orcamento/"><span class="n">04</span><h2>Já sei o serviço</h2><p class="p">Ir direto ao projeto ou serviço que preciso.</p></a>
+    <div class="sec-head">
+      <p class="eyebrow">Como funciona a estimativa</p>
+      <h2>Primeiro a estimativa. Depois o seu contato.</h2>
     </div>
-    <div class="note" style="margin-top:28px"><p>São as quatro entradas de <a href="./orcamento/">Faça seu orçamento</a>. Você responde só as perguntas do seu caso e recebe uma previsão inicial — não é proposta nem contrato.</p></div>
+    <ol class="how">
+      <li><h3>Escolha a sua situação</h3><p>Construir ou ampliar, regularizar, avaliar um problema ou ir direto ao serviço.</p></li>
+      <li><h3>Responda só o que se aplica</h3><p>As perguntas mudam conforme o seu caso. Não sabe uma medida? Marque “Ainda não sei”.</p></li>
+      <li><h3>Veja a estimativa na página</h3><p>O cálculo sai ali mesmo, pela tabela DEMELLO. Regra fixa, não inteligência artificial.</p></li>
+      <li><h3>Decida o próximo passo</h3><p>Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato.</p></li>
+    </ol>
+    <p class="lead" style="margin-top:34px;max-width:46em">A estimativa é um valor inicial calculado na própria página pela tabela DEMELLO — não é proposta, contrato nem garantia de preço. Alguns casos precisam de avaliação técnica antes de um valor. O envio para a DEMELLO só acontece quando você conclui e confirma — receber o caso não é aceite comercial.</p>
+    <div class="cta-line">
+      <a class="btn-cta" href="./orcamento/?situacao=build">Calcular minha estimativa<svg class="hs-ico-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p class="cta-micro">Sem compromisso · contato somente no final</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec-sm" data-block="reassurance">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Antes de começar</p>
+      <h2>Dúvidas que costumam travar o primeiro passo</h2>
+    </div>
+    <div class="benefits benefits-3">
+      <div class="benefit"><h3>“Não sei quais projetos preciso.”</h3><p>Não precisa saber. Marque “Não sei quais preciso”: sugerimos, você confirma. É sugestão ilustrativa — o escopo é confirmado pela equipe.</p></div>
+      <div class="benefit"><h3>“Não quero deixar meu contato agora.”</h3><p>Não precisa. Primeiro a estimativa. Depois o seu contato — e só se você confirmar o envio.</p></div>
+      <div class="benefit"><h3>“Meu caso é diferente.”</h3><p>Alguns casos precisam de avaliação técnica antes de um valor. Nesses, você recebe o enquadramento e decide se envia o caso à equipe.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-sm white bt bb" data-block="benefits">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">O que isso muda para a sua obra</p>
+      <h2>Menos promessa. Menos retrabalho. Mais engenharia de verdade.</h2>
+    </div>
+    <div class="benefits">
+      <div class="benefit"><h3>Projetos que conversam entre si</h3><p>Estrutura, instalações e arquitetura no mesmo modelo. Uma decisão não atrapalha a outra.</p></div>
+      <div class="benefit"><h3>Menos retrabalho na obra</h3><p>Problema identificado no projeto é só ajuste. Na obra é atraso — dinheiro perdido.</p></div>
+      <div class="benefit"><h3>Uma pessoa responsável</h3><p>Você fala com quem projeta, decide e assume a responsabilidade técnica.</p></div>
+      <div class="benefit"><h3>Clareza antes de contratar</h3><p>Você vê a estimativa — e entende o que ela é e o que não é — antes de falar com alguém.</p></div>
+    </div>
+    <p style="margin-top:30px"><a class="link-arrow" href="./metodologia/">Ver como trabalhamos →</a></p>
   </div>
 </section>
 
@@ -106,36 +161,23 @@
     <div class="stat"><div class="stat-n">2</div><div class="stat-l">Estados — PR e SP</div></div>
     <div class="stat" style="display:flex;align-items:flex-end"><p class="p" style="color:var(--ink)">Presença técnica consolidada no Sul e Sudeste.</p></div>
   </div>
-  <div class="wrap"><div class="note" style="margin-top:32px"><p>Acervo profissional do fundador — não o acervo operacional da DEMELLO ENG. <a href="./experiencia-tecnica/">Ver a experiência técnica →</a></p></div></div>
+  <div class="wrap"><div class="note" style="margin-top:32px;margin-bottom:48px"><p>Acervo profissional do fundador — não o acervo operacional da DEMELLO ENG. <a href="./experiencia-tecnica/">Ver a experiência técnica →</a></p></div></div>
 </section>
 
 <!--
-  service-summary — nove frentes do catálogo DEMELLO V1.
-  Os nomes públicos permanecem camada editorial; SERVICE_ID inalterado.
-  Cada frente possui página individual sob /servicos/; o enquadramento comercial permanece em /orcamento/.
+  selected-experience — experiência selecionada. Único case documentado até o momento; dados idênticos aos de /experiencia-tecnica/.
 -->
-<section class="sec" data-block="service-summary">
-  <div class="wrap" style="display:grid;grid-template-columns:minmax(240px,300px) 1fr;gap:clamp(32px,5vw,72px);align-items:start">
-    <div>
-      <p class="eyebrow">O que fazemos</p>
-      <h2 style="font-weight:700;font-size:clamp(28px,3.2vw,38px);line-height:1.12">Nove frentes técnicas, um só fluxo de decisão.</h2>
-      <a class="link-arrow" style="margin-top:28px" href="./servicos/">Todos os serviços →</a>
-    </div>
-    <div class="rowlist">
-      <div class="row"><span class="row-n">01</span><span class="row-t"><a href="./servicos/projeto-estrutural/">Projeto estrutural</a></span><span class="row-d">Estrutura de obra nova, ampliação ou fundação isolada.</span></div>
-      <div class="row"><span class="row-n">02</span><span class="row-t"><a href="./servicos/projeto-hidrossanitario/">Projeto hidrossanitário</a></span><span class="row-d">Água, esgoto e drenagem — inclusive integrando o que já existe.</span></div>
-      <div class="row"><span class="row-n">03</span><span class="row-t"><a href="./servicos/projeto-prevencao-incendio/">Prevenção contra incêndio</a></span><span class="row-d">A disciplina de incêndio coordenada no projeto.</span></div>
-      <div class="row"><span class="row-n">04</span><span class="row-t"><a href="./servicos/projeto-gas-glp/">Projeto de gás / GLP</a></span><span class="row-d">A disciplina de gás no escopo, sem se fundir com incêndio.</span></div>
-      <div class="row"><span class="row-n">05</span><span class="row-t"><a href="./servicos/projeto-arquitetura/">Projeto de arquitetura</a></span><span class="row-d">Intenção e restrições transformadas em projeto coordenável.</span></div>
-      <div class="row"><span class="row-n">06</span><span class="row-t"><a href="./servicos/regularizacao/">Regularização</a></span><span class="row-d">Divergência de área ou exigência de prefeitura ou cartório.</span></div>
-      <div class="row"><span class="row-n">07</span><span class="row-t"><a href="./servicos/orcamento-tecnico/">Orçamento técnico</a></span><span class="row-d">O serviço de orçamento de um escopo — diferente de “Faça seu orçamento”.</span></div>
-      <div class="row"><span class="row-n">08</span><span class="row-t"><a href="./servicos/projeto-terraplenagem/">Projeto de terraplenagem</a></span><span class="row-d">A relação entre terreno e implantação, sem executar a obra.</span></div>
-      <div class="row"><span class="row-n">09</span><span class="row-t"><a href="./servicos/compatibilizacao-bim/">Compatibilização BIM</a></span><span class="row-d">Coordenação das disciplinas e interfaces do projeto.</span></div>
-    </div>
+<section class="dark sec-sm" data-block="selected-experience">
+  <div class="wrap">
+    <p class="eyebrow eyebrow-l">Experiência selecionada</p>
+    <h2 style="font-weight:700;font-size:clamp(26px,3.2vw,40px);line-height:1.15;max-width:20em">Colégio Cívico Militar Djalma Marinho — Campo Largo/PR</h2>
+    <p class="lead" style="max-width:40em;margin-top:20px">Terreno com aproximadamente 16 metros de desnível, nove blocos existentes e uma ampliação que levaria o conjunto a dez. Arquitetura, estrutural, hidrossanitário, prevenção contra incêndio, terraplenagem, orçamento e regularização, desenvolvidos e compatibilizados em BIM sob um único responsável técnico.</p>
+    <p class="lead" style="max-width:40em;margin-top:14px;font-size:16px">Atuação de Marcos de Mello Silva, anterior à DEMELLO Engenharia.</p>
+    <p style="margin-top:28px"><a class="link-arrow" style="color:var(--sky);border-color:var(--sky)" href="./experiencia-tecnica/">Ver o case completo →</a></p>
   </div>
 </section>
 
-<section class="sec-sm white bt bb">
+<section class="sec-sm white bb">
   <div class="wrap">
     <p class="eyebrow">Projeto em movimento</p>
     <div class="case-video" style="border:1px solid var(--line)">
@@ -145,43 +187,35 @@
   </div>
 </section>
 
-<section class="white bt bb sec-sm">
-  <div class="wrap grid2" style="align-items:center">
-    <blockquote style="margin:0"><p class="quote">Problema identificado no projeto é só ajuste. Na obra é atraso — dinheiro perdido.</p></blockquote>
-    <div>
-      <p class="eyebrow">Metodologia</p>
-      <p class="lead" style="margin-bottom:20px">Entender antes de projetar. Resolver antes de executar. A DEMELLO trabalha em BIM do primeiro traço à entrega — o projeto inteiro se mantém coordenado, o tempo todo.</p>
-      <a class="link-arrow" href="./metodologia/">Ver as seis etapas →</a>
+<section class="sec" data-block="faq" id="duvidas">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Perguntas frequentes</p>
+      <h2>O que as pessoas perguntam antes de calcular</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Preciso saber quais projetos contratar?</summary><p>Não. Você escolhe a situação mais próxima do seu caso e responde só ao que se aplica. Se não souber quais projetos precisa, marque “Não sei quais preciso” e confirme a sugestão ilustrativa — o escopo final é confirmado pela equipe.</p></details>
+      <details><summary>A estimativa é uma proposta ou um preço garantido?</summary><p>Não. É um valor inicial calculado na própria página pela tabela DEMELLO. Não é proposta, contrato nem garantia de preço, e o escopo final é confirmado pela equipe.</p></details>
+      <details><summary>Preciso informar meu contato para ver a estimativa?</summary><p>Não. O resultado aparece antes. O contato só é pedido no final, depois que você escolhe entre receber uma proposta e tirar uma dúvida sobre o escopo.</p></details>
+      <details><summary>E se o meu caso não puder ser calculado na página?</summary><p>Alguns casos precisam de avaliação técnica antes de um valor. Nesses, você recebe o enquadramento do caso e pode enviá-lo à equipe para avaliação.</p></details>
+      <details><summary>A DEMELLO executa a obra?</summary><p>Não. A DEMELLO desenvolve projetos e serviços técnicos de engenharia civil; a execução da obra não faz parte dos serviços.</p></details>
+      <details><summary>O que acontece com as fotos que eu adicionar?</summary><p>As fotos ficam apenas na sua página, sem análise automática, e não são enviadas à DEMELLO.</p></details>
     </div>
   </div>
 </section>
 
-<!--
-  preview-explainer — distingue porta, prévia e limites. Texto reorganizado de conteúdo já sustentado
-  (contrato terminológico + "Como funciona" / "Privacidade" da própria experiência /orcamento/). Sem copy comercial nova.
--->
-<section class="sec-sm white bt" data-block="preview-explainer">
-  <div class="wrap grid2" style="align-items:start">
-    <div>
-      <p class="eyebrow">Faça seu orçamento</p>
-      <h2 style="font-weight:700;font-size:clamp(26px,3vw,34px);line-height:1.15">Primeiro a prévia. Depois o seu contato.</h2>
-    </div>
-    <div>
-      <p class="lead" style="margin-bottom:18px">Você escolhe uma das quatro situações e responde só as perguntas do seu caso. No fim, uma previsão inicial calculada na própria página pela tabela DEMELLO — não é proposta, contrato nem garantia de preço.</p>
-      <p class="lead" style="margin-bottom:24px">Alguns casos precisam de avaliação técnica antes de um valor. O envio para a DEMELLO só acontece quando você conclui e confirma — receber o caso não é aceite comercial.</p>
-      <a class="btn btn-solid" href="./orcamento/">Começar agora</a>
-    </div>
-  </div>
-</section>
-
-<section class="sec">
+<section class="sec-sm">
   <div class="wrap">
     <div class="cta-band">
       <div>
         <h2>Sua obra começou e as disciplinas estão se conhecendo só agora?</h2>
         <p class="lead" style="margin-top:22px">Nessa novela, a DEMELLO prefere spoiler.</p>
+        <p class="cta-micro" style="margin-top:18px">Sem compromisso · contato somente no final</p>
       </div>
-      <a class="btn btn-white" href="https://wa.me/5541985124056" target="_blank" rel="noopener">Fale com a DEMELLO</a>
+      <div class="cta-stack">
+        <a class="btn-cta btn-cta-light" href="./orcamento/?situacao=build">Calcular minha estimativa</a>
+        <a class="cta-wa" href="https://wa.me/5541985124056" target="_blank" rel="noopener">Prefere conversar? Fale pelo WhatsApp</a>
+      </div>
     </div>
   </div>
 </section>
@@ -196,11 +230,13 @@
     <div class="fcol">
       <p class="t">Navegação</p>
       <a href="./">Início</a>
+      <a href="./construir-ou-ampliar/">Construir ou ampliar</a>
+      <a href="./avaliar-um-problema/">Avaliar um problema</a>
+      <a href="./servicos/">Outros serviços</a>
+      <a href="./experiencia-tecnica/">Experiência</a>
+      <a href="./metodologia/">Como trabalhamos</a>
+      <a href="./orcamento/">Calcular estimativa</a>
       <a href="./empresa/">Empresa</a>
-      <a href="./servicos/">Serviços</a>
-      <a href="./metodologia/">Metodologia</a>
-      <a href="./experiencia-tecnica/">Experiência técnica</a>
-      <a href="./orcamento/">Orçamento</a>
       <a href="./contato/">Contato</a>
     </div>
     <div class="fcol">
@@ -215,5 +251,6 @@
   <div class="wrap footer-bar"><p>© 2026 Marcos de Mello Silva Engenharia LTDA</p></div>
 </footer>
 <script src="./assets/js/nav.js" defer></script>
+<script type="module" src="./assets/js/site-analytics.mjs"></script>
 </body>
 </html>

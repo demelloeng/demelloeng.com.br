@@ -69,10 +69,38 @@ body{min-width:280px}
 @media(max-width:900px){.is-entry .question-panel{padding-top:38px}.is-entry .question-panel h1{font-size:34px;letter-spacing:-1px;margin-bottom:24px}.is-entry .entry-helper{font-size:18px;margin-bottom:26px}.entry-grid{gap:12px}.entry-grid .choice{padding:18px 15px;min-height:165px;gap:12px}.entry-grid strong{font-size:19px}.entry-grid small{font-size:17px;margin-top:8px}.entry-grid .choice input{width:24px;height:24px}.is-entry .case-panel{order:1;position:static;height:auto;padding:30px 24px;border-top:1px solid var(--line)}.is-entry .case-heading h2{font-size:25px}.entry-summary-intro{font-size:18px;margin:18px 0 25px}.entry-promise{padding-top:25px}.entry-promise strong{font-size:21px}.entry-promise p{font-size:17px;margin:16px 0 0}.is-entry .primary-button{width:100%;min-height:56px}.is-entry .continue-hint{font-size:14px}.global-v1 .service-grid{grid-template-columns:1fr 1fr}.global-v1 .primary-button{min-width:0}.global-v1 .actions{padding-bottom:4px}.photo-list{grid-template-columns:1fr}}
 @media(max-width:520px){.entry-grid{grid-template-columns:1fr}.entry-grid .choice{min-height:112px;padding:18px}.entry-grid strong{font-size:20px}.entry-grid small{font-size:17px;margin-top:6px}.global-v1 .service-grid{grid-template-columns:1fr}.global-v1 .actions .primary-button{font-size:17px;padding-left:16px;padding-right:16px}.global-v1 .actions{gap:8px}.global-v1 .back-button{font-size:16px;gap:6px}.global-v1 .suggestions h2{font-size:23px}}
 
-/* Previsão DEMELLO V1 — detalhamento por serviço */
+/* Estimativa DEMELLO — detalhamento por serviço */
 .pricing-breakdown{margin-top:24px;border-top:1px solid var(--line);padding-top:18px}
 .pricing-breakdown summary{cursor:pointer;font-size:16px;color:var(--blue);font-weight:600}
 .pricing-breakdown ul{margin:16px 0 0;padding-left:20px}
 .pricing-breakdown li{font-size:16px;line-height:1.6;margin-bottom:8px}
 .pricing-breakdown li strong{display:inline;border:0;padding:0;font-size:inherit}
 .pricing-breakdown .small-note{margin-top:14px}
+
+/* Escolhas pós-resultado: CTA principal (proposta) + alternativa (dúvida sobre o escopo). O contato só é pedido depois delas. */
+.intent-actions{display:flex;flex-direction:column;gap:10px;flex:1;max-width:420px;margin-left:auto}
+.intent-actions .primary-button{width:100%;min-width:0}
+.intent-actions .secondary-button{width:100%;min-height:54px;font-size:18px}
+@media(max-width:520px){.global-v1 .actions:has(.intent-actions){flex-direction:column-reverse;align-items:stretch}.intent-actions{max-width:none;margin-left:0}}
+
+/* Arquitetura: programa de necessidades e devolutiva (estimativa comercial de área) */
+.program-form{display:grid;gap:22px}
+.program-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.program-grid label{display:flex;flex-direction:column;gap:8px;font-size:18px}
+.program-checks,.program-padrao{border:0;padding:0;margin:0;min-width:0}
+.program-checks{display:flex;flex-wrap:wrap;gap:6px 26px}
+.program-checks legend,.program-padrao legend{font-size:18px;margin-bottom:10px;padding:0}
+.program-check{display:flex;align-items:center;gap:10px;font-size:18px;min-height:44px;cursor:pointer}
+.program-check input{width:22px;height:22px;accent-color:var(--blue);margin:0}
+.program-padrao{grid-template-columns:repeat(3,1fr)}
+.program-form fieldset:disabled{opacity:.55}
+.arch-return{margin-top:30px;border-top:1px solid var(--line);padding-top:24px}
+.arch-return h2{font-family:Archivo,sans-serif;font-size:24px;margin:0 0 12px}
+.arch-return h3{font-family:Archivo,sans-serif;font-size:19px;margin:22px 0 4px}
+.arch-return p{margin:12px 0 0}
+.arch-facts{display:grid;gap:10px;margin:14px 0 6px}
+.arch-facts>div{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.arch-facts dt{color:var(--muted);font-size:17px}
+.arch-facts dd{margin:0;font-weight:600;text-align:right}
+.arch-next{font-weight:600}
+@media(max-width:900px){.program-padrao{grid-template-columns:1fr}.arch-facts>div{flex-direction:column;gap:2px}.arch-facts dd{text-align:left}}

@@ -5,7 +5,7 @@
 # Um único padrão recursivo permitido: "orcamento/assets/**". Todos os demais são caminhos exatos.
 # Comentários com "#". Linhas em branco ignoradas.
 #
-# 41 caminhos exatos + a subárvore runtime orcamento/assets/** (43 arquivos em 024c60e).
+# Caminhos exatos + a subárvore runtime orcamento/assets/**. A contagem é conferida por G2 a cada build (qualquer entrada que não exista no commit falha).
 
 # --- raiz institucional ---
 CNAME
@@ -16,6 +16,8 @@ verificar/index.html
 
 # --- páginas institucionais ---
 contato/index.html
+construir-ou-ampliar/index.html
+avaliar-um-problema/index.html
 empresa/index.html
 empresa/trajetoria-do-fundador.html
 experiencia-tecnica/index.html
@@ -38,6 +40,8 @@ assets/css/style.css
 assets/css/servicos.css
 assets/js/nav.js
 assets/js/three-d-stage.js
+assets/js/analytics.mjs
+assets/js/site-analytics.mjs
 
 # --- modelo 3D (HOME / Experiência) ---
 assets/models/guatupe.obj
@@ -51,6 +55,10 @@ assets/videos/projeto-02.mp4
 assets/images/favicon.png
 assets/images/logo.png
 assets/images/logo-branca.png
+
+# --- imagens: HOME (hero por situação — modelo Djalma Marinho, esboço → modelo) ---
+assets/images/hero-djalma-marinho.jpg
+assets/images/hero-djalma-marinho-900.jpg
 
 # --- imagens: Trajetória do fundador (fundador-*) ---
 assets/images/fundador-aldeia.png

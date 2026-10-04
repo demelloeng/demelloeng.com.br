@@ -2,7 +2,7 @@
    Reaproveita os tokens, a tipografia e os componentes de style.css.
    Sem nova identidade visual: poucas classes comuns às nove páginas. */
 .svc-hero{padding-top:clamp(56px,7vw,96px);padding-bottom:clamp(40px,5vw,68px)}
-.svc-hero .h1{max-width:15em}
+.svc-hero .h1{max-width:19em;font-size:clamp(32px,4.2vw,52px)}
 .svc-headline{font-family:Archivo,sans-serif;font-weight:600;font-size:clamp(20px,2.5vw,28px);line-height:1.28;letter-spacing:-.015em;color:var(--navy);margin:24px 0 0;max-width:22em;text-wrap:pretty}
 .svc-intro{margin-top:24px;max-width:42em}
 .svc-intro p{font-size:clamp(18px,2vw,21px);line-height:1.58;color:var(--body);margin:0 0 14px}
@@ -19,3 +19,8 @@
 .svc-list li::before{content:"";position:absolute;left:0;top:.6em;width:9px;height:2px;background:var(--steel)}
 .svc-block .note{margin-top:20px}
 .svc-block .cta-row{margin-top:32px}
+.svc-hero .cta-line{margin-top:30px}
+.svc-block .how{--cols:4;margin-top:6px}
+.svc-block .benefits{margin-top:6px}
+@media(max-width:1000px){.svc-block .how{--cols:2}}
+@media(max-width:760px){.svc-block .how{--cols:1}}

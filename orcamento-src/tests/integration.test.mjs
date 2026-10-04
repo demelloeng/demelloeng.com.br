@@ -39,7 +39,7 @@ test('built /orcamento route is self-contained and indexable', async () => {
   const bundle = await readFile(path.join(routeRoot, 'assets', bundleName), 'utf8');
   assert.match(bundle, /site-intake\/payload\/2/);
   assert.match(bundle, /DEMELLO_SITE/);
-  assert.match(bundle, /Previsão inicial DEMELLO/);
+  assert.match(bundle, /Estimativa inicial DEMELLO/);
   assert.doesNotMatch(bundle, /CRM simulado|Controles de demonstração/);
 });
 

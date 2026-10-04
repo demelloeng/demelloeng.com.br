@@ -1,4 +1,4 @@
-// Aritmética decimal exata (BigInt) para o motor de previsão DEMELLO V1 no browser.
+// Aritmética decimal exata (BigInt) para o motor de estimativa DEMELLO (TABELA V2) no browser.
 // Espelha o subconjunto de decimal.Decimal (Python) que o motor usa:
 //   parse de string/número, add, sub, mul, abs, compare,
 //   quantize para 2 casas com ROUND_HALF_UP,

@@ -1,0 +1,7 @@
+{
+  "contrato": "demello/base-municipal-urbanistica/1",
+  "versao": null,
+  "atualizada_em": null,
+  "observacao": "BASE VAZIA POR DESIGN. A base municipal canônica ainda não foi fornecida; nenhum município, coeficiente ou regra é simulado. Ver docs/CONTRATO_BASE_MUNICIPAL.md.",
+  "registros": []
+}

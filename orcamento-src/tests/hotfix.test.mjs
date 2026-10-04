@@ -13,6 +13,8 @@ const area = (value) => ({ value, unknown: false });
 
 const pages = [
   'index.html',
+  'construir-ou-ampliar/index.html',
+  'avaliar-um-problema/index.html',
   'empresa/index.html',
   'empresa/trajetoria-do-fundador.html',
   'servicos/index.html',
@@ -21,22 +23,25 @@ const pages = [
   'contato/index.html',
 ];
 
-test('home promotes the budget preview without changing the methodology CTA', async () => {
+test('home leads with the estimate CTA and keeps the way to "Como trabalhamos"', async () => {
   const html = await readFile(path.join(siteRoot, 'index.html'), 'utf8');
-  assert.match(html, /href="\.\/orcamento\/"[^>]*>Faça sua prévia agora<\/a>/i);
-  assert.match(html, /href="\.\/metodologia\/"[^>]*>Ver a metodologia<\/a>/i);
+  // primeira dobra comercial: o CTA principal abre a estimativa já na rota "Construir ou ampliar"
+  assert.match(html, /<a class="btn-cta" href="\.\/orcamento\/\?situacao=build">Calcular minha estimativa/i);
+  assert.match(html, /href="\.\/metodologia\/"[^>]*>Ver como trabalhamos →<\/a>/i);
   assert.doesNotMatch(html, /Fale com quem assina o projeto/i);
 });
 
-test('shared navigation puts the highlighted budget CTA second', async () => {
-  const expected = ['Início', 'Orçamento', 'Serviços', 'Empresa', 'Metodologia', 'Experiência', 'Contato', 'WhatsApp'];
+test('shared navigation: commercial order, estimate CTA highlighted, Contato and WhatsApp secondary', async () => {
+  // Principais, na ordem: Início · Construir ou ampliar · Outros serviços · Experiência · Como trabalhamos · Calcular estimativa.
+  // Contato e WhatsApp seguem acessíveis (faixa superior no desktop; dentro do menu no móvel), sem competir com o CTA.
+  const expected = ['Início', 'Construir ou ampliar', 'Outros serviços', 'Experiência', 'Como trabalhamos', 'Calcular estimativa', 'Contato', 'WhatsApp'];
   for (const page of pages) {
     const html = await readFile(path.join(siteRoot, page), 'utf8');
     const nav = html.match(/<nav class="nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
     const labels = [...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map((match) => match[1].trim());
     assert.deepEqual(labels, expected, page);
-    assert.match(nav, /<a class="nav-budget" href="(?:\.\/|\.\.\/)orcamento\/"/);
-    assert.match(nav, /<a class="nav-whatsapp" href="https:\/\/wa\.me\/5541985124056"/);
+    assert.match(nav, /<a class="nav-budget" href="(?:\.\/|(?:\.\.\/)+)orcamento\/"/);
+    assert.match(nav, /<a class="nav-extra nav-whatsapp" href="https:\/\/wa\.me\/5541985124056"/);
   }
 });
 
@@ -72,7 +77,7 @@ test('human summary contains only friendly case, price and applicable reference 
 
   assert.match(text, /DEMELLO ENGENHARIA\nRESUMO DO SEU CASO/);
   assert.match(text, /SERVIÇOS\nFundações/);
-  assert.match(text, /PREVISÃO INICIAL DEMELLO\nR\$ 12\.876,00/);
+  assert.match(text, /ESTIMATIVA INICIAL DEMELLO\nR\$ 12\.876,00/);
   assert.match(text, /REFERÊNCIAS\nSECID\/PR — Fundações: R\$ 16\.095,00/);
   assert.doesNotMatch(text, /AltoQi/);
   assert.match(text, /Nome: Cliente Teste/);

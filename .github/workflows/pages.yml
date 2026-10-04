@@ -38,7 +38,8 @@ jobs:
             tests/payload_v2.test.mjs tests/integration.test.mjs tests/hotfix.test.mjs \
             tests/submit.test.mjs tests/site_ux.test.mjs tests/preview.test.mjs \
             tests/structural_foundations.test.mjs tests/foundation_area.test.mjs tests/python_parity.test.mjs \
-            tests/hourly_services.test.mjs
+            tests/hourly_services.test.mjs tests/deeplink.test.mjs \
+            tests/commercial_funnel.test.mjs tests/analytics.test.mjs tests/commercial_site.test.mjs tests/native_services.test.mjs tests/architecture_estimator.test.mjs
           node scripts/publish-guard.mjs
 
       # Montagem determinística — copia só o allowlisted, bytes crus do commit.

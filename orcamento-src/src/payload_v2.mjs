@@ -6,7 +6,8 @@
 // prototype:false, pricing_preview determinístico. Nenhum proposal_value, nenhum
 // MA_ACOES / gate / APPROVED / CONTACT / SEND. Nada é enviado: o payload só é
 // serializado para download local.
-import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf } from './journey.mjs';
+import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf, REFORMA } from './journey.mjs';
+import { architectureFields, referenceAreaForPricing } from './architecture.mjs';
 import { buildPricingPreview } from './pricing/engine.mjs';
 import { dec, add, toStr } from './pricing/decimal.mjs';
 
@@ -20,6 +21,9 @@ const SERVICE_LABEL_TO_CODE = {
   Incêndio: 'INCENDIO',
   Gás: 'GAS_GLP',
   'Compatibilização BIM': 'COMPATIBILIZACAO',
+  Arquitetura: 'ARQUITETURA', // Q_NOVA
+  'Orçamento técnico': 'ORCAMENTO', // Q_ESCOPO
+  Terraplenagem: 'TERRAPLENAGEM', // Q_TERRENO
   'Consultoria Técnica': 'CONSULTORIA_TECNICA', // Q_HORAS
   'Mentoria Técnica': 'MENTORIA_TECNICA', // Q_HORAS
 };
@@ -44,6 +48,15 @@ function sumAreas(a, b) {
   } catch {
     return null;
   }
+}
+
+// COMPATIBILIZACAO e ORCAMENTO usam a mesma Q_ESCOPO no motor. Com os dois e áreas diferentes, não há como discriminar: fail-closed (null => avaliação).
+function areaEscopoOf(services, a) {
+  const compat = services.includes('COMPATIBILIZACAO') ? areaValue(a.area_escopo) : null;
+  const orc = services.includes('ORCAMENTO') ? areaValue(a.area_orcamento) : null;
+  const wantsBoth = services.includes('COMPATIBILIZACAO') && services.includes('ORCAMENTO');
+  if (wantsBoth) return compat !== null && compat === orc ? compat : null;
+  return compat ?? orc;
 }
 
 export function derivePricingInputs(a) {
@@ -89,6 +102,9 @@ export function derivePricingInputs(a) {
     if (a.CA1 === 'Construir do zero') {
       areaNew = areaValue(a.CA_AREA);
       areaTotal = areaValue(a.CA_AREA);
+    } else if (a.CA1 === REFORMA) {
+      // Reforma SEM aumento: só existe a área existente. Nunca vira área nova nem total; o motor decide se há dados suficientes.
+      areaExisting = areaValue(a.CA_REFORMA);
     } else if (a.CA1 === 'Ampliar um imóvel existente') {
       areaExisting = areaValue(a.CA_EXISTING);
       areaNew = areaValue(a.CA_NEW);
@@ -98,6 +114,13 @@ export function derivePricingInputs(a) {
     // Decisão humana aprovada: "known" não caracteriza ampliação -> S3 é area_total.
     // area_new / area_existing ficam null (distinção existente/nova pertence à rota "Construir ou ampliar").
     areaTotal = areaValue(a.S3);
+    // Arquitetura sem área do projeto: área de REFERÊNCIA estimada (programa/terreno), só para a Arquitetura.
+    // Nunca é gravada como digitada (origem em answers.architecture_area_source) e não entra se outro serviço
+    // usa a mesma área do projeto (isolamento).
+    if (services.includes('ARQUITETURA') && areaTotal === null) {
+      const ref = referenceAreaForPricing(a);
+      if (ref !== null) areaNew = ref;
+    }
   }
 
   // Q_FUNDACAO (área de projeção): só do que o cliente informou (Q_FUND) ou de térreo DECLARADO (pavimentos = 1).
@@ -133,8 +156,8 @@ export function derivePricingInputs(a) {
     area_new: areaNew,
     area_total: areaTotal,
     area_atendida: services.includes('GAS_GLP') ? areaValue(a.area_atendida) : null,
-    area_terreno: null,
-    area_escopo: services.includes('COMPATIBILIZACAO') ? areaValue(a.area_escopo) : null,
+    area_terreno: services.includes('TERRAPLENAGEM') ? areaValue(a.area_terreno) : null, // Q_TERRENO: só o que o usuário informou
+    area_escopo: areaEscopoOf(services, a), // Q_ESCOPO (Compatibilização e Orçamento técnico compartilham o mesmo campo no motor)
     area_fundacao: areaFundacao,
     hours,
     regularizacao: reg,
@@ -145,6 +168,7 @@ export function derivePricingInputs(a) {
 export function packageForCRMv2(a, mode) {
   const { photos, contact, ...data } = a;
   const pricing_inputs = derivePricingInputs(a);
+  const arch = architectureFields(a);
   const pricing_preview = buildPricingPreview(pricing_inputs);
   return {
     schema: 'site-intake/payload/2',
@@ -154,7 +178,7 @@ export function packageForCRMv2(a, mode) {
     // A entrada "apoio técnico" é UX; o contrato/CRM só conhece as 4 rotas (origin_detail): serviço escolhido = known; "ainda não sei" = problem.
     route: a.route === 'support' ? (hourlyServices(a).length ? 'known' : 'problem') : a.route,
     summary: summary(a),
-    answers: data,
+    answers: arch ? { ...data, ...arch } : data,
     pricing_inputs,
     contact: contact ?? { name: '', whatsapp: '', email: '' },
     attachments: (photos ?? []).map(({ name, size, type }) => ({ name, size, type, uploaded: false })),
