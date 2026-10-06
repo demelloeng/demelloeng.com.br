@@ -89,9 +89,9 @@ assets/icons/situacao-avaliar-v1.svg
 assets/images/hero-3d-translucido-v2.jpg
 assets/images/hero-3d-translucido-v2.webp
 assets/images/hero-3d-translucido-v2@2x.webp
-assets/images/bim-compatibilizacao-v1.jpg
-assets/images/bim-compatibilizacao-v1.webp
-assets/images/bim-compatibilizacao-v1@2x.webp
+assets/images/bim-compatibilizacao-v2.jpg
+assets/images/bim-compatibilizacao-v2.webp
+assets/images/bim-compatibilizacao-v2@2x.webp
 assets/images/textura-blueprint-v1.svg
 
 # --- visual V2: páginas e scripts novos (privacidade, 404, destino de mensuração) ---
