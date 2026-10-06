@@ -86,9 +86,9 @@ assets/icons/situacao-construir-v1.svg
 assets/icons/situacao-ampliar-v1.svg
 assets/icons/situacao-regularizar-v1.svg
 assets/icons/situacao-avaliar-v1.svg
-assets/images/hero-3d-translucido-v1.jpg
-assets/images/hero-3d-translucido-v1.webp
-assets/images/hero-3d-translucido-v1@2x.webp
+assets/images/hero-3d-translucido-v2.jpg
+assets/images/hero-3d-translucido-v2.webp
+assets/images/hero-3d-translucido-v2@2x.webp
 assets/images/bim-compatibilizacao-v1.jpg
 assets/images/bim-compatibilizacao-v1.webp
 assets/images/bim-compatibilizacao-v1@2x.webp
