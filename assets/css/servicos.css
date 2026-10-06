@@ -3,7 +3,7 @@
    Sem nova identidade visual: poucas classes comuns às nove páginas. */
 .svc-hero{padding-top:clamp(56px,7vw,96px);padding-bottom:clamp(40px,5vw,68px)}
 .svc-hero .h1{max-width:19em;font-size:clamp(32px,4.2vw,52px)}
-.svc-headline{font-family:Archivo,sans-serif;font-weight:600;font-size:clamp(20px,2.5vw,28px);line-height:1.28;letter-spacing:-.015em;color:var(--navy);margin:24px 0 0;max-width:22em;text-wrap:pretty}
+.svc-headline{font-family:var(--font);font-weight:600;font-size:clamp(20px,2.5vw,28px);line-height:1.28;letter-spacing:-.015em;color:var(--navy);margin:24px 0 0;max-width:22em;text-wrap:pretty}
 .svc-intro{margin-top:24px;max-width:42em}
 .svc-intro p{font-size:clamp(18px,2vw,21px);line-height:1.58;color:var(--body);margin:0 0 14px}
 .svc-intro p:last-child{margin-bottom:0}

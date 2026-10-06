@@ -74,3 +74,27 @@ assets/images/fundador-treliça.png
 # --- experiência /orcamento/ (runtime autocontido, já compilado) ---
 orcamento/index.html
 orcamento/assets/**
+
+# --- visual V2: fontes autohospedadas (sem Google Fonts), com as licenças ---
+assets/fonts/montserrat-var-latin.woff2
+assets/fonts/Montserrat-OFL.txt
+assets/fonts/special-elite-latin.woff2
+assets/fonts/SpecialElite-LICENSE.txt
+
+# --- visual V2: ícones das situações, hero 3D, imagem BIM e textura ---
+assets/icons/situacao-construir-v1.svg
+assets/icons/situacao-ampliar-v1.svg
+assets/icons/situacao-regularizar-v1.svg
+assets/icons/situacao-avaliar-v1.svg
+assets/images/hero-3d-translucido-v1.jpg
+assets/images/hero-3d-translucido-v1.webp
+assets/images/hero-3d-translucido-v1@2x.webp
+assets/images/bim-compatibilizacao-v1.jpg
+assets/images/bim-compatibilizacao-v1.webp
+assets/images/bim-compatibilizacao-v1@2x.webp
+assets/images/textura-blueprint-v1.svg
+
+# --- visual V2: páginas e scripts novos (privacidade, 404, destino de mensuração) ---
+privacidade/index.html
+404.html
+assets/js/analytics-sink.js

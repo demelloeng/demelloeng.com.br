@@ -5,7 +5,7 @@
 //  - nove páginas de serviço com CTA específico; nenhuma alteração de árvore/rotas/payload/pricing do intake.
 // Os testes de links, nav, sitemap e metadados de TODAS as páginas estão em commercial_site.test.mjs.
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
 const read = (p) => readFile(path.join(siteRoot, p), 'utf8');
+const exists = (p) => access(path.join(siteRoot, p)).then(() => true, () => false);
 const readSrc = (p) => readFile(path.join(appRoot, 'src', p), 'utf8');
 
 // Nomes públicos aprovados (H1). SERVICE_ID permanece inalterado.
@@ -48,23 +49,31 @@ test('HOME: primeira dobra faz só três coisas (situação, promessa, primeiro 
   assert.doesNotMatch(hero, /BIM|ART|munic[ií]pio|estrutural|hidrossanit|inc[êe]ndio|g[áa]s|anos|fundad|empresa/i, 'sem conteúdo institucional/técnico na hero');
 });
 
-test('HOME: cinco situações — construir e ampliar formam o eixo; as demais são alternativas; apoio técnico é link secundário', async () => {
+test('HOME (visual V2): quatro cartões de situação com ícone; "Já sei o serviço" lista as nove frentes; apoio técnico é link secundário', async () => {
   const html = await read('index.html');
   const block = html.match(/<section[^>]*data-block="situations"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.ok(block, 'bloco situations presente');
-  const main = [...block.matchAll(/<a class="sit-main" href="([^"]+)">\s*<h3>([^<]+)<\/h3>/g)].map((m) => [m[2], m[1]]);
+  const main = [...block.matchAll(/<a class="sit-main" href="([^"]+)">\s*<img class="sit-ico"[^>]*>\s*<h3>([^<]+)<\/h3>/g)].map((m) => [m[2], m[1]]);
   assert.deepEqual(main, [
     ['Construir uma casa', './construir-ou-ampliar/#construir'],
     ['Ampliar ou reformar', './construir-ou-ampliar/#ampliar'],
-  ], 'eixo visual prioritário: dois cartões');
-  const alt = [...block.matchAll(/<a class="sit-alt-item" href="([^"]+)"><strong>([^<]+)<\/strong>/g)].map((m) => [m[2], m[1]]);
-  assert.deepEqual(alt, [
     ['Regularizar um imóvel', './servicos/regularizacao/'],
     ['Avaliar um problema', './avaliar-um-problema/'],
-    ['Já sei o serviço', './servicos/'],
-  ], 'três rotas alternativas, sem cartões equivalentes');
-  assert.equal(main.length + alt.length, 5, 'cinco situações');
+  ], 'quatro situações, destinos preservados');
+  assert.match(block, /<span class="sit-go">Quero construir →<\/span>/, 'CTA do cartão construir');
+  assert.match(block, /<span class="sit-go">Quero ampliar ou reformar →<\/span>/, 'CTA do cartão ampliar');
+  assert.doesNotMatch(block, /Ver regularização|Começar avaliação/, 'nenhum texto novo nos cartões');
   assert.match(block, /<p class="sit-support">[^<]*<a href="\.\/orcamento\/\?situacao=support">Consultoria e mentoria técnica<\/a>/, 'apoio técnico preservado como link secundário');
+  const direct = html.match(/<section[^>]*data-block="services-direct"[\s\S]*?<\/section>/)?.[0] ?? '';
+  assert.match(direct, /<p class="eyebrow">Já sei o serviço<\/p>/, 'rótulo "Já sei o serviço" preservado');
+  assert.match(direct, /Vá direto ao projeto ou serviço de que precisa\./, 'frase original preservada');
+  const links = [...direct.matchAll(/<li><a href="([^"]+)">([^<]+)<\/a><\/li>/g)].map((m) => [m[2], m[1]]);
+  assert.equal(links.length, 9, 'nove frentes');
+  const svcPage = await read('servicos/index.html');
+  for (const [name, href] of links) {
+    assert.ok(await exists(href.replace('./', '') + 'index.html'), `destino existe: ${href}`);
+    assert.ok(svcPage.includes(name), `nome exato presente em /servicos/: ${name}`);
+  }
 });
 
 test('HOME: seções posteriores exigidas (insegurança, prova, benefícios, funcionamento, experiência, FAQ, CTA final)', async () => {

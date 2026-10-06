@@ -118,3 +118,18 @@ window.DemelloAnalytics.subscribe((e) => { if (e.name === 'proposal_requested') 
 ```
 
 Passos para conectar de verdade (decisões humanas): (1) escolher a ferramenta e criar a conta/ID; (2) definir a política de consentimento (LGPD) e só carregar a tag após o aceite; (3) incluir o carregador **em um arquivo novo** da allowlist (ex.: `assets/js/analytics-sink.mjs`) e importá-lo depois de `site-analytics.mjs` nas páginas; (4) no `/orcamento/`, o bundle é reconstruído (`pnpm build`) e `build_artifact.py` precisa dos novos nomes (o teste `commercial_site.test.mjs` acusa divergência); (5) ligar `proposal_sent` e `contract_won` a partir do CRM/back-office, não do navegador.
+
+## Destino ligado: Simple Analytics (visual V2, 2026-10-06)
+
+O destino (sink) é `assets/js/analytics-sink.js`, script clássico com `defer`, carregado **antes** de `site-analytics.mjs` nas páginas e antes do bundle no `/orcamento/` (para já estar ouvindo quando o primeiro evento sair).
+
+- Só liga quando o navegador **não** envia Do Not Track nem Global Privacy Control. Com qualquer um dos sinais, o script do Simple Analytics nem é carregado e `sa_event` não existe.
+- `page_view` **não** é reenviado: visitas e origem ficam por conta do próprio script do Simple Analytics (sem cookies).
+- Cada evento do contrato vira `sa_event(nome, metadados)`, com o nome em `[a-z0-9_]` (até 200 caracteres) e só metadados primitivos (string, número, booleano). Nenhum dado pessoal e nenhum texto livre passam, porque o adaptador já impõe o contrato fechado.
+- O destino não usa cookies, `localStorage`, `sessionStorage` nem IndexedDB (teste em `privacy_and_sink.test.mjs`).
+
+Pendências humanas para a medição funcionar (o site não pode fazer por conta própria):
+1. Criar a conta no Simple Analytics e **adicionar o domínio `demelloeng.com.br`**.
+2. Confirmar se o **plano gratuito inclui eventos personalizados** (a documentação oficial não diz). Plano gratuito: 1 usuário, 5 sites, 1 mês de histórico. Se os eventos não valerem no gratuito, o Simple Analytics mede só visitas e o funil fica no CRM (`proposal_sent` e `contract_won` já são do CRM).
+3. Conferir no painel a configuração de Do Not Track (o adaptador do site já respeita o sinal antes de qualquer envio).
+4. Em localhost o Simple Analytics ignora as visitas; a verificação real é pós-publicação.

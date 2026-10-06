@@ -25,7 +25,7 @@ const COMMERCIAL = [
   ...SERVICE_SLUGS.map((s) => `servicos/${s}/index.html`),
   'metodologia/index.html', 'experiencia-tecnica/index.html', 'contato/index.html',
 ];
-const OTHER = ['empresa/index.html', 'empresa/trajetoria-do-fundador.html', 'verificar/index.html'];
+const OTHER = ['empresa/index.html', 'empresa/trajetoria-do-fundador.html', 'privacidade/index.html', 'verificar/index.html'];
 const ALL = [...COMMERCIAL, ...OTHER];
 const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
 
@@ -331,7 +331,8 @@ const NUMERIC_FACTS = new Set([
 
 test('nenhum número técnico, case ou credencial novo: todo numeral visível existe no conteúdo original (ou é limite/segurança documentado)', () => {
   const unexpected = [];
-  for (const file of ALL.filter((f) => f !== 'verificar/index.html')) {
+  // A política de privacidade traz só referências legais (Lei 13.709/2018, art. 7º, V) e "3D"; ela é conferida em privacy_and_sink.test.mjs.
+  for (const file of ALL.filter((f) => f !== 'verificar/index.html' && f !== 'privacidade/index.html')) {
     for (const m of visibleText(HTML[file]).matchAll(/\d[\d.,/-]*\d|\d/g)) if (!NUMERIC_FACTS.has(m[0])) unexpected.push(`${file}: ${m[0]}`);
   }
   assert.deepEqual(unexpected, []);

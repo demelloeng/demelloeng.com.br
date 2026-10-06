@@ -14,10 +14,6 @@ import {renderPreviewPng} from './preview_png.mjs';
 import {brlStr} from './pricing/decimal.mjs';
 import {referenceEntries} from './references.mjs';
 import {buildClientSummary,friendlyServiceName as serviceName,NEXT_STEP} from './client_summary.mjs';
-import '@fontsource/archivo/600.css';
-import '@fontsource/archivo/700.css';
-import '@fontsource/source-sans-3/400.css';
-import '@fontsource/source-sans-3/600.css';
 
 const SUBMIT_LABEL={proposal:'Enviar pedido de proposta',scope_question:'Enviar minha dúvida',evaluation_only:'Enviar meu caso'};
 const SENT_TITLE={proposal:'Recebemos seu pedido de proposta.',scope_question:'Recebemos sua dúvida sobre o escopo.',evaluation_only:'Recebemos as informações do seu caso.'};
