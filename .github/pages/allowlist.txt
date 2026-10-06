@@ -98,3 +98,4 @@ assets/images/textura-blueprint-v1.svg
 privacidade/index.html
 404.html
 assets/js/analytics-sink.js
+assets/js/contact-clicks.mjs

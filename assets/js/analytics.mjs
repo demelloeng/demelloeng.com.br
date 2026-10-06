@@ -44,6 +44,8 @@ export const PARAMS = Object.freeze({
   lot_area_band: (v) => ['na', 'lt_200', '200_360', '360_600', '600_1000', 'gt_1000'].includes(v),
   program_size_band: (v) => ['na', 'lt_80', '80_140', '140_220', 'gt_220'].includes(v),
   estimation_version: (v) => typeof v === 'string' && /^ARQ_EST_V\d{1,3}$/.test(v),
+  // Contato direto (WhatsApp, telefone, e-mail): só a POSIÇÃO do botão, em lista fechada. Nunca número, nome, texto ou endereço.
+  placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'body'].includes(v),
 });
 
 // emitters: quem tem autoridade para emitir. 'site' = navegador do visitante; 'crm' = back-office.
@@ -67,6 +69,11 @@ export const EVENTS = Object.freeze({
   architecture_estimated_by_program_and_lot: { emitters: ['site'], params: ['area_source', 'area_band', 'lot_area_band', 'program_size_band', 'estimation_version'], stage: 'arquitetura' },
   architecture_estimator_human_review: { emitters: ['site'], params: ['area_source', 'lot_area_band', 'program_size_band', 'estimation_version'], stage: 'arquitetura' },
   architecture_estimate_presented: { emitters: ['site'], params: ['area_source', 'area_band', 'estimation_version'], stage: 'arquitetura' },
+  // Contato direto fora do estimador: é INTENÇÃO de contato, não lead qualificado e não pedido de proposta
+  // (qualified_lead continua só pela regra R1).
+  whatsapp_contact_started: { emitters: ['site'], params: ['page', 'placement', 'route', 'service'], stage: 'contato_direto' },
+  phone_contact_started: { emitters: ['site'], params: ['page', 'placement', 'route', 'service'], stage: 'contato_direto' },
+  email_contact_started: { emitters: ['site'], params: ['page', 'placement', 'route', 'service'], stage: 'contato_direto' },
   proposal_sent: { emitters: ['crm'], params: ['route', 'service'], stage: 'comercial', planned: true },
   contract_won: { emitters: ['crm'], params: ['route', 'service'], stage: 'comercial', planned: true },
 });

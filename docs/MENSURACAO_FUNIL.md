@@ -133,3 +133,30 @@ Pendências humanas para a medição funcionar (o site não pode fazer por conta
 2. Confirmar se o **plano gratuito inclui eventos personalizados** (a documentação oficial não diz). Plano gratuito: 1 usuário, 5 sites, 1 mês de histórico. Se os eventos não valerem no gratuito, o Simple Analytics mede só visitas e o funil fica no CRM (`proposal_sent` e `contract_won` já são do CRM).
 3. Conferir no painel a configuração de Do Not Track (o adaptador do site já respeita o sinal antes de qualquer envio).
 4. Em localhost o Simple Analytics ignora as visitas; a verificação real é pós-publicação.
+
+## Contato direto: WhatsApp, telefone e e-mail (2026-10-06)
+
+Antes, quem clicava em um `wa.me`, `tel:` ou `mailto:` saía do funil medido sem deixar rastro. Agora cada clique vira um evento no mesmo barramento (`DemelloAnalytics`), por um único ouvinte delegado (`assets/js/contact-clicks.mjs`, carregado por `site-analytics.mjs`). Todo link atual e futuro é coberto sem marcação link a link.
+
+| Evento | Quando | Parâmetros (contrato fechado) |
+|---|---|---|
+| `whatsapp_contact_started` | clique em qualquer link `https://wa.me/...` | `page`, `placement`, `route`, `service` |
+| `phone_contact_started` | clique em qualquer link `tel:` | idem |
+| `email_contact_started` | clique em qualquer link `mailto:` | idem |
+
+- `placement` é lista fechada: `topbar` (faixa superior), `menu` (menu no celular), `cta_band` (faixa de chamada final), `contact_page` (página Contato), `footer`, `body`. Um atributo `data-contact-placement` no link ou em um contêiner sobrescreve a posição.
+- `route` e `service` saem da página (tabela fechada em `contact-clicks.mjs`): por exemplo, `/servicos/projeto-estrutural/` gera `route=known`, `service=estrutural`.
+- **Nunca** entram número, e-mail, link, nome ou texto: o href não é lido para dentro do evento e os validadores são enums.
+- O mesmo botão conta **uma vez por visita**; cabeçalho e menu contam separado.
+- Respeita Do Not Track e Global Privacy Control (o adaptador desliga tudo), como os demais eventos.
+- **Campanha e origem**: o evento não guarda UTM no navegador (a política diz que o site não guarda nada). Em teste local, a requisição que o próprio Simple Analytics envia para cada evento já leva a **query string da página (UTM)** e o **identificador de sessão do Simple Analytics**, ao lado do `metadata` (`page`, `placement`, `route`, `service`). Ou seja, a campanha acompanha o evento sem armazenamento nosso. **Falta conferir no painel**, depois de publicar, se a atribuição por campanha aparece nos eventos. Se a campanha se perder quando a pessoa navega por várias páginas, a alternativa é guardar UTM de formato estrito em `sessionStorage` (exige mudar a política e os testes).
+
+**Não se confunde com lead qualificado.** `*_contact_started` é *intenção de contato direto*. Não é pedido de proposta (`proposal_requested`) nem lead qualificado (`qualified_lead`, que segue só pela regra R1).
+
+Hierarquia sugerida para mídia paga (do mais forte ao mais fraco):
+1. `qualified_lead` (regra R1; conversão principal);
+2. `proposal_requested`, `evaluation_requested`, `scope_question_requested` (pedidos feitos no estimador);
+3. `whatsapp_contact_started`, `phone_contact_started`, `email_contact_started` (**conversões intermediárias**, de fundo de funil, com peso menor; não usar como equivalente a venda ou lead qualificado).
+
+Uma futura integração de Ads só precisa se inscrever no barramento (`window.DemelloAnalytics.subscribe`) e mapear estes nomes; o contrato não muda.
+
