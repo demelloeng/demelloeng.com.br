@@ -140,11 +140,12 @@ test('política: nenhuma página carrega recurso de host externo (script, estilo
   assert.deepEqual([...hosts].sort(), [], `recursos externos nas páginas: ${[...hosts].join(', ')}`);
 });
 
-test('rodapé: todas as páginas estáticas apontam para /privacidade/; sitemap lista a política e todas têm lastmod', async () => {
+test('rodapé: todas as páginas estáticas apontam para /privacidade/ e para a trajetória do fundador; sitemap lista a política e todas têm lastmod', async () => {
   for (const p of await staticPages()) {
     if (p === '404.html') continue;
     const h = await read(p);
     assert.match(h, /<a href="(?:\.\/|(?:\.\.\/)+)privacidade\/">Privacidade<\/a>/, `${p}: link no rodapé`);
+    assert.match(h, /<a href="(?:\.\/|(?:\.\.\/)+)empresa\/trajetoria-do-fundador\.html">Trajetória do fundador<\/a>/, `${p}: trajetória no rodapé`);
   }
   const sm = await read('sitemap.xml');
   assert.match(sm, /<loc>https:\/\/demelloeng\.com\.br\/privacidade\/<\/loc>/);
@@ -186,4 +187,12 @@ test('SEO: título até 60 e descrição até 160 caracteres; JSON-LD válido e 
     const g = JSON.parse(h.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph'];
     assert.ok(g.some((n) => n['@type'] === 'Service') && g.some((n) => n['@type'] === 'BreadcrumbList'), `${slug}: Service + Breadcrumb`);
   }
+});
+
+test('Trajetória do fundador: alcançável do rodapé de qualquer página e da página Experiência; a página existe e está no sitemap', async () => {
+  const exp = await read('experiencia-tecnica/index.html');
+  assert.match(exp, /<a class="link-arrow"[^>]*href="\.\.\/empresa\/trajetoria-do-fundador\.html">Ver a trajetória do fundador →<\/a>/);
+  assert.ok(await exists('empresa/trajetoria-do-fundador.html'));
+  assert.match(await read('sitemap.xml'), /\/empresa\/trajetoria-do-fundador\.html/);
+  assert.match(await read('empresa/index.html'), /href="\.\/trajetoria-do-fundador\.html">Trajetória do fundador →/);
 });

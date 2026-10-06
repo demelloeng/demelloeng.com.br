@@ -118,7 +118,7 @@ test('OUTROS SERVIÇOS: nove frentes, H1, resultado primeiro, limites preservado
   assert.match(routes, /avaliar-um-problema\//);
   assert.match(routes, /href="\.\/regularizacao\/"/);
   assert.match(routes, /orcamento\/\?situacao=support/);
-  assert.ok(html.indexOf('data-block="routes"') < html.indexOf('data-block="service-summary"'), 'rotas por situação vêm antes do catálogo');
+  assert.ok(html.indexOf('data-block="service-summary"') < html.indexOf('data-block="routes"'), 'quem já sabe o serviço vê o catálogo primeiro; as rotas por situação vêm depois, como rede de segurança');
   assert.doesNotMatch(html, /href="\.\.\/servicos\/[a-z-]+\/?"/, 'nenhum slug de serviço absoluto inventado');
 });
 

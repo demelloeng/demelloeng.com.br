@@ -580,7 +580,7 @@ a.sit-alt-item:hover strong{color:var(--steel)}
 
 /* ---- rodapé ---- */
 .site-footer{background:var(--navy-900);color:#fff}
-.footer-in{padding:64px 0 32px}
+.footer-in{padding-top:64px;padding-bottom:32px}
 .site-footer img{height:44px;width:170px}
 .footer-tag{font-size:15px;color:#C9E7FF;font-style:normal;margin:0 0 20px}
 .footer-legal{font-size:12px;color:#A8C6DF}
