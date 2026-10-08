@@ -49,7 +49,7 @@
     <h1 class="h1">Privacidade: o que acontece com os seus dados.</h1>
     <div class="svc-intro">
       <p>Aqui está, sem rodeio, que dados a DEMELLO recebe, para quê, com quem e por quanto tempo. Se algo não estiver claro, escreva para <a href="mailto:marcos@demelloeng.com.br">marcos@demelloeng.com.br</a>.</p>
-      <p class="cta-micro">Última atualização: 6 de outubro de 2026.</p>
+      <p class="cta-micro">Última atualização: 8 de outubro de 2026.</p>
     </div>
   </div>
 </section>
@@ -65,7 +65,7 @@
 
     <div class="svc-block">
       <h2>Quando você só navega</h2>
-      <p>Para ler o site, você não precisa se cadastrar. O site não usa cookies e não guarda nada no seu navegador.</p>
+      <p>Para ler o site, você não precisa se cadastrar. O site em si não usa cookies e não guarda nada no seu navegador. A exceção é o Pixel da Meta, usado para medir anúncios, que grava cookies (veja “Anúncios e Meta”).</p>
       <p>As fontes, as imagens e os vídeos vêm do próprio site. A hospedagem é feita pelo GitHub Pages (GitHub, Inc.), que recebe o endereço IP e os dados técnicos de cada acesso, como qualquer hospedagem.</p>
       <p>Exceção: a página <a href="../experiencia-tecnica/">Experiência técnica</a> mostra um modelo 3D e, para isso, carrega uma biblioteca do serviço unpkg.com. Esse serviço vê o endereço IP do seu navegador.</p>
     </div>
@@ -78,6 +78,17 @@
         <li>O que não é medido: seu nome, seu contato e o conteúdo das suas respostas não entram na medição.</li>
         <li>Se o seu navegador envia o sinal Do Not Track ou Global Privacy Control, o site não envia nenhuma medição.</li>
       </ul>
+    </div>
+
+    <div class="svc-block" id="anuncios">
+      <h2>Anúncios e Meta</h2>
+      <p>A DEMELLO pode anunciar no Facebook e no Instagram, que pertencem à Meta. Para saber quais pedidos de proposta vieram dos anúncios, o site usa o Pixel da Meta.</p>
+      <ul class="svc-list">
+        <li>O que acontece: o seu navegador carrega um script da Meta (connect.facebook.net), que grava cookies (_fbp e _fbc) e envia à Meta o seu endereço IP, dados técnicos do navegador, as páginas que você vê e alguns cliques e etapas: concluir uma estimativa, pedir proposta, fazer uma pergunta sobre o escopo, pedir avaliação e clicar nos botões de WhatsApp, telefone e e-mail. Junto vão só a rota e o serviço escolhidos, nunca o seu nome, o seu contato, o que você escrever ou as suas fotos.</li>
+        <li>Como não ser medido: se o seu navegador envia Do Not Track ou Global Privacy Control, o script da Meta não é carregado e nada é enviado a ela. Bloqueadores de rastreamento e a recusa de cookies de terceiros no navegador também impedem o envio.</li>
+        <li>Base legal: legítimo interesse da DEMELLO em medir o resultado dos próprios anúncios (LGPD, art. 7º, IX). A Meta trata os dados que recebe conforme as próprias políticas, e isso pode envolver servidores fora do Brasil.</li>
+      </ul>
+      <p>Para apagar os cookies da Meta, limpe os cookies deste site no navegador. O que a Meta já recebeu fica sob a política dela, e a oposição ao tratamento ou a exclusão se pede a ela ou à DEMELLO, em <a href="mailto:marcos@demelloeng.com.br">marcos@demelloeng.com.br</a>.</p>
     </div>
 
     <div class="svc-block">
@@ -162,6 +173,7 @@
 </footer>
 <script src="../assets/js/nav.js" defer></script>
 <script src="../assets/js/analytics-sink.js" defer></script>
+<script src="../assets/js/meta-pixel.js" defer></script>
 <script type="module" src="../assets/js/site-analytics.mjs"></script>
 </body>
 </html>

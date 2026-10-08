@@ -382,7 +382,7 @@ test('19. regressão: serviços existentes inalterados (preços, tabela, motor, 
   assert.equal(await sha('src/pricing/pricing-table.v2.json'), '9a94f6afac58a79ae3cdeb66d7aea61611b7772fb61b324360c594f71b866dc1', 'Tabela V2 intocada');
   assert.equal(await sha('src/pricing/engine.mjs'), '12d243d2f9e0d6b519f120895b8ff1dd7cd60a8a513f1b7c331474a83abbb0a7', 'motor intocado');
   assert.equal(await sha('src/pricing/decimal.mjs'), 'de8ff4f5bdba6d159d24d0ef44daa1febef6d01e29be9b86132d054dd87c1a48');
-  assert.equal(await sha('src/submit.mjs'), '4ba7605a4961b19ca29b7c38102b35fb6a79d3784f000afa30f955d36d462d15', 'envio ao CRM intocado');
+  assert.equal(await sha('src/submit.mjs'), 'c47ec9c376aab58b14dd90d6896c304373ef596ea5a26d28c15c02d48ec31f7d', 'envio ao CRM: só acrescentou transport.meta (dados do anúncio para a CAPI; ver collectMeta)');
   // CRM não homologado: o payload novo segue no mesmo envelope; recusa do Worker (422) e queda de rede não lançam e não repetem indevidamente
   const payload = packageForCRMv2({ ...semArea(['Arquitetura'], { arq_programa: P_EXEMPLO }), contact: { name: 'Fulana', whatsapp: '41999990000', email: '' } });
   assert.equal(payload.schema, 'site-intake/payload/2');

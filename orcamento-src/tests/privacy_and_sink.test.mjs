@@ -116,7 +116,11 @@ test('política × código: o que o site carrega está declarado; nada que o sit
   for (const p of ['assets/js/analytics-sink.js', 'assets/js/analytics.mjs', 'assets/js/site-analytics.mjs', 'assets/js/nav.js']) {
     assert.doesNotMatch(await read(p), /document\.cookie|localStorage|sessionStorage|indexedDB/, `${p}: sem armazenamento no navegador`);
   }
-  assert.doesNotMatch(txt, /Google Analytics|GA4|Google Fonts|Meta Pixel|Hotjar/i, 'não cita ferramentas que o site não usa');
+  assert.doesNotMatch(txt, /Google Analytics|GA4|Google Fonts|Hotjar/i, 'não cita ferramentas que o site não usa');
+  assert.match(txt, /Pixel da Meta/);
+  assert.match(txt, /art\. 7º, IX\)/, 'base legal do Pixel: legítimo interesse');
+  assert.match(txt, /Do Not Track ou Global Privacy Control, o script da Meta não é carregado/);
+  assert.match(txt, /_fbp e _fbc/);
   assert.match(txt, /fotos[^.]*não são enviadas/i);
   assert.match(txt, /Lei 13\.709\/2018/);
   assert.match(txt, /art\. 7º, V/);
@@ -195,4 +199,16 @@ test('Trajetória do fundador: alcançável do rodapé de qualquer página e da 
   assert.ok(await exists('empresa/trajetoria-do-fundador.html'));
   assert.match(await read('sitemap.xml'), /\/empresa\/trajetoria-do-fundador\.html/);
   assert.match(await read('empresa/index.html'), /href="\.\/trajetoria-do-fundador\.html">Trajetória do fundador →/);
+});
+
+test('Pixel da Meta: respeita DNT/GPC, não envia dado pessoal e está em todas as páginas', async () => {
+  const px = await read('assets/js/meta-pixel.js');
+  assert.match(px, /PIXEL_ID = '\d{10,20}'/);
+  assert.match(px, /doNotTrack === '1'[\s\S]*globalPrivacyControl === true[\s\S]*return;/, 'sai antes de tudo com DNT/GPC');
+  assert.doesNotMatch(px, /document\.cookie|localStorage|sessionStorage|\.value|fbq\('init', PIXEL_ID, \{/, 'sem leitura de campos, sem armazenamento próprio, sem correspondência avançada');
+  for (const name of ['qualified_lead', 'whatsapp_contact_started']) assert.match(px, new RegExp(name));
+  const map = px.split('var MAP = {')[1].split('};')[0];
+  for (const name of ['proposal_requested', 'scope_question_requested', 'evaluation_requested']) assert.doesNotMatch(map, new RegExp(name), 'Lead sai do Worker (CAPI), não do navegador: sem duplicidade');
+  for (const p of await staticPages()) assert.match(await read(p), /assets\/js\/meta-pixel\.js" defer/, `${p}: carrega o Pixel`);
+  assert.match(await read('.github/pages/allowlist.txt'), /assets\/js\/meta-pixel\.js/);
 });

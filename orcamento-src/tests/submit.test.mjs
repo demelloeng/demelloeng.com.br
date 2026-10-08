@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { submitToCRM } from '../src/submit.mjs';
+import { submitToCRM, collectMeta } from '../src/submit.mjs';
 
 const ENDPOINT = 'https://example.invalid/api/site-intake';
 const PAYLOAD = { schema: 'site-intake/payload/2', source: 'DEMELLO_SITE', prototype: false, sent_to_crm: false, route: 'build' };
@@ -74,4 +74,28 @@ test('no endpoint configured -> { ok: false, error: no-endpoint }', async () => 
   const r = await submitToCRM(PAYLOAD, '', { endpoint: '', fetchImpl: async () => jsonResponse(202, {}) });
   assert.equal(r.ok, false);
   assert.equal(r.error, 'no-endpoint');
+});
+
+test('meta de anúncio: vai só em transport.meta, nunca no payload; sem meta, o envelope não ganha chave', async () => {
+  const fetchImpl = recordingFetch(() => jsonResponse(202, { accepted: true, submission_id: 'x', state: 'PENDING_PERSIST' }));
+  const meta = { fbp: 'fb.1.1791445316963.1234567890', url: 'https://demelloeng.com.br/orcamento/' };
+  await submitToCRM(PAYLOAD, '', { endpoint: ENDPOINT, fetchImpl, meta });
+  assert.deepEqual(fetchImpl.calls[0].body.transport.meta, meta);
+  assert.deepEqual(fetchImpl.calls[0].body.payload, PAYLOAD);
+  const f2 = recordingFetch(() => jsonResponse(202, { accepted: true, submission_id: 'x', state: 'PENDING_PERSIST' }));
+  await submitToCRM(PAYLOAD, '', { endpoint: ENDPOINT, fetchImpl: f2, meta: {} });
+  assert.equal('meta' in f2.calls[0].body.transport, false);
+});
+
+test('collectMeta: lê _fbp/_fbc, monta fbc do fbclid, respeita DNT/GPC e não lê mais nada', () => {
+  const base = { navigator: {}, document: { cookie: 'a=1; _fbp=fb.1.1791445316963.1234567890; b=2' }, location: { origin: 'https://demelloeng.com.br', pathname: '/orcamento/', search: '?fbclid=IwAR0abc' } };
+  const m = collectMeta(base);
+  assert.equal(m.fbp, 'fb.1.1791445316963.1234567890');
+  assert.match(m.fbc, /^fb\.1\.\d{13}\.IwAR0abc$/);
+  assert.equal(m.url, 'https://demelloeng.com.br/orcamento/');
+  assert.deepEqual(Object.keys(m).sort(), ['fbc', 'fbp', 'url']);
+  assert.deepEqual(collectMeta({ ...base, navigator: { doNotTrack: '1' } }), { optout: true });
+  assert.deepEqual(collectMeta({ ...base, navigator: { globalPrivacyControl: true } }), { optout: true });
+  assert.deepEqual(collectMeta(null), {});
+  assert.deepEqual(collectMeta({ navigator: {}, document: { cookie: '' }, location: { origin: 'https://demelloeng.com.br', pathname: '/x/', search: '' } }), { url: 'https://demelloeng.com.br/x/' });
 });
