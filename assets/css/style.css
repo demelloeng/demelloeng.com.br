@@ -541,7 +541,7 @@ a.sit-alt-item:hover strong{color:var(--steel)}
 .split-copy{padding:clamp(48px,6vw,88px) clamp(20px,4vw,64px) clamp(48px,6vw,88px) max(clamp(20px,3vw,48px),calc((100vw - 1280px)/2 + clamp(20px,3vw,48px)))}
 .split-copy h2{font-size:clamp(26px,3vw,40px);font-weight:800;line-height:1.12;letter-spacing:-.025em;color:var(--ink);margin:0 0 28px}
 .split-media{display:block;min-height:26rem;height:100%}
-.split-media img{width:100%;height:100%;min-height:26rem;object-fit:cover;display:block;object-view-box:inset(9.2% 0 11.8% 0)}
+.split-media img{width:100%;height:100%;min-height:26rem;object-fit:cover;object-position:center;display:block}
 .split .benefits{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 28px}
 .split .benefit{border-top:2px solid var(--steel);padding-top:14px}
 .split .benefit h3{font-size:16px}

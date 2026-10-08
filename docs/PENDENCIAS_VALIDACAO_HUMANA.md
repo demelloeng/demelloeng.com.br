@@ -9,6 +9,6 @@
 | Texto educativo da devolutiva de Arquitetura (tom e exemplos) | `src/architecture_return.mjs` | Redação sugerida na diretriz comercial; aprovação editorial de Marcos. |
 | Chaves `architecture_*` no Worker/CRM | payload V2 `answers` | **Contrato canônico localizado e validado (Marcos).** Sem pendência documental; a resposta do endpoint é conferida na verificação pós-publicação. |
 | Simple Analytics: conta, domínio e eventos no plano gratuito | `assets/js/analytics-sink.js` | Ver `docs/MENSURACAO_FUNIL.md`. **Não verificável sem a conta.** |
-| Hero 3D e imagem BIM | `assets/images/hero-3d-translucido-v2.*` (v2 = print do visualizador de armadura 3D do Eberick, tratado), `bim-compatibilizacao-v2.*` (v2 = render do BIMvision, sem marca e sem indicador de eixos) | Derivados do mockup do Codex (720 px de largura, sem arquivo-fonte). Conferir a nitidez em telas de alta densidade; se não passar, pedir o original. |
+| Hero 3D e imagem BIM | `assets/images/hero-3d-translucido-v3.*` (v2 = print do visualizador de armadura 3D do Eberick, tratado), `bim-compatibilizacao-v3.*` (v2 = render do BIMvision, sem marca e sem indicador de eixos) | Derivados do mockup do Codex (720 px de largura, sem arquivo-fonte). Conferir a nitidez em telas de alta densidade; se não passar, pedir o original. |
 | Biblioteca 3D carregada de `unpkg.com` | `experiencia-tecnica/` | Terceiro declarado na política. Autohospedar elimina esse terceiro e simplifica uma futura CSP (não feito nesta entrega). |
 
