@@ -13,3 +13,11 @@ Pendências: escolher a imagem de terraplanagem, revisar a presença do projeto 
 Verificação anterior registrada nesta conversa: 358 testes, 342 aprovados e 16 falhas preexistentes na candidata; não significa PASS e não foi reexecutada para este arquivamento. A verificação desta gravação é de integridade, escopo e recursos locais.
 
 Esta branch é um registro histórico, não uma proposta de merge automático. Não alterar main nem acionar workflow_dispatch. O workflow Pages preservado é disparado por push em main ou execução manual; salvar esta branch não solicita publicação.
+
+## Adendo — Home V02 incorporada em 28/10/2026
+
+A V02 recebeu aceite visual expresso do usuário na IT040, incluindo o painel topográfico abstrato de terraplanagem, e foi incorporada nesta branch arquivada por ordem específica posterior. O nome histórico do pacote `DEMELLO_V02_PROPOSTA_ACEITE_PENDENTE.zip` não representa o estado de aceite posterior.
+
+Fonte do delta: SHA-256 do ZIP `61775141d0c3e94f3217c1ea3b5ab5171b8720027a554c4d3360e1183587297b`. Foram adicionados somente `assets/css/v02-proposta.css`, `assets/images/v02-topografia-proposta.svg` e a referência CSS após as duas folhas existentes no `index.html`. Removendo essa referência e sua quebra de linha, o HTML original confere byte a byte com o SHA-256 histórico registrado acima.
+
+O registro anterior permanece histórico. Copy, SEO, scripts de navegação e mensuração (Simple Analytics e Meta), demais recursos, páginas e estimador foram preservados. Esta incorporação atualiza a candidata arquivada: não altera main, allowlist, documentos canônicos ou integrações, não autoriza publicação nem inicia a integração final do site. O destaque adicional de arquitetura não foi incorporado.
