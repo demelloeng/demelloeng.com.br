@@ -1,0 +1,55 @@
+/* /servicos/ — identidade compartilhada da Home V02; catálogo IT049. */
+.servicos-v02 [data-block="services-hero"]{background:#26323e;color:#fff;padding:64px 0 72px}
+.servicos-v02 .pg-hero{max-width:1280px}
+.servicos-v02 .pg-hero .eyebrow{color:#eef2f6;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 24px}
+.servicos-v02 .pg-hero h1{font-size:clamp(48px,5.2vw,76px);line-height:1.025;letter-spacing:-.045em;max-width:15ch}
+.servicos-v02 .pg-hero .lead{max-width:850px;font-size:22px;line-height:1.5;margin-top:26px}
+.servicos-v02 .pg-hero .lead+.lead{font-size:19px;max-width:850px;margin-top:20px}
+.servicos-v02 .pg-hero a{color:#fff;font-weight:700}
+.servicos-v02 .pg-hero a:focus-visible{outline-color:#fff}
+.servicos-v02 [data-block="service-summary"]{padding:80px 0;background:#fff}
+.servicos-v02 .svc-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:64px}
+.servicos-v02 .svc-group>h2{grid-column:1/-1;font-size:clamp(36px,3.45vw,52px);max-width:950px}
+.servicos-v02 .svc-group>p{grid-column:1/-1;max-width:800px;font-size:21px;line-height:1.5;margin:24px 0 36px}
+.servicos-v02 .svc-item{padding:28px 0;border-top:1px solid #d3dbe4;min-width:0}
+.servicos-v02 .svc-item h3{font-size:27px;line-height:1.18;letter-spacing:-.02em}
+.servicos-v02 .svc-item h3 a{color:#255280;text-decoration:none}
+.servicos-v02 .svc-item h3 a:hover{text-decoration:underline}
+.servicos-v02 .svc-item p{font-size:18px;line-height:1.55;margin-top:16px;max-width:600px}
+.servicos-v02 .svc-limit{display:block;font-size:16px;line-height:1.5;color:#5d6470;margin-top:12px}
+.servicos-v02 .link-arrow{display:inline-flex;align-items:center;min-height:44px;margin-top:16px;font-size:17px;font-weight:700}
+.servicos-v02 .svc-b2b{border-left:3px solid #255280;background:#eef2f6;padding:28px 32px;margin:36px 0 64px}
+.servicos-v02 .svc-b2b h3{font-size:25px;color:#26323e}
+.servicos-v02 .svc-b2b p{font-size:18px;line-height:1.55;max-width:1050px;margin-top:14px}
+.servicos-v02 [data-block="routes"]{padding:72px 0;background:#eef2f6}
+.servicos-v02 .sec-head{margin-bottom:32px}
+.servicos-v02 .sec-head .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 20px}
+.servicos-v02 [data-block="routes"] .svc-item{padding:24px 0}
+.servicos-v02 [data-block="routes"] .svc-item h3{font-size:25px}
+.servicos-v02 [data-block="routes"] .svc-item p{max-width:900px;margin-top:12px}
+.servicos-v02 main>section:last-child{padding:72px 0;background:#255280;color:#fff}
+.servicos-v02 .quote{font-weight:700;letter-spacing:-.02em}
+.servicos-v02 .cta-line{display:flex;flex-direction:column;align-items:center;gap:14px}
+.servicos-v02 .cta-line .btn-cta{background:#fff;color:#255280;border-color:#fff;gap:12px}
+.servicos-v02 .cta-line .btn-cta:hover{background:#eef2f6}
+.servicos-v02 .cta-line .btn-cta:focus-visible{outline-color:#fff}
+.servicos-v02 .hs-ico-arrow{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;flex-shrink:0}
+.servicos-v02 .cta-micro{font-size:15px;margin:0;color:#eef2f6}
+@media(max-width:700px){
+ .servicos-v02 [data-block="services-hero"]{padding:40px 0 48px}
+ .servicos-v02 .pg-hero h1{font-size:clamp(40px,10.8vw,62px);max-width:15ch}
+ .servicos-v02 .pg-hero .eyebrow{font-size:11px;letter-spacing:.1em;margin-bottom:20px}
+ .servicos-v02 .pg-hero .lead{font-size:20px;margin-top:24px}
+ .servicos-v02 .pg-hero .lead+.lead{font-size:18px;margin-top:18px}
+ .servicos-v02 [data-block="service-summary"]{padding:52px 0}
+ .servicos-v02 .svc-group{grid-template-columns:1fr}
+ .servicos-v02 .svc-group>h2{font-size:36px;line-height:1.1}
+ .servicos-v02 .svc-group>p{font-size:19px;margin:22px 0 26px}
+ .servicos-v02 .svc-item{padding:24px 0}
+ .servicos-v02 .svc-item h3{font-size:27px}
+ .servicos-v02 .svc-b2b{padding:24px 20px;margin:24px 0 48px}
+ .servicos-v02 .svc-b2b h3{font-size:25px}
+ .servicos-v02 [data-block="routes"]{padding:52px 0}
+ .servicos-v02 main>section:last-child{padding:52px 0}
+ .servicos-v02 .cta-line .btn-cta{max-width:100%;width:100%;text-align:center}
+}
