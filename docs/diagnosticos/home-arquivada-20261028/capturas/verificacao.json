@@ -1,0 +1,1560 @@
+{
+  "source": {
+    "branch": "arquivo/home-20261028",
+    "commit": "cca24fffa6720ad5ac97a882957df7e73057657c",
+    "index_sha256": "73b5794b623eb118555beb04c1d8b77a8f924c906dc2fa2d1f892dbfef973573",
+    "index_sha256_after": "73b5794b623eb118555beb04c1d8b77a8f924c906dc2fa2d1f892dbfef973573"
+  },
+  "scope": "Original archive served unchanged. External requests blocked; CSP prohibits connections/forms; no form submissions or contact clicks.",
+  "viewports": [
+    {
+      "h1": [
+        "Projeto estrutural e projetos complementares."
+      ],
+      "width": 1440,
+      "height": 900,
+      "documentWidth": 1440,
+      "documentHeight": 9947,
+      "stylesheets": [
+        {
+          "href": "http://127.0.0.1:56231/assets/css/home-20261024.css",
+          "rules": 147
+        },
+        {
+          "href": "http://127.0.0.1:56231/assets/css/home-opcao3-20261027.css",
+          "rules": 81
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Source Sans 3",
+          "weight": "400",
+          "status": "loaded"
+        },
+        {
+          "family": "Source Sans 3",
+          "weight": "600",
+          "status": "loaded"
+        },
+        {
+          "family": "Source Sans 3",
+          "weight": "700",
+          "status": "loaded"
+        },
+        {
+          "family": "Source Sans 3",
+          "weight": "800",
+          "status": "loaded"
+        }
+      ],
+      "fontStatus": "loaded",
+      "images": [
+        {
+          "src": "/assets/images/logo-branca.png",
+          "loaded": true,
+          "naturalWidth": 760,
+          "naturalHeight": 196,
+          "alt": "DEMELLO Engenharia"
+        },
+        {
+          "src": "/assets/images/home-opcao3-hero.webp",
+          "loaded": true,
+          "naturalWidth": 1513,
+          "naturalHeight": 1039,
+          "alt": "IlustraÃ§Ã£o conceitual de uma estrutura de concreto com armaduras aparentes"
+        },
+        {
+          "src": "/assets/images/home-opcao3-integracao.webp",
+          "loaded": true,
+          "naturalWidth": 1464,
+          "naturalHeight": 1074,
+          "alt": "IlustraÃ§Ã£o conceitual da relaÃ§Ã£o entre estrutura e instalaÃ§Ãµes em um modelo BIM"
+        },
+        {
+          "src": "/assets/images/hero-djalma-marinho.jpg",
+          "loaded": true,
+          "naturalWidth": 1800,
+          "naturalHeight": 999,
+          "alt": "Modelo do ColÃ©gio CÃ­vico Militar Djalma Marinho, em Campo Largo/PR"
+        },
+        {
+          "src": "/assets/images/JHE_logo.png",
+          "loaded": true,
+          "naturalWidth": 205,
+          "naturalHeight": 120,
+          "alt": "JHE Consultores Associados"
+        },
+        {
+          "src": "/assets/images/GERIBELLO_logo_branca.png",
+          "loaded": true,
+          "naturalWidth": 644,
+          "naturalHeight": 180,
+          "alt": "Geribello Engenharia"
+        },
+        {
+          "src": "/assets/images/ODARA_avatar_linktree.jpg",
+          "loaded": true,
+          "naturalWidth": 174,
+          "naturalHeight": 174,
+          "alt": "Odara CafÃ© Lounge"
+        },
+        {
+          "src": "/assets/images/home-opcao3-hero.webp",
+          "loaded": true,
+          "naturalWidth": 1513,
+          "naturalHeight": 1039,
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/home-opcao3-hidro.webp",
+          "loaded": true,
+          "naturalWidth": 1774,
+          "naturalHeight": 887,
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/home-opcao3-incendio.webp",
+          "loaded": true,
+          "naturalWidth": 1774,
+          "naturalHeight": 887,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-construir-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-ampliar-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-regularizar-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-avaliar-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/logo-oficial.png",
+          "loaded": true,
+          "naturalWidth": 1078,
+          "naturalHeight": 329,
+          "alt": "DEMELLO Engenharia"
+        }
+      ],
+      "sections": [
+        {
+          "i": 0,
+          "id": "",
+          "class": "hero",
+          "title": "Projeto\nestrutural e\nprojetos\ncomplementares.",
+          "top": 91,
+          "height": 850
+        },
+        {
+          "i": 1,
+          "id": "secao-3",
+          "class": "section entry-section",
+          "title": "Vai construir, ampliar ou reformar?",
+          "top": 941,
+          "height": 533.140625
+        },
+        {
+          "i": 2,
+          "id": "",
+          "class": "section integration-section",
+          "title": "Projetos que se encontram\nantes da obra.",
+          "top": 1474.140625,
+          "height": 784.0625
+        },
+        {
+          "i": 3,
+          "id": "secao-5",
+          "class": "section experience-section",
+          "title": "Projetos de diferentes escalas.\nUm responsÃ¡vel tÃ©cnico.",
+          "top": 2258.203125,
+          "height": 1185.390625
+        },
+        {
+          "i": 4,
+          "id": "secao-10",
+          "class": "section clients-section",
+          "title": "Quem jÃ¡ trouxe a demanda.",
+          "top": 3443.59375,
+          "height": 344.359375
+        },
+        {
+          "i": 5,
+          "id": "projetos-e-servicos",
+          "class": "section featured-services",
+          "title": "Cada projeto,\numa parte da sua obra.",
+          "top": 3787.953125,
+          "height": 1684.5
+        },
+        {
+          "i": 6,
+          "id": "secao-6",
+          "class": "section ",
+          "title": "Comece pela situaÃ§Ã£o. O nome tÃ©cnico vem depois.",
+          "top": 5472.453125,
+          "height": 899.984375
+        },
+        {
+          "i": 7,
+          "id": "secao-7",
+          "class": "section deliver-section",
+          "title": "O que vocÃª recebe\nem cada projeto.",
+          "top": 6372.4375,
+          "height": 1169.796875
+        },
+        {
+          "i": 8,
+          "id": "secao-8",
+          "class": "section estimate-section",
+          "title": "Como a estimativa funciona.",
+          "top": 7672.296875,
+          "height": 784.796875
+        },
+        {
+          "i": 9,
+          "id": "secao-9",
+          "class": "section ",
+          "title": "O que as pessoas perguntam antes de calcular",
+          "top": 8457.09375,
+          "height": 590.484375
+        },
+        {
+          "i": 10,
+          "id": "secao-11",
+          "class": "section cta-band",
+          "title": "Da sua demanda\nao prÃ³ximo passo.",
+          "top": 9047.578125,
+          "height": 541.375
+        }
+      ],
+      "links": [
+        {
+          "text": "Pular para o conteÃºdo",
+          "href": "#conteudo"
+        },
+        {
+          "text": "DEMELLO Engenharia",
+          "href": "./"
+        },
+        {
+          "text": "InÃ­cio",
+          "href": "./"
+        },
+        {
+          "text": "ServiÃ§os",
+          "href": "./servicos/"
+        },
+        {
+          "text": "Projetos",
+          "href": "./experiencia-tecnica/"
+        },
+        {
+          "text": "Como trabalhamos",
+          "href": "./metodologia/"
+        },
+        {
+          "text": "Contato",
+          "href": "./contato/"
+        },
+        {
+          "text": "Calcular estimativa",
+          "href": "./orcamento/"
+        },
+        {
+          "text": "WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "Calcular estimativa",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Falar no WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "ComeÃ§ar pela minha obra",
+          "href": "./construir-ou-ampliar/"
+        },
+        {
+          "text": "Ver os projetos complementares",
+          "href": "./servicos/"
+        },
+        {
+          "text": "Calcular estimativa",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Entender a compatibilizaÃ§Ã£o",
+          "href": "./servicos/compatibilizacao-bim/"
+        },
+        {
+          "text": "Abrir o Processo nÂº 010/2026",
+          "href": "./empresa/trajetoria-do-fundador.html"
+        },
+        {
+          "text": "Ver o case completo",
+          "href": "./experiencia-tecnica/"
+        },
+        {
+          "text": "Projeto estrutural\n\nConcepÃ§Ã£o, dimensionamento e detalhamento da estrutura e das fundaÃ§Ãµes, conforme o escopo contratado.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-estrutural/"
+        },
+        {
+          "text": "Projeto hidrossanitÃ¡rio\n\nRedes de Ã¡gua fria e quente, esgoto e drenagem, desenvolvidas em relaÃ§Ã£o Ã  arquitetura e Ã  estrutura.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-hidrossanitario/"
+        },
+        {
+          "text": "Projeto de incÃªndio â€” PPCI\n\nProjeto de prevenÃ§Ã£o contra incÃªndio, com enquadramento e documentaÃ§Ã£o conforme a edificaÃ§Ã£o e as exigÃªncias aplicÃ¡veis.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-prevencao-incendio/"
+        },
+        {
+          "text": "Terraplanagem\nProjeto de terraplanagem\n\nA relaÃ§Ã£o entre o terreno e a implantaÃ§Ã£o da obra, coordenada com as demais disciplinas.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-terraplenagem/"
+        },
+        {
+          "text": "ConheÃ§a todos os serviÃ§os",
+          "href": "./servicos/"
+        },
+        {
+          "text": "Construir uma casa.\n\nCom a arquitetura pronta ou sÃ³ com a ideia. Veja quais projetos a obra pede e a estimativa deles.",
+          "href": "./construir-ou-ampliar/#construir"
+        },
+        {
+          "text": "Ampliar ou reformar.\n\nO imÃ³vel existe e vai mudar. O novo precisa conversar com o que estÃ¡ de pÃ©.",
+          "href": "./construir-ou-ampliar/#ampliar"
+        },
+        {
+          "text": "Regularizar um imÃ³vel.\n\nDivergÃªncia de Ã¡rea, exigÃªncia de prefeitura ou cartÃ³rio. Primeiro se descobre o que estÃ¡ irregular.",
+          "href": "./servicos/regularizacao/"
+        },
+        {
+          "text": "Avaliar um problema.\n\nApareceu algo no imÃ³vel ou na obra? Conte o que vocÃª vÃª. Sem diagnÃ³stico remoto.",
+          "href": "./avaliar-um-problema/"
+        },
+        {
+          "text": "Consultoria e mentoria tÃ©cnica",
+          "href": "./orcamento/?situacao=support"
+        },
+        {
+          "text": "Projeto de arquitetura",
+          "href": "./servicos/projeto-arquitetura/"
+        },
+        {
+          "text": "Projeto estrutural",
+          "href": "./servicos/projeto-estrutural/"
+        },
+        {
+          "text": "Projeto hidrossanitÃ¡rio",
+          "href": "./servicos/projeto-hidrossanitario/"
+        },
+        {
+          "text": "Projeto de incÃªndio â€” PPCI",
+          "href": "./servicos/projeto-prevencao-incendio/"
+        },
+        {
+          "text": "Projeto de gÃ¡s / GLP",
+          "href": "./servicos/projeto-gas-glp/"
+        },
+        {
+          "text": "Projeto de terraplanagem",
+          "href": "./servicos/projeto-terraplenagem/"
+        },
+        {
+          "text": "CompatibilizaÃ§Ã£o BIM",
+          "href": "./servicos/compatibilizacao-bim/"
+        },
+        {
+          "text": "RegularizaÃ§Ã£o de imÃ³vel",
+          "href": "./servicos/regularizacao/"
+        },
+        {
+          "text": "OrÃ§amento tÃ©cnico",
+          "href": "./servicos/orcamento-tecnico/"
+        },
+        {
+          "text": "Calcular a estimativa dos projetos",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Calcular a estimativa dos projetos",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Falar no WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "DEMELLO Engenharia",
+          "href": "./"
+        },
+        {
+          "text": "marcos@demelloeng.com.br",
+          "href": "mailto:marcos@demelloeng.com.br"
+        },
+        {
+          "text": "(41) 98512-4056",
+          "href": "tel:+5541985124056"
+        },
+        {
+          "text": "(44) 99820-2552",
+          "href": "tel:+5544998202552"
+        },
+        {
+          "text": "WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "Empresa",
+          "href": "./empresa/"
+        },
+        {
+          "text": "Privacidade",
+          "href": "./privacidade/"
+        }
+      ],
+      "label": "desktop",
+      "blocked": [],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Loading the script 'https://scripts.simpleanalyticscdn.com/latest.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+        "Loading the script 'https://connect.facebook.net/en_US/fbevents.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+      ],
+      "failedRequests": [
+        {
+          "url": "https://scripts.simpleanalyticscdn.com/latest.js",
+          "failure": {
+            "errorText": "csp"
+          }
+        },
+        {
+          "url": "https://connect.facebook.net/en_US/fbevents.js",
+          "failure": {
+            "errorText": "csp"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:56231/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/css/home-20261024.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/css/home-opcao3-20261027.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/logo-branca.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-400-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-hero.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/site-analytics.mjs",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-800-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-construir-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-ampliar-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-regularizar-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-avaliar-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/nav.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/analytics-sink.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/meta-pixel.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-integracao.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-600-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-700-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/analytics.mjs",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/contact-clicks.mjs",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/favicon.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/hero-djalma-marinho.jpg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/JHE_logo.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/GERIBELLO_logo_branca.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/ODARA_avatar_linktree.jpg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-hidro.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-incendio.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/logo-oficial.png",
+          "status": 200
+        }
+      ],
+      "h1Matches": true,
+      "horizontalOverflow": false,
+      "interactions": {
+        "faqOpens": true,
+        "primaryCtaDestination": "/orcamento/?situacao=build",
+        "primaryCtaReachedLocalEstimate": true,
+        "estimateTitle": "Calcular estimativa | DEMELLO Engenharia",
+        "estimateH1": [
+          "O que vocÃª vai fazer?"
+        ],
+        "blocked": [],
+        "pageErrors": [],
+        "consoleErrors": [
+          "Loading the script 'https://scripts.simpleanalyticscdn.com/latest.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+          "Loading the script 'https://connect.facebook.net/en_US/fbevents.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+          "Loading the script 'https://scripts.simpleanalyticscdn.com/latest.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+          "Loading the script 'https://connect.facebook.net/en_US/fbevents.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+        ]
+      }
+    },
+    {
+      "h1": [
+        "Projeto estrutural e projetos complementares."
+      ],
+      "width": 390,
+      "height": 844,
+      "documentWidth": 390,
+      "documentHeight": 14950,
+      "stylesheets": [
+        {
+          "href": "http://127.0.0.1:56231/assets/css/home-20261024.css",
+          "rules": 147
+        },
+        {
+          "href": "http://127.0.0.1:56231/assets/css/home-opcao3-20261027.css",
+          "rules": 81
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Source Sans 3",
+          "weight": "400",
+          "status": "loaded"
+        },
+        {
+          "family": "Source Sans 3",
+          "weight": "600",
+          "status": "loaded"
+        },
+        {
+          "family": "Source Sans 3",
+          "weight": "700",
+          "status": "loaded"
+        },
+        {
+          "family": "Source Sans 3",
+          "weight": "800",
+          "status": "loaded"
+        }
+      ],
+      "fontStatus": "loaded",
+      "images": [
+        {
+          "src": "/assets/images/logo-branca.png",
+          "loaded": true,
+          "naturalWidth": 760,
+          "naturalHeight": 196,
+          "alt": "DEMELLO Engenharia"
+        },
+        {
+          "src": "/assets/images/home-opcao3-hero.webp",
+          "loaded": true,
+          "naturalWidth": 1513,
+          "naturalHeight": 1039,
+          "alt": "IlustraÃ§Ã£o conceitual de uma estrutura de concreto com armaduras aparentes"
+        },
+        {
+          "src": "/assets/images/home-opcao3-integracao.webp",
+          "loaded": true,
+          "naturalWidth": 1464,
+          "naturalHeight": 1074,
+          "alt": "IlustraÃ§Ã£o conceitual da relaÃ§Ã£o entre estrutura e instalaÃ§Ãµes em um modelo BIM"
+        },
+        {
+          "src": "/assets/images/hero-djalma-marinho.jpg",
+          "loaded": true,
+          "naturalWidth": 1800,
+          "naturalHeight": 999,
+          "alt": "Modelo do ColÃ©gio CÃ­vico Militar Djalma Marinho, em Campo Largo/PR"
+        },
+        {
+          "src": "/assets/images/JHE_logo.png",
+          "loaded": true,
+          "naturalWidth": 205,
+          "naturalHeight": 120,
+          "alt": "JHE Consultores Associados"
+        },
+        {
+          "src": "/assets/images/GERIBELLO_logo_branca.png",
+          "loaded": true,
+          "naturalWidth": 644,
+          "naturalHeight": 180,
+          "alt": "Geribello Engenharia"
+        },
+        {
+          "src": "/assets/images/ODARA_avatar_linktree.jpg",
+          "loaded": true,
+          "naturalWidth": 174,
+          "naturalHeight": 174,
+          "alt": "Odara CafÃ© Lounge"
+        },
+        {
+          "src": "/assets/images/home-opcao3-hero.webp",
+          "loaded": true,
+          "naturalWidth": 1513,
+          "naturalHeight": 1039,
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/home-opcao3-hidro.webp",
+          "loaded": true,
+          "naturalWidth": 1774,
+          "naturalHeight": 887,
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/home-opcao3-incendio.webp",
+          "loaded": true,
+          "naturalWidth": 1774,
+          "naturalHeight": 887,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-construir-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-ampliar-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-regularizar-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/icons/situacao-avaliar-v1.svg",
+          "loaded": true,
+          "naturalWidth": 64,
+          "naturalHeight": 64,
+          "alt": ""
+        },
+        {
+          "src": "/assets/images/logo-oficial.png",
+          "loaded": true,
+          "naturalWidth": 1078,
+          "naturalHeight": 329,
+          "alt": "DEMELLO Engenharia"
+        }
+      ],
+      "sections": [
+        {
+          "i": 0,
+          "id": "",
+          "class": "hero",
+          "title": "Projeto\nestrutural e\nprojetos\ncomplementares.",
+          "top": 77,
+          "height": 940.90625
+        },
+        {
+          "i": 1,
+          "id": "secao-3",
+          "class": "section entry-section",
+          "title": "Vai construir, ampliar ou reformar?",
+          "top": 1017.90625,
+          "height": 939.875
+        },
+        {
+          "i": 2,
+          "id": "",
+          "class": "section integration-section",
+          "title": "Projetos que se encontram\nantes da obra.",
+          "top": 1957.78125,
+          "height": 993.40625
+        },
+        {
+          "i": 3,
+          "id": "secao-5",
+          "class": "section experience-section",
+          "title": "Projetos de diferentes escalas.\nUm responsÃ¡vel tÃ©cnico.",
+          "top": 2951.1875,
+          "height": 1584.8125
+        },
+        {
+          "i": 4,
+          "id": "secao-10",
+          "class": "section clients-section",
+          "title": "Quem jÃ¡ trouxe a demanda.",
+          "top": 4536,
+          "height": 646.71875
+        },
+        {
+          "i": 5,
+          "id": "projetos-e-servicos",
+          "class": "section featured-services",
+          "title": "Cada projeto,\numa parte da sua obra.",
+          "top": 5182.71875,
+          "height": 2364.1875
+        },
+        {
+          "i": 6,
+          "id": "secao-6",
+          "class": "section ",
+          "title": "Comece pela situaÃ§Ã£o. O nome tÃ©cnico vem depois.",
+          "top": 7546.90625,
+          "height": 1811.75
+        },
+        {
+          "i": 7,
+          "id": "secao-7",
+          "class": "section deliver-section",
+          "title": "O que vocÃª recebe\nem cada projeto.",
+          "top": 9358.65625,
+          "height": 1992.28125
+        },
+        {
+          "i": 8,
+          "id": "secao-8",
+          "class": "section estimate-section",
+          "title": "Como a estimativa funciona.",
+          "top": 11548.5,
+          "height": 1515.25
+        },
+        {
+          "i": 9,
+          "id": "secao-9",
+          "class": "section ",
+          "title": "O que as pessoas perguntam antes de calcular",
+          "top": 13063.75,
+          "height": 658.78125
+        },
+        {
+          "i": 10,
+          "id": "secao-11",
+          "class": "section cta-band",
+          "title": "Da sua demanda\nao prÃ³ximo passo.",
+          "top": 13722.53125,
+          "height": 522.09375
+        }
+      ],
+      "links": [
+        {
+          "text": "Pular para o conteÃºdo",
+          "href": "#conteudo"
+        },
+        {
+          "text": "DEMELLO Engenharia",
+          "href": "./"
+        },
+        {
+          "text": "InÃ­cio",
+          "href": "./"
+        },
+        {
+          "text": "ServiÃ§os",
+          "href": "./servicos/"
+        },
+        {
+          "text": "Projetos",
+          "href": "./experiencia-tecnica/"
+        },
+        {
+          "text": "Como trabalhamos",
+          "href": "./metodologia/"
+        },
+        {
+          "text": "Contato",
+          "href": "./contato/"
+        },
+        {
+          "text": "Calcular estimativa",
+          "href": "./orcamento/"
+        },
+        {
+          "text": "WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "Calcular estimativa",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Falar no WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "ComeÃ§ar pela minha obra",
+          "href": "./construir-ou-ampliar/"
+        },
+        {
+          "text": "Ver os projetos complementares",
+          "href": "./servicos/"
+        },
+        {
+          "text": "Calcular estimativa",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Entender a compatibilizaÃ§Ã£o",
+          "href": "./servicos/compatibilizacao-bim/"
+        },
+        {
+          "text": "Abrir o Processo nÂº 010/2026",
+          "href": "./empresa/trajetoria-do-fundador.html"
+        },
+        {
+          "text": "Ver o case completo",
+          "href": "./experiencia-tecnica/"
+        },
+        {
+          "text": "Projeto estrutural\n\nConcepÃ§Ã£o, dimensionamento e detalhamento da estrutura e das fundaÃ§Ãµes, conforme o escopo contratado.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-estrutural/"
+        },
+        {
+          "text": "Projeto hidrossanitÃ¡rio\n\nRedes de Ã¡gua fria e quente, esgoto e drenagem, desenvolvidas em relaÃ§Ã£o Ã  arquitetura e Ã  estrutura.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-hidrossanitario/"
+        },
+        {
+          "text": "Projeto de incÃªndio â€” PPCI\n\nProjeto de prevenÃ§Ã£o contra incÃªndio, com enquadramento e documentaÃ§Ã£o conforme a edificaÃ§Ã£o e as exigÃªncias aplicÃ¡veis.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-prevencao-incendio/"
+        },
+        {
+          "text": "Terraplanagem\nProjeto de terraplanagem\n\nA relaÃ§Ã£o entre o terreno e a implantaÃ§Ã£o da obra, coordenada com as demais disciplinas.\n\nConhecer o serviÃ§o",
+          "href": "./servicos/projeto-terraplenagem/"
+        },
+        {
+          "text": "ConheÃ§a todos os serviÃ§os",
+          "href": "./servicos/"
+        },
+        {
+          "text": "Construir uma casa.\n\nCom a arquitetura pronta ou sÃ³ com a ideia. Veja quais projetos a obra pede e a estimativa deles.",
+          "href": "./construir-ou-ampliar/#construir"
+        },
+        {
+          "text": "Ampliar ou reformar.\n\nO imÃ³vel existe e vai mudar. O novo precisa conversar com o que estÃ¡ de pÃ©.",
+          "href": "./construir-ou-ampliar/#ampliar"
+        },
+        {
+          "text": "Regularizar um imÃ³vel.\n\nDivergÃªncia de Ã¡rea, exigÃªncia de prefeitura ou cartÃ³rio. Primeiro se descobre o que estÃ¡ irregular.",
+          "href": "./servicos/regularizacao/"
+        },
+        {
+          "text": "Avaliar um problema.\n\nApareceu algo no imÃ³vel ou na obra? Conte o que vocÃª vÃª. Sem diagnÃ³stico remoto.",
+          "href": "./avaliar-um-problema/"
+        },
+        {
+          "text": "Consultoria e mentoria tÃ©cnica",
+          "href": "./orcamento/?situacao=support"
+        },
+        {
+          "text": "Projeto de arquitetura",
+          "href": "./servicos/projeto-arquitetura/"
+        },
+        {
+          "text": "Projeto estrutural",
+          "href": "./servicos/projeto-estrutural/"
+        },
+        {
+          "text": "Projeto hidrossanitÃ¡rio",
+          "href": "./servicos/projeto-hidrossanitario/"
+        },
+        {
+          "text": "Projeto de incÃªndio â€” PPCI",
+          "href": "./servicos/projeto-prevencao-incendio/"
+        },
+        {
+          "text": "Projeto de gÃ¡s / GLP",
+          "href": "./servicos/projeto-gas-glp/"
+        },
+        {
+          "text": "Projeto de terraplanagem",
+          "href": "./servicos/projeto-terraplenagem/"
+        },
+        {
+          "text": "CompatibilizaÃ§Ã£o BIM",
+          "href": "./servicos/compatibilizacao-bim/"
+        },
+        {
+          "text": "RegularizaÃ§Ã£o de imÃ³vel",
+          "href": "./servicos/regularizacao/"
+        },
+        {
+          "text": "OrÃ§amento tÃ©cnico",
+          "href": "./servicos/orcamento-tecnico/"
+        },
+        {
+          "text": "Calcular a estimativa dos projetos",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Calcular a estimativa dos projetos",
+          "href": "./orcamento/?situacao=build"
+        },
+        {
+          "text": "Falar no WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "DEMELLO Engenharia",
+          "href": "./"
+        },
+        {
+          "text": "marcos@demelloeng.com.br",
+          "href": "mailto:marcos@demelloeng.com.br"
+        },
+        {
+          "text": "(41) 98512-4056",
+          "href": "tel:+5541985124056"
+        },
+        {
+          "text": "(44) 99820-2552",
+          "href": "tel:+5544998202552"
+        },
+        {
+          "text": "WhatsApp",
+          "href": "https://wa.me/5541985124056"
+        },
+        {
+          "text": "Empresa",
+          "href": "./empresa/"
+        },
+        {
+          "text": "Privacidade",
+          "href": "./privacidade/"
+        }
+      ],
+      "label": "mobile",
+      "blocked": [],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Loading the script 'https://scripts.simpleanalyticscdn.com/latest.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+        "Loading the script 'https://connect.facebook.net/en_US/fbevents.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+      ],
+      "failedRequests": [
+        {
+          "url": "https://scripts.simpleanalyticscdn.com/latest.js",
+          "failure": {
+            "errorText": "csp"
+          }
+        },
+        {
+          "url": "https://connect.facebook.net/en_US/fbevents.js",
+          "failure": {
+            "errorText": "csp"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "url": "http://127.0.0.1:56231/",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-400-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/css/home-20261024.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-800-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/css/home-opcao3-20261027.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/logo-branca.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-hero.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-construir-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-ampliar-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-regularizar-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/icons/situacao-avaliar-v1.svg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/site-analytics.mjs",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/nav.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/meta-pixel.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/analytics-sink.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-700-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/fonts/source-sans-3-latin-600-normal.woff2",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/analytics.mjs",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/js/contact-clicks.mjs",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/favicon.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-integracao.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/hero-djalma-marinho.jpg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/JHE_logo.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/GERIBELLO_logo_branca.png",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/ODARA_avatar_linktree.jpg",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-hidro.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/home-opcao3-incendio.webp",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:56231/assets/images/logo-oficial.png",
+          "status": 200
+        }
+      ],
+      "h1Matches": true,
+      "horizontalOverflow": false,
+      "interactions": {
+        "menuOpens": true,
+        "menuCloses": true,
+        "faqOpens": true,
+        "primaryCtaDestination": "/orcamento/?situacao=build",
+        "primaryCtaReachedLocalEstimate": true,
+        "estimateTitle": "Calcular estimativa | DEMELLO Engenharia",
+        "estimateH1": [
+          "O que vocÃª vai fazer?"
+        ],
+        "blocked": [],
+        "pageErrors": [],
+        "consoleErrors": [
+          "Loading the script 'https://scripts.simpleanalyticscdn.com/latest.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+          "Loading the script 'https://connect.facebook.net/en_US/fbevents.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+          "Loading the script 'https://scripts.simpleanalyticscdn.com/latest.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked.",
+          "Loading the script 'https://connect.facebook.net/en_US/fbevents.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline'\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been blocked."
+        ]
+      }
+    }
+  ],
+  "browser": "156.0.8078.48",
+  "served": {
+    "index.html": {
+      "bytes": 22306,
+      "sha256": "73b5794b623eb118555beb04c1d8b77a8f924c906dc2fa2d1f892dbfef973573"
+    },
+    "assets\\fonts\\source-sans-3-latin-400-normal.woff2": {
+      "bytes": 15696,
+      "sha256": "0f73f35e08cde0a2f10c109c6e01d71459d97e4099ecd9a50f1b6c0209e4de2b"
+    },
+    "assets\\css\\home-20261024.css": {
+      "bytes": 15987,
+      "sha256": "0476b114d9fad3af21ee833dfce3841cff9539b294515471945e952750269d4d"
+    },
+    "assets\\css\\home-opcao3-20261027.css": {
+      "bytes": 10220,
+      "sha256": "0f3eb41d6e4bf904f33475817d01b017f4132b3b02d3593ad4f72b59105698eb"
+    },
+    "assets\\fonts\\source-sans-3-latin-800-normal.woff2": {
+      "bytes": 15536,
+      "sha256": "b42d5c20d0730f353996e29dd28872f4782dae9fd0b8ba75365fbeab6f909605"
+    },
+    "assets\\images\\logo-branca.png": {
+      "bytes": 51145,
+      "sha256": "b7460e1023bfca912e01cca8e8b565c56b3911b676ca9018ef979246f64e9973"
+    },
+    "assets\\js\\site-analytics.mjs": {
+      "bytes": 466,
+      "sha256": "cc9f1d74fe4447c4c96b90907a315a4a93efe28f1e24dcfe37453adc9890e743"
+    },
+    "assets\\images\\home-opcao3-hero.webp": {
+      "bytes": 243828,
+      "sha256": "0d014b3188db8120ced9dae21393053af8667051a1c5c1485507fab6401aa900"
+    },
+    "assets\\icons\\situacao-construir-v1.svg": {
+      "bytes": 237,
+      "sha256": "99a400ad746a1f34ef90e25ed22366e76b220dfbd4e1b192f32f4a448b268384"
+    },
+    "assets\\icons\\situacao-ampliar-v1.svg": {
+      "bytes": 237,
+      "sha256": "1f410a8519cbde88a661ff838069f51bdda24a63392e00487438d792db5687c3"
+    },
+    "assets\\icons\\situacao-regularizar-v1.svg": {
+      "bytes": 276,
+      "sha256": "e0006ae3aee6b3b1414ce1bac374e4c34ef441af84e27b7b11c14302ce315f5b"
+    },
+    "assets\\icons\\situacao-avaliar-v1.svg": {
+      "bytes": 256,
+      "sha256": "07060a8b35162f6ba8c5429f8aeb42c3dcc6521e61203a5e52f98d86578cfc16"
+    },
+    "assets\\js\\nav.js": {
+      "bytes": 575,
+      "sha256": "6ea36b3340c366ddb48ee99b53225c2fab0510233f69028f7c8bc7f9cb6090be"
+    },
+    "assets\\js\\analytics-sink.js": {
+      "bytes": 1823,
+      "sha256": "66067d71ad41b008ecef4ade7372ae14df5456b0113f272de4c72dc36663bc88"
+    },
+    "assets\\js\\meta-pixel.js": {
+      "bytes": 2901,
+      "sha256": "f07ee5229c2dc336a03d218faac8b16cba613f7413b4677e6ce1ded132be7c84"
+    },
+    "assets\\js\\analytics.mjs": {
+      "bytes": 11759,
+      "sha256": "f637321dc85aeb50b8a604c99484f330c2a51ee64413f7330c1f803933ed9bed"
+    },
+    "assets\\js\\contact-clicks.mjs": {
+      "bytes": 4489,
+      "sha256": "576a16c709449c214ba83e1f1960d78bc7e2031badeda102b8ce790e977653ff"
+    },
+    "assets\\fonts\\source-sans-3-latin-600-normal.woff2": {
+      "bytes": 15668,
+      "sha256": "14527d193b0e30bc32ef931549a246cdfd286573bb12869b7e052b8101a39d38"
+    },
+    "assets\\fonts\\source-sans-3-latin-700-normal.woff2": {
+      "bytes": 15596,
+      "sha256": "ae35266f2ab0d5314ff9a04127931eb26c793e4f1269bb240046d4d2db4b7bb1"
+    },
+    "assets\\images\\home-opcao3-integracao.webp": {
+      "bytes": 215382,
+      "sha256": "c897dd571e39649b0bfbf613e97d303bef73f2786438177a9bb7b23b65354786"
+    },
+    "assets\\images\\favicon.png": {
+      "bytes": 153913,
+      "sha256": "0fe6ba68047b1007cba2cbc1147d6d58a2b3ee3141a61959cf6748787c463dcc"
+    },
+    "assets\\images\\hero-djalma-marinho.jpg": {
+      "bytes": 339959,
+      "sha256": "1a0046c51952ad9a5b0c50ea0b9fc363db21a9fd06d47f1ddc622a86b868ca35"
+    },
+    "assets\\images\\JHE_logo.png": {
+      "bytes": 13162,
+      "sha256": "b4d66d81d16b2113f628a19661460330c5f8c4675fe3b5ace534fcb987000f77"
+    },
+    "assets\\images\\GERIBELLO_logo_branca.png": {
+      "bytes": 26495,
+      "sha256": "52a6c22576c7713a74bad671dc1e0b4a612829bcafe9fba4309bce0d9bf6778e"
+    },
+    "assets\\images\\ODARA_avatar_linktree.jpg": {
+      "bytes": 5820,
+      "sha256": "a0e6529df0ca7d1a5838dc7335cee37a2910358c26fee6bd72cb746c38870b24"
+    },
+    "assets\\images\\home-opcao3-hidro.webp": {
+      "bytes": 187464,
+      "sha256": "746835b6d2409a155a4e8e2d607748cd20d824ed561ee9b8800134fbf631689e"
+    },
+    "assets\\images\\home-opcao3-incendio.webp": {
+      "bytes": 248630,
+      "sha256": "83fb98625d89b18c4bf822944c3f35da16da0a0dd4be9b38085a0c893bbdedb6"
+    },
+    "assets\\images\\logo-oficial.png": {
+      "bytes": 183174,
+      "sha256": "7f6e1a66583645532579d2f9b7cd8b8b03b3579f8b291182325492d051f6993b"
+    },
+    "orcamento\\index.html": {
+      "bytes": 1455,
+      "sha256": "6a61e01fc33baf11c9ec62b31fc72cd6c0a083b48f11ab9b5be36487a039e76c"
+    },
+    "orcamento\\assets\\index-CsN7vBmE.js": {
+      "bytes": 351647,
+      "sha256": "289c43992e94a884b38ddee804c62681013bc2a3e6deb87b2b806e88bd204a5b"
+    },
+    "orcamento\\assets\\index-B16Vzy82.css": {
+      "bytes": 23051,
+      "sha256": "78a8649253d84450436fc762c47237225377e07119e8a2860e39b72852dbeefc"
+    },
+    "assets\\images\\logo.png": {
+      "bytes": 106640,
+      "sha256": "5b0d3f946d530956e9c202a3795701c2caf47aa21da8499737a78bfdc0318c95"
+    },
+    "assets\\fonts\\montserrat-var-latin.woff2": {
+      "bytes": 37956,
+      "sha256": "06b16db7a969135d48d38c49183be7fb88d4452e2a3011957c7851941f4e4879"
+    }
+  },
+  "serverErrors": [],
+  "archive_byte_verification": {
+    "served_files": 33,
+    "all_equal_to_git_archive": true,
+    "archive_sha256": "cbc90a08dd6c66b145572b7a58c910946062b36c0689f501b9d696e4232ebe49"
+  },
+  "screenshot_manifest": [
+    {
+      "file": "desktop-estimate-entry.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "46a7e4ed598a74572c925caec7b0d7db337df84daaba0a2a46ac7ce77ff2a284",
+      "kind": "browser_capture"
+    },
+    {
+      "file": "desktop-facts.png",
+      "width": 1440,
+      "height": 130,
+      "sha256": "58137d18e53ea7c7f71481d59e2083f3d23971e3cd0a8da3a18a44f3bac6533c",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-footer.png",
+      "width": 1440,
+      "height": 359,
+      "sha256": "60a34e9d7d8d5aa6f131ccefe60a4bcb1b036ef73fdd8684e3ff17ee2a40a7ba",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-full.png",
+      "width": 1440,
+      "height": 9947,
+      "sha256": "817aa8017d6068af60dba004cd67958ab6f4d356273df73fd3d78efc1d3ffa42",
+      "kind": "browser_capture"
+    },
+    {
+      "file": "desktop-hero.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "be1903d7dc4fca00e07445122523d3c785e84b349afa1173ad6432a363bba860",
+      "kind": "browser_capture"
+    },
+    {
+      "file": "desktop-overview.png",
+      "width": 720,
+      "height": 4974,
+      "sha256": "4fcd78751f30618b735e95c792dad0f25cb78c455e39efe734e2e21684f9a222",
+      "kind": "scaled_overview"
+    },
+    {
+      "file": "desktop-section-01.png",
+      "width": 1440,
+      "height": 850,
+      "sha256": "306a0f1c917610554121ad882b59f513ea8a002f7cd089e47f35af34c0f3d577",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-02.png",
+      "width": 1440,
+      "height": 534,
+      "sha256": "a2a5edb64ace9ebbf473cef066ce6f4918c99ccdc714621aaacf4cdef164f121",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-03.png",
+      "width": 1440,
+      "height": 785,
+      "sha256": "5473fdc1558ee243f3694d3a1db6d964aeb4369a1997a021257df0aef2d30b24",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-04.png",
+      "width": 1440,
+      "height": 1186,
+      "sha256": "cff4284540e7e3e22bc3f3e3b137d6da31fca04b323a8b6489b4da9f1ee03b1e",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-05.png",
+      "width": 1440,
+      "height": 345,
+      "sha256": "b5c5412a9ecf70d9d4b46b6e522f4e3da08ed04944293b964fa58ae17b185728",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-06.png",
+      "width": 1440,
+      "height": 1686,
+      "sha256": "5788c0c250ccba597a88e723fa2be81d8d468f22e5228efbc945b62864776c53",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-07.png",
+      "width": 1440,
+      "height": 901,
+      "sha256": "e388e3f19da61346f3837c371a6b520bb27ef7afd67cf70103977f67c70bbb22",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-08.png",
+      "width": 1440,
+      "height": 1171,
+      "sha256": "332e1d148d4254e1e09a8660906917b0b5159876b9cd1258ac5e508f94191eb8",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-09.png",
+      "width": 1440,
+      "height": 786,
+      "sha256": "f354e06dd8e8b65bae3860564ffc42010ad6ceec680f4aabbc71a266359e852e",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-10.png",
+      "width": 1440,
+      "height": 591,
+      "sha256": "b7120f972800c4bccdc0e30af7de6723ca4f305622b80f9b90f03ead1cdc6365",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "desktop-section-11.png",
+      "width": 1440,
+      "height": 542,
+      "sha256": "e690655fb8a56b71a70d9af7979d85c58675d17c7ba25e0b688bd17e34178f44",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-estimate-entry.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "e26f04a614b77b75afd31a55aacd81bddf90ae6d0539fe1746d9a6b2931649d6",
+      "kind": "browser_capture"
+    },
+    {
+      "file": "mobile-facts.png",
+      "width": 390,
+      "height": 198,
+      "sha256": "5cb0fcf15945618fa2dca5b6e67f6c6e7c61683dfa5b8b481b0e8f8a713ef8cc",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-footer.png",
+      "width": 390,
+      "height": 706,
+      "sha256": "e1c73e5cf727caee250b4ddcba5847b4c9757706434a7a4eab111d81da327b73",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-full.png",
+      "width": 390,
+      "height": 14950,
+      "sha256": "c80b324b267c49fb91afc29eae2b1de02e19feb994694c6bf0e16d09427b2c66",
+      "kind": "browser_capture"
+    },
+    {
+      "file": "mobile-hero.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "681a739c2e32748aa401f39f6fb6fbb45c97b99a5cafabd8c9f9eacd6ec246de",
+      "kind": "browser_capture"
+    },
+    {
+      "file": "mobile-menu.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "af6abac1cdd926e32dc8a0ca616422589acbfd2f27ff3d30ea0238633ff0f9de",
+      "kind": "browser_capture"
+    },
+    {
+      "file": "mobile-overview.png",
+      "width": 188,
+      "height": 7200,
+      "sha256": "731396ff7756eb299763d755657babe27d901d020aa06dbfd36ef1b922debcd1",
+      "kind": "scaled_overview"
+    },
+    {
+      "file": "mobile-section-01.png",
+      "width": 390,
+      "height": 941,
+      "sha256": "4bbd076132ddebbd7ce8029a5ca2af1be6df8f7f78593fa3223b5dcfa98541ef",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-02.png",
+      "width": 390,
+      "height": 941,
+      "sha256": "d036363445d4b2a65e0031222650201cdf795e4e32e69d7dfc7bc714b55fde21",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-03.png",
+      "width": 390,
+      "height": 995,
+      "sha256": "948027534740803c1ba593b2e42037394c33d68438843c935bc85a11a15d64e1",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-04.png",
+      "width": 390,
+      "height": 1585,
+      "sha256": "0e56f79576baa11a35eeb04de69ba9fea67ddd123122a65442377384cb69d669",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-05.png",
+      "width": 390,
+      "height": 647,
+      "sha256": "f4c3a55352828517de6499bae3717e9961d0c29b00b6049d1b19fca9d5d9872b",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-06.png",
+      "width": 390,
+      "height": 2365,
+      "sha256": "e11fe3ce6a88a8d7a4dbee61fca1022ab9e7f0138271c0d9b3d8588aba331ab6",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-07.png",
+      "width": 390,
+      "height": 1813,
+      "sha256": "8eab15aba8ff9a5f8695eaf98f3bd0c79af3c45949ae88101e52c2c026bfc4c0",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-08.png",
+      "width": 390,
+      "height": 1993,
+      "sha256": "f3a0559564fe4f0b71139c1d16a0ccf9d078e88eb824b3057924a16c03768b61",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-09.png",
+      "width": 390,
+      "height": 1516,
+      "sha256": "e57137b7e98800273a53ba42747ca20325e3f5cdfb8978bbf38209ba4fe5ebce",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-10.png",
+      "width": 390,
+      "height": 660,
+      "sha256": "333ac0b9b531555453716c12c1f7019b5269b5831fb89936577932fbfc0bfc24",
+      "kind": "exact_crop_from_full"
+    },
+    {
+      "file": "mobile-section-11.png",
+      "width": 390,
+      "height": 523,
+      "sha256": "9e753a90f50935a83c25cc78721bfd8f760da7385667b425e937182a94c9fa3b",
+      "kind": "exact_crop_from_full"
+    }
+  ],
+  "section_capture_note": "Final section, facts and footer files are exact pixel crops from corresponding full screenshots, not locator screenshots. Initial locator captures with sticky-header overlay were rejected."
+}
