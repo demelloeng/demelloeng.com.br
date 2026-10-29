@@ -1,0 +1,239 @@
+{
+  "slug": "projeto-estrutural",
+  "nome_servico": "Projeto estrutural",
+  "fonte_copy": "COPY_ESTRUTURAL_V01_20261029.md",
+  "titulo_pagina": "Projeto estrutural residencial em BIM | DEMELLO",
+  "descricao": "Projeto estrutural para casa, sobrado e ampliação, em BIM, em nível básico ou executivo. Veja a estimativa antes do contato.",
+  "h1": "Projeto estrutural pensado junto com a arquitetura e as instalações",
+  "chamada": "Antes de calcular a estrutura, é preciso entender o que ela sustenta — e com o que precisa conviver.",
+  "introducao": [
+    "O projeto estrutural diz como a obra se sustenta: fundação, pilares, vigas e lajes. Ele nasce da arquitetura e precisa conviver com as instalações.",
+    "Erro na estrutura é ajuste no projeto. Na obra, vira demolição, atraso e dinheiro perdido. A DEMELLO projeta em BIM, em nível básico ou executivo, conforme o que a sua obra pede."
+  ],
+  "cta": {
+    "rotulo": "Ver a estimativa do meu projeto estrutural",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos_novos": {
+    "para_quem": {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido se você:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "vai construir uma casa ou um sobrado e já tem, ou está fazendo, a arquitetura;",
+            "quer ampliar uma construção que já existe;",
+            "já tem a planta em PDF, DWG, DXF ou IFC: mande como está, e a DEMELLO leva para o Revit e continua daí;",
+            "precisa só da estrutura de uma obra projetada por outro profissional."
+          ]
+        }
+      ]
+    },
+    "muda": {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "A estrutura nasce encaixada",
+              "texto": "Pilar, viga e laje são lançados junto com a arquitetura e as instalações, no mesmo modelo. O tubo não atravessa a viga, porque os dois foram desenhados juntos."
+            },
+            {
+              "titulo": "Você contrata o nível que precisa",
+              "texto": "Básico e executivo não são a mesma coisa. O conteúdo final fica claro na proposta, antes de você decidir."
+            },
+            {
+              "titulo": "A fundação vem junto",
+              "texto": "Precisa só dela? Ela é tratada dentro do projeto estrutural, sem virar outro serviço."
+            }
+          ]
+        }
+      ]
+    },
+    "estrutura": {
+      "titulo": "Da fundação à laje",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "- Estacas: levam a carga até o solo firme."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Sapatas: espalham a carga no solo."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Pilares: descem as cargas da obra."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Vigas: recebem lajes e paredes."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Lajes: formam os pisos e a cobertura."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Em uma estrutura de concreto armado, a carga desce das lajes até o solo. O projeto estrutural define o tamanho e a posição de cada peça."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Estaca ou sapata depende do solo. Estacas e sapatas formam a fundação."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Básico. Resolve a concepção, o lançamento e a modelagem, com informação suficiente para aquela etapa. Não traz todos os detalhamentos de uma contratação executiva."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Executivo. Traz os detalhamentos que a obra precisa para executar a estrutura."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Estrutura pronta é base para orçar a obra. Isso é com o serviço de <a href=\"../orcamento-tecnico/\">Orçamento e cronograma</a>."
+        }
+      ]
+    },
+    "experiencia": {
+      "titulo": "Experiência aplicada — UNV Interventor Manoel Ribas",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Na UNV (Unidade Nova) Interventor Manoel Ribas, em Santo Antônio do Sudoeste/PR, Marcos de Mello Silva respondeu pelo projeto estrutural em concreto armado: 4.856,55 m²."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "No mesmo trabalho, também respondeu pelos projetos hidrossanitário e de gás."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Em breve: maquete 3D desta obra, com o modelo estrutural para você explorar."
+        }
+      ]
+    },
+    "mezanino": {
+      "titulo": "Vai construir um mezanino?",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Mezanino também é estrutura: pilares, vigas e piso, com a carga descendo até o chão. Este é um modelo preliminar de um mezanino metálico. Gire, monte e separe as camadas."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Tamanho: 7,50 × 4,60 m, a cerca de 3,00 m de altura."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Pilares: 6, em tubo quadrado de aço 100 × 100 × 3 mm."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Treliças: 9, de 300 mm de altura, em tubo retangular 100 × 40 × 3 mm. Sete de 4,60 m e duas de 7,50 m."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Piso: 12 placas de 1.200 × 2.500 × 40 mm, 34,5 m²."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Aço: cerca de 1,1 t."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Roupeiros: cinco, junto aos pilares. Entram como carga."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Aviso: Modelo preliminar, com premissas adotadas. Não é projeto executivo."
+        }
+      ]
+    },
+    "faz": {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO projeta a estrutura a partir do que a obra pede e do nível contratado: concepção, lançamento, modelagem em BIM, pré-dimensionamento, desenvolvimento das soluções e coordenação com as demais disciplinas."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O trabalho é em BIM: um modelo só, em 3D. Estrutura, arquitetura e instalações se acertam nele antes da obra. Primeiro se entende o problema. Depois se fecha o que precisa ser projetado."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "Quanto custa um projeto estrutural?",
+              "resposta": "Depende da área, do número de pavimentos, do sistema estrutural e do nível contratado. Não sabe tudo isso? Conte o que você imagina para a obra: a estimativa usa uma área de referência. O valor inicial aparece nesta página, antes de qualquer contato. Não é proposta, contrato nem garantia de preço."
+            },
+            {
+              "pergunta": "Preciso de projeto estrutural para construir uma casa?",
+              "resposta": "Precisa. É ele que diz como a casa se sustenta. Quem projeta assina o projeto, com ART, e a obra precisa de responsável técnico. A DEMELLO não executa a obra."
+            },
+            {
+              "pergunta": "O projeto estrutural precisa ser aprovado na prefeitura?",
+              "resposta": "Depende da cidade. Em muitas, a ART do projeto estrutural entra no processo do alvará. Em outras, a prefeitura só pede o projeto para a obra. Diga a cidade, e a DEMELLO confirma."
+            },
+            {
+              "pergunta": "Projeto básico ou executivo: qual a diferença?",
+              "resposta": "Os dois não são equivalentes. O básico resolve concepção, lançamento e modelagem, com informação suficiente para aquela etapa. O executivo traz os detalhamentos para a obra. O conteúdo final é definido na proposta."
+            },
+            {
+              "pergunta": "Posso contratar só a fundação?",
+              "resposta": "Pode. Ela é tratada dentro do projeto estrutural, sem virar outro serviço."
+            },
+            {
+              "pergunta": "Já tenho a arquitetura pronta. Serve?",
+              "resposta": "Serve. Mande como está: PDF, DWG, DXF ou IFC. A DEMELLO leva para o Revit e segue daí."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ordem": [
+    "para_quem",
+    "muda",
+    "estrutura",
+    "faz",
+    "perguntas",
+    "Prova técnica",
+    "experiencia",
+    {
+      "detalhes": {
+        "titulo": "Detalhes do escopo",
+        "resumo": "Entregáveis, como funciona, como o escopo é definido e limites",
+        "blocos": [
+          "Entregáveis",
+          "Como funciona",
+          "Como o escopo é definido",
+          "Escopo e limites"
+        ]
+      }
+    }
+  ],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Conte o que você vai construir. Já tem a planta? Mande como está. A estimativa sai aqui mesmo, antes do seu contato."
+    ]
+  },
+  "figuras": {},
+  "layout": "rico",
+  "perfil": "estrutura",
+  "imprensa": [],
+  "removidos": [
+    "Os quantitativos pertencem à trajetória profissional do responsável técnico e não correspondem exclusivamente ao acervo operacional do atual CNPJ."
+  ]
+}

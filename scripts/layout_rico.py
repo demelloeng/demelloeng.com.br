@@ -33,13 +33,13 @@ def _paragrafos(bloco):
     return [c['texto'] for c in bloco['conteudo'] if c['tipo'] in ('paragrafo', 'nota')]
 
 
-def hero(copia, d, maquete_html):
+def hero(copia, d, maquete_html, extra=''):
     cta = d['cta']
     intro = ''.join(f'<p>{p}</p>' for p in d['introducao'])
     return f'''<section class="rico-hero-fundo" data-block="service-hero"><div class="rico-hero wrap">
 <div class="rico-titulo"><p class="crumb"><a href="../">Serviços</a> / {copia["nome_servico"]}</p><h1>{d["h1"]}</h1></div>
 <div class="rico-caixa">{maquete_html}</div>
-<div class="rico-texto"><p class="chamada">{d["chamada"]}</p>{intro}<p class="cta-linha"><a class="cta" href="{cta["href"]}">{cta["rotulo"]} →</a></p><p class="micro">{cta["micro"]}</p></div>
+<div class="rico-texto"><p class="chamada">{d["chamada"]}</p>{intro}<p class="cta-linha"><a class="cta" href="{cta["href"]}">{cta["rotulo"]} →</a></p><p class="micro">{cta["micro"]}</p>{extra}</div>
 </div></section>'''
 
 
@@ -85,16 +85,22 @@ def perguntas(bloco):
     return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-sanfona">{det}</div></section>'
 
 
-def prova(bloco):
+def prova(bloco, rotulo='de experiência técnica arquitetônica documentada'):
     ps = _paragrafos(bloco)
-    m = re.search(r'registra ([\d\.]+) m²', ps[0])
-    numero = f'<div class="rico-numero"><b>{m.group(1)} m²</b><span>de experiência técnica arquitetônica documentada</span></div>' if m else ''
+    m = re.search(r'(?:registra|reúne) ([\d\.]+) m²', ps[0])
+    numero = f'<div class="rico-numero"><b>{m.group(1)} m²</b><span>{rotulo}</span></div>' if m else ''
     corpo = ''.join(f'<p>{t}</p>' for t in ps[:-1])   # a ressalva do CNPJ saiu por ordem de Marcos (29/10/2026)
     return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-duas rico-prova">{numero}<div class="rico-corrido">{corpo}</div></div></section>'
 
 
 def djalma(bloco, figuras_html, imprensa=()):
-    ps = ''.join(f'<p>{t}</p>' for t in _paragrafos(bloco))
+    todos = _paragrafos(bloco)
+    ps = ''.join(f'<p>{t}</p>' for t in todos if not t.startswith('Em breve:'))
+    embreve = next((t.split(':', 1)[1].strip() for t in todos if t.startswith('Em breve:')), None)
+    embreve = embreve[:1].upper() + embreve[1:] if embreve else embreve
+    if embreve:
+        ps += ('<div class="rico-embreve"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5L12 12l8-4.5M12 12v9"/></svg>'
+               f'<div><span class="chip-embreve">Em breve</span><p>{embreve}</p></div></div>')
     links = ''
     if imprensa:
         itens = ''.join(
@@ -103,3 +109,50 @@ def djalma(bloco, figuras_html, imprensa=()):
         links = f'<div class="rico-imprensa"><h3>A obra de ampliação na imprensa</h3><ul>{itens}</ul></div>'
     return (f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2>{figuras_html}'
             f'<div class="rico-corrido rico-estreito">{ps}</div>{links}</section>')
+
+
+def estrutura(bloco):
+    """Bloco "Da fundação à laje" (página de estrutural). Tudo sai do texto da copy:
+    linhas "- Nome: explicação." viram as etapas; "Básico." e "Executivo." viram os dois cartões; a frase com
+    "Orçamento e cronograma" vira o gancho; o resto é texto corrido."""
+    linhas = _paragrafos(bloco)
+    etapas = [re.match(r'-\s*([^:]+):\s*(.*)$', l) for l in linhas if l.startswith('- ')]
+    corrido = [l for l in linhas if not l.startswith(('- ', 'Básico.', 'Executivo.')) and 'Orçamento e cronograma' not in l]
+    basico = next(l for l in linhas if l.startswith('Básico.'))
+    executivo = next(l for l in linhas if l.startswith('Executivo.'))
+    gancho = next(l for l in linhas if 'Orçamento e cronograma' in l)
+    lis = ''.join(f'<li class="dm"><span class="ponto"></span><b>{m.group(1)}</b><em>{m.group(2).rstrip(".")}</em></li>' for m in etapas)
+    corpo = ''.join(f'<p>{t}</p>' for t in corrido)
+    return f'''<section class="rico-faixa"><div class="wrap">
+<h2>{bloco["titulo"]}</h2>
+<ol class="rico-etapas" aria-label="Da fundação à laje">{lis}</ol>
+<div class="rico-duas">
+<div class="rico-corrido">{corpo}</div>
+<div class="rico-cartoes">
+<div class="rico-cartao"><span class="chips"><i>Nível básico</i></span><p>{basico.split('. ', 1)[1]}</p></div>
+<div class="rico-cartao destaque"><p><strong>Nível executivo</strong> {executivo.split('. ', 1)[1]}</p></div>
+</div></div>
+<p class="rico-gancho">{gancho}</p>
+</div></section>'''
+
+
+
+CUBO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5L12 12l8-4.5M12 12v9"/></svg>'
+
+
+def mezanino_link(bloco):
+    """Botão discreto na abertura da página: abre a maquete do mezanino em tela cheia."""
+    return f'<p class="rico-mezanino-link"><button type="button" class="rico-link-3d" data-abrir-maquete="aco">{CUBO}<span>{bloco["titulo"]}</span></button></p>'
+
+
+def mezanino_painel(bloco, cta_href, cta_rotulo):
+    """Painel dentro do pop-up da maquete do mezanino. Tudo vem da copy: "- Item: valor." vira a lista de fatos,
+    "Aviso:" vira o aviso e os demais parágrafos são o texto."""
+    ps = _paragrafos(bloco)
+    fatos = [l[2:] for l in ps if l.startswith('- ')]
+    aviso = next((l.split(':', 1)[1].strip() for l in ps if l.startswith('Aviso:')), '')
+    texto = [l for l in ps if not l.startswith(('- ', 'Aviso:'))]
+    lis = ''.join('<li><b>{}</b> {}</li>'.format(*f.split(':', 1)) if ':' in f else f'<li>{f}</li>' for f in fatos)
+    corpo = f'<p>{texto[0]}</p><ul>{lis}</ul>' + ''.join(f'<p>{t}</p>' for t in texto[1:])
+    return (f'<details class="sobre" id="sobre" hidden open><summary>{bloco["titulo"]}</summary><div class="sobre-corpo">{corpo}'
+            f'<p class="aviso">{aviso}</p><a class="sobre-cta" href="{cta_href}">{cta_rotulo} →</a></div></details>')

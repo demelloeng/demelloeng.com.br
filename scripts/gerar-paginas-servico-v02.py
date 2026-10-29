@@ -200,14 +200,27 @@ def gerar(slug):
         nv, ant = copia['blocos_novos'], {b['titulo']: b for b in d['blocos']} if False else antigos
         t_dj = 'Experiência aplicada — CECM Djalma Marinho'
         figs = ''.join(figura_html(f) for f in copia.get('figuras', {}).get(t_dj, []))
-        maquete_html = (DOCS / 'maquete-markup.html').read_text(encoding='utf-8')
-        principal = '\n'.join([L.hero(copia, d, maquete_html), L.para_quem(nv['para_quem']), L.muda(nv['muda']), L.prefeitura(nv['prefeitura']),
-                               L.faz(nv['faz']), L.perguntas(nv['perguntas']), L.prova(ant['Prova técnica']),
-                               L.djalma(ant[t_dj], '', copia.get('imprensa', [])), detalhes_html])
-        extra_head = ('<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n'
-                      '<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>')
-        extra_body = '<script type="module" src="../../assets/js/maquete-3d.js"></script>'
-        classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02'
+        estrutura_pg = copia.get('perfil') == 'estrutura'
+        maquete_html = (DOCS / ('maquete-estrutura-markup.html' if estrutura_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
+        meio = L.estrutura(nv['estrutura']) if estrutura_pg else L.prefeitura(nv['prefeitura'])
+        prova_html = L.prova(ant['Prova técnica'], 'de experiência técnica estrutural documentada') if estrutura_pg else L.prova(ant['Prova técnica'])
+        extra_hero = L.mezanino_link(nv['mezanino']) if estrutura_pg and 'mezanino' in nv else ''
+        if estrutura_pg and 'mezanino' in nv:
+            maquete_html = maquete_html.replace('<!--SOBRE-->', L.mezanino_painel(nv['mezanino'], d['cta']['href'], copia['cta']['rotulo']))
+        principal = '\n'.join([L.hero(copia, d, maquete_html, extra_hero), L.para_quem(nv['para_quem']), L.muda(nv['muda']), meio,
+                               L.faz(nv['faz']), L.perguntas(nv['perguntas']), prova_html,
+                               L.djalma(nv['experiencia'] if estrutura_pg else ant[t_dj], '', copia.get('imprensa', [])), detalhes_html])
+        importmap = '<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>'
+        base_css = '<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n'
+        if estrutura_pg:
+            extra_head = (base_css + '<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">\n'
+                          '<link rel="stylesheet" href="../../assets/css/servico-estrutural-v02.css?v=4">\n' + importmap)
+            extra_body = '<script type="module" src="../../assets/js/maquete-estrutura-3d.js?v=6"></script>'
+            classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-estrutural'
+        else:
+            extra_head = base_css + importmap
+            extra_body = '<script type="module" src="../../assets/js/maquete-3d.js"></script>'
+            classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02'
     else:
         principal = f'''<section class="hero wrap" data-block="service-hero"><div><p class="crumb"><a href="../">Serviços</a> / {nome_servico}</p><h1>{d['h1']}</h1></div><div class="hero-copy"><p class="chamada">{d['chamada']}</p>{introducao}<p class="cta-linha"><a class="cta" href="{cta['href']}">{cta['rotulo']} →</a></p><p class="micro">{cta['micro']}</p></div></section>
 {corpo}'''
@@ -245,7 +258,7 @@ def gerar(slug):
 <footer class="site-footer rodape"><div class="wrap rodape-grade">
 <div class="rodape-marca"><img src="../../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="230" height="67"><p class="tag">projetos possíveis, planos reais</p>
 <p class="legal">Marcos de Mello Silva Engenharia LTDA<br>CNPJ 65.613.230/0001-71<br>CREA-PR PJ nº 92585<br>Responsável técnico: CREA-PR 146906/D</p></div>
-<nav class="rodape-col" aria-label="Rodapé"><p class="t">Navegação</p><a href="../../">Início</a><a href="../">Serviços</a><a href="../../experiencia-tecnica/">Projetos</a><a href="../../metodologia/">Como trabalhamos</a><a href="../../empresa/">Empresa</a><a href="../../contato/">Contato</a><a href="../../privacidade/">Privacidade</a></nav>
+<nav class="rodape-col" aria-label="Rodapé"><p class="t">Navegação</p><a href="../../">Início</a><a href="../">Serviços</a><a href="../../experiencia-tecnica/">Projetos</a><a href="../../metodologia/">Como trabalhamos</a><a href="../../empresa/">Empresa</a><a href="../../empresa/trajetoria-do-fundador.html">Trajetória do fundador</a><a href="../../contato/">Contato</a><a href="../../privacidade/">Privacidade</a></nav>
 <div class="rodape-col"><p class="t">Contato</p><a href="mailto:marcos@demelloeng.com.br">marcos@demelloeng.com.br</a><a href="tel:+5541985124056">(41) 98512-4056</a><a href="tel:+5544998202552">(44) 99820-2552</a><a href="https://wa.me/5541985124056">WhatsApp</a><a href="https://www.instagram.com/demelloeng/" target="_blank" rel="noopener">Instagram</a><a href="https://www.linkedin.com/company/demello-engenharia/" target="_blank" rel="noopener">LinkedIn</a></div>
 <div class="rodape-col"><p class="t">Onde estamos</p><span>R. Pedro Ivo, 730, Centro</span><span>Curitiba/PR · CEP 80010-020</span><span>Atendimento em todo o Brasil</span></div>
 </div><div class="wrap rodape-barra"><p>© 2026 Marcos de Mello Silva Engenharia LTDA</p></div></footer>
