@@ -1,7 +1,7 @@
 {
   "slug": "projeto-hidrossanitario",
   "nome_servico": "Projeto hidrossanitário",
-  "fonte_copy": "COPY_HIDROSSANITARIO_V11_20261029.md",
+  "fonte_copy": "COPY_HIDROSSANITARIO_V12_20261029.md",
   "titulo_pagina": "Projeto hidrossanitário em BIM: água, esgoto e drenagem | DEMELLO",
   "descricao": "Projeto hidrossanitário para casa, sobrado, ampliação, escola ou rede existente. Água, esgoto e drenagem na mesma disciplina, em BIM. Veja a estimativa antes do contato.",
   "h1": "Projeto hidrossanitário: água, esgoto e drenagem",
@@ -77,6 +77,10 @@
         },
         {
           "tipo": "paragrafo",
+          "texto": "- Reaproveitamento de água: reusa a água da chuva ou a do chuveiro, em vez de jogar fora."
+        },
+        {
+          "tipo": "paragrafo",
           "texto": "O projeto define o caminho, o diâmetro e a inclinação de cada trecho, pra nenhuma torneira da casa ficar sem pressão."
         },
         {
@@ -103,7 +107,7 @@
       "conteudo": [
         {
           "tipo": "paragrafo",
-          "texto": "A DEMELLO projeta as redes que o seu escopo pede: abastecimento de água, esgoto sanitário, ventilação e drenagem. Onde não há rede pública de esgoto, projeta o tratamento no próprio lote: fossa séptica, filtro anaeróbio, sumidouro e vala de infiltração. Faz também traçados, esquemas, pré-dimensionamento e a coordenação com arquitetura e estrutura."
+          "texto": "A DEMELLO projeta as redes que o seu escopo pede: abastecimento de água, esgoto sanitário, ventilação, drenagem e reaproveitamento de água. Onde não há rede pública de esgoto, projeta o tratamento no próprio lote: fossa séptica, filtro anaeróbio, sumidouro e vala de infiltração. Faz também traçados, esquemas, pré-dimensionamento e a coordenação com arquitetura e estrutura."
         },
         {
           "tipo": "paragrafo",
