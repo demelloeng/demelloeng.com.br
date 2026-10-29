@@ -118,20 +118,21 @@ def estrutura(bloco):
     linhas = _paragrafos(bloco)
     etapas = [re.match(r'-\s*([^:]+):\s*(.*)$', l) for l in linhas if l.startswith('- ')]
     corrido = [l for l in linhas if not l.startswith(('- ', 'Básico.', 'Executivo.')) and 'Orçamento e cronograma' not in l]
-    basico = next(l for l in linhas if l.startswith('Básico.'))
-    executivo = next(l for l in linhas if l.startswith('Executivo.'))
+    basico = next((l for l in linhas if l.startswith('Básico.')), None)   # hidrossanitário não tem os cartões de nível
+    executivo = next((l for l in linhas if l.startswith('Executivo.')), None)
     gancho = next(l for l in linhas if 'Orçamento e cronograma' in l)
     lis = ''.join(f'<li class="dm"><span class="ponto"></span><b>{m.group(1)}</b><em>{m.group(2).rstrip(".")}</em></li>' for m in etapas)
     corpo = ''.join(f'<p>{t}</p>' for t in corrido)
+    if basico and executivo:
+        niveis = ('<div class="rico-duas">\n<div class="rico-corrido">' + corpo + '</div>\n<div class="rico-cartoes">\n'
+                  '<div class="rico-cartao"><span class="chips"><i>Nível básico</i></span><p>' + basico.split('. ', 1)[1] + '</p></div>\n'
+                  '<div class="rico-cartao destaque"><p><strong>Nível executivo</strong> ' + executivo.split('. ', 1)[1] + '</p></div>\n</div></div>')
+    else:
+        niveis = '<div class="rico-corrido">' + corpo + '</div>'
     return f'''<section class="rico-faixa"><div class="wrap">
 <h2>{bloco["titulo"]}</h2>
 <ol class="rico-etapas" aria-label="{bloco["titulo"]}">{lis}</ol>
-<div class="rico-duas">
-<div class="rico-corrido">{corpo}</div>
-<div class="rico-cartoes">
-<div class="rico-cartao"><span class="chips"><i>Nível básico</i></span><p>{basico.split('. ', 1)[1]}</p></div>
-<div class="rico-cartao destaque"><p><strong>Nível executivo</strong> {executivo.split('. ', 1)[1]}</p></div>
-</div></div>
+{niveis}
 <p class="rico-gancho">{gancho}</p>
 </div></section>'''
 
