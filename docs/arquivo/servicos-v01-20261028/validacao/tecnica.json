@@ -1,0 +1,65 @@
+{
+  "branch": "arquivo/servicos-v01-20261028",
+  "baseCommit": "7975a154a61a48a2d35e4aeb67b8fbfc754246b0",
+  "checks": "PASS",
+  "scriptsOrderPreserved": [
+    "../assets/js/nav.js",
+    "../assets/js/analytics-sink.js",
+    "../assets/js/meta-pixel.js",
+    "../assets/js/site-analytics.mjs"
+  ],
+  "jsonLdPreserved": true,
+  "canonicalPreserved": true,
+  "copyAndNineSvgMatchSource": true,
+  "allLocalLinksAndResourcesResolve": true,
+  "generatorIdempotent": true,
+  "tests": {
+    "total": 71,
+    "passedBefore": 57,
+    "passedAfter": 57,
+    "historicalFailures": [
+      "HOME (visual V2): quatro cartões de situação com ícone; \"Já sei o serviço\" lista as nove frentes; apoio técnico é link secundário",
+      "HOME: primeira dobra faz só três coisas (situação, promessa, primeiro clique) e não traz conteúdo institucional",
+      "HOME: seções posteriores exigidas (insegurança, prova, benefícios, funcionamento, experiência, FAQ, CTA final)",
+      "Pixel da Meta: respeita DNT/GPC, não envia dado pessoal e está em todas as páginas",
+      "SEO: título até 60 e descrição até 160 caracteres; JSON-LD válido e sem dado inventado",
+      "destino de mensuração: toda página estática e o /orcamento/ carregam o destino ANTES do módulo de eventos",
+      "metadados: title, description, canonical, Open Graph e idioma em todas as páginas",
+      "navegação: item atual marcado com aria-current na página correspondente",
+      "nenhum número técnico, case ou credencial novo: todo numeral visível existe no conteúdo original (ou é limite/segurança documentado)",
+      "preview-explainer distingue estimativa de proposta sem prometer preço",
+      "promessa de contato: toda página com CTA de estimativa diz que o contato só vem no final",
+      "proveniência: a prova técnica continua atribuída ao acervo profissional do responsável técnico, nunca ao CNPJ",
+      "rodapé: todas as páginas estáticas apontam para /privacidade/ e para a trajetória do fundador; sitemap lista a política e todas têm lastmod",
+      "terminologia: \"estimativa\" é o termo da oferta; \"previsão/prévia/Faça seu orçamento\" não aparecem nas páginas"
+    ],
+    "newFailures": []
+  },
+  "browser": {
+    "desktop": "1440×900",
+    "mobile": "390×844",
+    "noHorizontalOverflow": true,
+    "menuWorks": true,
+    "localErrors": []
+  },
+  "renders": {
+    "desktop": {
+      "size": [
+        1424,
+        4365
+      ],
+      "sha256": "a1255be284dfb3f835862e0a2f342185c3a4981febaf3877e8e61d1aa3d03bba",
+      "differenceFromVerifiedPreview": null
+    },
+    "mobile": {
+      "size": [
+        375,
+        6691
+      ],
+      "sha256": "1421727def76e08173c29d1f7d909c35a574bb2674851a476a6dfc4ec6bbf0d7",
+      "differenceFromVerifiedPreview": null
+    }
+  },
+  "publication": "Não executada; workflow Pages restrito a push em main ou despacho manual.",
+  "seo": "Fonte recebida preservada com SHA; métricas não reconsultadas; matriz completa por URL não confirmada."
+}

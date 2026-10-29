@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "title": "Projeto de arquitetura",
+      "description": "Precisa da planta de casa ou de outro projeto de arquitetura? O que você pretende construir vira a base para os demais projetos.",
+      "limit": "Estudo preliminar, projeto legal, básico e executivo são etapas diferentes. Regularização não está incluída automaticamente.",
+      "url": "https://demelloeng.com.br/servicos/projeto-arquitetura/"
+    },
+    {
+      "title": "Projeto estrutural",
+      "description": "A estrutura precisa funcionar com a arquitetura e deixar espaço para as instalações. O projeto pode abranger a estrutura da obra ou somente a fundação, conforme o caso.",
+      "limit": "Não inclui execução da obra.",
+      "url": "https://demelloeng.com.br/servicos/projeto-estrutural/"
+    },
+    {
+      "title": "Projeto hidrossanitário",
+      "description": "Água, esgoto e drenagem precisam funcionar juntos. O projeto hidrossanitário organiza essas redes para obra nova, ampliação ou uma rede já existente.",
+      "limit": "Drenagem entra aqui, sem cobrança separada. Não inclui execução das instalações.",
+      "url": "https://demelloeng.com.br/servicos/projeto-hidrossanitario/"
+    },
+    {
+      "title": "Projeto de incêndio — PPCI",
+      "description": "A prevenção contra incêndio precisa entrar nas decisões de projeto. O PPCI considera os encontros com a arquitetura e as demais disciplinas.",
+      "limit": "Incêndio e gás são serviços distintos. A contratação do projeto não garante aprovação pelo órgão competente.",
+      "url": "https://demelloeng.com.br/servicos/projeto-prevencao-incendio/"
+    },
+    {
+      "title": "Projeto de gás / GLP",
+      "description": "A instalação de gás começa no projeto. O projeto de gás / GLP considera o uso da edificação e os encontros com as demais disciplinas.",
+      "limit": "Não se funde com o projeto de incêndio. Projeto não é instalação e não presume aprovação garantida.",
+      "url": "https://demelloeng.com.br/servicos/projeto-gas-glp/"
+    },
+    {
+      "title": "Projeto de terraplanagem",
+      "description": "Antes de mexer na terra, é preciso resolver como a obra se encaixa no terreno. O projeto de terraplanagem trata essa relação, coordenado com os demais projetos.",
+      "limit": "Também chamada de terraplenagem. A DEMELLO não executa movimentação de terra.",
+      "url": "https://demelloeng.com.br/servicos/projeto-terraplenagem/"
+    },
+    {
+      "title": "Compatibilização BIM",
+      "description": "Coordenar as disciplinas e as interfaces do projeto antes que a obra descubra os conflitos por conta própria.",
+      "limit": "Não presume autoria de todos os projetos nem ausência de conflitos.",
+      "url": "https://demelloeng.com.br/servicos/compatibilizacao-bim/"
+    },
+    {
+      "title": "Regularização de imóvel",
+      "description": "O imóvel não bate com os documentos? Há uma exigência de prefeitura ou cartório? Primeiro se descobre o que está irregular. Depois, qual caminho o caso exige.",
+      "limit": "Não é um pacote universal: levantamento e projeto legal entram só quando necessários e contratados. Sem promessa de aprovação automática.",
+      "url": "https://demelloeng.com.br/servicos/regularizacao/"
+    },
+    {
+      "title": "Orçamento e cronograma",
+      "description": "Já sabe o que será feito? O orçamento e o cronograma organizam as informações desse escopo para você planejar e decidir.",
+      "limit": "É um serviço profissional contratado, diferente da estimativa deste site. Não promete o custo final da obra.",
+      "url": "https://demelloeng.com.br/servicos/orcamento-tecnico/"
+    }
+  ],
+  "common": {
+    "Introdução": "Escolha o serviço abaixo. Veja o que ele resolve, o que entra na contratação e qual é o próximo passo.",
+    "Construir ou ampliar": "Vai construir ou ampliar e ainda não sabe quais projetos precisa? Comece por Construir ou ampliar. A estimativa ajuda a organizar o próximo passo.",
+    "Grupo 1": "Projetos para construir ou ampliar",
+    "Descrição do grupo 1": "Arquitetura, estrutura e instalações têm funções diferentes. Veja qual projeto atende à sua demanda.",
+    "B2B copy": "Já tem a arquitetura e precisa dos projetos complementares? Veja as disciplinas acima. Se os projetos vieram de profissionais diferentes, conheça a compatibilização BIM.",
+    "Descrição grupo 2": "O imóvel já existe. Ou o escopo da obra já está definido. Veja o que precisa ser organizado para seguir."
+  },
+  "footer": "projetos possíveis, planos reais\nMarcos de Mello Silva Engenharia LTDA · CNPJ 65.613.230/0001-71\nCREA-PR PJ nº 92585 · Responsável técnico: CREA-PR 146906/D\nSede: R. Pedro Ivo, 730, Centro, Curitiba/PR · CEP 80010-020\nAtendimento em todo o Brasil.\nmarcos@demelloeng.com.br\n(41) 98512-4056\n(44) 99820-2552\nWhatsApp\nEmpresa\nPrivacidade",
+  "routes": [
+    {
+      "title": "Vai construir ou ampliar?",
+      "url": "https://demelloeng.com.br/construir-ou-ampliar/",
+      "description": "Responda só o que se aplica ao seu caso e veja uma estimativa inicial. Você não precisa escolher disciplinas antes."
+    },
+    {
+      "title": "Apareceu um problema ou você tem uma dúvida técnica?",
+      "url": "https://demelloeng.com.br/avaliar-um-problema/",
+      "description": "Descreva o caso e veja como ele é enquadrado — sem diagnóstico remoto."
+    },
+    {
+      "title": "O imóvel está irregular ou há exigência de prefeitura ou cartório?",
+      "url": "https://demelloeng.com.br/servicos/regularizacao/",
+      "description": "A regularização começa pela situação real do imóvel."
+    },
+    {
+      "title": "Precisa de orientação ou apoio técnico por hora?",
+      "url": "https://demelloeng.com.br/orcamento/?situacao=support",
+      "description": "Consultoria e mentoria técnica. Nenhuma das duas é execução de projeto nem gera ART automaticamente."
+    }
+  ],
+  "ctaUrl": "https://demelloeng.com.br/orcamento/?situacao=known",
+  "h1": "Já sabe o serviço? Vá direto a ele.",
+  "eyebrow": "Projetos e serviços técnicos",
+  "group2": "Regularização de imóveis, orçamento e cronograma",
+  "b2bTitle": "Para arquitetos e construtoras",
+  "routesTitle": "Comece pela situação. O nome técnico vem depois.",
+  "quote": "Porque um problema identificado no projeto é só ajuste. Na obra, vira atraso, retrabalho e dinheiro perdido.",
+  "ctaLabel": "Calcular estimativa do serviço que procuro",
+  "ctaMicro": "Sem compromisso · contato somente no final",
+  "seoTitle": "Projetos e serviços técnicos de engenharia | DEMELLO",
+  "seoDescription": "Já sabe o serviço? Arquitetura, estrutural, hidrossanitário, PPCI, gás/GLP, terraplanagem, compatibilização BIM, regularização e orçamento e cronograma."
+}

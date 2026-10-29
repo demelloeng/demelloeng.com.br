@@ -1,0 +1,89 @@
+DEMELLO — Confronto SEO × TinyFish × Copy aprovada
+Data: 28/10/2026
+Escopo: Home V02 e /servicos/
+Natureza: diagnóstico e consolidação de decisões existentes, sem implementação.
+1. Resultado central
+A pesquisa do TinyFish não apresenta evidência suficiente para modificar o SEO ou a copy aprovada da Home V02.
+
+O confronto confirmou três conclusões:
+1. A Home preserva uma identidade comercial centrada em projetos de engenharia, compatível com os termos de contratação encontrados no Google Ads.
+2. Consultoria técnica e mentoria técnica constituem ofertas coexistentes, mas não precisam substituir o posicionamento principal da Home. Os caminhos secundários já estão representados no HTML.
+3. A candidata /servicos/ apresenta uma divergência editorial verificável: utiliza terraplenagem, enquanto a orientação posterior e a Home utilizam terraplanagem.
+Há também imprecisões no relatório TinyFish que precisam ser corrigidas na interpretação dos dados, não necessariamente no site.
+2. Fontes efetivamente confrontadas
+Fonte	Identificação	Papel
+TinyFish — primeira leitura	af8383bb-7f4a-46e5-a297-c04f15805932	Histórico inicial, parcialmente superado
+TinyFish — segunda leitura	1b1228d0-906c-49c1-8900-529eac1bfd60	Principal evidência da pesquisa dos três planos
+Home V02	Commit e6a55776	Referência de copy e composição aprovada
+/servicos/ V01	Commit 7975a154	Candidata anterior, ainda não aprovada
+VOZ_DEMELLO_V01.md	V01 vigente	Autoridade de linguagem, não de volume SEO
+PROMPT_WORK_CONSOLIDADO_V09_20261025.md	Trechos reportados nesta conversa	Referência editorial posterior; íntegra ainda não conferida
+Documento 03	V83 vigente, 24/10	Estado canônico; não contém matriz SEO aprovada por página
+
+O project/CURRENT.json continua apontando para o Documento 03 V83.
+3. Confronto das palavras-chave com a Home
+Expressão ou grupo do TinyFish	Evidência recuperada	Situação na Home V02	Diagnóstico
+engenheiro estrutural curitiba	10–100 buscas/mês; concorrência alta	Estrutural no H1; Curitiba na descrição SEO	Compatível. Não exige acrescentar Curitiba ao H1.
+valor projeto estrutural	10–100; concorrência média	Serviço estrutural e FAQ sobre custo	Compatível. A intenção de preço é atendida pela jornada de estimativa.
+alvará de construção	1 mil–10 mil; concorrência baixa	Arquitetura, construção e regularização	Aderência condicional. Procura por alvará não comprova contratação de projeto.
+habite se	10 mil–100 mil; concorrência baixa	Caminho de regularização	Sinal de busca, não aprovação de nova promessa comercial.
+civil 3d terraplanagem	Sem dados quantitativos	terraplanagem na Home	Não sustenta mudança de grafia ou prioridade.
+consultoria saneamento	10–100; concorrência média	Serviços de saneamento e acesso a orientação técnica	Compatível, com necessidade de preservar o escopo efetivo da consultoria.
+autocad curso	1 mil–10 mil; concorrência alta	Consultoria/mentoria em caminho secundário	Não exige inclusão de curso no Hero.
+civil 3d curso	100–1 mil; concorrência alta	Mesmo caminho secundário	Potencial para mentoria, não conversão comprovada.
+alguém para ensinar eberick	Expressão identificada, sem volume disponível	Mentoria técnica	Aderência semântica, demanda não quantificada.
+bim	10 mil–100 mil; concorrência baixa	BIM aparece no subtítulo e em outras seções	Compatível, mas busca genérica não comprova intenção de contratar.
+
+As métricas são faixas nacionais registradas pelo TinyFish no Planejador, para outubro/2025–setembro/2026. Não representam tráfego orgânico nem clientes captados.Erros de associação encontrados no relatório
+Há dois casos que precisam ser explicitamente preservados como ressalvas metodológicas:
+
+Caso A — projeto estrutural. O relatório associa a faixa de 10–100 à expressão projeto estrutural. Contudo, na tabela efetivamente transcrita, a medição pertence a valor projeto estrutural. Não é correto transferir automaticamente uma métrica entre essas duas expressões.
+
+Caso B — arquitetura. O relatório também associa a faixa de 10–100 e os lances de R$ 1,48–2,90 ao grupo arquitetura. Na amostra apresentada, esses números correspondem a valor projeto de casa. A equivalência não está demonstrada.
+
+Portanto, a segunda execução TinyFish é a melhor fonte disponível da leitura, mas suas classificações interpretativas não devem prevalecer sobre as linhas literais observadas.
+4. Decisões editoriais da Home V02
+A comparação do HTML arquivado com as orientações das iterações IT009–IT016 produziu o seguinte quadro:
+Elemento	Texto efetivo no arquivo	Situação
+SEO title	Projeto estrutural, hidrossanitário e PPCI \| DEMELLO	PRESERVAR
+H1	Projeto estrutural e projetos complementares.	PRESERVAR
+Subtítulo	Da planta de casa aos projetos complementares: arquitetura, estrutura e instalações desenvolvidas juntas, em BIM.	PRESERVAR
+Complemento	Também desenvolvemos projetos de terraplanagem.	PRESERVAR
+CTA primário	Calcular estimativa	PRESERVAR
+Entrada secundária	Consultoria e mentoria técnica	JÁ REPRESENTADA
+
+A descrição SEO efetiva é:
+Arquitetura, projeto estrutural, hidrossanitário, PPCI e terraplanagem em BIM. DEMELLO Engenharia, com sede em Curitiba e atendimento nacional.
+
+Fonte: Home V02 — commit arquivado.
+
+Avaliação: a Home combina nomes técnicos de serviços, uma expressão acessível ao proprietário (planta de casa) e uma descrição de integração BIM. O TinyFish não forneceu evidência para desmontar essa composição.
+
+A orientação recuperada na IT013 também foi preservar o posicionamento principal e não misturar ofertas de mentoria no Hero.
+5. Consultoria e mentoria: conflito na interpretação TinyFish
+O relatório TinyFish afirma que projetos complementares poderia representar consultoria técnica e que a menção a BIM favoreceria também mentoria.
+
+Essa classificação extrapola o significado das ofertas.
+Expressão da Home	Significado operacional adequado
+Projeto estrutural	Prestação de serviço de projeto
+Projetos complementares	Disciplinas de projeto, como estrutural, hidrossanitário, incêndio e gás
+Compatibilização BIM	Serviço técnico de coordenação e verificação entre modelos
+Consultoria técnica	Apoio técnico pontual, conforme escopo
+Mentoria técnica	Orientação individualizada de aprendizagem técnica
+
+O fato de uma pessoa pesquisar BIM, AutoCAD ou Eberick não determina qual dessas ofertas pretende contratar.
+
+Decisão preservada: as três frentes coexistem, sem transformar a Home em uma página genérica de cursos e softwares.
+6. Diagnóstico específico de /servicos/
+A página candidata possui nove serviços identificáveis, separados em grupos de projetos, compatibilização, regularização e orçamento. Há também caminhos por situação e uma entrada para consultoria/mentoria.
+
+Fonte: Serviços V01 — commit arquivado.
+Elemento	Situação encontrada	Conclusão
+H1 Já sabe o serviço? Vá direto a ele.	Direciona o visitante que conhece a disciplina	Coerente com a função da página.
+Catálogo dos nove serviços	Ofertas técnicas identificáveis	Coerente com a demanda de contratação, sem comprovação de prioridade SEO entre elas.
+Descrições e limites técnicos	Separam projeto de execução	Coerente com a voz DEMELLO.
+Projeto de terraplenagem	Diverge da grafia principal da Home	DIVERGÊNCIA EDITORIAL CONFIRMADA.
+Consultoria e mentoria	Entrada por apoio técnico por hora	Coerente com as três linhas comerciais.
+Palavra-chave principal por URL	Não há matriz completa validada	NÃO CONFIRMADA.
+
+A revisão visual V02 do Figma permanece separada dessa análise: um design estático não prova que a página implementada atenderá aos contratos técnicos ou SEO.

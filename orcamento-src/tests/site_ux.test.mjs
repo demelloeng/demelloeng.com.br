@@ -92,34 +92,31 @@ test('HOME: catálogo de nove frentes não é mais a porta de entrada; nove fren
   assert.match(home, /href="\.\/servicos\/"/, 'a home ainda conduz a /servicos/');
 });
 
-test('OUTROS SERVIÇOS: nove frentes, H1, resultado primeiro, limites preservados, conduz às landings', async () => {
+test('SERVIÇOS V02: nove destinos, copy corrigida, limites e caminhos por situação preservados', async () => {
   const html = await read('servicos/index.html');
-  const block = html.match(/<section[^>]*data-block="service-summary"[\s\S]*?<\/section>/)?.[0] ?? '';
-  assert.ok(block, 'bloco service-summary presente');
-  assert.equal([...block.matchAll(/<div class="svc-item">/g)].length, 9, 'nove serviços');
-  for (const name of H1_NAMES) assert.ok(html.includes(name), `nome público H1: ${name}`);
-  for (const s of SERVICE_SLUGS) {
-    assert.match(block, new RegExp(`<h3><a href="\\./${s}/">`), `frente enlaça ./${s}/`);
+  const items = [...html.matchAll(/<article class="service"[\s\S]*?<\/article>/g)].map(m => m[0]);
+  assert.equal(items.length, 9, 'nove serviços editáveis, sem omissão');
+  const expected = ['Projeto de arquitetura', 'Projeto estrutural', 'Projeto hidrossanitário', 'Projeto de incêndio — PPCI', 'Projeto de gás / GLP', 'Projeto de terraplanagem', 'Compatibilização BIM', 'Regularização de imóvel', 'Orçamento e cronograma'];
+  const titles = items.map(item => item.match(/<h3><a[^>]*>([^<]+)<\/a><\/h3>/)?.[1]);
+  assert.deepEqual(titles, expected, 'ordem e nomes da copy validada');
+  const slugs = items.map(item => item.match(/<h3><a href="\.\/([a-z-]+)\/">/)?.[1]);
+  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  for (const item of items) {
+    assert.match(item, /<p class="service-limit">[^<]+<\/p>/, 'limite técnico disponível sem interação');
+    assert.match(item, /<img[^>]+src="\.\.\/assets\/icons\/servicos-v02\/[a-z-]+\.svg"[^>]+alt=""/, 'ícone decorativo junto ao nome textual');
   }
-  const linked = [...block.matchAll(/<h3><a href="\.\/([a-z-]+)\/">/g)].map((m) => m[1]);
-  assert.deepEqual(linked.sort(), [...SERVICE_SLUGS].sort(), 'somente os nove slugs canônicos');
-  // cada frente carrega o seu limite técnico/contratual
-  assert.equal([...block.matchAll(/<span class="svc-limit">/g)].length, 9, 'um limite por frente');
-  assert.match(block, /Não inclui execução da obra\./);
-  assert.match(block, /A DEMELLO não executa movimentação de terra\./);
-  assert.match(block, /não garante aprovação pelo órgão competente/);
-  assert.match(block, /Sem promessa de aprovação automática/);
-  assert.match(block, /Não promete o custo final da obra/);
-  assert.doesNotMatch(block, /<ul\b|<ol\b/, 'sem lista de entregáveis renderizada');
-  assert.doesNotMatch(block, /O que (normalmente )?faz parte|entregáveis|entregamos|você recebe/i, 'sem promessa de entregável universal');
-  // não é a principal porta de entrada: aponta primeiro para as rotas por situação
+  const block = items.join('\n');
+  for (const limit of ['Não inclui execução da obra.', 'A DEMELLO não executa movimentação de terra.', 'não garante aprovação pelo órgão competente', 'Sem promessa de aprovação automática', 'Não promete o custo final da obra']) assert.ok(block.includes(limit), limit);
+  assert.match(block, /planta de casa/);
+  assert.doesNotMatch(block, /Orçamento técnico/);
+  assert.doesNotMatch(block, /O que (normalmente )?faz parte|entregáveis|entregamos|você recebe/i);
   const routes = html.match(/<section[^>]*data-block="routes"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.match(routes, /construir-ou-ampliar\//);
   assert.match(routes, /avaliar-um-problema\//);
   assert.match(routes, /href="\.\/regularizacao\/"/);
   assert.match(routes, /orcamento\/\?situacao=support/);
-  assert.ok(html.indexOf('data-block="service-summary"') < html.indexOf('data-block="routes"'), 'quem já sabe o serviço vê o catálogo primeiro; as rotas por situação vêm depois, como rede de segurança');
-  assert.doesNotMatch(html, /href="\.\.\/servicos\/[a-z-]+\/?"/, 'nenhum slug de serviço absoluto inventado');
+  assert.match(html, /href="\.\.\/orcamento\/\?situacao=known"/);
+  assert.ok(html.indexOf('data-block="service-summary"') < html.indexOf('data-block="routes"'));
 });
 
 test('nove páginas individuais: H1 único, canonical, hero com CTA específico e seções exigidas', async () => {

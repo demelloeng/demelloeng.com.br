@@ -1,55 +1,140 @@
-/* /servicos/ — identidade compartilhada da Home V02; catálogo IT049. */
-.servicos-v02 [data-block="services-hero"]{background:#26323e;color:#fff;padding:64px 0 72px}
-.servicos-v02 .pg-hero{max-width:1280px}
-.servicos-v02 .pg-hero .eyebrow{color:#eef2f6;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 24px}
-.servicos-v02 .pg-hero h1{font-size:clamp(48px,5.2vw,76px);line-height:1.025;letter-spacing:-.045em;max-width:15ch}
-.servicos-v02 .pg-hero .lead{max-width:850px;font-size:22px;line-height:1.5;margin-top:26px}
-.servicos-v02 .pg-hero .lead+.lead{font-size:19px;max-width:850px;margin-top:20px}
-.servicos-v02 .pg-hero a{color:#fff;font-weight:700}
-.servicos-v02 .pg-hero a:focus-visible{outline-color:#fff}
-.servicos-v02 [data-block="service-summary"]{padding:80px 0;background:#fff}
-.servicos-v02 .svc-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:64px}
-.servicos-v02 .svc-group>h2{grid-column:1/-1;font-size:clamp(36px,3.45vw,52px);max-width:950px}
-.servicos-v02 .svc-group>p{grid-column:1/-1;max-width:800px;font-size:21px;line-height:1.5;margin:24px 0 36px}
-.servicos-v02 .svc-item{padding:28px 0;border-top:1px solid #d3dbe4;min-width:0}
-.servicos-v02 .svc-item h3{font-size:27px;line-height:1.18;letter-spacing:-.02em}
-.servicos-v02 .svc-item h3 a{color:#255280;text-decoration:none}
-.servicos-v02 .svc-item h3 a:hover{text-decoration:underline}
-.servicos-v02 .svc-item p{font-size:18px;line-height:1.55;margin-top:16px;max-width:600px}
-.servicos-v02 .svc-limit{display:block;font-size:16px;line-height:1.5;color:#5d6470;margin-top:12px}
-.servicos-v02 .link-arrow{display:inline-flex;align-items:center;min-height:44px;margin-top:16px;font-size:17px;font-weight:700}
-.servicos-v02 .svc-b2b{border-left:3px solid #255280;background:#eef2f6;padding:28px 32px;margin:36px 0 64px}
-.servicos-v02 .svc-b2b h3{font-size:25px;color:#26323e}
-.servicos-v02 .svc-b2b p{font-size:18px;line-height:1.55;max-width:1050px;margin-top:14px}
-.servicos-v02 [data-block="routes"]{padding:72px 0;background:#eef2f6}
-.servicos-v02 .sec-head{margin-bottom:32px}
-.servicos-v02 .sec-head .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 20px}
-.servicos-v02 [data-block="routes"] .svc-item{padding:24px 0}
-.servicos-v02 [data-block="routes"] .svc-item h3{font-size:25px}
-.servicos-v02 [data-block="routes"] .svc-item p{max-width:900px;margin-top:12px}
-.servicos-v02 main>section:last-child{padding:72px 0;background:#255280;color:#fff}
-.servicos-v02 .quote{font-weight:700;letter-spacing:-.02em}
-.servicos-v02 .cta-line{display:flex;flex-direction:column;align-items:center;gap:14px}
-.servicos-v02 .cta-line .btn-cta{background:#fff;color:#255280;border-color:#fff;gap:12px}
-.servicos-v02 .cta-line .btn-cta:hover{background:#eef2f6}
-.servicos-v02 .cta-line .btn-cta:focus-visible{outline-color:#fff}
-.servicos-v02 .hs-ico-arrow{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;flex-shrink:0}
-.servicos-v02 .cta-micro{font-size:15px;margin:0;color:#eef2f6}
-@media(max-width:700px){
- .servicos-v02 [data-block="services-hero"]{padding:40px 0 48px}
- .servicos-v02 .pg-hero h1{font-size:clamp(40px,10.8vw,62px);max-width:15ch}
- .servicos-v02 .pg-hero .eyebrow{font-size:11px;letter-spacing:.1em;margin-bottom:20px}
- .servicos-v02 .pg-hero .lead{font-size:20px;margin-top:24px}
- .servicos-v02 .pg-hero .lead+.lead{font-size:18px;margin-top:18px}
- .servicos-v02 [data-block="service-summary"]{padding:52px 0}
- .servicos-v02 .svc-group{grid-template-columns:1fr}
- .servicos-v02 .svc-group>h2{font-size:36px;line-height:1.1}
- .servicos-v02 .svc-group>p{font-size:19px;margin:22px 0 26px}
- .servicos-v02 .svc-item{padding:24px 0}
- .servicos-v02 .svc-item h3{font-size:27px}
- .servicos-v02 .svc-b2b{padding:24px 20px;margin:24px 0 48px}
- .servicos-v02 .svc-b2b h3{font-size:25px}
- .servicos-v02 [data-block="routes"]{padding:52px 0}
- .servicos-v02 main>section:last-child{padding:52px 0}
- .servicos-v02 .cta-line .btn-cta{max-width:100%;width:100%;text-align:center}
-}
+@font-face{font-family:'Source Sans 3';src:url('../fonts/source-sans-3-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Source Sans 3';src:url('../fonts/source-sans-3-latin-600-normal.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Source Sans 3';src:url('../fonts/source-sans-3-latin-700-normal.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Source Sans 3';src:url('../fonts/source-sans-3-latin-800-normal.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+.servicos-v02{--blue:#255280;--ink:#26323e;--muted:#5d6470;--pale:#eef2f6;--line:#cbd6e1;--white:#fff}
+.servicos-v02 *{box-sizing:border-box}
+body.servicos-v02{margin:0;color:var(--ink);background:var(--white);font:400 20px/1.35 'Source Sans 3',sans-serif}
+.servicos-v02 h1,.servicos-v02 h2,.servicos-v02 h3,.servicos-v02 p{margin:0}
+.servicos-v02 h1,.servicos-v02 h2,.servicos-v02 h3{font-weight:700}
+.servicos-v02 a{color:var(--blue);text-decoration:none}
+.servicos-v02 a:hover{text-decoration:underline}
+.servicos-v02 a:focus-visible,.servicos-v02 button:focus-visible{outline:3px solid currentColor;outline-offset:5px}
+.servicos-v02 button{font:inherit}
+.servicos-v02 img{max-width:100%;display:block}
+.servicos-v02 .wrap{width:calc(100% - 160px);max-width:1280px;margin-inline:auto}
+.servicos-v02 .sr-only,.servicos-v02 .skip{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.servicos-v02 .skip:focus{width:auto;height:auto;clip-path:none;top:12px;left:12px;padding:12px;background:#fff;z-index:20}
+.servicos-v02 .site-header{background:var(--ink);color:#fff}
+.servicos-v02 .header-inner{display:flex;align-items:center;gap:24px;min-height:132px}
+.servicos-v02 .logo{width:230px;flex-shrink:0}
+.servicos-v02 .logo img{width:100%;height:auto}
+.servicos-v02 .nav{display:flex;align-items:center;gap:20px;flex:1;font-size:16px;font-weight:600}
+.servicos-v02 .nav a{color:#fff;white-space:nowrap}
+.servicos-v02 .nav-budget{background:var(--blue);padding:16px 24px;margin-left:auto;min-width:244px}
+.servicos-v02 .nav-toggle{display:none}
+.servicos-v02 .hero{display:grid;grid-template-columns:60% 40%;padding-top:64px;padding-bottom:112px}
+.servicos-v02 .eyebrow{font-size:12px;line-height:16px;text-transform:uppercase;color:var(--blue);font-weight:700}
+.servicos-v02 .hero .eyebrow{margin-bottom:32px}
+.servicos-v02 .hero h1{max-width:640px;font-size:84px;line-height:1.05;font-weight:800;letter-spacing:-.025em;color:var(--blue)}
+.servicos-v02 .hero-copy{padding-top:48px;font-size:20px;line-height:1.4}
+.servicos-v02 .hero-copy .secondary{margin-top:24px;font-size:18px;color:var(--muted)}
+.servicos-v02 .hero-copy a{color:inherit}
+.servicos-v02 .catalog{border-top:1px solid var(--blue);padding-bottom:48px}
+.servicos-v02 .group-intro{padding-top:16px;padding-bottom:12px}
+.servicos-v02 .group-intro h2{font-size:48px;line-height:1.2}
+.servicos-v02 .group-intro p{margin-top:16px;font-size:21px;line-height:1.35;color:var(--muted)}
+.servicos-v02 .service{display:grid;grid-template-columns:52px 300px minmax(0,1fr) 216px;gap:24px;min-height:185px;padding:24px 0;border-bottom:1px solid var(--line);align-items:start}
+.servicos-v02 .service-mark{display:flex;gap:4px;align-items:center;color:var(--blue);font-size:20px;font-weight:700}
+.servicos-v02 .service-mark img{width:28px;height:28px;flex:none}
+.servicos-v02 .service h3{font-size:30px;line-height:1.35;overflow-wrap:break-word}
+.servicos-v02 .service-copy{font-size:20px;line-height:1.35}
+.servicos-v02 .service-limit{font-size:16px;color:var(--muted);line-height:1.45;margin-top:16px}
+.servicos-v02 .service-link{font-size:18px;font-weight:700;line-height:1.5}
+.servicos-v02 .b2b{background:var(--blue);color:#fff;padding:56px 0}
+.servicos-v02 .b2b h2{font-size:40px;line-height:1.3}
+.servicos-v02 .b2b p{margin-top:24px;max-width:1240px;font-size:20px;line-height:1.4}
+.servicos-v02 .b2b a{color:inherit}
+.servicos-v02 .group-secondary{background:var(--pale);padding:56px 0 80px}
+.servicos-v02 .group-secondary h2{font-size:48px;line-height:1.35;max-width:950px}
+.servicos-v02 .group-description{margin:24px 0 20px;color:var(--muted);font-size:20px;line-height:1.4}
+.servicos-v02 .group-secondary .service{background:#fff;margin-bottom:40px}
+.servicos-v02 .group-secondary .service:last-child{margin-bottom:0}
+.servicos-v02 .routes{padding-top:64px;padding-bottom:64px}
+.servicos-v02 .routes>.eyebrow{margin-bottom:28px}
+.servicos-v02 .routes>h2{font-size:48px;line-height:1.35;max-width:800px;margin-bottom:28px}
+.servicos-v02 .route{margin-bottom:24px}
+.servicos-v02 .route:last-child{margin-bottom:0}
+.servicos-v02 .route h3{font-size:28px;line-height:1.3}
+.servicos-v02 .route p{font-size:20px;line-height:1.4;margin-top:8px}
+.servicos-v02 .final-cta{padding:64px 0;background:var(--pale)}
+.servicos-v02 .final-cta h2{font-size:40px;line-height:1.35;max-width:1280px}
+.servicos-v02 .final-cta .cta{display:inline-block;margin-top:28px;font-size:26px;line-height:1.35;font-weight:700}
+.servicos-v02 .final-cta p{font-size:16px;margin-top:24px}
+.servicos-v02 .site-footer{background:var(--ink);color:#fff;padding:40px 0 56px;font-size:16px;line-height:1.3}
+@media(max-width:1190px) and (min-width:761px){
+.servicos-v02 .wrap{width:calc(100% - 80px)}
+.servicos-v02 .logo{width:190px}
+.servicos-v02 .nav{font-size:14px;gap:14px}
+.servicos-v02 .nav-budget{min-width:0;padding:16px}
+.servicos-v02 .hero h1{font-size:70px}
+.servicos-v02 .service{grid-template-columns:52px minmax(180px,.85fr) minmax(0,1.5fr) 130px;gap:18px}
+.servicos-v02 .service h3{font-size:27px}
+.servicos-v02 .service-copy{font-size:19px}}
+@media(max-width:760px){
+body.servicos-v02{font-size:20px}
+.servicos-v02 .wrap{width:calc(100% - 48px)}
+.servicos-v02 .header-inner{min-height:90px;justify-content:space-between;position:relative}
+.servicos-v02 .logo{width:180px}
+.servicos-v02 .nav-toggle{display:block;color:#fff;border:0;background:transparent;font-size:14px;min-width:48px;min-height:44px;cursor:pointer}
+.servicos-v02 .nav{display:none;position:absolute;top:90px;left:-24px;right:-24px;background:var(--ink);z-index:10;padding:16px 24px 24px;flex-direction:column;align-items:stretch;gap:0;font-size:18px}
+.servicos-v02 .nav.is-open{display:flex}
+.servicos-v02 .nav a{padding:12px 0;white-space:normal}
+.servicos-v02 .nav .nav-budget{margin:12px 0 0;padding:14px 16px}
+.servicos-v02 .hero{display:block;padding-top:44px;padding-bottom:64px}
+.servicos-v02 .eyebrow{font-size:10px;line-height:14px}
+.servicos-v02 .hero .eyebrow{margin-bottom:20px}
+.servicos-v02 .hero h1{font-size:46px;line-height:1.03;max-width:300px;letter-spacing:-.02em}
+.servicos-v02 .hero-copy{padding-top:24px;font-size:20px;line-height:1.35}
+.servicos-v02 .hero-copy .secondary{font-size:18px;margin-top:24px;line-height:1.4}
+.servicos-v02 .catalog{padding-bottom:40px}
+.servicos-v02 .group-intro{padding-top:16px;padding-bottom:24px}
+.servicos-v02 .group-intro h2{font-size:34px;line-height:1.25;max-width:340px}
+.servicos-v02 .group-intro p{font-size:20px;margin-top:20px;line-height:1.35}
+.servicos-v02 .service{display:flex;flex-direction:column;gap:0;padding:28px 0;min-height:0}
+.servicos-v02 .service-mark{font-size:16px;gap:12px;line-height:28px;margin-bottom:18px}
+.servicos-v02 .service h3{font-size:28px;line-height:1.3;width:100%}
+.servicos-v02 .service-copy{font-size:20px;line-height:1.35;width:100%;margin-top:20px}
+.servicos-v02 .service-limit{font-size:16px;line-height:1.45;margin-top:16px}
+.servicos-v02 .service-link{margin-top:22px;min-height:28px;font-size:18px}
+.servicos-v02 .b2b{padding:40px 0}
+.servicos-v02 .b2b h2{font-size:32px;line-height:1.3}
+.servicos-v02 .b2b p{margin-top:24px;font-size:20px;line-height:1.4}
+.servicos-v02 .group-secondary{padding:40px 0 48px}
+.servicos-v02 .group-secondary h2{font-size:34px;line-height:1.35}
+.servicos-v02 .group-description{font-size:20px;line-height:1.35;margin-top:24px;margin-bottom:24px}
+.servicos-v02 .group-secondary .service{margin-bottom:36px;padding:24px 0}
+.servicos-v02 .routes{padding-top:48px;padding-bottom:48px}
+.servicos-v02 .routes>.eyebrow{margin-bottom:24px}
+.servicos-v02 .routes>h2{font-size:34px;line-height:1.3;margin-bottom:30px}
+.servicos-v02 .route{margin-bottom:28px}
+.servicos-v02 .route h3{font-size:26px;line-height:1.3}
+.servicos-v02 .route p{font-size:20px;margin-top:12px;line-height:1.4}
+.servicos-v02 .final-cta{padding:48px 0}
+.servicos-v02 .final-cta h2{font-size:30px;line-height:1.3}
+.servicos-v02 .final-cta .cta{font-size:24px;margin-top:28px}
+.servicos-v02 .final-cta p{font-size:16px;margin-top:24px}
+.servicos-v02 .site-footer{padding:36px 0 48px;font-size:14px;line-height:1.35;overflow-wrap:anywhere}}
+/* Correspondência das quebras e do ritmo com os frames aprovados. */
+.servicos-v02 .group-secondary h2{max-width:720px}
+.servicos-v02 .site-footer a{color:inherit}
+@media(max-width:760px){
+.servicos-v02 .b2b{padding:36px 0}
+.servicos-v02 .b2b p{font-size:18px;line-height:1.35}
+.servicos-v02 .group-secondary .service-copy{font-size:18px;line-height:1.4}
+.servicos-v02 .group-secondary .service-limit{font-size:14px;line-height:1.45}
+.servicos-v02 .routes .route p{font-size:18px;line-height:1.4}}
+@media(max-width:760px){
+.servicos-v02 .header-inner{min-height:93px}
+.servicos-v02 .nav{top:93px}
+.servicos-v02 .hero{padding-bottom:73px}
+.servicos-v02 .hero .eyebrow{font-size:12px;line-height:16px}
+.servicos-v02 .group-intro{padding-bottom:4px}
+.servicos-v02 .service{padding-top:24px;padding-bottom:24px}
+.servicos-v02 .service-limit{line-height:1.35}
+.servicos-v02 .service-link{margin-top:16px}
+.servicos-v02 .routes .route h3{font-size:24px}
+.servicos-v02 .routes .route{margin-bottom:24px}}
+
+.servicos-v02 .nav-extra{display:none}
+@media(max-width:760px){.servicos-v02 .nav.is-open .nav-extra{display:block}}
