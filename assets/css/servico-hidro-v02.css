@@ -1,0 +1,18 @@
+/* Página de projeto hidrossanitário: fundo liso (sem imagem) e título dimensionado para o H1 mais longo. */
+.servico-rico-hidro .rico-hero h1{font-size:clamp(32px,3.9vw,52px);max-width:19ch}
+@media(max-width:900px){.servico-rico-hidro .rico-hero h1{max-width:none}}
+.servico-rico-hidro .rico-hero-fundo{background:linear-gradient(100deg,rgba(27,36,45,.99) 0%,rgba(27,36,45,.96) 60%,rgba(31,44,57,.96) 100%),var(--fundo-escuro)}
+.servico-rico-hidro .final-cta{background:var(--pale)}
+
+/* legenda de cores das peças, dentro da maquete aberta */
+.caixa.estrutura .legenda{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 8px;padding:0;list-style:none;font:600 14px var(--fonte);color:#cfe0f1}
+.caixa.estrutura .legenda li{display:inline-flex;align-items:center;gap:6px}
+.caixa.estrutura .legenda i{display:inline-block;width:12px;height:12px;border-radius:2px;border:1px solid rgba(255,255,255,.45)}
+@media (max-width:640px){
+.caixa.estrutura .legenda{font-size:12px;gap:4px 10px}
+.caixa.estrutura .camadas{display:flex;flex-wrap:wrap;gap:6px}
+}
+.caixa.estrutura .leg{margin:0 0 8px;font:600 14px var(--fonte);color:#cfe0f1}
+.caixa.estrutura .leg summary{cursor:pointer;list-style:none;display:inline-block;padding:2px 0;border-bottom:1px dashed #6f8aa6}
+.caixa.estrutura .leg summary::-webkit-details-marker{display:none}
+.caixa.estrutura .leg .legenda{margin:8px 0 0}

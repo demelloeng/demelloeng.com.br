@@ -125,7 +125,7 @@ def estrutura(bloco):
     corpo = ''.join(f'<p>{t}</p>' for t in corrido)
     return f'''<section class="rico-faixa"><div class="wrap">
 <h2>{bloco["titulo"]}</h2>
-<ol class="rico-etapas" aria-label="Da fundação à laje">{lis}</ol>
+<ol class="rico-etapas" aria-label="{bloco["titulo"]}">{lis}</ol>
 <div class="rico-duas">
 <div class="rico-corrido">{corpo}</div>
 <div class="rico-cartoes">

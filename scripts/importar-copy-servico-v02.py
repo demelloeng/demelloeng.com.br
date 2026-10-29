@@ -17,6 +17,7 @@ REPO = Path(__file__).resolve().parent.parent
 
 # imagens por bloco (arquivos em assets/images/). Legenda: o render é o modelo do projeto tratado por IA (declarado por Marcos em 29/10/2026).
 REMOVIDOS = {'projeto-arquitetura': ['O dado pertence à trajetória profissional do responsável técnico e não exclusivamente ao atual CNPJ.'],
+             'projeto-hidrossanitario': ['Os quantitativos pertencem à trajetória profissional do responsável técnico, e não exclusivamente ao atual CNPJ.'],
              'projeto-estrutural': ['Os quantitativos pertencem à trajetória profissional do responsável técnico e não correspondem exclusivamente ao acervo operacional do atual CNPJ.']}
 IMPRENSA = {
     'projeto-arquitetura': [
@@ -28,8 +29,8 @@ IMPRENSA = {
          'url': 'https://www.folhadecampolargo.com.br/noticia/56187/ccm-djalma-marinho-recebe-investimento-historico-de-r-83-mil', 'data': '16/06/2026'},
     ],
 }
-LAYOUTS = {'projeto-arquitetura': 'rico', 'projeto-estrutural': 'rico'}
-PERFIS = {'projeto-estrutural': 'estrutura'}   # layout próprio: maquete estrutural e bloco "Da fundação à laje"   # as demais páginas ficam no layout simples até terem copy aprovada
+LAYOUTS = {'projeto-arquitetura': 'rico', 'projeto-estrutural': 'rico', 'projeto-hidrossanitario': 'rico'}
+PERFIS = {'projeto-estrutural': 'estrutura', 'projeto-hidrossanitario': 'hidro'}   # layout próprio: maquete estrutural e bloco "Da fundação à laje"   # as demais páginas ficam no layout simples até terem copy aprovada
 FIGURAS = {
     'projeto-arquitetura': {
         'Experiência aplicada — CECM Djalma Marinho': [{
@@ -49,6 +50,7 @@ DOCS = REPO / 'docs/arquivo/paginas-servico-v02'
 LINKS = {
     'projeto-arquitetura': [('pode ser necessária regularização', 'regularização', '../regularizacao/')],
     'projeto-estrutural': [('serviço de Orçamento e cronograma', 'Orçamento e cronograma', '../orcamento-tecnico/')],
+    'projeto-hidrossanitario': [('serviço de Orçamento e cronograma', 'Orçamento e cronograma', '../orcamento-tecnico/')],
 }
 
 ROTULOS = ['TITULO', 'DESCRICAO', 'H1', 'CHAMADA', 'INTRODUCAO 1', 'INTRODUCAO 2', 'PARA QUEM E', 'O QUE MUDA PARA VOCE',
@@ -57,8 +59,10 @@ ROTULOS = ['TITULO', 'DESCRICAO', 'H1', 'CHAMADA', 'INTRODUCAO 1', 'INTRODUCAO 2
 
 
 def rotulos_de(slug):
-    novos = [('DA FUNDACAO A LAJE' if (r.startswith('PREFEITURA') and PERFIS.get(slug) == 'estrutura') else r) for r in ROTULOS]
-    return novos + (['EXPERIENCIA APLICADA', 'MEZANINO'] if PERFIS.get(slug) == 'estrutura' else [])
+    perfil = PERFIS.get(slug)
+    meio = {'estrutura': 'DA FUNDACAO A LAJE', 'hidro': "DA CAIXA D'AGUA AO COLETOR"}.get(perfil)
+    novos = [(meio if (r.startswith('PREFEITURA') and meio) else r) for r in ROTULOS]
+    return novos + {'estrutura': ['EXPERIENCIA APLICADA', 'MEZANINO'], 'hidro': ['EXPERIENCIA APLICADA']}.get(perfil, [])
 
 
 def secoes(texto, rotulos=ROTULOS):
@@ -97,7 +101,7 @@ def main(slug, arquivo, nome_servico):
     perguntas = [{'pergunta': perg_linhas[i], 'resposta': perg_linhas[i + 1]} for i in range(0, len(perg_linhas), 2)]
 
     exp = None
-    if PERFIS.get(slug) == 'estrutura':
+    if PERFIS.get(slug) in ('estrutura', 'hidro'):
         linhas_exp = s['EXPERIENCIA APLICADA'].split('\n', 1)
         exp = {'titulo': linhas_exp[0].strip(), 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(linhas_exp[1])]}
 
@@ -121,6 +125,8 @@ def main(slug, arquivo, nome_servico):
             'muda': {'titulo': 'O que muda para você', 'conteudo': [{'tipo': 'beneficios', 'itens': muda}]},
             **({'estrutura': {'titulo': 'Da fundação à laje', 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(s['DA FUNDACAO A LAJE'])]}}
                if PERFIS.get(slug) == 'estrutura' else
+               {'estrutura': {'titulo': "Da caixa d'água ao coletor", 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(s["DA CAIXA D'AGUA AO COLETOR"])]}}
+               if PERFIS.get(slug) == 'hidro' else
                {'prefeitura': {'titulo': 'Prefeitura, aprovação e habite-se', 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(s['PREFEITURA, APROVACAO E HABITE-SE'])]}}),
             **({'experiencia': exp} if exp else {}),
             **({'mezanino': mez} if mez else {}),
@@ -129,7 +135,7 @@ def main(slug, arquivo, nome_servico):
         },
         # ordem da página; chaves de blocos_novos ou títulos dos blocos antigos (mantidos sem alteração)
         # Vitrine: o que o leitor de busca precisa. "Detalhes do escopo": texto antigo intacto, fechado por padrão.
-        'ordem': ['para_quem', 'muda', ('estrutura' if PERFIS.get(slug) == 'estrutura' else 'prefeitura'), 'faz', 'perguntas', 'Prova técnica',
+        'ordem': ['para_quem', 'muda', ('estrutura' if PERFIS.get(slug) in ('estrutura', 'hidro') else 'prefeitura'), 'faz', 'perguntas', 'Prova técnica',
                   ('experiencia' if exp else 'Experiência aplicada — CECM Djalma Marinho'),
                   {'detalhes': {'titulo': 'Detalhes do escopo',
                                 'resumo': 'Entregáveis, como funciona, como o escopo é definido e limites',

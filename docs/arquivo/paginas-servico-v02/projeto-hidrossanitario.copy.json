@@ -1,0 +1,190 @@
+{
+  "slug": "projeto-hidrossanitario",
+  "nome_servico": "Projeto hidrossanitário",
+  "fonte_copy": "COPY_HIDROSSANITARIO_V04_20261029.md",
+  "titulo_pagina": "Projeto hidrossanitário em BIM: água, esgoto e drenagem | DEMELLO",
+  "descricao": "Projeto hidrossanitário para casa, sobrado, ampliação, escola ou rede existente. Água, esgoto e drenagem na mesma disciplina, em BIM. Veja a estimativa antes do contato.",
+  "h1": "Projeto hidrossanitário: água, esgoto e drenagem funcionando como um sistema",
+  "chamada": "Água, esgoto e drenagem precisam funcionar como sistema, não como desenhos soltos.",
+  "introducao": [
+    "O projeto hidrossanitário diz por onde a água chega, por onde o esgoto sai e para onde a chuva vai. Ele nasce da arquitetura e precisa caber na estrutura.",
+    "Tubo que bate em viga vira quebra-quebra na obra. A DEMELLO projeta as redes em BIM, no mesmo modelo da arquitetura e da estrutura. Em água, esgoto e drenagem, tudo é uma disciplina só."
+  ],
+  "cta": {
+    "rotulo": "Ver a estimativa do meu projeto hidrossanitário",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos_novos": {
+    "para_quem": {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido se você:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "vai construir uma casa, um sobrado, um prédio ou uma escola;",
+            "quer ampliar uma construção que já existe;",
+            "tem uma rede já instalada que não funciona bem e precisa entender o problema;",
+            "já tem a planta em PDF, DWG, DXF ou IFC: mande como está, e a DEMELLO leva para o Revit e continua daí."
+          ]
+        }
+      ]
+    },
+    "muda": {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Uma disciplina só para as redes",
+              "texto": "Água, esgoto e drenagem são o mesmo projeto. Drenagem não tem cobrança separada."
+            },
+            {
+              "titulo": "As redes nascem encaixadas",
+              "texto": "Tubo, shaft e caixa são lançados no mesmo modelo da arquitetura e da estrutura. O tubo não atravessa a viga, porque os dois foram desenhados juntos."
+            },
+            {
+              "titulo": "Obra existente: primeiro se entende o que está lá",
+              "texto": "Em imóvel já construído, o sistema atual vem antes da solução."
+            }
+          ]
+        }
+      ]
+    },
+    "estrutura": {
+      "titulo": "Da caixa d'água ao coletor",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "- Água fria: leva a água do reservatório até cada ponto de uso."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Esgoto: leva o que sai de cada aparelho até a rede de coleta."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Ventilação: deixa o ar circular na tubulação, para o esgoto correr e o cheiro não voltar."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Drenagem: leva a água da chuva para longe da construção."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O projeto define o caminho, o diâmetro e a inclinação de cada trecho."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Básico. Resolve as redes principais, os traçados, os esquemas e o pré-dimensionamento daquela etapa. Não traz todos os detalhamentos de uma contratação executiva."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Executivo. Traz os detalhamentos que a obra precisa para executar as redes."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O conteúdo final é definido na proposta."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Rede pronta é base para orçar a obra. Isso é com o serviço de <a href=\"../orcamento-tecnico/\">Orçamento e cronograma</a>."
+        }
+      ]
+    },
+    "experiencia": {
+      "titulo": "Experiência aplicada — Colégio Luiz Carlos",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No Colégio Luiz Carlos, em Curitiba/PR, Marcos de Mello Silva respondeu pelo projeto hidrossanitário: água fria, esgoto, águas pluviais e dreno, em pranchas para a Fundepar."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Escola é prédio de uso coletivo, com várias caixas d'água na cobertura, vários blocos e muitos banheiros. As redes se desenham juntas, em BIM."
+        }
+      ]
+    },
+    "faz": {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO projeta as redes que o seu escopo pede: abastecimento de água, esgoto sanitário, ventilação e drenagem. Faz também traçados, esquemas, pré-dimensionamento e a coordenação com arquitetura e estrutura."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O trabalho é em BIM: um modelo só, em 3D. Arquitetura, estrutura e instalações se acertam nele antes da obra. Primeiro se entende o problema. Depois se fecha o que precisa ser projetado."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "Quanto custa um projeto hidrossanitário?",
+              "resposta": "Depende da área, do tipo de obra e do nível contratado. Não sabe tudo isso? Conte o que você imagina: a estimativa usa uma área de referência. O valor inicial aparece nesta página, antes de qualquer contato. Não é proposta, contrato nem garantia de preço."
+            },
+            {
+              "pergunta": "Drenagem é cobrada à parte?",
+              "resposta": "Não. Água, esgoto e drenagem são a mesma disciplina. A drenagem não vira outro serviço."
+            },
+            {
+              "pergunta": "Já tenho a arquitetura pronta. Serve?",
+              "resposta": "Serve. Mande como está: PDF, DWG, DXF ou IFC. A DEMELLO leva para o Revit e segue daí."
+            },
+            {
+              "pergunta": "Projeto básico ou executivo: qual a diferença?",
+              "resposta": "Os dois não são equivalentes. O básico resolve as redes principais, os traçados e os esquemas. O executivo traz os detalhamentos para a obra. O conteúdo final é definido na proposta."
+            },
+            {
+              "pergunta": "Minha obra já está construída. Dá para projetar?",
+              "resposta": "Dá. Primeiro a DEMELLO entende o sistema que existe. Só depois decide a solução."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ordem": [
+    "para_quem",
+    "muda",
+    "estrutura",
+    "faz",
+    "perguntas",
+    "Prova técnica",
+    "experiencia",
+    {
+      "detalhes": {
+        "titulo": "Detalhes do escopo",
+        "resumo": "Entregáveis, como funciona, como o escopo é definido e limites",
+        "blocos": [
+          "Entregáveis",
+          "Como funciona",
+          "Como o escopo é definido",
+          "Escopo e limites"
+        ]
+      }
+    }
+  ],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Conte o que você vai construir ou ampliar. Já tem a planta? Mande como está. A estimativa sai aqui mesmo, antes do seu contato."
+    ]
+  },
+  "figuras": {},
+  "layout": "rico",
+  "perfil": "hidro",
+  "imprensa": [],
+  "removidos": [
+    "Os quantitativos pertencem à trajetória profissional do responsável técnico, e não exclusivamente ao atual CNPJ."
+  ]
+}
