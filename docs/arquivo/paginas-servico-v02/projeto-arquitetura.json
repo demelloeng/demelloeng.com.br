@@ -1,0 +1,225 @@
+{
+  "slug": "projeto-arquitetura",
+  "titulo_pagina": "Projeto de arquitetura | DEMELLO Engenharia",
+  "descricao": "Projeto de arquitetura que transforma intenção e restrições em base coordenável com estrutura, instalações e terreno, do estudo preliminar ao executivo.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Projeto de arquitetura\",\"description\":\"Projeto de arquitetura que transforma intenção e restrições em base coordenável com estrutura, instalações e terreno, do estudo preliminar ao executivo.\",\"url\":\"https://demelloeng.com.br/servicos/projeto-arquitetura/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Projeto de arquitetura\",\"item\":\"https://demelloeng.com.br/servicos/projeto-arquitetura/\"}]}]}</script>",
+  "h1": "Projeto de arquitetura: da intenção a um projeto que as outras disciplinas conseguem seguir",
+  "chamada": "Antes de coordenar disciplinas, é preciso transformar intenção e restrição em espaço possível.",
+  "introducao": [
+    "O projeto de arquitetura organiza aquilo que o empreendimento pretende ser e cria uma base capaz de conversar com estrutura, instalações, terreno e exigências do caso."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=known&amp;servico=arquitetura",
+    "rotulo": "Descrever meu projeto de arquitetura",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido em:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "construções novas;",
+            "ampliações;",
+            "desenvolvimento de uma intenção ainda não transformada em projeto coordenável;",
+            "situações em que arquitetura precisa evoluir junto das demais disciplinas."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme o nível e o escopo contratados:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "estudos;",
+            "projeto legal;",
+            "projeto básico;",
+            "projeto executivo;",
+            "pranchas;",
+            "arquivos digitais;",
+            "modelos tridimensionais;",
+            "IFC;",
+            "memoriais;",
+            "ART;",
+            "demais produtos expressamente definidos na proposta."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Nenhum desses itens deve ser entendido como pacote automático de toda contratação."
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Uma base que conversa com o resto",
+              "texto": "A arquitetura vira uma base que conversa com estrutura, instalações, terreno e exigências do caso."
+            },
+            {
+              "titulo": "Você contrata o nível que precisa",
+              "texto": "Estudo preliminar, projeto legal, básico e executivo são etapas diferentes. O escopo define quais entram."
+            },
+            {
+              "titulo": "Nada de pacote automático",
+              "texto": "Nenhum item da lista de entregáveis é pacote de toda contratação."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa com “Arquitetura” já selecionado e responda só ao que se aplica ao seu caso. Você informa a área do projeto. Não sabe a área? Conta o que imagina para a casa e/ou informa o terreno: estimamos uma área de referência para o orçamento, sem consultar legislação. Sem nada disso, a equipe avalia."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve arquitetura a partir das necessidades do empreendimento e do nível contratado."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A cadeia de desenvolvimento pode envolver, conforme a proposta:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "estudo preliminar;",
+            "projeto legal;",
+            "projeto básico;",
+            "projeto executivo."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Nem toda contratação passa por todas essas etapas; o escopo define quais fazem parte do trabalho."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A definição pode considerar:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "construção ou ampliação;",
+            "intenção do empreendimento;",
+            "restrições existentes;",
+            "área;",
+            "tipologia;",
+            "número de pavimentos;",
+            "fase;",
+            "localização;",
+            "documentação e levantamentos disponíveis;",
+            "nível de desenvolvimento pretendido."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O acervo profissional de Marcos de Mello Silva registra 4.981 m² de experiência técnica arquitetônica documentada."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Quando diferentes atividades ou fases incidem sobre a mesma área, ela é contabilizada uma única vez."
+        },
+        {
+          "tipo": "nota",
+          "texto": "O dado pertence à trajetória profissional do responsável técnico e não exclusivamente ao atual CNPJ."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No CECM Djalma Marinho, Marcos respondeu pelo projeto arquitetônico de um conjunto com forte condicionante de implantação: aproximadamente 16 metros de desnível, nove blocos existentes e uma ampliação que levaria o conjunto a dez."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O projeto incluiu doze rampas integrando os espaços e reorganização funcional dentro do conjunto."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A atuação ocorreu antes da DEMELLO Engenharia."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Arquitetura e regularização podem se relacionar, mas são serviços distintos. Procedimentos de regularização, levantamentos específicos e atuação administrativa só integram o trabalho quando previstos no escopo."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O nível de desenvolvimento também precisa ser identificado com clareza."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Estudo preliminar, projeto legal, projeto básico e projeto executivo são produtos e etapas diferentes."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se você está começando uma construção, estudando uma ampliação ou precisa transformar intenção em projeto, comece pelo enquadramento."
+        }
+      ]
+    }
+  ]
+}

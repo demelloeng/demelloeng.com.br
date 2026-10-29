@@ -1,0 +1,233 @@
+{
+  "slug": "projeto-hidrossanitario",
+  "titulo_pagina": "Projeto hidrossanitário | DEMELLO Engenharia",
+  "descricao": "Projeto hidrossanitário com água, esgoto e drenagem na mesma disciplina, para construção, ampliação ou redes existentes, em nível básico ou executivo.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Projeto hidrossanitário\",\"description\":\"Projeto hidrossanitário com água, esgoto e drenagem na mesma disciplina, para construção, ampliação ou redes existentes, em nível básico ou executivo.\",\"url\":\"https://demelloeng.com.br/servicos/projeto-hidrossanitario/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Projeto hidrossanitário\",\"item\":\"https://demelloeng.com.br/servicos/projeto-hidrossanitario/\"}]}]}</script>",
+  "h1": "Projeto hidrossanitário: água, esgoto e drenagem funcionando como um sistema",
+  "chamada": "Água, esgoto e drenagem precisam funcionar como sistema — não como desenhos independentes.",
+  "introducao": [
+    "O projeto hidrossanitário organiza as redes e suas interfaces com arquitetura, estrutura, implantação e condições existentes.",
+    "Na DEMELLO, água, esgoto e drenagem pertencem à mesma disciplina de projeto."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=known&amp;servico=hidrossanitario",
+    "rotulo": "Calcular estimativa do meu projeto",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode ser contratado para:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "construções novas;",
+            "ampliações;",
+            "adequações que interferem em sistemas existentes;",
+            "avaliação e desenvolvimento de soluções para redes já implantadas."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A abrangência pode mudar bastante entre projetar um sistema novo e intervir em algo que já existe."
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme o escopo e o nível contratado:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "modelagem e desenvolvimento das redes;",
+            "água;",
+            "esgoto;",
+            "ventilação;",
+            "drenagem;",
+            "traçados e esquemas;",
+            "pré-dimensionamento;",
+            "compatibilização;",
+            "arquivos, memoriais e demais documentos previstos na proposta."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O nível de detalhamento final acompanha o nível efetivamente contratado."
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Uma disciplina só para as redes",
+              "texto": "Água, esgoto e drenagem são a mesma disciplina. Drenagem não tem cobrança separada."
+            },
+            {
+              "titulo": "Compreender o que já existe",
+              "texto": "Em imóvel já construído, entender o sistema atual vem antes de decidir a solução."
+            },
+            {
+              "titulo": "Redes coordenadas com o restante",
+              "texto": "As redes são pensadas junto com arquitetura, estrutura e implantação."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa com “Hidrossanitário” já selecionado e responda só ao que se aplica ao seu caso."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve a disciplina considerando as redes necessárias ao escopo contratado e sua relação com o restante do empreendimento."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O trabalho pode envolver:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "abastecimento de água;",
+            "esgoto sanitário;",
+            "ventilação;",
+            "drenagem;",
+            "traçados;",
+            "pré-dimensionamento;",
+            "esquemas;",
+            "coordenação com arquitetura e estrutura."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A drenagem não é automaticamente tratada como um serviço separado."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "São considerados, conforme o caso:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "construção, ampliação ou sistema existente;",
+            "área nova ou área efetivamente atendida;",
+            "tipo de empreendimento;",
+            "fase do projeto;",
+            "localização;",
+            "condições existentes;",
+            "informações e projetos disponíveis."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Quando existe intervenção em edificação já construída, entender o sistema atual faz parte do problema antes de decidir a solução."
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O acervo profissional de Marcos de Mello Silva registra 42.789 m² de experiência técnica hidrossanitária documentada."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A mesma área não é contabilizada novamente por cada sistema da disciplina."
+        },
+        {
+          "tipo": "nota",
+          "texto": "Os quantitativos pertencem à trajetória profissional do responsável técnico, e não exclusivamente ao atual CNPJ."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O CECM Djalma Marinho incluiu, sob responsabilidade de Marcos de Mello Silva, as frentes de água, esgoto e drenagem, coordenadas em BIM com as demais disciplinas envolvidas."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A atuação ocorreu em experiência profissional anterior à DEMELLO Engenharia."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O projeto pode ser contratado em nível básico ou executivo."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "No nível básico, podem ser desenvolvidas as redes principais, seus traçados, esquemas, pré-dimensionamentos e compatibilização necessários àquela etapa."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Produtos executivos mais detalhados dependem da contratação correspondente."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO projeta as instalações. Não executa fisicamente as redes."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se a demanda envolve construção, ampliação ou sistema existente, o enquadramento inicial ajuda a definir o caso antes da proposta."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "slug": "projeto-arquitetura",
+  "nome_servico": "Projeto de arquitetura",
+  "fonte_copy": "COPY_ARQUITETURA_V06_20261029.md",
+  "titulo_pagina": "Projeto de casa (arquitetônico) em 3D | DEMELLO",
+  "descricao": "Projeto arquitetônico e planta de casa em 3D, com projeto aprovado na prefeitura. Estrutura e instalações juntas. Veja a estimativa antes do contato.",
+  "h1": "Projeto de casa em 3D: você vê a casa antes de construir",
+  "chamada": "Primeiro a casa no computador. Depois, a obra.",
+  "introducao": [
+    "Você tem um terreno e uma ideia. Falta transformar isso em projeto: as pranchas, o modelo em 3D e o projeto aprovado na prefeitura. Isso é arquitetura, e ela vem primeiro. Estrutura, água e esgoto dependem dela.",
+    "A DEMELLO faz a arquitetura em BIM, junto com os projetos complementares. Erro na planta é ajuste. Na obra, vira retrabalho e dinheiro perdido."
+  ],
+  "cta": {
+    "rotulo": "Ver a estimativa do meu projeto de casa",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos_novos": {
+    "para_quem": {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido se você:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "vai construir uma casa nova e só tem o terreno;",
+            "quer ampliar uma casa que já existe;",
+            "já tem um estudo em SketchUp, ArchiCAD ou Revit: mande em PDF, DWG, DXF ou IFC, e a DEMELLO leva para o Revit e continua daí;",
+            "precisa que a arquitetura converse com a estrutura e as instalações desde o começo."
+          ]
+        }
+      ]
+    },
+    "muda": {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Você vê antes de construir",
+              "texto": "O modelo em 3D mostra a casa antes da obra. O problema aparece no computador, não no canteiro."
+            },
+            {
+              "titulo": "Tudo nasce encaixado",
+              "texto": "Arquitetura, estrutura, água e esgoto saem do mesmo modelo. Ninguém descobre o pilar no meio do banheiro."
+            },
+            {
+              "titulo": "Você contrata o nível que precisa",
+              "texto": "Estudo preliminar, projeto legal, projeto básico e projeto executivo são etapas diferentes. Mas relaxa, eu te explico tim tim por tim tim."
+            }
+          ]
+        }
+      ]
+    },
+    "prefeitura": {
+      "titulo": "Prefeitura, aprovação e habite-se",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Para construir, a prefeitura precisa aprovar o projeto. O projeto legal é a parte da arquitetura que ela analisa. Com a aprovação, vem o alvará de construção. No fim da obra, vem o habite-se."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O habite-se só sai se a obra estiver conforme o projeto aprovado."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A área construída sai do projeto. É a metragem que a prefeitura usa no IPTU e que o cartório registra na matrícula quando a construção é averbada. Averbar é registrar a construção na matrícula do imóvel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO te entrega o projeto aprovado. E a gente sabe que coisas mudam no decorrer da obra. Se precisar de apoio para a emissão do habite-se, pode contar conosco."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "E se bateu a vontade de cobrir a área de lazer depois do projeto aprovado, pode ser necessária <a href=\"../regularizacao/\">regularização</a>. É claro que pode chamar a DEMELLO."
+        }
+      ]
+    },
+    "faz": {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve o projeto arquitetônico da sua casa a partir do que você quer construir e do nível que contratar. O trabalho pode ir do estudo preliminar ao projeto executivo, passando pelo projeto legal e pelo básico. Nem toda contratação passa por todas as etapas."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O trabalho é em BIM: um modelo só, em 3D. Arquitetura, estrutura e instalações se acertam nele, antes da obra. Isso é compatibilização."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "Quanto custa um projeto de casa?",
+              "resposta": "Depende da área e do que a obra pede. Não sabe a metragem? Conte o que você imagina para a casa ou informe o terreno: a estimativa usa uma área de referência, sem consultar legislação. O valor inicial aparece nesta página, antes de qualquer contato. Não é proposta, contrato nem garantia de preço."
+            },
+            {
+              "pergunta": "Planta de casa pronta serve?",
+              "resposta": "Serve para olhar. Mas ela não conhece o seu terreno: o desnível, o solo, as regras da sua prefeitura. Se você já tem uma planta ou um estudo, mande como está: PDF, DWG, DXF ou IFC. A DEMELLO leva para o Revit e segue daí."
+            },
+            {
+              "pergunta": "Precisa aprovar o projeto de casa na prefeitura?",
+              "resposta": "Precisa. É o projeto legal: a prefeitura analisa antes de a obra começar. O prazo de análise é dela. A DEMELLO cuida da aprovação e entrega o projeto aprovado."
+            },
+            {
+              "pergunta": "Preciso de engenheiro para construir?",
+              "resposta": "A obra precisa de responsável técnico. Quem projeta assina o projeto, com ART. A DEMELLO não executa a obra."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ordem": [
+    "para_quem",
+    "muda",
+    "prefeitura",
+    "faz",
+    "perguntas",
+    "Prova técnica",
+    "Experiência aplicada — CECM Djalma Marinho",
+    {
+      "detalhes": {
+        "titulo": "Detalhes do escopo",
+        "resumo": "Entregáveis, como funciona, como o escopo é definido e limites",
+        "blocos": [
+          "Entregáveis",
+          "Como funciona",
+          "Como o escopo é definido",
+          "Escopo e limites"
+        ]
+      }
+    }
+  ],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Conte o que você vai construir. Só tem o terreno? Serve. A estimativa sai aqui mesmo, antes do seu contato."
+    ]
+  },
+  "figuras": {
+    "Experiência aplicada — CECM Djalma Marinho": [
+      {
+        "base": "djalma-render-entardecer",
+        "larguras": [
+          800,
+          1600
+        ],
+        "altura_1600": 857,
+        "alt": "Vista aérea ao entardecer do Colégio Cívico Militar Djalma Marinho, em Campo Largo/PR: blocos de ensino, ginásio de cobertura azul em arco e pátios em terreno em declive.",
+        "legenda": "Render do modelo em BIM do projeto, ao entardecer."
+      },
+      {
+        "base": "djalma-render-dia",
+        "larguras": [
+          800,
+          1600
+        ],
+        "altura_1600": 857,
+        "alt": "Vista aérea à luz do dia do Colégio Cívico Militar Djalma Marinho, em Campo Largo/PR: blocos de ensino, ginásio de cobertura azul em arco, reservatório e ruas ao redor.",
+        "legenda": "O mesmo render, à luz do dia."
+      }
+    ]
+  },
+  "layout": "rico",
+  "imprensa": [
+    {
+      "veiculo": "Instagram, @roni.miranda",
+      "titulo": "Secretário de Estado da Educação assina a ordem de serviço da ampliação e reforma do colégio",
+      "url": "https://www.instagram.com/reel/DZpkXZBOcjA/",
+      "data": "16/06/2026"
+    },
+    {
+      "veiculo": "Bem Paraná, com a Agência Estadual de Notícias",
+      "titulo": "Colégio cívico-militar da Grande Curitiba cria 528 novas vagas após obra de ampliação",
+      "url": "https://www.bemparana.com.br/noticias/parana/colegio-civico-militar-da-grande-curitiba-cria-528-novas-vagas-apos-obra-de-ampliacao/",
+      "data": "16/06/2026"
+    },
+    {
+      "veiculo": "Folha de Campo Largo",
+      "titulo": "CCM Djalma Marinho recebe investimento histórico de R$ 8,3 milhões e ampliará atendimento",
+      "url": "https://www.folhadecampolargo.com.br/noticia/56187/ccm-djalma-marinho-recebe-investimento-historico-de-r-83-mil",
+      "data": "16/06/2026"
+    }
+  ],
+  "removidos": [
+    "O dado pertence à trajetória profissional do responsável técnico e não exclusivamente ao atual CNPJ."
+  ]
+}

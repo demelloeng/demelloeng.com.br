@@ -1,0 +1,94 @@
+/* Páginas /servicos/<slug>/ no visual da Home V02.
+   Depende de servicos-v02.css (cabeçalho, rodapé, cores, fontes). Seletores restritos a .servico-pagina-v02. */
+.servico-pagina-v02 .hero{grid-template-columns:55% 45%;padding-top:56px;padding-bottom:72px;column-gap:0}
+.servico-pagina-v02 .crumb{font-size:16px;line-height:1.3;color:var(--muted);margin-bottom:28px}
+.servico-pagina-v02 .crumb a{color:var(--muted);text-decoration:underline}
+.servico-pagina-v02 .hero h1{max-width:680px;font-size:56px;line-height:1.1;letter-spacing:-.02em}
+.servico-pagina-v02 .hero-copy{padding-top:36px}
+.servico-pagina-v02 .hero-copy p{font-size:20px;line-height:1.4;margin-bottom:16px}
+.servico-pagina-v02 .hero-copy .chamada{font-size:24px;line-height:1.3;font-weight:700;color:var(--ink);margin-bottom:20px}
+.servico-pagina-v02 .cta-linha{margin-top:28px;margin-bottom:8px}
+.servico-pagina-v02 .cta{display:inline-block;font-size:24px;line-height:1.35;font-weight:700}
+.servico-pagina-v02 .hero-copy .cta,.servico-pagina-v02 .final-cta .cta{color:var(--blue)}
+.servico-pagina-v02 .micro{font-size:16px;line-height:1.4;color:var(--muted)}
+.servico-pagina-v02 .hero-copy .micro{margin-bottom:0}
+
+.servico-pagina-v02 .bloco{display:grid;grid-template-columns:320px minmax(0,1fr);column-gap:48px;padding-top:36px;padding-bottom:40px;border-top:1px solid var(--line)}
+.servico-pagina-v02 .hero+.bloco{border-top:1px solid var(--blue)}
+.servico-pagina-v02 .bloco h2{font-size:30px;line-height:1.25}
+.servico-pagina-v02 .bloco-corpo{max-width:860px;font-size:20px;line-height:1.45}
+.servico-pagina-v02 .bloco-corpo>*+*{margin-top:16px}
+.servico-pagina-v02 .lista{list-style:none;margin:0;padding:0}
+.servico-pagina-v02 .lista li{position:relative;padding-left:22px;margin-top:8px}
+.servico-pagina-v02 .lista li:first-child{margin-top:0}
+.servico-pagina-v02 .lista li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;background:var(--blue)}
+.servico-pagina-v02 .nota{padding:16px 20px;background:var(--pale);border-left:4px solid var(--blue);font-size:17px;line-height:1.45;color:var(--muted)}
+.servico-pagina-v02 .beneficios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.servico-pagina-v02 .beneficios h3,.servico-pagina-v02 .passos h3{font-size:22px;line-height:1.3;margin-bottom:8px}
+.servico-pagina-v02 .beneficios p,.servico-pagina-v02 .passos p{font-size:18px;line-height:1.45;color:var(--muted)}
+.servico-pagina-v02 .passos{list-style:none;margin:0;padding:0;counter-reset:passo;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 40px}
+.servico-pagina-v02 .passos li{counter-increment:passo;position:relative;padding-top:36px}
+.servico-pagina-v02 .passos li::before{content:counter(passo,decimal-leading-zero);position:absolute;top:0;left:0;font-size:20px;font-weight:700;color:var(--blue)}
+
+.servico-pagina-v02 .detalhes details{grid-column:1/-1}
+.servico-pagina-v02 .detalhes summary{display:grid;grid-template-columns:320px minmax(0,1fr);column-gap:48px;align-items:baseline;cursor:pointer;list-style:none}
+.servico-pagina-v02 .detalhes summary::-webkit-details-marker{display:none}
+.servico-pagina-v02 .detalhes .det-rotulo{font-size:30px;line-height:1.25;font-weight:700}
+.servico-pagina-v02 .detalhes .det-conteudo{font-size:18px;line-height:1.4;color:var(--muted)}
+.servico-pagina-v02 .detalhes .det-conteudo::after{content:" +";font-weight:700;color:var(--blue)}
+.servico-pagina-v02 .detalhes details[open] .det-conteudo::after{content:" −"}
+.servico-pagina-v02 .detalhes summary:focus-visible{outline:3px solid var(--blue);outline-offset:6px}
+.servico-pagina-v02 .bloco-interno{display:grid;grid-template-columns:320px minmax(0,1fr);column-gap:48px;padding-top:32px;margin-top:32px;border-top:1px solid var(--line)}
+.servico-pagina-v02 .bloco-interno:first-of-type{margin-top:32px}
+.servico-pagina-v02 .bloco-interno h3{font-size:24px;line-height:1.3}
+.servico-pagina-v02 .perguntas h3{font-size:22px;line-height:1.3;margin-top:28px;margin-bottom:8px}
+.servico-pagina-v02 .perguntas h3:first-child{margin-top:0}
+.servico-pagina-v02 .perguntas p{font-size:19px;line-height:1.45}
+.servico-pagina-v02 .bloco-corpo a{text-decoration:underline}
+.servico-pagina-v02 .final-cta p{max-width:860px;font-size:20px;line-height:1.4;margin-top:16px}
+.servico-pagina-v02 .final-cta .micro{font-size:16px;margin-top:16px}
+
+@media(max-width:1190px) and (min-width:761px){
+.servico-pagina-v02 .hero h1{font-size:46px}
+.servico-pagina-v02 .bloco{grid-template-columns:220px minmax(0,1fr);column-gap:32px}
+.servico-pagina-v02 .beneficios{grid-template-columns:1fr}}
+@media(max-width:760px){
+.servico-pagina-v02 .hero{grid-template-columns:1fr;padding-top:32px;padding-bottom:40px}
+.servico-pagina-v02 .hero h1{font-size:38px}
+.servico-pagina-v02 .hero-copy{padding-top:24px}
+.servico-pagina-v02 .hero-copy .chamada{font-size:22px}
+.servico-pagina-v02 .bloco{grid-template-columns:1fr;row-gap:16px;padding-top:28px;padding-bottom:28px}
+.servico-pagina-v02 .bloco h2{font-size:26px}
+.servico-pagina-v02 .bloco-corpo{font-size:19px}
+.servico-pagina-v02 .beneficios,.servico-pagina-v02 .passos{grid-template-columns:1fr}
+.servico-pagina-v02 .final-cta h2{font-size:28px}
+.servico-pagina-v02 .cta{font-size:22px}}
+@media(max-width:1190px) and (min-width:761px){
+.servico-pagina-v02 .detalhes summary,.servico-pagina-v02 .bloco-interno{grid-template-columns:220px minmax(0,1fr);column-gap:32px}}
+@media(max-width:760px){
+.servico-pagina-v02 .detalhes summary,.servico-pagina-v02 .bloco-interno{grid-template-columns:1fr;row-gap:8px}
+.servico-pagina-v02 .detalhes .det-rotulo{font-size:26px}
+.servico-pagina-v02 .bloco-interno h3{font-size:22px}}
+
+.servico-pagina-v02 .figura{margin:0 0 4px}
+.servico-pagina-v02 .figura img{display:block;width:100%;height:auto;border-radius:3px}
+.servico-pagina-v02 .figura figcaption{margin-top:8px;font-size:16px;line-height:1.4;color:var(--muted)}
+
+.servico-pagina-v02 .figuras{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.servico-pagina-v02 .figuras .figura{margin:0;min-width:0}
+@media(max-width:760px){.servico-pagina-v02 .figuras{grid-template-columns:1fr}}
+
+/* rodapé em colunas */
+.servico-pagina-v02 .rodape{padding:60px 0 0}
+.servico-pagina-v02 .rodape-grade{display:grid;grid-template-columns:1.4fr 1fr 1.2fr 1.1fr;gap:44px}
+.servico-pagina-v02 .rodape-marca img{display:block;width:230px;height:auto;margin-bottom:16px}
+.servico-pagina-v02 .rodape .tag{margin:0 0 14px;font-size:19px;font-weight:600;color:#fff}
+.servico-pagina-v02 .rodape .legal{margin:0;font-size:15px;line-height:1.6;color:#9db6cf}
+.servico-pagina-v02 .rodape-col{display:flex;flex-direction:column}
+.servico-pagina-v02 .rodape-col .t{margin:0 0 12px;font-size:16px;font-weight:700;color:#fff}
+.servico-pagina-v02 .rodape-col a,.servico-pagina-v02 .rodape-col span{color:#cfdbe8;font-size:17px;line-height:1.9}
+.servico-pagina-v02 .rodape-col a:hover{color:#fff;text-decoration:underline}
+.servico-pagina-v02 .rodape-barra{margin-top:44px;padding:20px 0 30px;border-top:1px solid #3a4856}
+.servico-pagina-v02 .rodape-barra p{margin:0;font-size:14px;color:#9db6cf}
+@media(max-width:900px){.servico-pagina-v02 .rodape-grade{grid-template-columns:1fr 1fr;gap:36px}}
+@media(max-width:560px){.servico-pagina-v02 .rodape-grade{grid-template-columns:1fr}}

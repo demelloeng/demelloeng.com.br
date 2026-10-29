@@ -1,0 +1,225 @@
+{
+  "slug": "regularizacao",
+  "titulo_pagina": "Regularização | DEMELLO Engenharia",
+  "descricao": "Regularização a partir da situação real do imóvel: divergência de área ou exigência de prefeitura ou cartório. Sem pacote universal; enquadramento antes.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Regularização\",\"description\":\"Regularização a partir da situação real do imóvel: divergência de área ou exigência de prefeitura ou cartório. Sem pacote universal; enquadramento antes.\",\"url\":\"https://demelloeng.com.br/servicos/regularizacao/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Regularização\",\"item\":\"https://demelloeng.com.br/servicos/regularizacao/\"}]}]}</script>",
+  "h1": "Regularização: descubra primeiro o que, de fato, está irregular",
+  "chamada": "Regularização não é um pacote. Primeiro é preciso descobrir o que, de fato, está irregular.",
+  "introducao": [
+    "Dois imóveis podem parecer ter o mesmo problema e exigir caminhos completamente diferentes.",
+    "Por isso, a DEMELLO não parte de uma solução pronta.",
+    "Parte da situação real."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=regularize",
+    "rotulo": "Entender o que meu imóvel precisa",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A regularização pode fazer sentido quando existe, por exemplo:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "divergência de área;",
+            "construção ou ampliação não regularizada;",
+            "diferença entre documentação e situação existente;",
+            "exigência de prefeitura;",
+            "exigência de cartório;",
+            "notificação;",
+            "ausência ou inconsistência de documentos;",
+            "necessidade de entender qual caminho administrativo e técnico o caso exige."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme o caminho efetivamente contratado:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "levantamento;",
+            "projeto legal;",
+            "projeto aprovado, quando o processo correspondente estiver incluído e efetivamente resultar em aprovação;",
+            "pranchas em DWG;",
+            "modelos IFC;",
+            "documentos técnicos e administrativos previstos no escopo."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Não existe obrigação de todos esses produtos estarem presentes no mesmo serviço."
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Um caminho definido pelo seu caso",
+              "texto": "A DEMELLO não parte de solução pronta. Parte da situação real do imóvel."
+            },
+            {
+              "titulo": "Só o que for necessário",
+              "texto": "Levantamento, projeto legal e o resto só entram quando necessários e contratados."
+            },
+            {
+              "titulo": "Perguntar antes de propor",
+              "texto": "Por isso o enquadramento vem antes da proposta. E aprovação automática não existe: se houver análise de prefeitura, cartório ou outro órgão, a aprovação depende desse processo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa na rota “Regularizar meu imóvel” e escolha a situação que mais se parece com a sua."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO primeiro enquadra a situação."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A partir disso, define quais produtos técnicos e procedimentos realmente precisam integrar o serviço."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Dependendo do caso, podem ser necessários levantamento, projeto legal, documentação técnica e outras etapas."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Em outro caso, parte disso pode simplesmente não fazer sentido."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A análise pode considerar:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "qual é o problema percebido;",
+            "finalidade da regularização;",
+            "cidade e estado;",
+            "tipo de imóvel;",
+            "documentação existente;",
+            "área registrada;",
+            "área informada em IPTU;",
+            "divergências entre documentos;",
+            "alteração física em relação ao projeto existente;",
+            "construção ou ampliação não regularizada;",
+            "exigência ou notificação já recebida;",
+            "origem da exigência;",
+            "área afetada;",
+            "existência de planta ou projeto anterior."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "É por isso que a DEMELLO pergunta antes de propor."
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Na Regularização, a experiência técnica documentada é apresentada por meio de casos concretos, como o CECM Djalma Marinho."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No CECM Djalma Marinho, Marcos assumiu também a regularização do conjunto, além dos projetos técnicos e do orçamento envolvidos na intervenção."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A atuação ocorreu anteriormente à DEMELLO Engenharia."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O case não deve ser entendido como modelo universal de regularização: ele demonstra uma experiência concreta dentro de um empreendimento específico."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Regularização não possui pacote universal."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Levantamento, projeto legal, procedimentos administrativos e demais componentes entram somente quando necessários e contratados."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Também não existe promessa de aprovação automática."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Quando houver análise de prefeitura, cartório ou outro órgão competente, a aprovação depende desse processo."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se você sabe que existe uma divergência — ou só sabe que “tem alguma coisa errada no documento” — o enquadramento inicial ajuda a organizar o caso antes da proposta."
+        }
+      ]
+    }
+  ]
+}
