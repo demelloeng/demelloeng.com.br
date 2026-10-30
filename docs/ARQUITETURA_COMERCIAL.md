@@ -60,7 +60,7 @@ Só então aparece o formulário de contato (nó `X4`), com título e botão con
 | **Prévia** | Documento **verificável** com código, emitido a partir da estimativa (botão "Gerar prévia DEMELLO", página `/verificar/`). Opcional. | `/orcamento/`, `/verificar/` |
 | **Proposta** | Documento comercial da DEMELLO, emitido **depois** da confirmação do escopo pela equipe. | Pedido via "Quero receber uma proposta" |
 | **Orçamento técnico** | **Serviço** profissional contratado (planilha orçamentária, cronograma). Não é a estimativa. | `/servicos/orcamento-tecnico/` |
-| **Orçamento de obra** | Custo de execução da obra. A DEMELLO não executa obra e a estimativa não o representa. | — |
+| **Orçamento de obra** | Custo de execução da obra. Ele é orçado à parte e não entra na estimativa do projeto. | — |
 | **Previsão** | Legado. Permanece **somente** (a) no texto do motor de preços (`nossa previsão inicial é de R$…`), mantido por paridade com o motor Python/Worker — a interface o exibe como "nossa estimativa inicial" por substituição de apresentação; (b) no rótulo da imagem da prévia verificável (`preview_png.mjs`). Não usar em texto novo. | motor, PNG da prévia |
 | **/orcamento/** | Apenas a URL (legada, preservada). | — |
 

@@ -1,7 +1,7 @@
 {
   "slug": "projeto-estrutural",
   "nome_servico": "Projeto estrutural",
-  "fonte_copy": "COPY_ESTRUTURAL_V01_20261029.md",
+  "fonte_copy": "COPY_ESTRUTURAL_V02_20261030.md",
   "titulo_pagina": "Projeto estrutural residencial em BIM | DEMELLO",
   "descricao": "Projeto estrutural para casa, sobrado e ampliação, em BIM, em nível básico ou executivo. Veja a estimativa antes do contato.",
   "h1": "Projeto estrutural pensado junto com a arquitetura e as instalações",
@@ -179,7 +179,7 @@
             },
             {
               "pergunta": "Preciso de projeto estrutural para construir uma casa?",
-              "resposta": "Precisa. É ele que diz como a casa se sustenta. Quem projeta assina o projeto, com ART, e a obra precisa de responsável técnico. A DEMELLO não executa a obra."
+              "resposta": "Precisa. É ele que diz como a casa se sustenta. Quem projeta assina o projeto, com ART, e a obra precisa de responsável técnico. A DEMELLO acompanha a obra e assume a responsabilidade técnica de execução."
             },
             {
               "pergunta": "O projeto estrutural precisa ser aprovado na prefeitura?",
@@ -234,6 +234,7 @@
   "perfil": "estrutura",
   "imprensa": [],
   "removidos": [
-    "Os quantitativos pertencem à trajetória profissional do responsável técnico e não correspondem exclusivamente ao acervo operacional do atual CNPJ."
+    "Os quantitativos pertencem à trajetória profissional do responsável técnico e não correspondem exclusivamente ao acervo operacional do atual CNPJ.",
+    "A DEMELLO não executa a obra."
   ]
 }

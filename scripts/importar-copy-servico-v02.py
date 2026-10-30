@@ -16,10 +16,10 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 
 # imagens por bloco (arquivos em assets/images/). Legenda: o render é o modelo do projeto tratado por IA (declarado por Marcos em 29/10/2026).
-REMOVIDOS = {'projeto-arquitetura': ['O dado pertence à trajetória profissional do responsável técnico e não exclusivamente ao atual CNPJ.'],
+REMOVIDOS = {'projeto-arquitetura': ['O dado pertence à trajetória profissional do responsável técnico e não exclusivamente ao atual CNPJ.', 'A DEMELLO não executa a obra.'],
              'projeto-hidrossanitario': ['Os quantitativos pertencem à trajetória profissional do responsável técnico, e não exclusivamente ao atual CNPJ.',
                                          'A DEMELLO projeta as instalações. Não executa fisicamente as redes.'],
-             'projeto-estrutural': ['Os quantitativos pertencem à trajetória profissional do responsável técnico e não correspondem exclusivamente ao acervo operacional do atual CNPJ.']}
+             'projeto-estrutural': ['Os quantitativos pertencem à trajetória profissional do responsável técnico e não correspondem exclusivamente ao acervo operacional do atual CNPJ.', 'A DEMELLO não executa a obra.']}
 IMPRENSA = {
     'projeto-arquitetura': [
         {'veiculo': 'Instagram, @roni.miranda', 'titulo': 'Secretário de Estado da Educação assina a ordem de serviço da ampliação e reforma do colégio',
