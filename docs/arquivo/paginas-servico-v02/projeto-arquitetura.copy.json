@@ -1,7 +1,7 @@
 {
   "slug": "projeto-arquitetura",
   "nome_servico": "Projeto de arquitetura",
-  "fonte_copy": "COPY_ARQUITETURA_V10_20261030.md",
+  "fonte_copy": "COPY_ARQUITETURA_V11_20261030.md",
   "titulo_pagina": "Projeto de casa (arquitetônico) em 3D | DEMELLO",
   "descricao": "Projeto arquitetônico e planta de casa em 3D, com projeto aprovado na prefeitura. Estrutura e instalações juntas. Veja a estimativa antes do contato.",
   "h1": "Projeto de casa em 3D: você vê a casa antes de construir",
@@ -113,7 +113,7 @@
             },
             {
               "pergunta": "Preciso de engenheiro para construir?",
-              "resposta": "A obra precisa de responsável técnico. Quem projeta assina o projeto, com ART. Se você contratar, a DEMELLO também acompanha a obra e assume a responsabilidade técnica de execução, registrada em ART."
+              "resposta": "A obra precisa de responsável técnico. Quem projeta assina o projeto, com ART."
             }
           ]
         }
