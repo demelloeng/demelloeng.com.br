@@ -1,7 +1,7 @@
 {
   "slug": "projeto-hidrossanitario",
   "nome_servico": "Projeto hidrossanitário",
-  "fonte_copy": "COPY_HIDROSSANITARIO_V15_20261030.md",
+  "fonte_copy": "COPY_HIDROSSANITARIO_V16_20261030.md",
   "titulo_pagina": "Projeto hidrossanitário em BIM: água, esgoto e drenagem | DEMELLO",
   "descricao": "Projeto hidrossanitário para casa, sobrado, ampliação, escola ou rede existente. Água, esgoto e drenagem na mesma disciplina, em BIM. Veja a estimativa antes do contato.",
   "h1": "Projeto hidrossanitário: água, esgoto e drenagem",
@@ -111,7 +111,7 @@
         },
         {
           "tipo": "paragrafo",
-          "texto": "O trabalho é em BIM: um modelo só, em 3D. A DEMELLO também acompanha a obra e assume a responsabilidade técnica de execução, registrada em ART."
+          "texto": "O trabalho é em BIM: um modelo só, em 3D. Se você contratar, a DEMELLO também acompanha a obra e assume a responsabilidade técnica de execução, registrada em ART."
         }
       ]
     },
