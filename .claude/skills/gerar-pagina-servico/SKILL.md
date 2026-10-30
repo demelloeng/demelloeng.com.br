@@ -31,7 +31,8 @@ Rodar dentro do clone do site (`C:\Users\mms_e\Documents\MA_DEMELLO_PILOTO\demel
 4. `python scripts/conferir-paginas-servico-v02.py` e olhar a linha da página: **trechos ausentes 0**.
 5. Conferir o HTML: um H1, sem rolagem lateral em 390 px, sem erro no console.
 6. Mostrar a página consolidada em tela larga e no celular **antes de qualquer commit**. Uma rodada de anotações.
-7. Commit só local, só com ordem. **Push, PR e merge são ordens separadas.**
+7. **Atualizar `docs/CODEBASE_MAP.md`** na mesma entrega, se a mudança for estrutural (página nova, serviço renomeado ou agrupado, script, teste, allowlist, menu, rodapé, publicação). O mapa é o documento canônico do site (decisão de Marcos, 30/10/2026). Rodar o Cartographer em modo de atualização.
+8. Commit só local, só com ordem. **Push, PR e merge são ordens separadas.**
 
 ## Maquete 3D (quando houver IFC)
 - Passar o IFC antes por `scripts/otimizar_ifc.py` (sem perda).
