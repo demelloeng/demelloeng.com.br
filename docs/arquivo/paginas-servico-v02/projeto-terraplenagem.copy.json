@@ -1,0 +1,191 @@
+{
+  "slug": "projeto-terraplenagem",
+  "nome_servico": "Projeto de terraplanagem e infraestrutura",
+  "fonte_copy": "COPY_INFRAESTRUTURA_V01_20261102.md",
+  "titulo_pagina": "Projeto de terraplanagem: corte, aterro e drenagem | DEMELLO",
+  "descricao": "Projeto de terraplanagem, drenagem, pavimentação e redes públicas de água e esgoto. Platôs, corte, aterro e contenção definidos antes da obra, em BIM.",
+  "h1": "Projeto de terraplanagem: quanto de terra sai e quanto entra",
+  "chamada": "Terraplanagem, drenagem, pavimentação e redes públicas de água e esgoto, em BIM.",
+  "introducao": [
+    "A terraplanagem define a cota de cada piso, a terra que sai e a terra que entra. A máquina trabalha em cima desse projeto.",
+    "A DEMELLO modela o terreno e a implantação no Revit. Terreno, arquitetura e drenagem se encontram no mesmo modelo."
+  ],
+  "cta": {
+    "rotulo": "Contar o meu caso de infraestrutura",
+    "micro": "Sem compromisso",
+    "href": "../../contato/"
+  },
+  "jsonld_nomes": {
+    "Projeto de terraplenagem": "Projeto de terraplanagem e infraestrutura"
+  },
+  "blocos_novos": {
+    "para_quem": {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido se você:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "vai construir em terreno com desnível;",
+            "tem o projeto de arquitetura e precisa saber quanta terra sai e quanta entra;",
+            "precisa de drenagem urbana, pavimentação ou rodovia;",
+            "precisa do projeto das redes públicas de água e esgoto;",
+            "já tem curvas de nível ou a planta em PDF, DWG, DXF ou IFC."
+          ]
+        }
+      ]
+    },
+    "muda": {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "O volume de terra é conhecido antes da obra",
+              "texto": "O projeto diz quanto sai e quanto entra. Menos surpresa cara quando a máquina chegar."
+            },
+            {
+              "titulo": "Cada platô fica na cota certa",
+              "texto": "O piso de cada bloco tem a sua cota. Onde o talude cabe, talude. Onde não cabe, muro de arrimo."
+            },
+            {
+              "titulo": "O terreno conversa com o resto",
+              "texto": "A terraplanagem se encontra com a arquitetura e com a drenagem, e a água da chuva tem para onde ir."
+            }
+          ]
+        }
+      ]
+    },
+    "estrutura": {
+      "titulo": "Do terreno natural ao terraplanado",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "- Terreno natural: as curvas de nível dizem como o terreno é hoje."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Platôs: a cota de cada piso, definida com a arquitetura."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Corte: a terra que sai, onde o terreno está acima do piso."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Aterro: a terra que entra, onde o terreno está abaixo do piso."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Taludes e contenções: o talude onde ele cabe, o muro de arrimo onde não cabe."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Drenagem: leva a água da chuva para longe do platô."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A linha de zero marca onde o terreno encontra o piso novo. De um lado é corte. Do outro, aterro."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A maquete no topo da página mostra esse caminho em um colégio real."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A terra que sai e entra é base para orçar a obra. Isso é com o serviço de <a href=\"../orcamento-tecnico/\">Orçamento e cronograma</a>."
+        }
+      ]
+    },
+    "experiencia": {
+      "titulo": "Experiência aplicada — Colégio Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No Colégio Estadual Cívico Militar Djalma Marinho, Marcos de Mello Silva respondeu pelo projeto de terraplanagem. O terreno tem cerca de 16 metros de desnível."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O projeto definiu os platôs de cada bloco, os cortes, os aterros e as contenções. A maquete 3D no topo da página mostra esse caminho."
+        }
+      ]
+    },
+    "faz": {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO projeta a infraestrutura que o seu escopo pede: terraplanagem, drenagem urbana, pavimentação, rodovia e redes públicas de água e esgoto. Na terraplanagem, define os platôs, os volumes de corte e aterro, os taludes e as contenções. Faz também as seções, os traçados e a coordenação com a arquitetura e as demais disciplinas."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O trabalho é em BIM: terreno e implantação em um modelo só, em 3D."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "Quanto custa um projeto de terraplanagem?",
+              "resposta": "Esta página não traz estimativa. Terreno e obra de infraestrutura variam demais para um número genérico. Conte o seu caso, e a DEMELLO responde com uma proposta."
+            },
+            {
+              "pergunta": "O que o projeto entrega para a máquina?",
+              "resposta": "As cotas, os volumes de corte e aterro, os taludes e as contenções. A máquina trabalha em cima disso."
+            },
+            {
+              "pergunta": "Preciso de levantamento topográfico?",
+              "resposta": "Precisa de um ponto de partida: as curvas de nível ou o levantamento do terreno. Se você tem em PDF, DWG, DXF ou IFC, a DEMELLO parte dele."
+            },
+            {
+              "pergunta": "Drenagem e pavimentação entram?",
+              "resposta": "Entram quando o seu escopo pede. Drenagem urbana, pavimentação e rodovia fazem parte da infraestrutura. Conte o que você precisa."
+            },
+            {
+              "pergunta": "E a rede de água e esgoto da rua?",
+              "resposta": "Redes públicas de água e esgoto também entram. A DEMELLO projeta no mesmo modelo, junto com o terreno e a drenagem."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ordem": [
+    "para_quem",
+    "muda",
+    "estrutura",
+    "faz",
+    "perguntas",
+    "Prova técnica",
+    "experiencia",
+    {
+      "detalhes": {
+        "titulo": "Detalhes do escopo",
+        "resumo": "Entregáveis, como funciona, como o escopo é definido e limites",
+        "blocos": [
+          "Entregáveis",
+          "Como o escopo é definido"
+        ]
+      }
+    }
+  ],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Conte o que você vai construir e onde. Já tem as curvas de nível ou a planta? Mande como está."
+    ]
+  },
+  "figuras": {},
+  "layout": "rico",
+  "perfil": "infra",
+  "imprensa": [],
+  "removidos": []
+}

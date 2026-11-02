@@ -109,7 +109,7 @@ test('deep links: todo link para /orcamento/ com query usa situação e discipli
   }
   // cobertura: cada disciplina com deep link por servico é usada por uma página; regularização usa a rota exclusiva
   for (const key of Object.keys(SERVICE_DEEPLINKS)) {
-    if (key === 'regularizacao') continue;
+    if (key === 'regularizacao' || key === 'terraplenagem') continue;   // regularização usa rota exclusiva; Infraestrutura não leva estimativa (decisão 97)
     assert.ok(seen.has(`known|${key}`), `nenhuma página usa o deep link da disciplina ${key}`);
   }
   for (const route of ['build', 'regularize', 'problem', 'support', 'known']) assert.ok(seen.has(`${route}|`), `rota ${route}`);

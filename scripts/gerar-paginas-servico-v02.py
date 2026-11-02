@@ -121,7 +121,9 @@ def gerar(slug):
         jsonld = jsonld.replace(d['descricao'], copia['descricao'])
         d = {**d, 'titulo_pagina': q(copia['titulo_pagina']), 'descricao': q(copia['descricao']), 'h1': copia['h1'],
              'chamada': copia['chamada'], 'introducao': copia['introducao'],
-             'cta': {**d['cta'], 'rotulo': copia['cta']['rotulo'], 'micro': copia['cta']['micro']}}
+             'cta': {**d['cta'], 'rotulo': copia['cta']['rotulo'], 'micro': copia['cta']['micro'], **({'href': copia['cta']['href']} if 'href' in copia['cta'] else {})}}
+        for antigo, novo in copia.get('jsonld_nomes', {}).items():   # a página muda de nome (ex.: terraplenagem -> terraplanagem)
+            jsonld = jsonld.replace(f'"name":"{antigo}"', f'"name":"{novo}"')
 
     nav = ''.join(
         f'<a href="../../{href}"' + (' aria-current="page"' if rotulo == 'Serviços' else '') + f'>{rotulo}</a>'
@@ -200,24 +202,26 @@ def gerar(slug):
         nv, ant = copia['blocos_novos'], {b['titulo']: b for b in d['blocos']} if False else antigos
         t_dj = 'Experiência aplicada — CECM Djalma Marinho'
         figs = ''.join(figura_html(f) for f in copia.get('figuras', {}).get(t_dj, []))
-        estrutura_pg = copia.get('perfil') in ('estrutura', 'hidro')
+        estrutura_pg = copia.get('perfil') in ('estrutura', 'hidro', 'infra')
         hidro_pg = copia.get('perfil') == 'hidro'
-        maquete_html = (DOCS / ('maquete-hidro-markup.html' if hidro_pg else 'maquete-estrutura-markup.html' if estrutura_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
+        infra_pg = copia.get('perfil') == 'infra'
+        maquete_html = (DOCS / ('maquete-terraplanagem-markup.html' if infra_pg else 'maquete-hidro-markup.html' if hidro_pg else 'maquete-estrutura-markup.html' if estrutura_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
         meio = L.estrutura(nv['estrutura']) if estrutura_pg else L.prefeitura(nv['prefeitura'])
-        prova_html = L.prova(ant['Prova técnica'], 'de experiência técnica ' + ('hidrossanitária' if hidro_pg else 'estrutural') + ' documentada') if estrutura_pg else L.prova(ant['Prova técnica'])
+        prova_html = (L.prova_volume(ant['Prova técnica']) if infra_pg else
+                      L.prova(ant['Prova técnica'], 'de experiência técnica ' + ('hidrossanitária' if hidro_pg else 'estrutural') + ' documentada') if estrutura_pg else L.prova(ant['Prova técnica']))
         extra_hero = L.mezanino_link(nv['mezanino']) if estrutura_pg and 'mezanino' in nv else ''
         if estrutura_pg and 'mezanino' in nv:
             maquete_html = maquete_html.replace('<!--SOBRE-->', L.mezanino_painel(nv['mezanino'], d['cta']['href'], copia['cta']['rotulo']))
         principal = '\n'.join([L.hero(copia, d, maquete_html, extra_hero), L.para_quem(nv['para_quem']), L.muda(nv['muda']), meio,
-                               L.faz(nv['faz']), L.perguntas(nv['perguntas']), prova_html,
+                               (L.faz(nv['faz'], L.DIAGRAMA_INFRA) if infra_pg else L.faz(nv['faz'])), L.perguntas(nv['perguntas']), prova_html,
                                L.djalma(nv['experiencia'] if estrutura_pg else ant[t_dj], '', copia.get('imprensa', [])), detalhes_html])
         importmap = '<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>'
         base_css = '<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n'
         if estrutura_pg:
             extra_head = (base_css + '<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">\n'
-                          '<link rel="stylesheet" href="../../assets/css/' + ('servico-hidro-v02.css?v=4' if hidro_pg else 'servico-estrutural-v02.css?v=4') + '">\n' + importmap)
-            extra_body = '<script type="module" src="../../assets/js/' + ('maquete-hidro-3d.js?v=10' if hidro_pg else 'maquete-estrutura-3d.js?v=6') + '"></script>'
-            classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 ' + ('servico-rico-hidro' if hidro_pg else 'servico-rico-estrutural')
+                          '<link rel="stylesheet" href="../../assets/css/' + ('servico-infra-v02.css?v=1' if infra_pg else 'servico-hidro-v02.css?v=4' if hidro_pg else 'servico-estrutural-v02.css?v=4') + '">\n' + importmap)
+            extra_body = '<script type="module" src="../../assets/js/' + ('maquete-terraplanagem-3d.js?v=1' if infra_pg else 'maquete-hidro-3d.js?v=10' if hidro_pg else 'maquete-estrutura-3d.js?v=6') + '"></script>'
+            classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 ' + ('servico-rico-infra' if infra_pg else 'servico-rico-hidro' if hidro_pg else 'servico-rico-estrutural')
         else:
             extra_head = base_css + importmap
             extra_body = '<script type="module" src="../../assets/js/maquete-3d.js"></script>'

@@ -25,6 +25,10 @@ DIAGRAMA_BIM = '''<svg class="rico-bim" viewBox="0 0 440 300" role="img" aria-la
 </svg>'''
 
 
+DIAGRAMA_INFRA = (DIAGRAMA_BIM.replace('Arquitetura, estrutura e instalações se encontram em um único modelo BIM', 'Terreno, arquitetura e drenagem se encontram em um único modelo BIM')
+                  .replace('>Arquitetura<', '>Terreno<', 1).replace('>Estrutura<', '>Arquitetura<', 1).replace('>Instalações<', '>Drenagem<', 1))
+
+
 def _lista(conteudo, tipo):
     return next((c for c in conteudo if c['tipo'] == tipo), None)
 
@@ -74,9 +78,9 @@ def prefeitura(bloco):
 </div></section>'''
 
 
-def faz(bloco):
+def faz(bloco, diagrama=DIAGRAMA_BIM):
     ps = ''.join(f'<p>{t}</p>' for t in _paragrafos(bloco))
-    return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-duas rico-faz"><div class="rico-corrido">{ps}</div><div class="rico-fig">{DIAGRAMA_BIM}</div></div></section>'
+    return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-duas rico-faz"><div class="rico-corrido">{ps}</div><div class="rico-fig">{diagrama}</div></div></section>'
 
 
 def perguntas(bloco):
@@ -90,6 +94,17 @@ def prova(bloco, rotulo='de experiência técnica arquitetônica documentada'):
     m = re.search(r'(?:registra|reúne) ([\d\.]+) m²', ps[0])
     numero = f'<div class="rico-numero"><b>{m.group(1)} m²</b><span>{rotulo}</span></div>' if m else ''
     corpo = ''.join(f'<p>{t}</p>' for t in ps[:-1])   # a ressalva do CNPJ saiu por ordem de Marcos (29/10/2026)
+    return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-duas rico-prova">{numero}<div class="rico-corrido">{corpo}</div></div></section>'
+
+
+def prova_volume(bloco):
+    """Prova técnica em m³ (terraplanagem): o total combinado vira o número grande; o resto do texto antigo fica como está."""
+    ps = _paragrafos(bloco)
+    lista = _lista(bloco['conteudo'], 'lista')['itens']
+    total = next(p for p in ps if p.startswith('Total combinado'))
+    m = re.search(r'([\d\.]+) m³ de (.*?)\.?$', total)
+    numero = f'<div class="rico-numero"><b>{m.group(1)} m³</b><span>de {m.group(2)}</span></div>' if m else ''
+    corpo = f'<p>{ps[0]}</p><ul class="lista">' + ''.join(f'<li>{x}</li>' for x in lista) + f'</ul><p>{total}</p>'   # o texto antigo fica inteiro
     return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-duas rico-prova">{numero}<div class="rico-corrido">{corpo}</div></div></section>'
 
 

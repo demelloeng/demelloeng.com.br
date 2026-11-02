@@ -1,0 +1,20 @@
+{
+ "versao": "V5",
+ "camadas": [
+  "TERRENO_NATURAL",
+  "TERRENO_FINAL",
+  "VOLUME_CORTE",
+  "VOLUME_ATERRO",
+  "MARCA_CORTE",
+  "MARCA_ATERRO",
+  "PISOS",
+  "CONTENCOES"
+ ],
+ "ordem_animacao": [
+  "TERRENO_NATURAL",
+  "PISOS",
+  "linha desce: TERRENO_FINAL + MARCA_CORTE + MARCA_ATERRO + VOLUME_CORTE + VOLUME_ATERRO + CONTENCOES (permanecem em 100%)"
+ ],
+ "fora_da_V5": "edificacoes, patamares, urbanizacao e camadas de revisao (continuam na V4, com o CSV de revisao)",
+ "aviso": "ilustrativo; sem volumes; terreno natural reconstruido; aterro posicionado pela planta (nao verificado por volume); contencoes ilustrativas, sem altura executiva"
+}

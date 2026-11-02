@@ -10,6 +10,8 @@ branch: claude/hidrossanitario-v01-20261029
 
 > **Documento canônico do site (decisão de Marcos, 30/10/2026).** Fica no repositório, versionado junto com o código. **Toda mudança estrutural no site muda este mapa na mesma entrega:** página nova, serviço renomeado ou agrupado, script novo, teste novo, arquivo na allowlist, mudança de menu, de rodapé ou de publicação. A skill `gerar-pagina-servico` inclui esse passo. Para atualizar, rodar o Cartographer em modo de atualização (ele reaproveita o que não mudou).
 
+> **Atualização dirigida em 02/11/2026** (branch `claude/infraestrutura-v01-20261102`, página de Infraestrutura): seções 3, 4, 8 e 13 e o guia de navegação foram editados à mão; **o Cartographer não foi rodado**. As contagens de arquivo e de tokens do cabeçalho seguem as de 30/10.
+
 > Gerado pelo Cartographer em 2026-10-30T08:01:20Z, por seis leituras em paralelo (calculadora, testes, scripts e publicação, copy central, maquete 3D e páginas HTML).
 > **Leitura estática:** nada foi executado (nem os testes, nem o build). Onde um relatório citou um número que não foi conferido, o texto diz.
 > Estado do repositório no mapeamento: branch `claude/hidrossanitario-v01-20261029` (a nova versão do site, em paralelo; a `main` continua em `27a229e` e é o que está no ar). Dois arquivos sem rastreio no Git: `assets/models/hidro-redes.glb` e `.json`.
@@ -100,7 +102,7 @@ site-hidro/
 ## 3. Módulo: pipeline de páginas de serviço
 
 **Propósito:** produzir `servicos/<slug>/index.html` a partir de uma copy central versionada.
-**Estado hoje:** só `projeto-arquitetura`, `projeto-estrutural` e `projeto-hidrossanitario` têm copy nova e layout rico. As outras seis (`compatibilizacao-bim`, `orcamento-tecnico`, `projeto-gas-glp`, `projeto-prevencao-incendio`, `projeto-terraplenagem`, `regularizacao`) seguem no texto antigo e no layout simples.
+**Estado hoje:** só `projeto-arquitetura`, `projeto-estrutural` e `projeto-hidrossanitario` têm copy nova e layout rico; **na branch `claude/infraestrutura-v01-20261102` também `projeto-terraplenagem` (Infraestrutura, perfil `infra`)**. As outras seis (`compatibilizacao-bim`, `orcamento-tecnico`, `projeto-gas-glp`, `projeto-prevencao-incendio`, `projeto-terraplenagem`, `regularizacao`) seguem no texto antigo e no layout simples.
 
 ### 3.1 Ciclo
 
@@ -135,12 +137,15 @@ O **bloco do meio** depende do perfil:
 | (arquitetura, sem perfil) | `PREFEITURA, APROVACAO E HABITE-SE` | nenhum |
 | `estrutura` | `DA FUNDACAO A LAJE` | `EXPERIENCIA APLICADA`, `MEZANINO` |
 | `hidro` | `DA CAIXA D'AGUA AO COLETOR` | `EXPERIENCIA APLICADA` |
+| `infra` | `DO TERRENO NATURAL AO TERRAPLANADO` | `EXPERIENCIA APLICADA` |
 
 Regras de formato que quebram a importação: item de "O que muda" no padrão `N. Título. Texto.`; `PERGUNTAS` em número par de linhas; `prefeitura()` exige exatamente 5 parágrafos; `estrutura()` exige uma linha com "Orçamento e cronograma" (o gancho) e só monta os cartões Básico/Executivo se houver os dois.
 
 ### 3.4 Dicionários fixos por slug no importador (editar o código para página nova)
 
 `LAYOUTS`, `PERFIS`, `REMOVIDOS`, `IMPRENSA`, `FIGURAS`, `LINKS`. O gerador tem a lista `SLUGS` (os 9). **Página nova de serviço = editar esses dicionários.**
+
+**Perfil `infra` (Infraestrutura):** a página **não leva estimativa** (decisão 97). Por isso o importador grava `cta.href = ../../contato/` e `jsonld_nomes` (o nome do serviço no JSON-LD muda de "Projeto de terraplenagem" para o nome novo); o bloco "Detalhes do escopo" traz só `Entregáveis` e `Como o escopo é definido` (saem `Como funciona`, que descreve a estimativa, e `Escopo e limites`, que nega a execução; o texto antigo continua intacto em `projeto-terraplenagem.json`); `layout_rico.prova_volume` mostra a prova técnica em m³ e `layout_rico.DIAGRAMA_INFRA` troca o diagrama (Terreno, Arquitetura, Drenagem). O **slug continua `projeto-terraplenagem`** (a grafia antiga só aparece em endereços; trocar o slug muda a URL e pede redirecionamento, decisão de Marcos).
 
 ### 3.5 Versionamento
 
@@ -155,10 +160,12 @@ Cada mudança de texto, mesmo de uma frase, gera `V<NN+1>` novo. Cada serviço t
 | Arquitetura | `maquete-3d.js` (sem `?v`) | `casa-exemplo.glb` (sem JSON) | nenhum além da base |
 | Estrutural | `maquete-estrutura-3d.js?v=6` | `estrutura-concreto` e `estrutura-aco` (`.glb` + `.json`) | `servico-estrutural-v02.css?v=4` |
 | Hidrossanitário | `maquete-hidro-3d.js?v=10` | `hidro-casa.glb` + `.json` | `servico-hidro-v02.css?v=4` |
+| Infraestrutura | `maquete-terraplanagem-3d.js?v=1` | `terraplanagem-djalma.glb` + `.json` (667 KB) | `servico-infra-v02.css?v=1` |
 
 - **Contrato do JSON de identidade:** `{padrao, pavimentos[], rotulos?, legenda?, grupos:{<camada>:[[nome, iPavimento, primeiraFace, nFaces, detalhe?]]}}`. A ficha acha a peça por **busca binária no índice de face**; por isso a ordem do JSON tem de casar com o GLB.
 - **Cor:** estrutural pinta pela cor da camada; hidro usa **cor por vértice** gravada no GLB (cores do IFC original) e injeta brilho via `onBeforeCompile`; arquitetura usa paleta por nome de malha.
 - **Conversor IFC→GLB:** `scripts/ifc_para_glb_hidro.py <entrada.ifc> <saida>`. Regra de peso (Marcos, 29/10/2026): peças acima de 250 triângulos são simplificadas por agrupamento de vértices; tubos ficam intactos; GLB final **não passa de 2.000 KB** (senão o script aborta sem gravar); tubos e conexões têm a espessura ampliada 3× só no visual (a página avisa). O IFC é dado de cliente e **não vai ao site**; só o GLB derivado, com nomes neutros.
+- **Maquete da terraplanagem (Infraestrutura):** GLB ilustrativo (V5, 02/11/2026) com 8 camadas nomeadas (`TERRENO_NATURAL`, `TERRENO_FINAL`, `VOLUME_CORTE`, `VOLUME_ATERRO`, `MARCA_CORTE`, `MARCA_ATERRO`, `PISOS`, `CONTENCOES`), sem IFC de cliente, sem volumes, relevo exagerado 2 vezes. A animação é por janelas (terreno natural, pisos que caem, linha que desce, corte e aterro que ficam). Os scripts que geram o GLB e o relatório de validação estão **fora do repositório** (`C:\work\cad\djalma\maquete_v1\v5`).
 - **Dependência externa:** three.js 0.160.0 via importmap do jsDelivr, **ainda não hospedado** no site.
 - **Outra página 3D:** `experiencia-tecnica` usa `three-d-stage.js` com three 0.184.0 via unpkg (importmap próprio).
 
@@ -209,6 +216,7 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 | `contact_clicks` | ≥ 90 links de contato; classes `.topbar/.nav/.cta-band/.site-footer`; sem dado pessoal no evento. |
 | `privacy_and_sink` | Sem fonte nem recurso externo; sink antes do módulo de analytics; Pixel `defer`; rodapé com "Privacidade" e "Trajetória do fundador"; **title ≤ 60 e description 70–160** (mais estrito que `commercial_site`). |
 | `hotfix` | Nav com 8 rótulos exatos e ordem; animação do CTA. |
+| `native_services`, `commercial_site` (exceção) | Infraestrutura não descreve estimativa nem usa deep link de disciplina (decisão 97). Teste novo em `native_services`: a página leva ao contato e não ao `/orcamento/`. |
 | `integration`, `native_services`, `analytics` | Bundle compilado, endpoints, textos fixos, hashes SHA-256 de `pricing-table.v2.json`, `engine.mjs`, `decimal.mjs` e `submit.mjs` (qualquer edição quebra `architecture_estimator`). |
 
 ## 9. Publicação (`.github/`)
@@ -257,7 +265,7 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 
 ## 13. Estado de reestruturação em curso (30/10/2026, declarado por Marcos)
 
-O site deve passar a **sete páginas**: Arquitetura, Estrutural, Hidrossanitário, **Infraestrutura** (terraplanagem, redes de água e esgoto, drenagem urbana, rodovia, pavimentação), **PSCIP + GLP**, **Orçamento, cronograma e compatibilização** e **Regularização**. Os serviços continuam diferentes entre si; o agrupamento é estratégico. Efeitos mapeados acima: `site_ux` trava os 9 títulos e 9 slugs; a calculadora tem 11 códigos de preço e nenhum para rodovia, pavimentação, redes públicas ou drenagem urbana, **e não precisa ter**: infraestrutura é projeto de milhões, que ninguém digita por curiosidade (Marcos, 30/10/2026). A página de Infraestrutura **não leva estimativa**: o chamado é para conversar sobre o caso (contato), e o `site_ux`, que exige um CTA de estimativa em toda página de serviço, terá de ser ajustado para essa exceção. Nada disso foi alterado; a pendência está registrada na memória do projeto, não no Doc03.
+O site deve passar a **sete páginas**: Arquitetura, Estrutural, Hidrossanitário, **Infraestrutura** (terraplanagem, redes de água e esgoto, drenagem urbana, rodovia, pavimentação), **PSCIP + GLP**, **Orçamento, cronograma e compatibilização** e **Regularização**. Os serviços continuam diferentes entre si; o agrupamento é estratégico. Efeitos mapeados acima: `site_ux` trava os 9 títulos e 9 slugs; a calculadora tem 11 códigos de preço e nenhum para rodovia, pavimentação, redes públicas ou drenagem urbana, **e não precisa ter**: infraestrutura é projeto de milhões, que ninguém digita por curiosidade (Marcos, 30/10/2026). A página de Infraestrutura **não leva estimativa**: o chamado é para conversar sobre o caso (contato), e o `site_ux`, que exige um CTA de estimativa em toda página de serviço, terá de ser ajustado para essa exceção. **02/11/2026:** a página de Infraestrutura foi feita **só na branch `claude/infraestrutura-v01-20261102`** (copy `COPY_INFRAESTRUTURA_V01_20261102.md`, maquete V5, exceção nos testes). Continuam como estavam: o catálogo `servicos/index.html` (card ainda com o nome antigo), os 9 slugs e títulos do `site_ux`, o menu, o sitemap e a allowlist. Publicar exige a allowlist com os arquivos novos, o three.js hospedado e ordem expressa de Marcos.
 
 ---
 
