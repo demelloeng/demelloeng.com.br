@@ -104,7 +104,7 @@ def prova_volume(bloco):
     total = next(p for p in ps if p.startswith('Total combinado') or re.match(r'[\d\.]+ m³ de ', p))   # frase do total (antiga ou manchete da copy)
     m = re.search(r'([\d\.]+) m³ de (.*?)\.?$', total)
     numero = f'<div class="rico-numero"><b>{m.group(1)} m³</b><span>de {m.group(2)}</span></div>' if m else ''
-    corpo = f'<p>{next(p for p in ps if p != total)}</p><ul class="lista">' + ''.join(f'<li>{x}</li>' for x in lista) + f'</ul><p>{total}</p>'   # o texto antigo fica inteiro
+    corpo = f'<p>{next(p for p in ps if p != total)}</p><ul class="lista">' + ''.join(f'<li>{x}</li>' for x in lista) + '</ul>' + (f'<p>{total}</p>' if total.startswith('Total combinado') else '')   # texto antigo: frase inteira; copy V02: o total já é o número grande
     return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-duas rico-prova">{numero}<div class="rico-corrido">{corpo}</div></div></section>'
 
 
