@@ -360,6 +360,6 @@ test('Infraestrutura (terraplanagem): sem estimativa (decisão 97); o chamado le
   const html = await readFile(path.join(siteRoot, 'servicos/projeto-terraplenagem/index.html'), 'utf8');
   const principal = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
   assert.doesNotMatch(principal, /orcamento\/\?/, 'a página de Infraestrutura não abre a estimativa');
-  assert.match(principal, /<a class="cta" href="\.\.\/\.\.\/contato\/">Contar o meu caso de infraestrutura/);
+  assert.match(principal, /<a class="cta" href="\.\.\/\.\.\/contato\/">Conversar sobre meu projeto de terraplanagem/);
   assert.doesNotMatch(principal, /terraplenagem/i, 'a grafia correta é terraplanagem; a antiga só pode aparecer em endereços');
 });

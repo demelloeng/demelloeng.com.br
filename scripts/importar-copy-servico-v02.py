@@ -64,7 +64,7 @@ def rotulos_de(slug):
     perfil = PERFIS.get(slug)
     meio = {'estrutura': 'DA FUNDACAO A LAJE', 'hidro': "DA CAIXA D'AGUA AO COLETOR", 'infra': 'DO TERRENO NATURAL AO TERRAPLANADO'}.get(perfil)
     novos = [(meio if (r.startswith('PREFEITURA') and meio) else r) for r in ROTULOS]
-    return novos + {'estrutura': ['EXPERIENCIA APLICADA', 'MEZANINO'], 'hidro': ['EXPERIENCIA APLICADA'], 'infra': ['EXPERIENCIA APLICADA']}.get(perfil, [])
+    return novos + {'estrutura': ['EXPERIENCIA APLICADA', 'MEZANINO'], 'hidro': ['EXPERIENCIA APLICADA'], 'infra': ['EXPERIENCIA APLICADA', 'PROVA TECNICA']}.get(perfil, [])
 
 
 def secoes(texto, rotulos=ROTULOS):
@@ -99,13 +99,30 @@ def main(slug, arquivo, nome_servico):
         muda.append({'titulo': m.group(1), 'texto': m.group(2)})
 
     perg_linhas = paragrafos(s['PERGUNTAS'])
-    assert len(perg_linhas) % 2 == 0, 'perguntas e respostas devem vir em pares'
-    perguntas = [{'pergunta': perg_linhas[i], 'resposta': perg_linhas[i + 1]} for i in range(0, len(perg_linhas), 2)]
+    if PERFIS.get(slug) == 'infra':   # resposta com mais de um parágrafo: a pergunta é a linha que termina em "?"
+        grupos = []
+        for linha in perg_linhas:
+            if linha.endswith('?'):
+                grupos.append((linha, []))
+            else:
+                assert grupos, f'resposta sem pergunta: {linha[:60]}'
+                grupos[-1][1].append(linha)
+        assert all(r for _, r in grupos), 'pergunta sem resposta'
+        perguntas = [{'pergunta': q, 'resposta': '</p><p>'.join(r)} for q, r in grupos]
+    else:
+        assert len(perg_linhas) % 2 == 0, 'perguntas e respostas devem vir em pares'
+        perguntas = [{'pergunta': perg_linhas[i], 'resposta': perg_linhas[i + 1]} for i in range(0, len(perg_linhas), 2)]
 
     exp = None
     if PERFIS.get(slug) in ('estrutura', 'hidro', 'infra'):
         linhas_exp = s['EXPERIENCIA APLICADA'].split('\n', 1)
         exp = {'titulo': linhas_exp[0].strip(), 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(linhas_exp[1])]}
+
+    prova = None
+    if PERFIS.get(slug) == 'infra':   # prova técnica aprovada na copy: manchete com o total + lista do acervo
+        pl = paragrafos(s['PROVA TECNICA'])
+        prova = {'titulo': 'Prova técnica', 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in pl if not t.startswith('- ')]
+                 + [{'tipo': 'lista', 'itens': [t[2:] for t in pl if t.startswith('- ')]}]}
 
     mez = None
     if PERFIS.get(slug) == 'estrutura':
@@ -134,16 +151,17 @@ def main(slug, arquivo, nome_servico):
                if PERFIS.get(slug) == 'infra' else
                {'prefeitura': {'titulo': 'Prefeitura, aprovação e habite-se', 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(s['PREFEITURA, APROVACAO E HABITE-SE'])]}}),
             **({'experiencia': exp} if exp else {}),
+            **({'prova': prova} if prova else {}),
             **({'mezanino': mez} if mez else {}),
             'faz': {'titulo': 'O que a DEMELLO faz', 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(s['O QUE A DEMELLO FAZ'])]},
             'perguntas': {'titulo': 'Perguntas', 'conteudo': [{'tipo': 'perguntas', 'itens': perguntas}]},
         },
         # ordem da página; chaves de blocos_novos ou títulos dos blocos antigos (mantidos sem alteração)
         # Vitrine: o que o leitor de busca precisa. "Detalhes do escopo": texto antigo intacto, fechado por padrão.
-        'ordem': ['para_quem', 'muda', ('estrutura' if PERFIS.get(slug) in ('estrutura', 'hidro', 'infra') else 'prefeitura'), 'faz', 'perguntas', 'Prova técnica',
+        'ordem': ['para_quem', 'muda', ('estrutura' if PERFIS.get(slug) in ('estrutura', 'hidro', 'infra') else 'prefeitura'), 'faz', 'perguntas', ('prova' if prova else 'Prova técnica'),
                   ('experiencia' if exp else 'Experiência aplicada — CECM Djalma Marinho'),
                   {'detalhes': {'titulo': 'Detalhes do escopo',
-                                'resumo': 'Entregáveis, como funciona, como o escopo é definido e limites',
+                                'resumo': ('Entregáveis e como o escopo é definido' if PERFIS.get(slug) == 'infra' else 'Entregáveis, como funciona, como o escopo é definido e limites'),
                                 'blocos': (['Entregáveis', 'Como o escopo é definido'] if PERFIS.get(slug) == 'infra'   # sem estimativa (decisão 97) e sem a negação de execução (Voz V07)
                                            else ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites'])}}],
         'proximo_passo': {'titulo': 'Próximo passo', 'paragrafos': paragrafos(s['PROXIMO PASSO'])},

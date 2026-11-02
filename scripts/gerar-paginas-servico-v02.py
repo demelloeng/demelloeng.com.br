@@ -207,7 +207,7 @@ def gerar(slug):
         infra_pg = copia.get('perfil') == 'infra'
         maquete_html = (DOCS / ('maquete-terraplanagem-markup.html' if infra_pg else 'maquete-hidro-markup.html' if hidro_pg else 'maquete-estrutura-markup.html' if estrutura_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
         meio = L.estrutura(nv['estrutura']) if estrutura_pg else L.prefeitura(nv['prefeitura'])
-        prova_html = (L.prova_volume(ant['Prova técnica']) if infra_pg else
+        prova_html = (L.prova_volume(nv.get('prova') or ant['Prova técnica']) if infra_pg else
                       L.prova(ant['Prova técnica'], 'de experiência técnica ' + ('hidrossanitária' if hidro_pg else 'estrutural') + ' documentada') if estrutura_pg else L.prova(ant['Prova técnica']))
         extra_hero = L.mezanino_link(nv['mezanino']) if estrutura_pg and 'mezanino' in nv else ''
         if estrutura_pg and 'mezanino' in nv:

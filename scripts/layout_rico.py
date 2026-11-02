@@ -101,10 +101,10 @@ def prova_volume(bloco):
     """Prova técnica em m³ (terraplanagem): o total combinado vira o número grande; o resto do texto antigo fica como está."""
     ps = _paragrafos(bloco)
     lista = _lista(bloco['conteudo'], 'lista')['itens']
-    total = next(p for p in ps if p.startswith('Total combinado'))
+    total = next(p for p in ps if p.startswith('Total combinado') or re.match(r'[\d\.]+ m³ de ', p))   # frase do total (antiga ou manchete da copy)
     m = re.search(r'([\d\.]+) m³ de (.*?)\.?$', total)
     numero = f'<div class="rico-numero"><b>{m.group(1)} m³</b><span>de {m.group(2)}</span></div>' if m else ''
-    corpo = f'<p>{ps[0]}</p><ul class="lista">' + ''.join(f'<li>{x}</li>' for x in lista) + f'</ul><p>{total}</p>'   # o texto antigo fica inteiro
+    corpo = f'<p>{next(p for p in ps if p != total)}</p><ul class="lista">' + ''.join(f'<li>{x}</li>' for x in lista) + f'</ul><p>{total}</p>'   # o texto antigo fica inteiro
     return f'<section class="rico-sec wrap"><h2>{bloco["titulo"]}</h2><div class="rico-duas rico-prova">{numero}<div class="rico-corrido">{corpo}</div></div></section>'
 
 
