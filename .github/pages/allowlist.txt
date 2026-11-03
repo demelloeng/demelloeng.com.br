@@ -110,6 +110,7 @@ assets/css/home-20261024.css
 assets/css/home-opcao3-20261027.css
 assets/css/maquete-3d.css
 assets/css/maquete-estrutura-3d.css
+assets/css/rodape-v02.css
 assets/css/servico-estrutural-v02.css
 assets/css/servico-hidro-v02.css
 assets/css/servico-infra-v02.css

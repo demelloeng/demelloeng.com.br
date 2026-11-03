@@ -14,6 +14,8 @@ branch: claude/hidrossanitario-v01-20261029
 >
 > **Atualização dirigida em 02/11/2026** (branch `claude/infraestrutura-v01-20261102`, página de Infraestrutura): seções 3, 4, 8 e 13 e o guia de navegação foram editados à mão; **o Cartographer não foi rodado**. As contagens de arquivo e de tokens do cabeçalho seguem as de 30/10.
 
+> **Atualização dirigida em 03/11/2026** (branch `claude/rodape-home-servicos`): a Home e os Serviços passam a usar o mesmo rodapé rico das páginas de projeto, com o CSS compartilhado `assets/css/rodape-v02.css` (na allowlist). O teste `commercial_site` ganhou a checagem "rodapé: as seis páginas lançadas têm o mesmo rodapé". O item 8 da seção de armadilhas foi ajustado à mão; o Cartographer não foi rodado.
+>
 > Gerado pelo Cartographer em 2026-10-30T08:01:20Z, por seis leituras em paralelo (calculadora, testes, scripts e publicação, copy central, maquete 3D e páginas HTML).
 > **Leitura estática:** nada foi executado (nem os testes, nem o build). Onde um relatório citou um número que não foi conferido, o texto diz.
 > Estado do repositório no mapeamento: branch `claude/hidrossanitario-v01-20261029` (a nova versão do site, em paralelo; a `main` continua em `27a229e` e é o que está no ar). Dois arquivos sem rastreio no Git: `assets/models/hidro-redes.glb` e `.json`.
@@ -245,7 +247,7 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 5. **Regerar uma página não pode mexer nas outras.** Conferir o `git diff` das demais.
 6. **`conferir` com `.copy.json` não confere o texto novo**, só os blocos antigos mantidos, por substring na página inteira. Não substitui a revisão (subagent `revisor-copy`).
 7. **`otimizar_ifc.py` não existe neste repositório** (está no canônico), mas o conversor e a skill o citam.
-8. **Dois menus e dois rodapés convivem.** O menu novo (Início, Serviços, Projetos…) está na home, no catálogo e nas 3 páginas ricas; as 6 páginas simples e as institucionais usam o antigo (com "Construir ou ampliar"). `hotfix` e `commercial_site` exigem o rótulo antigo em várias páginas.
+8. **Dois menus convivem; o rodapé é um só nas seis páginas lançadas.** Desde 03/11/2026 a Home, os Serviços e as quatro páginas de projeto têm o mesmo rodapé (o teste `commercial_site` reprova se divergir). As outras 15 páginas seguem com o rodapé antigo (pendência 150). O menu novo (Início, Serviços, Projetos…) está na home, no catálogo e nas 3 páginas ricas; as 6 páginas simples e as institucionais usam o antigo (com "Construir ou ampliar"). `hotfix` e `commercial_site` exigem o rótulo antigo em várias páginas.
 9. **Sitemap** tem 20 URLs com `lastmod` de 06/10 e não é atualizado pelo pipeline; página nova exige editar `sitemap`, allowlist e `commercial_site`.
 10. **Ordem do `<head>` e dos scripts importa** (sink antes de `site-analytics.mjs`, Pixel `defer`).
 11. **Servidor local:** a porta 8765 já estava ocupada por outro processo servindo outra pasta; usar porta livre.
