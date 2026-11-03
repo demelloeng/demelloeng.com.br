@@ -1,0 +1,16 @@
+/* Rodapé V02 compartilhado (Home e Serviços). Mesmas regras do rodapé aprovado das páginas de projeto
+   (servico-pagina-v02.css), sem depender da classe do <body>. Fundo e cor base vêm do CSS de cada página. */
+.site-footer.rodape{padding:60px 0 0}
+.site-footer.rodape .rodape-grade{display:grid;grid-template-columns:1.4fr 1fr 1.2fr 1.1fr;gap:44px}
+.site-footer.rodape .rodape-marca img{display:block;width:230px;height:auto;margin-bottom:16px}
+.site-footer.rodape .tag{margin:0 0 14px;font-size:19px;font-weight:600;color:#fff}
+.site-footer.rodape .legal{margin:0;font-size:15px;line-height:1.6;color:#9db6cf}
+.site-footer.rodape .rodape-col{display:flex;flex-direction:column}
+.site-footer.rodape .rodape-col .t{margin:0 0 12px;font-size:16px;font-weight:700;color:#fff}
+.site-footer.rodape nav.rodape-col{padding-top:0}
+.site-footer.rodape .rodape-col a,.site-footer.rodape .rodape-col span{color:#cfdbe8;font-size:17px;line-height:1.9;min-height:0;padding:0;text-decoration:none}
+.site-footer.rodape .rodape-col a:hover{color:#fff;text-decoration:underline}
+.site-footer.rodape .rodape-barra{margin-top:44px;padding:20px 0 30px;border-top:1px solid #3a4856}
+.site-footer.rodape .rodape-barra p{margin:0;font-size:14px;color:#9db6cf}
+@media(max-width:900px){.site-footer.rodape .rodape-grade{grid-template-columns:1fr 1fr;gap:36px}}
+@media(max-width:560px){.site-footer.rodape .rodape-grade{grid-template-columns:1fr}}

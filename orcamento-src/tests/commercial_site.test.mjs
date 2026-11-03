@@ -219,6 +219,19 @@ test('HTML semântico: um H1, landmarks, hierarquia de títulos sem saltos, imag
   }
 });
 
+test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projeto) têm o mesmo rodapé', () => {
+  // Resolve href/src relativos para caminhos do site, para comparar o bloco sem depender da profundidade da página.
+  const normaliza = (file, html) => {
+    const rodape = html.match(/<footer[\s\S]*?<\/footer>/)[0];
+    const dir = path.posix.dirname(`/${file}`);
+    return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
+  };
+  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`)];
+  const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
+  assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
+  for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
+});
+
 test('navegação: item atual marcado com aria-current na página correspondente', () => {
   const current = (file) => [...(HTML[file].match(/<nav class="nav"[\s\S]*?<\/nav>/)?.[0] ?? '').matchAll(/<a[^>]*aria-current="page"[^>]*>([^<]+)<\/a>/g)].map((m) => m[1]);
   assert.deepEqual(current('index.html'), ['Início']);
