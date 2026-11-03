@@ -5,7 +5,7 @@
 .site-footer.rodape .rodape-marca img{display:block;width:230px;height:auto;margin-bottom:16px}
 .site-footer.rodape .tag{margin:0 0 14px;font-size:19px;font-weight:600;color:#fff}
 .site-footer.rodape .legal{margin:0;font-size:15px;line-height:1.6;color:#9db6cf}
-.site-footer.rodape .rodape-col{display:flex;flex-direction:column}
+.site-footer.rodape .rodape-col{display:flex;flex-direction:column;gap:0}
 .site-footer.rodape .rodape-col .t{margin:0 0 12px;font-size:16px;font-weight:700;color:#fff}
 .site-footer.rodape nav.rodape-col{padding-top:0}
 .site-footer.rodape .rodape-col a,.site-footer.rodape .rodape-col span{color:#cfdbe8;font-size:17px;line-height:1.9;min-height:0;padding:0;text-decoration:none}
