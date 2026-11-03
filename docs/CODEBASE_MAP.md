@@ -16,6 +16,8 @@ branch: claude/hidrossanitario-v01-20261029
 
 > **Atualização dirigida em 03/11/2026** (branch `claude/rodape-home-servicos`): a Home e os Serviços passam a usar o mesmo rodapé rico das páginas de projeto, com o CSS compartilhado `assets/css/rodape-v02.css` (na allowlist). O teste `commercial_site` ganhou a checagem "rodapé: as seis páginas lançadas têm o mesmo rodapé". O item 8 da seção de armadilhas foi ajustado à mão; o Cartographer não foi rodado.
 >
+> **Atualização dirigida em 03/11/2026** (branch local `local/contato-v02`, página Contato V02, **ainda não publicada**): `contato/index.html` passa a ser **gerado** por `scripts/gerar-contato-v02.py` a partir da copy `docs/arquivo/contato-v02-20261103/COPY_CONTATO_V03_20261103.md` (a V02 fica como histórico), com o CSS isolado `assets/css/contato-v02.css` (na allowlist). Seção 3.6 nova; a linha do `contato/` na seção 2 e os testes `hotfix` e `commercial_site` foram ajustados. O Cartographer não foi rodado.
+>
 > Gerado pelo Cartographer em 2026-10-30T08:01:20Z, por seis leituras em paralelo (calculadora, testes, scripts e publicação, copy central, maquete 3D e páginas HTML).
 > **Leitura estática:** nada foi executado (nem os testes, nem o build). Onde um relatório citou um número que não foi conferido, o texto diz.
 > Estado do repositório no mapeamento: branch `claude/hidrossanitario-v01-20261029` (a nova versão do site, em paralelo; a `main` continua em `27a229e` e é o que está no ar). Dois arquivos sem rastreio no Git: `assets/models/hidro-redes.glb` e `.json`.
@@ -93,7 +95,8 @@ site-hidro/
 │   ├── index.html              Catálogo (gerado por gerar-servicos-v02.py)
 │   └── <9 slugs>/index.html    3 no layout rico, 6 no layout simples antigo
 ├── construir-ou-ampliar/  avaliar-um-problema/  metodologia/
-├── experiencia-tecnica/   empresa/  contato/  privacidade/  verificar/
+├── experiencia-tecnica/   empresa/  privacidade/  verificar/
+├── contato/                    Contato V02 (index.html GERADO por scripts/gerar-contato-v02.py)
 ├── orcamento/                  Bundle compilado da calculadora (não editar)
 ├── orcamento-src/              Fonte React/Vite + 21 arquivos de teste
 ├── scripts/                    Geradores e conversor IFC→GLB
@@ -154,6 +157,18 @@ Regras de formato que quebram a importação: item de "O que muda" no padrão `N
 ### 3.5 Versionamento
 
 Cada mudança de texto, mesmo de uma frase, gera `V<NN+1>` novo. Cada serviço tem a sua numeração (hidrossanitário V01 a V17, arquitetura V05 a V11, estrutural V01 a V06). Mudança transversal sai em lote, uma versão por serviço. O `.copy.json` guarda `fonte_copy`, então toda página é rastreável até o `.md`.
+
+### 3.6 Contato V02 (gerador próprio, separado do pipeline de serviços)
+
+`contato/index.html` **não se edita à mão**. Ciclo: alterar a copy (arquivo novo `COPY_CONTATO_V<NN>_<AAAAMMDD>.md` em `docs/arquivo/contato-v02-<data>/`, ajustando a constante `COPY` do gerador) → `python scripts/gerar-contato-v02.py` → `python scripts/gerar-contato-v02.py --check` (falha se o HTML diverge da fonte) → mostrar em 1440×900 e 390×844 antes de qualquer commit.
+
+| Arquivo | Papel |
+|---|---|
+| `docs/arquivo/contato-v02-20261103/COPY_CONTATO_V03_20261103.md` | Copy vigente (IT032 + ajuste dos canais da IT039: telefone principal uma vez com WhatsApp e Ligar, outros contatos, Instagram, Facebook e LinkedIn). Um campo por linha. A `COPY_CONTATO_V02_20261103.md` fica preservada. |
+| `scripts/gerar-contato-v02.py` | Só biblioteca padrão; recusa campo a mais ou a menos; confere que cada valor da copy aparece no HTML; grava o SHA-256 da copy num comentário do `<head>`; saída com fim de linha LF, idêntica em duas gerações. Cabeçalho, menu, JSON-LD e rodapé V02 são constantes do gerador, assim como os cinco ícones (SVG inline de autoria própria, sem arquivo, CDN nem licença de terceiros). |
+| `assets/css/contato-v02.css` | CSS pequeno, escopo `.contato-v02`; o resto vem de `servicos-v02.css` e `rodape-v02.css`. |
+
+Não usa `gerar-paginas-servico-v02.py` nem `layout_rico.py`. O rodapé é o mesmo das seis páginas lançadas (o teste `commercial_site` agora compara sete). Os links de contato da página ficam fora de `.topbar`, `.nav`, `.site-footer` e `.cta-band`, para o evento sair com a posição `contact_page`.
 
 ## 4. Módulo: maquete 3D
 

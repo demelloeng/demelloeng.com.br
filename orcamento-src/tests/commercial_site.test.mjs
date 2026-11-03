@@ -41,6 +41,7 @@ const mainOf = (html) => html.match(/<main[\s\S]*?<\/main>/)?.[0] ?? '';
 const EXTERNAL_ALLOWED = [
   /^https:\/\/wa\.me\/5541985124056$/, /^mailto:marcos@demelloeng\.com\.br$/, /^tel:\+55\d{10,11}$/,
   /^https:\/\/www\.instagram\.com\/demelloeng\/$/, /^https:\/\/www\.linkedin\.com\/company\/demello-engenharia\/$/,
+  /^https:\/\/www\.facebook\.com\/demelloeng\/$/,   // Contato V02 (IT039): Facebook oficial, URL personalizada confirmada pelo proprietário
   /^https:\/\/www\.educacao\.pr\.gov\.br\//, /^https:\/\/fonts\.(googleapis|gstatic)\.com(\/|$)/, /^https:\/\/unpkg\.com\/three@/,
   // Arquitetura V11: matérias de imprensa citadas na página (scripts/importar-copy-servico-v02.py, IMPRENSA). URLs exatas, não domínios.
   /^https:\/\/www\.instagram\.com\/reel\/DZpkXZBOcjA\/$/,
@@ -219,14 +220,14 @@ test('HTML semântico: um H1, landmarks, hierarquia de títulos sem saltos, imag
   }
 });
 
-test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projeto) têm o mesmo rodapé', () => {
+test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projeto) e o Contato V02 têm o mesmo rodapé', () => {
   // Resolve href/src relativos para caminhos do site, para comparar o bloco sem depender da profundidade da página.
   const normaliza = (file, html) => {
     const rodape = html.match(/<footer[\s\S]*?<\/footer>/)[0].replace(/\r\n/g, '\n');   // o fim de linha dos arquivos varia (CRLF e LF)
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
-  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`)];
+  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`), 'contato/index.html'];
   const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);

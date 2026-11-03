@@ -1,0 +1,72 @@
+/* Contato V02. Só o que a página precisa além de servicos-v02.css e rodape-v02.css; tudo sob .contato-v02,
+   sem alterar nenhuma outra página. Cores, fonte e variáveis vêm de servicos-v02.css. */
+.contato-v02 .hero{padding-bottom:72px}
+.contato-v02 .hero h1{max-width:760px}
+.contato-v02 .acoes{display:flex;flex-wrap:wrap;gap:16px;margin-top:32px}
+.contato-v02 .acao{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 28px;font-size:20px;font-weight:700;line-height:1.2;text-align:center;border:2px solid var(--blue)}
+.contato-v02 .acao:hover{text-decoration:none}
+.contato-v02 .hero-copy .acao-principal{background:var(--blue);color:#fff}
+.contato-v02 .acao-principal:hover{background:var(--ink);border-color:var(--ink)}
+.contato-v02 .hero-copy .acao-secundaria{background:#fff;color:var(--blue)}
+.contato-v02 .acao-secundaria:hover{background:var(--pale)}
+.contato-v02 .canais{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;padding-top:32px;padding-bottom:72px;border-top:1px solid var(--blue)}
+.contato-v02 .canais h2{font-size:40px;line-height:1.2}
+.contato-v02 .resp-nome{margin-top:28px;font-size:30px;line-height:1.3;font-weight:700}
+.contato-v02 .resp-credencial{margin-top:6px;font-size:20px;line-height:1.4;color:var(--muted)}
+.contato-v02 dl{margin:0}
+.contato-v02 dd{margin:0}
+.contato-v02 .canal{display:grid;grid-template-columns:180px minmax(0,1fr);gap:24px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.contato-v02 .canais-lista{display:flex;flex-direction:column;gap:44px}
+.contato-v02 .canal-grupo h3{margin-bottom:12px;font-size:16px;line-height:1.4;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.contato-v02 .fone-principal{font-size:48px;line-height:1.15;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.contato-v02 .canal-acoes{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.contato-v02 .canal-acao{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:12px 24px;font-size:20px;font-weight:700;line-height:1.2;border:2px solid var(--blue)}
+.contato-v02 .canal-acao:hover{text-decoration:none}
+.contato-v02 .canal-acao-wa{background:var(--blue);color:#fff}
+.contato-v02 .canal-acao-wa:hover{background:var(--ink);border-color:var(--ink)}
+.contato-v02 .canal-acao-tel{background:#fff;color:var(--blue)}
+.contato-v02 .canal-acao-tel:hover{background:var(--pale)}
+.contato-v02 .icone{flex:none;width:24px;height:24px}
+.contato-v02 .redes{display:flex;flex-wrap:wrap;gap:12px;margin:0;padding:0;list-style:none}
+.contato-v02 .rede{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:10px 18px;font-size:20px;font-weight:700;line-height:1.2;color:var(--blue);border:2px solid var(--line);background:#fff}
+.contato-v02 .rede:hover{text-decoration:none;border-color:var(--blue);background:var(--pale)}
+.contato-v02 a:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.contato-v02 .outros .canal:first-child{border-top:1px solid var(--line)}
+.contato-v02 .canal dt{font-size:16px;line-height:1.4;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.contato-v02 .canal dd{font-size:26px;line-height:1.35;font-weight:700;overflow-wrap:anywhere}
+.contato-v02 .canal dd a{display:inline-block;padding:6px 0;min-height:44px}
+.contato-v02 .orientacao{background:var(--pale);padding:64px 0}
+.contato-v02 .orientacao-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:64px}
+.contato-v02 .orientacao-bloco h2{font-size:34px;line-height:1.25}
+.contato-v02 .orientacao-bloco p{margin-top:20px;font-size:21px;line-height:1.4;max-width:34em}
+.contato-v02 .acao-texto{display:inline-block;padding:6px 0;font-size:22px;font-weight:700}
+.contato-v02 .sede{padding-top:64px;padding-bottom:80px}
+.contato-v02 .sede h2{font-size:40px;line-height:1.2;margin-bottom:24px}
+.contato-v02 .sede-lista .canal:first-child{border-top:1px solid var(--line)}
+.contato-v02 .sede-lista .canal dd{font-size:22px;font-weight:400}
+@media(max-width:1190px) and (min-width:761px){
+.contato-v02 .canais,.contato-v02 .orientacao-grade{gap:40px}
+.contato-v02 .canal{grid-template-columns:140px minmax(0,1fr);gap:16px}
+.contato-v02 .canal dd{font-size:24px}}
+@media(max-width:760px){
+.contato-v02 .hero{padding-bottom:48px}
+.contato-v02 .acoes{flex-direction:column;align-items:stretch;gap:12px;margin-top:28px}
+.contato-v02 .acao{width:100%}
+.contato-v02 .canais{display:block;padding-top:28px;padding-bottom:48px}
+.contato-v02 .canais h2{font-size:32px}
+.contato-v02 .resp-nome{margin-top:20px;font-size:26px}
+.contato-v02 .resp-credencial{font-size:18px}
+.contato-v02 .canais-lista{margin-top:32px;gap:36px}
+.contato-v02 .fone-principal{font-size:38px}
+.contato-v02 .canal-acoes{flex-direction:column;align-items:stretch}
+.contato-v02 .canal-acao{width:100%}
+.contato-v02 .canal{grid-template-columns:1fr;gap:4px;padding:14px 0}
+.contato-v02 .canal dd{font-size:24px}
+.contato-v02 .orientacao{padding:44px 0}
+.contato-v02 .orientacao-grade{grid-template-columns:1fr;gap:40px}
+.contato-v02 .orientacao-bloco h2{font-size:30px}
+.contato-v02 .orientacao-bloco p{font-size:19px;margin-top:16px}
+.contato-v02 .sede{padding-top:44px;padding-bottom:56px}
+.contato-v02 .sede h2{font-size:32px}
+.contato-v02 .sede-lista .canal dd{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.contato-v02 *{transition:none!important;animation:none!important}}
