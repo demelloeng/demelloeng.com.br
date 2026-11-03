@@ -457,3 +457,29 @@ test('marcação: tags balanceadas em todas as páginas (sem tag aberta ou fecha
     assert.deepEqual(stack, [], `${file}: tags sem fechamento`);
   }
 });
+
+
+test('/orcamento/: texto estático e indexável no HTML (decisão 89), nas duas cópias; o bundle da calculadora não muda', async () => {
+  for (const p of ['orcamento/index.html', 'orcamento-src/index.html']) {
+    const html = await read(p);
+    const texto = visibleText(html);
+    assert.ok(texto.split(' ').length >= 60, `${p}: texto estático insuficiente (${texto.split(' ').length} palavras)`);
+    assert.match(texto, /Quanto custa o projeto\? Calcule a estimativa\./, p);
+    assert.match(texto, /Não é proposta, contrato nem garantia de preço\./, p);
+    assert.match(texto, /nada é enviado sem a sua confirmação/i, p);
+    assert.doesNotMatch(texto, /\bprévia\b|\bprevisão\b|faça seu orçamento|\d/i, `${p}: termo antigo ou número novo no texto estático`);
+    assert.doesNotMatch(html, /name="robots" content="noindex/, `${p}: indexável`);
+  }
+  const publicada = await read('orcamento/index.html');
+  assert.ok(publicada.includes('/orcamento/assets/index-CsN7vBmE.js') && publicada.includes('/orcamento/assets/index-B16Vzy82.css'), 'a página publicada segue apontando para o bundle e o CSS ancorados (G5)');
+});
+
+test('JSON-LD das nove páginas de serviço: atendimento em todo o Brasil (não só PR e SP)', () => {
+  for (const slug of SERVICE_SLUGS) {
+    const html = HTML[`servicos/${slug}/index.html`];
+    const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+    const servico = ld['@graph'].find((n) => n['@type'] === 'Service');
+    assert.deepEqual(servico.areaServed, { '@type': 'Country', name: 'Brasil' }, `${slug}: areaServed`);
+    assert.doesNotMatch(html, /"name":"Paraná"\},\{"@type":"AdministrativeArea"/, `${slug}: cobertura restrita a PR e SP`);
+  }
+});
