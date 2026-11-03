@@ -222,7 +222,7 @@ test('HTML semântico: um H1, landmarks, hierarquia de títulos sem saltos, imag
 test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projeto) têm o mesmo rodapé', () => {
   // Resolve href/src relativos para caminhos do site, para comparar o bloco sem depender da profundidade da página.
   const normaliza = (file, html) => {
-    const rodape = html.match(/<footer[\s\S]*?<\/footer>/)[0];
+    const rodape = html.match(/<footer[\s\S]*?<\/footer>/)[0].replace(/\r\n/g, '\n');   // o fim de linha dos arquivos varia (CRLF e LF)
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
