@@ -215,7 +215,7 @@ def gerar(slug):
         principal = '\n'.join([L.hero(copia, d, maquete_html, extra_hero), L.para_quem(nv['para_quem']), L.muda(nv['muda']), meio,
                                (L.faz(nv['faz'], L.DIAGRAMA_INFRA) if infra_pg else L.faz(nv['faz'])), L.perguntas(nv['perguntas']), prova_html,
                                L.djalma(nv['experiencia'] if estrutura_pg else ant[t_dj], '', copia.get('imprensa', [])), detalhes_html])
-        importmap = '<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>'
+        importmap = '<script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>'
         base_css = '<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n'
         if estrutura_pg:
             extra_head = (base_css + '<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">\n'

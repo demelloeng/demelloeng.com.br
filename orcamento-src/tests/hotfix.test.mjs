@@ -26,8 +26,9 @@ const pages = [
 test('home leads with the estimate CTA and keeps the way to "Como trabalhamos"', async () => {
   const html = await readFile(path.join(siteRoot, 'index.html'), 'utf8');
   // primeira dobra comercial: o CTA principal abre a estimativa já na rota "Construir ou ampliar"
-  assert.match(html, /<a class="btn-cta" href="\.\/orcamento\/\?situacao=build">Calcular minha estimativa/i);
-  assert.match(html, /href="\.\/metodologia\/"[^>]*>Ver como trabalhamos →<\/a>/i);
+  // Home V02: o CTA do hero é "Calcular estimativa" (mesma rota); o caminho para "Como trabalhamos" está no menu principal.
+  assert.match(html, /<a class="btn-cta" href="\.\/orcamento\/\?situacao=build">Calcular estimativa<\/a>/i);
+  assert.match(html, /<nav class="nav"[\s\S]*?<a href="\.\/metodologia\/">Como trabalhamos<\/a>/i);
   assert.doesNotMatch(html, /Fale com quem assina o projeto/i);
 });
 
@@ -35,11 +36,13 @@ test('shared navigation: commercial order, estimate CTA highlighted, Contato and
   // Principais, na ordem: Início · Construir ou ampliar · Outros serviços · Experiência · Como trabalhamos · Calcular estimativa.
   // Contato e WhatsApp seguem acessíveis (faixa superior no desktop; dentro do menu no móvel), sem competir com o CTA.
   const expected = ['Início', 'Construir ou ampliar', 'Outros serviços', 'Experiência', 'Como trabalhamos', 'Calcular estimativa', 'Contato', 'WhatsApp'];
+  // Home e Serviços V02: menu "Início · Serviços · Projetos · Como trabalhamos · Contato · Calcular estimativa · WhatsApp".
+  const expectedV02 = ['Início', 'Serviços', 'Projetos', 'Como trabalhamos', 'Contato', 'Calcular estimativa', 'WhatsApp'];
   for (const page of pages) {
     const html = await readFile(path.join(siteRoot, page), 'utf8');
     const nav = html.match(/<nav class="nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
     const labels = [...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map((match) => match[1].trim());
-    assert.deepEqual(labels, expected, page);
+    assert.deepEqual(labels, ['index.html', 'servicos/index.html'].includes(page) ? expectedV02 : expected, page);
     assert.match(nav, /<a class="nav-budget" href="(?:\.\/|(?:\.\.\/)+)orcamento\/"/);
     assert.match(nav, /<a class="nav-extra nav-whatsapp" href="https:\/\/wa\.me\/5541985124056"/);
   }

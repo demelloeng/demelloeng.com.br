@@ -10,6 +10,8 @@ branch: claude/hidrossanitario-v01-20261029
 
 > **Documento canônico do site (decisão de Marcos, 30/10/2026).** Fica no repositório, versionado junto com o código. **Toda mudança estrutural no site muda este mapa na mesma entrega:** página nova, serviço renomeado ou agrupado, script novo, teste novo, arquivo na allowlist, mudança de menu, de rodapé ou de publicação. A skill `gerar-pagina-servico` inclui esse passo. Para atualizar, rodar o Cartographer em modo de atualização (ele reaproveita o que não mudou).
 
+> **Atualização dirigida em 02/11/2026, release parcial** (branch de trabalho `prep/release-parcial-20261102`): three.js hospedado, allowlist ampliada em 56 caminhos e testes do G1 atualizados para a Home V02 e as páginas V02 (seções de maquete, publicação, armadilhas e o guia de navegação). Conteúdo **não verificado de novo**: contagens de arquivo e de tokens do cabeçalho.
+>
 > **Atualização dirigida em 02/11/2026** (branch `claude/infraestrutura-v01-20261102`, página de Infraestrutura): seções 3, 4, 8 e 13 e o guia de navegação foram editados à mão; **o Cartographer não foi rodado**. As contagens de arquivo e de tokens do cabeçalho seguem as de 30/10.
 
 > Gerado pelo Cartographer em 2026-10-30T08:01:20Z, por seis leituras em paralelo (calculadora, testes, scripts e publicação, copy central, maquete 3D e páginas HTML).
@@ -166,7 +168,7 @@ Cada mudança de texto, mesmo de uma frase, gera `V<NN+1>` novo. Cada serviço t
 - **Cor:** estrutural pinta pela cor da camada; hidro usa **cor por vértice** gravada no GLB (cores do IFC original) e injeta brilho via `onBeforeCompile`; arquitetura usa paleta por nome de malha.
 - **Conversor IFC→GLB:** `scripts/ifc_para_glb_hidro.py <entrada.ifc> <saida>`. Regra de peso (Marcos, 29/10/2026): peças acima de 250 triângulos são simplificadas por agrupamento de vértices; tubos ficam intactos; GLB final **não passa de 2.000 KB** (senão o script aborta sem gravar); tubos e conexões têm a espessura ampliada 3× só no visual (a página avisa). O IFC é dado de cliente e **não vai ao site**; só o GLB derivado, com nomes neutros.
 - **Maquete da terraplanagem (Infraestrutura):** GLB ilustrativo (V5, 02/11/2026) com 8 camadas nomeadas (`TERRENO_NATURAL`, `TERRENO_FINAL`, `VOLUME_CORTE`, `VOLUME_ATERRO`, `MARCA_CORTE`, `MARCA_ATERRO`, `PISOS`, `CONTENCOES`), sem IFC de cliente, sem volumes, relevo exagerado 2 vezes. A animação é por janelas (terreno natural, pisos que caem, linha que desce, corte e aterro que ficam). Os scripts que geram o GLB e o relatório de validação estão **fora do repositório** (`C:\work\cad\djalma\maquete_v1\v5`).
-- **Dependência externa:** three.js 0.160.0 via importmap do jsDelivr, **ainda não hospedado** no site.
+- **three.js hospedado (02/11/2026):** `assets/vendor/three/` guarda three.js 0.160.0 (MIT) sem alteração: `build/three.module.js`, `examples/jsm/controls/OrbitControls.js`, `examples/jsm/loaders/GLTFLoader.js`, `examples/jsm/utils/BufferGeometryUtils.js`, `LICENSE` e `ORIGEM.txt` (pacote npm, shasum e sha256 de cada arquivo). O importmap das quatro páginas de maquete vem de `scripts/gerar-paginas-servico-v02.py` (`../../assets/vendor/three/…`); **nenhuma maquete carrega recurso de CDN**. A `/experiencia-tecnica/` continua com o seu próprio importmap (unpkg), fora desta mudança.
 - **Outra página 3D:** `experiencia-tecnica` usa `three-d-stage.js` com three 0.184.0 via unpkg (importmap próprio).
 
 ## 5. Módulo: CSS e classes
@@ -222,7 +224,7 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 ## 9. Publicação (`.github/`)
 
 - `pages.yml`: gatilho `push` na `main` ou `workflow_dispatch`. Passos: `node --test` em ~24 testes + `publish-guard`, `build_artifact.py build`, `validate` (gates G2 a G5), `smoke-local`, deploy, `smoke-live`. **Não roda o `conferir` de texto.**
-- `allowlist.txt` (105 linhas): **lista fechada**; só caminhos exatos, mais `orcamento/assets/**`. "Não está na lista, não entra."
+- `allowlist.txt` (164 linhas): **lista fechada**; só caminhos exatos, mais `orcamento/assets/**`. "Não está na lista, não entra." Em 02/11/2026 entraram 56 caminhos exatos (CSS, fontes Source Sans 3, ícones, imagens, JS, GLB/JSON e o three.js hospedado) para a Home V02, Serviços V02 e as quatro páginas de projeto. Artefato resultante: 127 arquivos, 34 MB; G2–G5 e smoke-local passam.
 - `build_artifact.py`: copia os bytes do commit (sem transformar). G3 proíbe `.gitignore`, `orcamento-src/`, `.github/` etc. no artefato.
 
 ## 10. Convenções
@@ -236,8 +238,8 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 
 ## 11. Armadilhas (as que já custaram caro)
 
-1. **A allowlist não contém os assets das páginas V02.** Conferido nesta leitura: não estão `servicos-v02.css`, `servico-pagina-v02.css`, `servico-rico-v02.css`, `maquete-3d.css`, `servico-hidro-v02.css`, `maquete-hidro-3d.js`, os `.glb`/`.json`, a fonte Source Sans 3 nem os renders. Se a branch fosse mesclada hoje, as páginas sairiam **sem estilo e sem maquete**; o G4 e os smokes não pegariam.
-2. **three.js vem do CDN (jsDelivr)**; precisa ser hospedado para publicar (os imports internos do `OrbitControls`/`GLTFLoader` pedem a estrutura `examples/jsm/`). Há conflito com a `CSP_PROPOSTA.md` e com `privacy_and_sink`, que proíbe recurso externo.
+1. **A allowlist é fechada: arquivo novo de página só sai se estiver na lista.** Os assets das páginas V02 foram incluídos em 02/11/2026. O G4 e o smoke-local **não pegam** um CSS, uma imagem ou um modelo esquecido; confira com o rastreador de referências (todas as páginas do artefato servidas e cada `href`/`src` pedido) antes de publicar.
+2. **three.js é hospedado (`assets/vendor/three/`) e precisa manter a estrutura `build/` e `examples/jsm/`**, porque o `GLTFLoader` importa `../utils/BufferGeometryUtils.js`. Trocar a versão exige trocar os quatro arquivos juntos e atualizar `ORIGEM.txt`. A política de privacidade e a `CSP_PROPOSTA.md` precisam ser relidas à luz de que o jsDelivr saiu (pendência editorial: o texto publicado cita só o unpkg).
 3. **`.glb` e `.json` sem `?v=`.** Cache velho de um deles com o outro novo quebra a busca binária e a ficha mostra a peça errada, sem erro visível.
 4. **Edição com `\n` dentro de Python** corrompeu `layout_rico.py` duas vezes. Usar o editor de arquivos ou `chr(92) + 'n'`.
 5. **Regerar uma página não pode mexer nas outras.** Conferir o `git diff` das demais.
@@ -258,10 +260,10 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 | Criar uma página de serviço nova | `PERFIS`, `LAYOUTS`, `LINKS`, `REMOVIDOS` no importador; `SLUGS` no gerador; markup da maquete; `site_ux`, `commercial_site`, sitemap e allowlist. |
 | Renomear ou juntar serviços | `journey.mjs` (`services`, `buildServices`), `payload_v2.mjs`, `client_summary.mjs`, `deeplink.mjs`, `gerar-servicos-v02.py` (catálogo, com `assert == 9`), `site_ux`, `commercial_site`, `analytics.mjs` (lista fechada de serviços) e os links da home e do catálogo. A tabela de preços é cópia do canônico. |
 | Trocar o slug "terraplenagem" | pasta, `SLUGS`, JSON de origem, sitemap, allowlist, `PAGE_CONTEXT` e `analytics.mjs`, deeplink, tabela de preços, links da home/catálogo/experiência, bundle (rebuild) e **redirecionamento** (a URL já está no Google). |
-| Adicionar uma maquete | JS e CSS próprios (ou reaproveitar `estrutura`), `.glb` + `.json` com mesmo `?v`, importmap hospedado, allowlist. |
+| Adicionar uma maquete | JS e CSS próprios (ou reaproveitar `estrutura`), `.glb` + `.json` com mesmo `?v`, importmap para `assets/vendor/three/` (já no gerador), allowlist. |
 | Gerar o GLB de um IFC | `otimizar_ifc.py` (do canônico) → `ifc_para_glb_hidro.py`; teto de 2.000 KB. |
 | Mexer na calculadora | `orcamento-src/src` → `pnpm build` → `pnpm publish-guard` → commit do bundle; não editar `pricing-table.v2.json`, `engine.mjs`, `decimal.mjs`, `submit.mjs` sem atualizar hashes e o golden de paridade. |
-| Publicar | allowlist completa + three.js hospedado + ordem de Marcos para PR e merge; push na `main` publica sem aprovação. |
+| Publicar | allowlist (feita para as seis páginas do release parcial) + three.js hospedado (feito) + G1 verde + ordem de Marcos para PR e merge; push na `main` publica sem aprovação. |
 
 ## 13. Estado de reestruturação em curso (30/10/2026, declarado por Marcos)
 

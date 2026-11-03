@@ -1,9 +1,9 @@
 {
   "slug": "projeto-hidrossanitario",
   "nome_servico": "Projeto hidrossanitário",
-  "fonte_copy": "COPY_HIDROSSANITARIO_V17_20261030.md",
-  "titulo_pagina": "Projeto hidrossanitário em BIM: água, esgoto e drenagem | DEMELLO",
-  "descricao": "Projeto hidrossanitário para casa, sobrado, ampliação, escola ou rede existente. Água, esgoto e drenagem na mesma disciplina, em BIM. Veja a estimativa antes do contato.",
+  "fonte_copy": "COPY_HIDROSSANITARIO_V18_20261102.md",
+  "titulo_pagina": "Hidrossanitário em BIM: água, esgoto e drenagem | DEMELLO",
+  "descricao": "Projeto hidrossanitário para casa, sobrado, ampliação ou escola. Água, esgoto e drenagem na mesma disciplina, em BIM. Veja a estimativa antes do contato.",
   "h1": "Projeto hidrossanitário: água, esgoto e drenagem",
   "chamada": "Projeto de esgoto, água fria e drenagem pluvial, em BIM.",
   "introducao": [
@@ -14,6 +14,7 @@
     "rotulo": "Ver a estimativa do meu projeto hidrossanitário",
     "micro": "Sem compromisso · contato somente no final"
   },
+  "jsonld_nomes": {},
   "blocos_novos": {
     "para_quem": {
       "titulo": "Para quem é",

@@ -42,6 +42,10 @@ const EXTERNAL_ALLOWED = [
   /^https:\/\/wa\.me\/5541985124056$/, /^mailto:marcos@demelloeng\.com\.br$/, /^tel:\+55\d{10,11}$/,
   /^https:\/\/www\.instagram\.com\/demelloeng\/$/, /^https:\/\/www\.linkedin\.com\/company\/demello-engenharia\/$/,
   /^https:\/\/www\.educacao\.pr\.gov\.br\//, /^https:\/\/fonts\.(googleapis|gstatic)\.com(\/|$)/, /^https:\/\/unpkg\.com\/three@/,
+  // Arquitetura V11: matérias de imprensa citadas na página (scripts/importar-copy-servico-v02.py, IMPRENSA). URLs exatas, não domínios.
+  /^https:\/\/www\.instagram\.com\/reel\/DZpkXZBOcjA\/$/,
+  /^https:\/\/www\.bemparana\.com\.br\/noticias\/parana\/colegio-civico-militar-da-grande-curitiba-cria-528-novas-vagas-apos-obra-de-ampliacao\/$/,
+  /^https:\/\/www\.folhadecampolargo\.com\.br\/noticia\/56187\/ccm-djalma-marinho-recebe-investimento-historico-de-r-83-mil$/,
 ];
 
 // ---- links --------------------------------------------------------------------------------------------------------
@@ -126,11 +130,11 @@ test('landings: CTAs abrem DIRETAMENTE a rota correspondente da estimativa', () 
 });
 
 // ---- SEO / metadados ----------------------------------------------------------------------------------------------
-test('metadados: title, description, canonical, Open Graph e idioma em todas as páginas', () => {
+test('metadados: title, description, canonical, Open Graph e idioma em todas as páginas', async () => {
   const titles = new Set();
   for (const file of ALL) {
     const html = HTML[file];
-    assert.match(html, /^<!DOCTYPE html>\s*<html lang="pt-BR">/, file);
+    assert.match(html, /^<!doctype html>\s*<html lang="pt-BR">/i, file);   // as páginas V02 geradas usam <!doctype html> em minúsculas
     assert.match(html, /<meta name="viewport" content="width=device-width,initial-scale=1">/, file);
     const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
     assert.ok(title && title.length >= 12 && title.length <= 78, `${file}: title (${title?.length})`);
@@ -150,7 +154,10 @@ test('metadados: title, description, canonical, Open Graph e idioma em todas as 
     if (INDEXABLE.includes(file)) {
       assert.match(html, /<meta property="og:type" content="website">/, file);
       assert.match(html, /<meta property="og:locale" content="pt_BR">/, file);
-      assert.match(html, /<meta property="og:image" content="https:\/\/demelloeng\.com\.br\/assets\/images\/logo\.png">/, file);
+      const ogImage = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1] ?? '';
+      assert.ok(ogImage.startsWith(`${ORIGIN}/assets/images/`), `${file}: og:image fora de /assets/images/`);
+      assert.ok(await exists(ogImage.slice(ORIGIN.length + 1)), `${file}: og:image aponta para arquivo inexistente (${ogImage})`);
+      if (file !== 'index.html') assert.equal(ogImage, `${ORIGIN}/assets/images/logo.png`, `${file}: og:image`);   // só a Home V02 tem imagem de compartilhamento própria
     }
     const ogUrl = html.match(/<meta property="og:url" content="([^"]+)"/)?.[1];
     if (ogUrl) assert.equal(ogUrl, pageUrl(file), `${file}: og:url`);
@@ -200,7 +207,7 @@ test('HTML semântico: um H1, landmarks, hierarquia de títulos sem saltos, imag
     assert.match(html, /<a class="skip" href="#conteudo">/, file);
     assert.match(html, /<header class="site-header">[\s\S]*<nav class="nav" id="site-nav" aria-label="Principal">/, file);
     assert.match(html, /<button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav">/, file);
-    assert.match(html, /<footer class="site-footer">/, file);
+    assert.match(html, /<footer class="site-footer(?: [a-z-]+)*">/, file);   // as páginas V02 usam "site-footer rodape"
     for (const img of html.matchAll(/<img\b[^>]*>/g)) assert.match(img[0], /\balt="/, `${file}: img sem alt -> ${img[0].slice(0, 60)}`);
     const levels = [...mainOf(html).matchAll(/<h([1-6])\b/g)].map((m) => Number(m[1]));
     if (COMMERCIAL.includes(file)) {
@@ -216,8 +223,10 @@ test('navegação: item atual marcado com aria-current na página correspondente
   const current = (file) => [...(HTML[file].match(/<nav class="nav"[\s\S]*?<\/nav>/)?.[0] ?? '').matchAll(/<a[^>]*aria-current="page"[^>]*>([^<]+)<\/a>/g)].map((m) => m[1]);
   assert.deepEqual(current('index.html'), ['Início']);
   assert.deepEqual(current('construir-ou-ampliar/index.html'), ['Construir ou ampliar']);
-  assert.deepEqual(current('servicos/index.html'), ['Outros serviços']);
-  for (const s of SERVICE_SLUGS) assert.deepEqual(current(`servicos/${s}/index.html`), ['Outros serviços'], s);
+  // Páginas V02 (Serviços e as quatro de projeto com copy nova): o item atual do menu é "Serviços". As demais seguem com "Outros serviços".
+  const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem']);
+  assert.deepEqual(current('servicos/index.html'), ['Serviços']);
+  for (const s of SERVICE_SLUGS) assert.deepEqual(current(`servicos/${s}/index.html`), V02_SERVICES.has(s) ? ['Serviços'] : ['Outros serviços'], s);
   assert.deepEqual(current('experiencia-tecnica/index.html'), ['Experiência']);
   assert.deepEqual(current('metodologia/index.html'), ['Como trabalhamos']);
   assert.deepEqual(current('contato/index.html'), ['Contato']);
@@ -238,9 +247,13 @@ test('navegação: "Empresa" deixa de ser eixo principal, mas a página e as URL
 
 // ---- conteúdo ---------------------------------------------------------------------------------------------------
 test('promessa de contato: toda página com CTA de estimativa diz que o contato só vem no final', () => {
-  for (const file of ['index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html', 'metodologia/index.html', ...SERVICE_SLUGS.map((s) => `servicos/${s}/index.html`)]) {
+  // Infraestrutura (terraplanagem) não leva estimativa (decisão 97): o CTA vai a /contato/ e não há promessa de "contato só no final".
+  for (const file of ['construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html', 'metodologia/index.html', ...SERVICE_SLUGS.filter((s) => s !== 'projeto-terraplenagem').map((s) => `servicos/${s}/index.html`)]) {
     assert.match(HTML[file], /Sem compromisso · contato somente no final/, file);
   }
+  assert.doesNotMatch(mainOf(HTML['servicos/projeto-terraplenagem/index.html']), /orcamento\/\?/, 'Infraestrutura não abre a estimativa');
+  // Home V02: a seção da estimativa foi reescrita; a promessa equivalente é que nada é enviado sem confirmação.
+  assert.match(HTML['index.html'], /Nada é enviado sem a sua confirmação\./, 'Home V02: nada é enviado sem confirmação');
   for (const file of COMMERCIAL) assert.doesNotMatch(visibleText(mainOf(HTML[file])), /entraremos em contato (agora|imediatamente)|ligamos em|retornamos em \d/i, file);
 });
 
@@ -253,7 +266,7 @@ test('terminologia: "estimativa" é o termo da oferta; "previsão/prévia/Faça 
   assert.match(visibleText(HTML['servicos/orcamento-tecnico/index.html']), /diferente da estimativa|Orçamento técnico ≠ estimativa/i);
   assert.match(visibleText(HTML['servicos/index.html']), /diferente da estimativa deste site/);
   // estimativa nunca é apresentada como proposta, contrato ou garantia
-  for (const file of ['index.html', 'construir-ou-ampliar/index.html']) assert.match(visibleText(HTML[file]), /não é proposta, contrato nem garantia de preço/, file);
+  for (const file of ['index.html', 'construir-ou-ampliar/index.html']) assert.match(visibleText(HTML[file]), /não é proposta, contrato nem garantia de preço/i, file);   // Home V02: "Não é proposta…" no início da frase
 });
 
 test('referências obsoletas: sem "quatro entradas" e sem TABELA V1 em nenhum texto servido (páginas, código-fonte e bundle)', async () => {
@@ -300,17 +313,24 @@ test('experiência: um único case documentado, estruturado e com a proveniênci
 });
 
 test('proveniência: a prova técnica continua atribuída ao acervo profissional do responsável técnico, nunca ao CNPJ', () => {
+  // Páginas V02 (Home e as quatro de projeto): a ressalva sobre o CNPJ foi retirada por decisão de Marcos (29/10/2026; "acervo é do profissional").
+  // A invariante continua: o dado é atribuído ao acervo profissional de Marcos de Mello Silva, nunca à empresa.
   for (const [file, re] of [
-    ['index.html', /Acervo profissional do fundador — não o acervo operacional da DEMELLO ENG\./],
+    ['index.html', /Acervo profissional de Marcos de Mello Silva, fundador da DEMELLO Engenharia\./],
+    ['index.html', /Esses dados descrevem a trajetória profissional do fundador\./],
     ['construir-ou-ampliar/index.html', /Não correspondem exclusivamente ao acervo operacional do atual CNPJ/],
-    ['servicos/projeto-estrutural/index.html', /não correspondem exclusivamente ao acervo operacional do atual CNPJ/],
-    ['servicos/projeto-hidrossanitario/index.html', /não exclusivamente ao atual CNPJ/],
+    ['servicos/projeto-estrutural/index.html', /O acervo profissional de Marcos de Mello Silva reúne 67\.762 m² de experiência técnica estrutural documentada/],
+    ['servicos/projeto-hidrossanitario/index.html', /O acervo profissional de Marcos de Mello Silva registra 42\.789 m² de experiência técnica hidrossanitária documentada/],
     ['servicos/projeto-gas-glp/index.html', /não exclusivamente ao atual CNPJ/],
-    ['servicos/projeto-arquitetura/index.html', /não exclusivamente ao atual CNPJ/],
+    ['servicos/projeto-arquitetura/index.html', /O acervo profissional de Marcos de Mello Silva registra 4\.981 m² de experiência técnica arquitetônica documentada/],
     ['servicos/projeto-prevencao-incendio/index.html', /registra 12\.879 m² de experiência técnica documentada na disciplina/],
-    ['servicos/projeto-terraplenagem/index.html', /Total combinado: 4\.959 m³/],
+    ['servicos/projeto-terraplenagem/index.html', /O acervo profissional de Marcos de Mello Silva registra:/],
+    ['servicos/projeto-terraplenagem/index.html', /4\.959 m³/],
   ]) assert.match(HTML[file], re, file);
-  for (const slug of SERVICE_SLUGS) assert.doesNotMatch(HTML[`servicos/${slug}/index.html`], /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, slug);
+  for (const slug of ['projeto-estrutural', 'projeto-hidrossanitario', 'projeto-arquitetura', 'projeto-terraplenagem']) assert.doesNotMatch(HTML[`servicos/${slug}/index.html`], /acervo (?:operacional )?(?:da|do) (?:DEMELLO|CNPJ|empresa)/i, `${slug}: acervo atribuído à empresa`);
+  // A manchete de imprensa da Arquitetura V11 ("... R$ 8,3 milhões ...") é título de terceiro, com veículo e link; fora desse bloco o valor continua proibido.
+  const semImprensa = (html) => html.replace(/<div class="rico-imprensa">[\s\S]*?<\/div>/, '');
+  for (const slug of SERVICE_SLUGS) assert.doesNotMatch(semImprensa(HTML[`servicos/${slug}/index.html`]), /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, slug);
 });
 
 // Todo número que aparece em texto visível precisa existir no conteúdo original do site (ou ser dado de segurança pública / limite da própria interface).
@@ -321,6 +341,8 @@ const NUMERIC_FACTS = new Set([
   '60', '23', '12', '16', '528', '55', '8,3', '67.762', '42.789', '12.879', '4.487', '26', '9.451', '4.981', '4.959', '2.447', '2.512',
   // identificação legal / contato (rodapé e contato, conteúdo original)
   '65.613.230/0001-71', '92585', '146906', '41', '98512-4056', '44', '99820-2552', '2026', '010/2026',
+  // endereço da sede, no rodapé das páginas V02 (fonte: docs/arquivo/servicos-v01-20261028/conteudo.json e scripts/gerar-paginas-servico-v02.py)
+  '730', '80010-020',
   // trajetória do fundador (conteúdo original)
   '15', '22', '80', '120', '2010', '2014', '2018', '2019', '2020', '2022', '2023', '2024',
   // limites já existentes na interface do /orcamento/ (relato de até 600 caracteres)
@@ -329,17 +351,32 @@ const NUMERIC_FACTS = new Set([
   '193', '199',
 ]);
 
+// Numerais que só valem em UMA página, cada um com a fonte conferida (nada é liberado para o site inteiro).
+const PAGE_FACTS = {
+  // referências de preço da tabela DEMELLO V2: Resolução SECID/PR e Credenciamento Fundepar (orcamento-src/src/pricing/pricing-table.v2.json; journey.mjs)
+  'index.html': ['009/2026', '001/2025'],
+  // data das matérias de imprensa citadas (scripts/importar-copy-servico-v02.py, IMPRENSA, aprovadas na Arquitetura V11)
+  'servicos/projeto-arquitetura/index.html': ['16/06/2026'],
+  // especificação da maquete e área do projeto estrutural: docs/arquivo/paginas-servico-v02/copy/COPY_ESTRUTURAL_V06_20261030.md (aprovada)
+  'servicos/projeto-estrutural/index.html': ['3', '9', '40', '100', '300', '7,50', '4,60', '3,00', '1.200', '2.500', '34,5', '1,1', '4.856,55'],
+  // rótulo do botão da maquete ("Construir 100%"): estado da interface, não afirmação
+  'servicos/projeto-hidrossanitario/index.html': ['100'],
+  // indicador de andamento da maquete ("Andamento 0%"): estado da interface, não afirmação
+  'servicos/projeto-terraplenagem/index.html': ['0'],
+};
+
 test('nenhum número técnico, case ou credencial novo: todo numeral visível existe no conteúdo original (ou é limite/segurança documentado)', () => {
   const unexpected = [];
   // A política de privacidade traz só referências legais (Lei 13.709/2018, art. 7º, V) e "3D"; ela é conferida em privacy_and_sink.test.mjs.
   for (const file of ALL.filter((f) => f !== 'verificar/index.html' && f !== 'privacidade/index.html')) {
-    for (const m of visibleText(HTML[file]).matchAll(/\d[\d.,/-]*\d|\d/g)) if (!NUMERIC_FACTS.has(m[0])) unexpected.push(`${file}: ${m[0]}`);
+    // "3D" é notação de dimensão, não quantidade
+    for (const m of visibleText(HTML[file]).replace(/\b3D\b/g, ' ').matchAll(/\d[\d.,/-]*\d|\d/g)) if (!NUMERIC_FACTS.has(m[0]) && !(PAGE_FACTS[file] ?? []).includes(m[0])) unexpected.push(`${file}: ${m[0]}`);
   }
   assert.deepEqual(unexpected, []);
   // quantidade de disciplinas/etapas descritas por extenso continua batendo com a estrutura
   assert.equal([...HTML['metodologia/index.html'].matchAll(/<div class="step">/g)].length, 6, 'seis etapas');
-  const catalogue = HTML['servicos/index.html'].match(/data-block="service-summary"[\s\S]*?<\/section>/)[0];
-  assert.equal([...catalogue.matchAll(/<div class="svc-item"><h3><a href="\.\/[a-z-]+\/">/g)].length, 9, 'nove frentes');
+  // Serviços V02: um <article class="service"> por frente
+  assert.equal([...HTML['servicos/index.html'].matchAll(/<article class="service"[\s\S]*?<h3><a href="\.\/[a-z-]+\/">/g)].length, 9, 'nove frentes');
 });
 
 test('Como trabalhamos: as seis etapas pedidas, nesta ordem; BIM aparece como método, não como abertura', () => {

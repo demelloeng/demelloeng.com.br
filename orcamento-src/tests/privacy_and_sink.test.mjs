@@ -21,7 +21,7 @@ async function staticPages() {
       if (e.isDirectory()) {
         if (['orcamento-src', 'node_modules', 'docs', 'orcamento', '.github', '.git', 'assets'].includes(e.name)) continue;
         await walk(rel);
-      } else if (e.name.endsWith('.html') && !e.name.startsWith('_')) out.push(rel);
+      } else if (e.name.endsWith('.html') && !e.name.startsWith('_') && !/^google[0-9a-f]+\.html$/.test(e.name)) out.push(rel); // arquivo de verificação do Search Console não é página
     }
   }
   await walk('.');
