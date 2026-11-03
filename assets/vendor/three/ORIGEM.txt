@@ -1,0 +1,13 @@
+three.js 0.160.0 (MIT) — hospedado no próprio site para as quatro maquetes 3D (Arquitetura, Estrutural, Hidrossanitário, Infraestrutura).
+Origem oficial: pacote npm "three@0.160.0" (https://registry.npmjs.org/three/-/three-0.160.0.tgz), obtido em 02/11/2026.
+Integridade do pacote conferida contra o registro npm:
+  shasum    cd1e4dbd01aee0719280a9086d75545db52b7a8f
+  integrity sha512-DLU8lc0zNIPkM7rH5/e1Ks1Z8tWCGRq6g8mPowdDJpw1CFBJMU7UoJjC6PefXW7z//SSl0b2+GCw14LB+uDhng==
+Arquivos copiados SEM alteração (bytes do pacote), na mesma estrutura de pastas:
+  76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495  build/three.module.js
+  5a44a9e86a2a0fb11933eed69bc2cd33c76a496854c1aed6ed776efa87d7b064  examples/jsm/controls/OrbitControls.js
+  d073b438e6a07e1359741dd5d6c76c953420cc0d4fd84eb1bdde94315540e6a3  examples/jsm/loaders/GLTFLoader.js
+  9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb  examples/jsm/utils/BufferGeometryUtils.js
+  852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d  LICENSE
+Importados pelas maquetes: "three", "three/addons/controls/OrbitControls.js", "three/addons/loaders/GLTFLoader.js"; o GLTFLoader importa ../utils/BufferGeometryUtils.js.
+O mapa de importação das páginas (scripts/gerar-paginas-servico-v02.py) aponta para estes arquivos; nenhum recurso é carregado de CDN.

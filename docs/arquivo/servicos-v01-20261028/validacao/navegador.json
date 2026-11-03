@@ -1,0 +1,120 @@
+{
+  "desktop": {
+    "bodyFont": "\"Source Sans 3\", sans-serif",
+    "canonical": "https://demelloeng.com.br/servicos/",
+    "clientWidth": 1425,
+    "cta": "../orcamento/?situacao=known",
+    "documentWidth": 1425,
+    "h1": "Já sabe o serviço?\nVá direto a ele.",
+    "height": 4366,
+    "images": [
+      {
+        "loaded": true,
+        "src": "../assets/images/logo-branca.png"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/arquitetura.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/estrutural.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/hidrossanitario.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/incendio.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/gas-glp.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/terraplanagem.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/bim.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/regularizacao.svg"
+      },
+      {
+        "loaded": true,
+        "src": "../assets/icons/servicos-v02/orcamento.svg"
+      }
+    ],
+    "scripts": [
+      "https://connect.facebook.net/en_US/fbevents.js",
+      "https://scripts.simpleanalyticscdn.com/latest.js",
+      "../assets/js/nav.js",
+      "../assets/js/analytics-sink.js",
+      "../assets/js/meta-pixel.js",
+      "../assets/js/site-analytics.mjs"
+    ],
+    "services": [
+      {
+        "href": "./projeto-arquitetura/",
+        "title": "Projeto de arquitetura"
+      },
+      {
+        "href": "./projeto-estrutural/",
+        "title": "Projeto estrutural"
+      },
+      {
+        "href": "./projeto-hidrossanitario/",
+        "title": "Projeto hidrossanitário"
+      },
+      {
+        "href": "./projeto-prevencao-incendio/",
+        "title": "Projeto de incêndio — PPCI"
+      },
+      {
+        "href": "./projeto-gas-glp/",
+        "title": "Projeto de gás / GLP"
+      },
+      {
+        "href": "./projeto-terraplenagem/",
+        "title": "Projeto de terraplanagem"
+      },
+      {
+        "href": "./compatibilizacao-bim/",
+        "title": "Compatibilização BIM"
+      },
+      {
+        "href": "./regularizacao/",
+        "title": "Regularização de imóvel"
+      },
+      {
+        "href": "./orcamento-tecnico/",
+        "title": "Orçamento e cronograma"
+      }
+    ],
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "mobile": {
+    "clientWidth": 375,
+    "documentWidth": 375,
+    "height": 6691,
+    "imagesOk": true,
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  "menu": {
+    "opens": true,
+    "closes": true
+  },
+  "localErrors": [],
+  "deliberateExternalBlocks": [],
+  "externalContactsTriggered": false
+}

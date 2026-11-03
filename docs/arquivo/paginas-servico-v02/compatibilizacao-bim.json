@@ -1,0 +1,238 @@
+{
+  "slug": "compatibilizacao-bim",
+  "titulo_pagina": "Compatibilização BIM | DEMELLO Engenharia",
+  "descricao": "Compatibilização BIM: coordenação entre disciplinas e modelos de terceiros, sem pressupor autoria de todos os projetos nem prometer ausência de conflitos.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Compatibilização BIM\",\"description\":\"Compatibilização BIM: coordenação entre disciplinas e modelos de terceiros, sem pressupor autoria de todos os projetos nem prometer ausência de conflitos.\",\"url\":\"https://demelloeng.com.br/servicos/compatibilizacao-bim/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Compatibilização BIM\",\"item\":\"https://demelloeng.com.br/servicos/compatibilizacao-bim/\"}]}]}</script>",
+  "h1": "Compatibilização BIM: projetos que ocupam o mesmo espaço precisam combinar",
+  "chamada": "Compatibilizar não é colocar todos os modelos na mesma tela. É coordenar decisões que ocupam o mesmo espaço.",
+  "introducao": [
+    "A Compatibilização BIM é um serviço técnico de coordenação e compatibilização.",
+    "Não é uma nova disciplina de projeto e não pressupõe que a DEMELLO seja autora de todos os projetos envolvidos."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=known&amp;servico=compatibilizacao",
+    "rotulo": "Avaliar a compatibilização do meu projeto",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido quando:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "existem duas ou mais disciplinas que precisam ser coordenadas;",
+            "diferentes projetos possuem interfaces relevantes;",
+            "modelos de terceiros precisam entrar em uma análise coordenada;",
+            "revisões em uma disciplina podem impactar outras;",
+            "o empreendimento precisa consolidar informações antes da execução."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme a contratação:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "coordenação dos modelos;",
+            "verificação tridimensional das principais interferências;",
+            "adequação dos lançamentos gerais dentro do escopo;",
+            "consolidação de modelo coordenado;",
+            "registro das compatibilizações;",
+            "coordenação de modelos de terceiros disponibilizados em condições adequadas;",
+            "arquivos e produtos técnicos previstos na proposta."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A forma de registro e os formatos finais dependem do objeto contratado."
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Interferências vistas antes da obra",
+              "texto": "As principais interferências aparecem no modelo tridimensional — antes que a obra descubra os conflitos por conta própria."
+            },
+            {
+              "titulo": "Um modelo coordenado e registrado",
+              "texto": "O modelo coordenado é consolidado e as compatibilizações ficam registradas."
+            },
+            {
+              "titulo": "Também com projetos de terceiros",
+              "texto": "Modelos de terceiros entram na coordenação, desde que cheguem em condições adequadas de uso."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa com “Compatibilização BIM” já selecionada e informe a área do escopo."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO coordena os modelos e as interfaces previstas no escopo."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O serviço pode envolver:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "coordenação entre disciplinas;",
+            "verificação tridimensional das principais interferências;",
+            "adequação dos lançamentos gerais dentro do processo de coordenação;",
+            "consolidação de modelo coordenado;",
+            "registro das compatibilizações;",
+            "coordenação de modelos de terceiros quando forem fornecidos em condições adequadas para uso."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "BIM é a ferramenta."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A decisão técnica continua sendo o trabalho."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A definição considera, conforme o caso:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "quais disciplinas entram na coordenação;",
+            "número e natureza das interfaces;",
+            "área do escopo;",
+            "estágio dos projetos;",
+            "autoria dos modelos;",
+            "informações disponíveis;",
+            "condições dos arquivos fornecidos por terceiros;",
+            "abrangência da compatibilização contratada."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Quanto melhor definido o conjunto de informações que entra, mais claro fica o trabalho de coordenação que precisa sair."
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A experiência técnica documentada em Compatibilização BIM é demonstrada pela metodologia aplicada e por trabalhos multidisciplinares em que diferentes projetos foram efetivamente coordenados."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No CECM Djalma Marinho, Marcos concentrou diferentes frentes técnicas — arquitetura, estrutura, hidrossanitário, incêndio, terraplenagem, orçamento e regularização — com desenvolvimento e compatibilização em BIM."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Foi um empreendimento com nove blocos existentes, ampliação para um décimo bloco, aproximadamente 16 metros de desnível e doze rampas integrando o conjunto."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A atuação ocorreu antes da constituição da DEMELLO Engenharia."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Compatibilização não significa autoria automática sobre todos os projetos envolvidos."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A autoria e a responsabilidade dos projetos de terceiros continuam com seus respectivos responsáveis."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Também não existe promessa de:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "eliminação absoluta de conflitos;",
+            "correção automática de projeto de terceiros;",
+            "número universal de rodadas;",
+            "relatório formal de clashes;",
+            "BCF;",
+            "planilha de interferências,"
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "salvo quando algum desses produtos estiver expressamente previsto em contratação específica."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se você já tem projetos que precisam conversar antes que a obra descubra os conflitos por conta própria, comece pelo enquadramento."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+<div class="vaga">
+    <div class="caixa" id="caixa" data-glb="../../assets/models/casa-exemplo.glb" role="button" tabindex="0" aria-label="Abrir a maquete 3D da casa em tela cheia">
+      <div class="palco" id="palco" aria-hidden="true"></div>
+      <div class="carregando" id="carregando">Carregando a maquete…</div>
+      <div class="rotulo" id="rotulo"><b>Maquete 3D</b><span>Casa de exemplo, modelada no Revit</span></div>
+      <div class="explorar" id="explorar" aria-hidden="true">Explorar
+        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
+
+      <div class="ui-aberta" id="ui" hidden>
+        <div class="topo">
+          <div><h2>Maquete 3D</h2><p>Casa de exemplo, modelada no Revit</p></div>
+          <button class="fechar" id="fechar" type="button" aria-label="Fechar a maquete"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+        </div>
+        <div class="baixo">
+          <p class="dica">Arraste para girar. Role ou pince para aproximar. Botão direito para mover.</p>
+          <div class="painel" role="group" aria-label="Controles da maquete">
+            <div class="grupo"><span id="rot-estilo">Estilo</span>
+              <div class="seg" role="radiogroup" aria-labelledby="rot-estilo">
+                <button type="button" role="radio" aria-checked="true" data-estilo="projeto">Projeto</button>
+                <button type="button" role="radio" aria-checked="false" data-estilo="realista">Realista</button>
+              </div></div>
+            <div class="grupo"><span id="rot-vista">Vista</span>
+              <div class="seg" role="radiogroup" aria-labelledby="rot-vista">
+                <button type="button" role="radio" aria-checked="true" data-vista="3d">3D</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="planta">Planta</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="fachada">Fachada</button>
+              </div></div>
+            <div class="grupo"><button class="chip" id="raiox" type="button" aria-pressed="false">Raio-X</button>
+              <button class="chip" id="girar" type="button" aria-pressed="true">Girar</button></div>
+            <div class="grupo"><label for="corte"><span>Corte</span></label><input id="corte" type="range" min="0" max="100" value="100" aria-label="Altura do corte horizontal"></div>
+            <div class="camadas" id="camadas" role="group" aria-label="Camadas visíveis"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

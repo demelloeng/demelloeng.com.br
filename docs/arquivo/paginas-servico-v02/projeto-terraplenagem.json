@@ -1,0 +1,208 @@
+{
+  "slug": "projeto-terraplenagem",
+  "titulo_pagina": "Projeto de terraplenagem | DEMELLO Engenharia",
+  "descricao": "Projeto de terraplenagem — a relação técnica entre terreno e implantação, coordenada com as demais disciplinas. Projeto, não execução de movimentação de terra.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Projeto de terraplenagem\",\"description\":\"Projeto de terraplenagem — a relação técnica entre terreno e implantação, coordenada com as demais disciplinas. Projeto, não execução de movimentação de terra.\",\"url\":\"https://demelloeng.com.br/servicos/projeto-terraplenagem/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Projeto de terraplenagem\",\"item\":\"https://demelloeng.com.br/servicos/projeto-terraplenagem/\"}]}]}</script>",
+  "h1": "Projeto de terraplenagem: o terreno resolvido antes de movimentar terra",
+  "chamada": "Antes de movimentar terra, é preciso entender o que o terreno precisa fazer pelo projeto.",
+  "introducao": [
+    "Terraplenagem começa na relação entre terreno e implantação.",
+    "Não na máquina."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=known&amp;servico=terraplenagem",
+    "rotulo": "Descrever meu projeto de terraplenagem",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido quando:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "o terreno condiciona a implantação;",
+            "existem diferenças de nível relevantes para o empreendimento;",
+            "construção ou ampliação exigem estudo e definição técnica dessa relação;",
+            "o projeto precisa organizar como a implantação se adapta às condições existentes."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme o escopo contratado:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "pranchas;",
+            "arquivos DWG;",
+            "modelos BIM;",
+            "arquivos IFC;",
+            "demais documentos e produtos técnicos previstos na proposta."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Esses itens representam o universo possível do serviço, não um pacote obrigatório."
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Terreno e implantação em diálogo",
+              "texto": "A relação entre terreno e implantação é organizada tecnicamente, dentro do escopo contratado."
+            },
+            {
+              "titulo": "Coordenado com as demais disciplinas",
+              "texto": "Pode ser coordenada com arquitetura e com os demais projetos do empreendimento."
+            },
+            {
+              "titulo": "Projeto, não execução",
+              "texto": "Projeto, não máquina: a DEMELLO não executa movimentação de terra neste serviço."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa com “Terraplenagem” já selecionado e responda só ao que se aplica ao seu caso. Você informa a área do terreno — só ela."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve projeto de terraplenagem."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O trabalho organiza tecnicamente a relação entre terreno e implantação dentro do escopo contratado e pode ser coordenado com as demais disciplinas do empreendimento."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A definição pode considerar:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "terreno;",
+            "implantação prevista;",
+            "área do terreno;",
+            "localização;",
+            "fase do empreendimento;",
+            "condições existentes;",
+            "levantamentos disponíveis;",
+            "interfaces com arquitetura e demais projetos."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O acervo profissional de Marcos de Mello Silva registra:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "2.447 m³ de corte;",
+            "2.512 m³ de aterro."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Total combinado: 4.959 m³ de experiência técnica documentada em corte + aterro."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O CECM Djalma Marinho foi desenvolvido em terreno com aproximadamente 16 metros de desnível."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A terraplenagem integrou o conjunto de projetos sob responsabilidade de Marcos de Mello Silva, em atuação anterior à DEMELLO Engenharia, coordenada com arquitetura e demais disciplinas."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A diferença fundamental é simples:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "projeto de terraplenagem ≠ execução de terraplenagem."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO não executa movimentação física de terra como parte deste serviço."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O conteúdo técnico final também varia conforme o escopo contratado e os insumos disponíveis para o projeto."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se o terreno está determinando o projeto — ou deveria estar — comece pelo enquadramento."
+        }
+      ]
+    }
+  ]
+}

@@ -149,8 +149,10 @@ test('posição e contexto: cada clique carrega página, posição e (quando a p
   const win = (p) => ({ location: { pathname: p } });
   const find = async (file, pred) => nodesOf(await read(file)).filter((a) => channelOf(a.attrs.href) && pred(a));
   // serviço
-  const [wa] = await find('servicos/projeto-estrutural/index.html', (a) => a.closest('.topbar'));
-  assert.deepEqual(buildEvent(wa, win('/servicos/projeto-estrutural/')), { event: 'whatsapp_contact_started', params: { placement: 'topbar', route: 'known', service: 'estrutural', page: '/servicos/projeto-estrutural/' } });
+  // Páginas V02 de projeto não têm a faixa superior (.topbar): o WhatsApp do menu carrega a posição "menu" com rota e serviço.
+  const wa = (await find('servicos/projeto-estrutural/index.html', (a) => a.closest('.nav') && channelOf(a.attrs.href) === 'whatsapp_contact_started'))[0];
+  assert.ok(wa, 'WhatsApp no menu da página V02');
+  assert.deepEqual(buildEvent(wa, win('/servicos/projeto-estrutural/')), { event: 'whatsapp_contact_started', params: { placement: 'menu', route: 'known', service: 'estrutural', page: '/servicos/projeto-estrutural/' } });
   const [reg] = await find('servicos/regularizacao/index.html', (a) => a.closest('.topbar'));
   assert.deepEqual(buildEvent(reg, win('/servicos/regularizacao/')).params, { placement: 'topbar', route: 'regularize', service: 'regularizacao', page: '/servicos/regularizacao/' });
   // intenção

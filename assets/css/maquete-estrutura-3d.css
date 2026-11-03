@@ -1,0 +1,32 @@
+/* Controles extras da maquete estrutural: dica do elemento, ficha, e brilho. Soma-se a maquete-3d.css (mesmas classes da caixa). */
+.caixa.estrutura{font-family:var(--fonte)}
+.caixa.estrutura{border-color:#3b6ea5;box-shadow:0 0 0 1px rgba(106,160,216,.25),0 0 60px rgba(47,106,168,.25) inset}
+.caixa.estrutura .elemento{position:absolute;z-index:4;pointer-events:none;padding:8px 12px;background:rgba(15,22,29,.92);border:1px solid #9cc2ec;color:#fff;
+  font:600 15px var(--fonte);border-radius:3px;white-space:nowrap;box-shadow:0 0 18px rgba(156,194,236,.35)}
+.caixa.estrutura .ficha{position:absolute;z-index:4;left:16px;top:84px;display:flex;flex-direction:column;gap:4px;min-width:220px;padding:14px 16px;
+  background:rgba(15,22,29,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid #9cc2ec;border-radius:4px;color:#e8f0f8;box-shadow:0 0 24px rgba(156,194,236,.25)}
+.caixa.estrutura .ficha b{font-size:22px;line-height:1.1;color:#fff}
+.caixa.estrutura .ficha span{font-size:15px;color:#9db6cf}
+.caixa.estrutura .ficha button{margin-top:8px;align-self:flex-start;min-height:36px;padding:0 12px;font:600 14px var(--fonte);color:#cfe0f1;background:transparent;border:1px solid #3b5f84;border-radius:3px;cursor:pointer}
+.caixa.estrutura .ficha button:hover{background:var(--azul);color:#fff}
+.caixa.estrutura label{display:flex;align-items:center}
+.caixa.estrutura label span b{display:inline-block;min-width:3.2ch;text-align:right;color:#9cc2ec}
+.caixa.estrutura .painel{max-width:min(1080px,100%)}
+@media (max-width:640px){.caixa.estrutura .ficha{top:72px;left:12px;min-width:180px}.caixa.estrutura .elemento{font-size:14px}}
+
+/* painel "sobre o mezanino", dentro do pop-up */
+.caixa.estrutura:not(.aberta) .sobre{display:none}
+.caixa.estrutura .sobre{position:absolute;z-index:4;right:16px;top:84px;width:min(380px,calc(100vw - 32px));max-height:calc(100% - 330px);overflow:auto;
+  background:rgba(15,22,29,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid #9cc2ec;border-radius:4px;color:#e8f0f8;box-shadow:0 0 24px rgba(156,194,236,.25)}
+.caixa.estrutura .sobre summary{cursor:pointer;list-style:none;padding:12px 16px;font-size:18px;font-weight:700;color:#fff}
+.caixa.estrutura .sobre summary::-webkit-details-marker{display:none}
+.caixa.estrutura .sobre summary::after{content:"−";float:right;color:#9cc2ec}
+.caixa.estrutura .sobre:not([open]) summary::after{content:"+"}
+.caixa.estrutura .sobre-corpo{padding:0 16px 16px;font-size:15px;line-height:1.4;color:#cfe0f1}
+.caixa.estrutura .sobre-corpo p{margin:0 0 10px;font-size:15px;line-height:1.4;color:#cfe0f1}
+.caixa.estrutura .sobre-corpo ul{margin:0 0 12px;padding:0;list-style:none;display:grid;gap:6px}
+.caixa.estrutura .sobre-corpo li{padding-left:12px;border-left:2px solid #3b6ea5}
+.caixa.estrutura .sobre-corpo li b{color:#9cc2ec}
+.caixa.estrutura .sobre-corpo .aviso{padding:8px 10px;background:rgba(156,194,236,.1);border-radius:3px;color:#9db6cf;font-size:14px}
+.caixa.estrutura .sobre-cta{display:inline-block;margin-top:4px;font-weight:700;font-size:16px;color:#9cc2ec;text-decoration:underline}
+@media (max-width:640px){.caixa.estrutura .sobre{top:64px;right:12px;max-height:calc(100% - 300px)}}

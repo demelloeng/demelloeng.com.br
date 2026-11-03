@@ -1,0 +1,196 @@
+{
+  "slug": "projeto-prevencao-incendio",
+  "titulo_pagina": "Projeto de prevenção contra incêndio | DEMELLO Engenharia",
+  "descricao": "Projeto de prevenção contra incêndio como disciplina própria e coordenada, distinta de gás / GLP. Conteúdo conforme o escopo e o processo envolvido.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Projeto de prevenção contra incêndio\",\"description\":\"Projeto de prevenção contra incêndio como disciplina própria e coordenada, distinta de gás / GLP. Conteúdo conforme o escopo e o processo envolvido.\",\"url\":\"https://demelloeng.com.br/servicos/projeto-prevencao-incendio/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Projeto de prevenção contra incêndio\",\"item\":\"https://demelloeng.com.br/servicos/projeto-prevencao-incendio/\"}]}]}</script>",
+  "h1": "Projeto de prevenção contra incêndio, tratado como disciplina própria",
+  "chamada": "Prevenção contra incêndio é disciplina própria. E precisa ser tratada como tal.",
+  "introducao": [
+    "O projeto organiza as soluções técnicas previstas para segurança contra incêndio dentro do escopo do empreendimento e das exigências aplicáveis ao caso.",
+    "Ele não deve ser confundido com projeto de gás / GLP."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=known&amp;servico=incendio",
+    "rotulo": "Avaliar meu projeto",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode ser necessário em:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "edificações novas;",
+            "ampliações;",
+            "empreendimentos que já tenham identificado necessidade específica da disciplina;",
+            "situações em que o projeto precise ser coordenado com arquitetura, estrutura e demais instalações."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Área, tipo de empreendimento, fase e localização ajudam a enquadrar o serviço."
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme o escopo contratado:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "projeto técnico da disciplina;",
+            "pranchas em DWG;",
+            "modelos IFC;",
+            "demais arquivos e documentos técnicos previstos na proposta;",
+            "quando o processo correspondente fizer parte da contratação e resultar em aprovação, o respectivo projeto aprovado."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Incêndio e gás, cada um no seu escopo",
+              "texto": "Incêndio e gás podem ter interfaces. Continuam sendo serviços distintos, cada um com o seu escopo."
+            },
+            {
+              "titulo": "Disciplina coordenada com o projeto",
+              "texto": "A disciplina é coordenada com arquitetura, estrutura e demais instalações."
+            },
+            {
+              "titulo": "Clareza sobre o que é projeto e o que é processo",
+              "texto": "Protocolo, acompanhamento e etapas administrativas só entram quando contratados. E projeto contratado não é aprovação garantida."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa com “Incêndio” já selecionado e responda só ao que se aplica ao seu caso."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve o projeto de prevenção contra incêndio conforme o escopo contratado, coordenando a disciplina com os demais elementos do empreendimento."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O conteúdo técnico e documental varia conforme o caso e conforme o processo administrativo eventualmente envolvido."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO considera, conforme o caso:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "edificação nova ou ampliação;",
+            "área;",
+            "tipo de empreendimento;",
+            "fase do projeto;",
+            "localização;",
+            "informações e projetos disponíveis;",
+            "abrangência efetivamente contratada."
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O acervo profissional de Marcos de Mello Silva registra 12.879 m² de experiência técnica documentada na disciplina de prevenção contra incêndio."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O total reúne projetos e consultoria técnica em controle de fumaça, por isso representa experiência documentada na disciplina — não apenas área de projetos de incêndio."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No CECM Djalma Marinho, Marcos desenvolveu a disciplina de prevenção contra incêndio dentro do conjunto de serviços sob sua responsabilidade, incluindo 12 caixas de hidrante."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Esse trabalho integra sua experiência profissional anterior à DEMELLO Engenharia."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Projeto de prevenção contra incêndio e projeto de gás / GLP são serviços distintos."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Protocolo, acompanhamento e demais etapas administrativas só integram o serviço quando contratados."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A contratação do projeto não garante aprovação pelo órgão competente."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se você já sabe que o empreendimento precisa da disciplina ou ainda precisa enquadrar a demanda, comece pelo caso."
+        }
+      ]
+    }
+  ]
+}

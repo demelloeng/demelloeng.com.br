@@ -1,0 +1,36 @@
+<div class="vaga">
+    <div class="caixa estrutura" id="caixa" data-glb="../../assets/models/hidro-casa.glb" data-meta="../../assets/models/hidro-casa.json" role="button" tabindex="0" aria-label="Abrir a maquete 3D das redes hidrossanitárias em tela cheia">
+      <div class="palco" id="palco" aria-hidden="true"></div>
+      <div class="carregando" id="carregando">Carregando as redes…</div>
+      <div class="rotulo" id="rotulo"><b>Maquete 3D</b><span>Instalações de uma casa, em 3D · espessura ampliada</span></div>
+      <div class="explorar" id="explorar" aria-hidden="true">Montar e explorar
+        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
+      <div class="elemento" id="elemento" hidden></div>
+      <div class="ficha" id="ficha" hidden></div>
+
+      <div class="ui-aberta" id="ui" hidden>
+        <div class="topo">
+          <div><h2>Maquete 3D</h2><p>Instalações de uma casa com piscina, com a espessura dos tubos ampliada para leitura. Passe o mouse ou toque nos elementos.</p></div>
+          <button class="fechar" id="fechar" type="button" aria-label="Fechar a maquete"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+        </div>
+        <div class="baixo">
+          <details class="leg" id="leg-det"><summary>Cores das peças</summary><ul class="legenda" id="legenda" aria-label="Cores das peças"></ul></details>
+          <p class="dica">Arraste para girar. Role ou pince para aproximar. Clique em um elemento para ver a ficha dele.</p>
+          <div class="painel" role="group" aria-label="Controles da maquete">
+            <div class="grupo"><button class="chip" id="montar" type="button">Montar de novo</button>
+              <label for="construir"><span>Construir <b id="pct">100%</b></span></label><input id="construir" type="range" min="0" max="100" value="100" aria-label="Quanto das redes está montado"></div>
+            <div class="grupo"><label for="explodir"><span>Separar camadas</span></label><input id="explodir" type="range" min="0" max="100" value="0" aria-label="Separar as redes"></div>
+            <div class="grupo"><span id="rot-vista">Vista</span>
+              <div class="seg" role="radiogroup" aria-labelledby="rot-vista">
+                <button type="button" role="radio" aria-checked="true" data-vista="3d">3D</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="planta">Planta</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="frente">Frente</button>
+              </div></div>
+            <div class="grupo"><button class="chip" id="raiox" type="button" aria-pressed="false">Raio-X</button>
+              <button class="chip" id="girar" type="button" aria-pressed="true">Girar</button></div>
+            <div class="camadas" id="camadas" role="group" aria-label="Camadas visíveis"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

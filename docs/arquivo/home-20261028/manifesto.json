@@ -1,0 +1,137 @@
+{
+  "base_commit": "1ff07c721a9615a0f42cc0fdfa5587cee0fee534",
+  "branch": "arquivo/home-20261028",
+  "home_sha256": "73b5794b623eb118555beb04c1d8b77a8f924c906dc2fa2d1f892dbfef973573",
+  "resources": [
+    {
+      "path": "assets/css/home-20261024.css",
+      "sha256": "0476b114d9fad3af21ee833dfce3841cff9539b294515471945e952750269d4d",
+      "bytes": 15987
+    },
+    {
+      "path": "assets/css/home-opcao3-20261027.css",
+      "sha256": "0f3eb41d6e4bf904f33475817d01b017f4132b3b02d3593ad4f72b59105698eb",
+      "bytes": 10220
+    },
+    {
+      "path": "assets/fonts/SourceSans3-LICENSE.txt",
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3",
+      "bytes": 4314
+    },
+    {
+      "path": "assets/fonts/source-sans-3-latin-400-normal.woff2",
+      "sha256": "0f73f35e08cde0a2f10c109c6e01d71459d97e4099ecd9a50f1b6c0209e4de2b",
+      "bytes": 15696
+    },
+    {
+      "path": "assets/fonts/source-sans-3-latin-600-normal.woff2",
+      "sha256": "14527d193b0e30bc32ef931549a246cdfd286573bb12869b7e052b8101a39d38",
+      "bytes": 15668
+    },
+    {
+      "path": "assets/fonts/source-sans-3-latin-700-normal.woff2",
+      "sha256": "ae35266f2ab0d5314ff9a04127931eb26c793e4f1269bb240046d4d2db4b7bb1",
+      "bytes": 15596
+    },
+    {
+      "path": "assets/fonts/source-sans-3-latin-800-normal.woff2",
+      "sha256": "b42d5c20d0730f353996e29dd28872f4782dae9fd0b8ba75365fbeab6f909605",
+      "bytes": 15536
+    },
+    {
+      "path": "assets/icons/situacao-ampliar-v1.svg",
+      "sha256": "1f410a8519cbde88a661ff838069f51bdda24a63392e00487438d792db5687c3",
+      "bytes": 237
+    },
+    {
+      "path": "assets/icons/situacao-avaliar-v1.svg",
+      "sha256": "07060a8b35162f6ba8c5429f8aeb42c3dcc6521e61203a5e52f98d86578cfc16",
+      "bytes": 256
+    },
+    {
+      "path": "assets/icons/situacao-construir-v1.svg",
+      "sha256": "99a400ad746a1f34ef90e25ed22366e76b220dfbd4e1b192f32f4a448b268384",
+      "bytes": 237
+    },
+    {
+      "path": "assets/icons/situacao-regularizar-v1.svg",
+      "sha256": "e0006ae3aee6b3b1414ce1bac374e4c34ef441af84e27b7b11c14302ce315f5b",
+      "bytes": 276
+    },
+    {
+      "path": "assets/images/GERIBELLO_logo_branca.png",
+      "sha256": "52a6c22576c7713a74bad671dc1e0b4a612829bcafe9fba4309bce0d9bf6778e",
+      "bytes": 26495
+    },
+    {
+      "path": "assets/images/JHE_logo.png",
+      "sha256": "b4d66d81d16b2113f628a19661460330c5f8c4675fe3b5ace534fcb987000f77",
+      "bytes": 13162
+    },
+    {
+      "path": "assets/images/ODARA_avatar_linktree.jpg",
+      "sha256": "a0e6529df0ca7d1a5838dc7335cee37a2910358c26fee6bd72cb746c38870b24",
+      "bytes": 5820
+    },
+    {
+      "path": "assets/images/favicon.png",
+      "sha256": "0fe6ba68047b1007cba2cbc1147d6d58a2b3ee3141a61959cf6748787c463dcc",
+      "bytes": 153913
+    },
+    {
+      "path": "assets/images/hero-djalma-marinho.jpg",
+      "sha256": "1a0046c51952ad9a5b0c50ea0b9fc363db21a9fd06d47f1ddc622a86b868ca35",
+      "bytes": 339959
+    },
+    {
+      "path": "assets/images/home-opcao3-hero.webp",
+      "sha256": "0d014b3188db8120ced9dae21393053af8667051a1c5c1485507fab6401aa900",
+      "bytes": 243828
+    },
+    {
+      "path": "assets/images/home-opcao3-hidro.webp",
+      "sha256": "746835b6d2409a155a4e8e2d607748cd20d824ed561ee9b8800134fbf631689e",
+      "bytes": 187464
+    },
+    {
+      "path": "assets/images/home-opcao3-incendio.webp",
+      "sha256": "83fb98625d89b18c4bf822944c3f35da16da0a0dd4be9b38085a0c893bbdedb6",
+      "bytes": 248630
+    },
+    {
+      "path": "assets/images/home-opcao3-integracao.webp",
+      "sha256": "c897dd571e39649b0bfbf613e97d303bef73f2786438177a9bb7b23b65354786",
+      "bytes": 215382
+    },
+    {
+      "path": "assets/images/logo-branca.png",
+      "sha256": "b7460e1023bfca912e01cca8e8b565c56b3911b676ca9018ef979246f64e9973",
+      "bytes": 51145
+    },
+    {
+      "path": "assets/images/logo-oficial.png",
+      "sha256": "7f6e1a66583645532579d2f9b7cd8b8b03b3579f8b291182325492d051f6993b",
+      "bytes": 183174
+    },
+    {
+      "path": "assets/js/analytics-sink.js",
+      "sha256": "66067d71ad41b008ecef4ade7372ae14df5456b0113f272de4c72dc36663bc88",
+      "bytes": 1823
+    },
+    {
+      "path": "assets/js/meta-pixel.js",
+      "sha256": "f07ee5229c2dc336a03d218faac8b16cba613f7413b4677e6ce1ded132be7c84",
+      "bytes": 2901
+    },
+    {
+      "path": "assets/js/nav.js",
+      "sha256": "6ea36b3340c366ddb48ee99b53225c2fab0510233f69028f7c8bc7f9cb6090be",
+      "bytes": 575
+    },
+    {
+      "path": "assets/js/site-analytics.mjs",
+      "sha256": "cc9f1d74fe4447c4c96b90907a315a4a93efe28f1e24dcfe37453adc9890e743",
+      "bytes": 466
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "slug": "projeto-terraplenagem",
+  "nome_servico": "Projeto de terraplanagem e infraestrutura",
+  "fonte_copy": "COPY_INFRAESTRUTURA_V02_20261102.md",
+  "titulo_pagina": "Terraplanagem: projeto de corte, aterro e drenagem | DEMELLO",
+  "descricao": "Vai fazer terraplanagem? Entenda o papel do projeto antes da máquina. Corte, aterro e integração com drenagem, pavimentação e redes de infraestrutura.",
+  "h1": "Vai fazer terraplanagem? Saiba o que definir antes de contratar a máquina.",
+  "chamada": "A máquina movimenta a terra. O projeto define onde, quanto e para qual cota.",
+  "introducao": [
+    "Vai contratar uma retroescavadeira ou começar a terraplanagem? Antes de mobilizar equipamentos, vale entender onde cortar, onde aterrar, quais cotas atingir e como a água da chuva vai escoar. O projeto organiza essas decisões técnicas antes da execução.",
+    "A DEMELLO desenvolve projetos de terraplanagem em BIM, coordenando, conforme o escopo, suas interfaces com drenagem, pavimentação, rodovias e redes de água e esgoto."
+  ],
+  "cta": {
+    "rotulo": "Conversar sobre meu projeto de terraplanagem",
+    "micro": "Sem compromisso.",
+    "href": "../../contato/"
+  },
+  "jsonld_nomes": {
+    "Projeto de terraplenagem": "Projeto de terraplanagem e infraestrutura"
+  },
+  "blocos_novos": {
+    "para_quem": {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido se você:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "está procurando terraplanagem e quer entender o que precisa ser definido antes de contratar as máquinas;",
+            "vai construir ou ampliar em um terreno com desnível;",
+            "precisa implantar uma rua, rodovia, acesso ou área pavimentada;",
+            "precisa planejar drenagem urbana ou redes de água e esgoto;",
+            "já possui levantamento topográfico, curvas de nível ou plantas do empreendimento;",
+            "está pensando em contratar uma retroescavadeira para preparar o terreno e precisa entender se a intervenção exige um projeto."
+          ]
+        }
+      ]
+    },
+    "muda": {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Antes da máquina, você sabe o que precisa movimentar",
+              "texto": "Com os levantamentos necessários, o projeto define as cotas e permite estimar os volumes de corte e aterro. São informações para planejar os serviços e fundamentar o orçamento da execução."
+            },
+            {
+              "titulo": "A terraplanagem considera o que será construído depois",
+              "texto": "Platôs, acessos, vias e áreas pavimentadas dependem de uma implantação coerente com o terreno. O projeto considera essas relações desde o desenvolvimento das soluções."
+            },
+            {
+              "titulo": "A infraestrutura é pensada em conjunto",
+              "texto": "Drenagem, pavimentação e redes enterradas interferem na implantação. Coordenar essas disciplinas permite identificar conflitos antes da obra e organizar melhor as decisões de projeto."
+            }
+          ]
+        }
+      ]
+    },
+    "estrutura": {
+      "titulo": "Do terreno natural ao terraplanado",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "- Terreno natural: as curvas de nível representam a configuração existente do terreno."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Platôs: cotas e superfícies de implantação definidas em relação à arquitetura."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Corte: retirada de material onde o terreno existente está acima da superfície projetada."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Aterro: acréscimo de material onde o terreno existente está abaixo da superfície projetada."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Taludes e contenções: soluções estudadas conforme os desníveis, as condições do terreno e o espaço disponível."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "- Drenagem: soluções para conduzir e destinar adequadamente as águas pluviais."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A comparação entre o terreno existente e as cotas projetadas identifica as áreas de corte e aterro. A maquete ilustra essa transformação."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A maquete no topo da página mostra esse processo a partir de um projeto real de terraplanagem de um colégio."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Os quantitativos de movimentação de terra também ajudam a fundamentar o orçamento da execução, conforme os critérios do serviço de <a href=\"../orcamento-tecnico/\">Orçamento e cronograma</a>."
+        }
+      ]
+    },
+    "experiencia": {
+      "titulo": "Experiência aplicada — Colégio Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No Colégio Estadual Cívico Militar Djalma Marinho, Marcos de Mello Silva respondeu pelo projeto de terraplanagem."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O terreno apresenta aproximadamente 16 metros de desnível."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O projeto contemplou a definição dos platôs dos blocos, dos cortes, dos aterros e das contenções, considerando a implantação do empreendimento."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A maquete 3D apresentada no topo da página ilustra essa transformação do terreno, com relevo vertical exagerado duas vezes para facilitar a visualização."
+        }
+      ]
+    },
+    "prova": {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "4.959 m³ de experiência técnica documentada em corte e aterro"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O acervo profissional de Marcos de Mello Silva registra:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "2.447 m³ de corte;",
+            "2.512 m³ de aterro."
+          ]
+        }
+      ]
+    },
+    "faz": {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve projetos de terraplanagem, drenagem urbana, pavimentação, rodovias e redes públicas de água e esgoto, conforme as necessidades de cada empreendimento."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Na terraplanagem, o trabalho pode compreender a definição de platôs, cortes, aterros, taludes, contenções, quantitativos e documentação técnica correspondente ao nível contratado."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A modelagem BIM ajuda a visualizar as soluções e coordenar sua relação com a arquitetura e as demais disciplinas."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "Quanto custa fazer uma terraplanagem? E quanto custa o projeto?",
+              "resposta": "São contratações diferentes. O custo da execução depende, entre outros fatores, do tipo de solo, dos volumes movimentados, dos equipamentos e do transporte de terra.</p><p>Já o projeto da DEMELLO utiliza critérios próprios de precificação, considerando a área do terreno e o escopo técnico necessário. Conte o que pretende fazer para receber o enquadramento adequado."
+            },
+            {
+              "pergunta": "Vou contratar uma retroescavadeira. Preciso de projeto de terraplanagem?",
+              "resposta": "Depende da intervenção. Uma escavação pontual não exige necessariamente um projeto específico de terraplanagem.</p><p>Quando há desníveis relevantes, movimentação de volumes, implantação de platôs, contenções ou interferências com drenagem e redes enterradas, é importante avaliar as definições técnicas antes de contratar a máquina.</p><p>O projeto permite estabelecer cotas, geometria e quantitativos, além de coordenar a movimentação de terra com o restante do empreendimento.</p><p>Ainda não sabe se precisa de projeto? Conte o que pretende fazer no terreno. A DEMELLO pode avaliar a necessidade e o escopo técnico adequado."
+            },
+            {
+              "pergunta": "Preciso de levantamento topográfico?",
+              "resposta": "O projeto precisa de informações confiáveis sobre o terreno. Se você já tem levantamento, curvas de nível ou desenhos em PDF, DWG, DXF ou IFC, envie para avaliação.</p><p>A DEMELLO identifica os dados aproveitáveis e o que ainda será necessário."
+            },
+            {
+              "pergunta": "Qual é a relação entre terraplanagem, drenagem e pavimentação?",
+              "resposta": "A água precisa escoar, o pavimento precisa de uma base adequada e as vias precisam de cotas e declividades definidas.</p><p>Essas soluções têm interfaces com a terraplanagem e devem ser coordenadas conforme as condições do empreendimento."
+            },
+            {
+              "pergunta": "E os projetos de água e esgoto?",
+              "resposta": "A implantação de redes enterradas envolve traçados, profundidades, escavações, declividades quando aplicáveis e recomposição das áreas afetadas.</p><p>A DEMELLO também desenvolve projetos dessas redes, conforme o escopo contratado."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "ordem": [
+    "para_quem",
+    "muda",
+    "estrutura",
+    "faz",
+    "perguntas",
+    "prova",
+    "experiencia",
+    {
+      "detalhes": {
+        "titulo": "Detalhes do escopo",
+        "resumo": "Entregáveis e como o escopo é definido",
+        "blocos": [
+          "Entregáveis",
+          "Como o escopo é definido"
+        ]
+      }
+    }
+  ],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Vai fazer terraplanagem ou implantar infraestrutura?",
+      "Conte onde fica o terreno e o que você pretende construir. Se já tiver levantamento ou plantas, envie como estão."
+    ]
+  },
+  "figuras": {},
+  "layout": "rico",
+  "perfil": "infra",
+  "imprensa": [],
+  "removidos": []
+}

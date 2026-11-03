@@ -36,37 +36,37 @@ const SERVICE_SLUGS = [
   'orcamento-tecnico', 'projeto-terraplenagem', 'compatibilizacao-bim',
 ];
 
-test('HOME: primeira dobra faz só três coisas (situação, promessa, primeiro clique) e não traz conteúdo institucional', async () => {
+test('HOME V02: primeira dobra apresenta o que a DEMELLO projeta e leva à estimativa ou ao WhatsApp; sem números de acervo', async () => {
+  // A Home V02 (IT040, aprovada por Marcos) substituiu a primeira dobra "Vai construir ou ampliar?". A situação passa a ser escolhida na seção "Comece pela situação".
   const html = await read('index.html');
   const hero = html.match(/<section[^>]*data-block="situation-entry"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.ok(hero, 'bloco situation-entry presente');
-  assert.match(hero, /<h1[^>]*>Vai construir ou ampliar\?<\/h1>/);
-  assert.match(hero, /Descubra quais projetos sua obra pode precisar e veja uma estimativa inicial\./);
-  assert.match(hero, /<a class="btn-cta" href="\.\/orcamento\/\?situacao=build">Calcular minha estimativa/);
-  assert.match(hero, /Sem compromisso · contato somente no final/);
-  assert.equal([...hero.matchAll(/<a\b/g)].length, 1, 'um único link (o CTA) na primeira dobra');
-  // fora da primeira dobra: disciplinas, BIM, ARTs, histórico, municípios, institucional
-  assert.doesNotMatch(hero, /BIM|ART|munic[ií]pio|estrutural|hidrossanit|inc[êe]ndio|g[áa]s|anos|fundad|empresa/i, 'sem conteúdo institucional/técnico na hero');
+  const h1 = hero.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  assert.equal(h1, 'Projeto estrutural e projetos complementares.');
+  assert.match(hero, /Da planta de casa aos projetos complementares: arquitetura, estrutura e instalações desenvolvidas juntas, em BIM\./);
+  assert.match(hero, /Também desenvolvemos projetos de terraplanagem\./);
+  assert.match(hero, /<a class="btn-cta" href="\.\/orcamento\/\?situacao=build">Calcular estimativa<\/a>/);
+  assert.match(hero, /<a class="wa-link"[^>]*href="https:\/\/wa\.me\/5541985124056"/);
+  assert.equal([...hero.matchAll(/<a\b/g)].length, 2, 'dois links na primeira dobra: estimativa e WhatsApp');
+  assert.doesNotMatch(hero, /\d+ ARTs|\d+ munic[ií]pios|anos de/i, 'números de acervo ficam fora da primeira dobra');
 });
 
 test('HOME (visual V2): quatro cartões de situação com ícone; "Já sei o serviço" lista as nove frentes; apoio técnico é link secundário', async () => {
   const html = await read('index.html');
   const block = html.match(/<section[^>]*data-block="situations"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.ok(block, 'bloco situations presente');
-  const main = [...block.matchAll(/<a class="sit-main" href="([^"]+)">\s*<img class="sit-ico"[^>]*>\s*<h3>([^<]+)<\/h3>/g)].map((m) => [m[2], m[1]]);
+  // Home V02: cartões `a.situation` com o mesmo ícone e os mesmos quatro destinos; "Já sabe o serviço?" lista as nove frentes.
+  const main = [...block.matchAll(/<a class="situation" href="([^"]+)"><img src="\.\/assets\/icons\/situacao-[a-z]+-v1\.svg"[^>]*>\s*<h3>([^<]+)<\/h3>/g)].map((m) => [m[2], m[1]]);
   assert.deepEqual(main, [
-    ['Construir uma casa', './construir-ou-ampliar/#construir'],
-    ['Ampliar ou reformar', './construir-ou-ampliar/#ampliar'],
-    ['Regularizar um imóvel', './servicos/regularizacao/'],
-    ['Avaliar um problema', './avaliar-um-problema/'],
+    ['Construir uma casa.', './construir-ou-ampliar/#construir'],
+    ['Ampliar ou reformar.', './construir-ou-ampliar/#ampliar'],
+    ['Regularizar um imóvel.', './servicos/regularizacao/'],
+    ['Avaliar um problema.', './avaliar-um-problema/'],
   ], 'quatro situações, destinos preservados');
-  assert.match(block, /<span class="sit-go">Quero construir →<\/span>/, 'CTA do cartão construir');
-  assert.match(block, /<span class="sit-go">Quero ampliar ou reformar →<\/span>/, 'CTA do cartão ampliar');
-  assert.doesNotMatch(block, /Ver regularização|Começar avaliação/, 'nenhum texto novo nos cartões');
   assert.match(block, /<p class="sit-support">[^<]*<a href="\.\/orcamento\/\?situacao=support">Consultoria e mentoria técnica<\/a>/, 'apoio técnico preservado como link secundário');
-  const direct = html.match(/<section[^>]*data-block="services-direct"[\s\S]*?<\/section>/)?.[0] ?? '';
-  assert.match(direct, /<p class="eyebrow">Já sei o serviço<\/p>/, 'rótulo "Já sei o serviço" preservado');
-  assert.match(direct, /Vá direto ao projeto ou serviço de que precisa\./, 'frase original preservada');
+  const direct = html.match(/<div[^>]*data-block="services-direct"[\s\S]*?<\/ul><\/div>/)?.[0] ?? '';
+  assert.ok(direct, 'bloco services-direct presente');
+  assert.match(direct, /<h3>Já sabe o serviço\?<\/h3>/, 'chamada "Já sabe o serviço?"');
   const links = [...direct.matchAll(/<li><a href="([^"]+)">([^<]+)<\/a><\/li>/g)].map((m) => [m[2], m[1]]);
   assert.equal(links.length, 9, 'nove frentes');
   const svcPage = await read('servicos/index.html');
@@ -78,12 +78,14 @@ test('HOME (visual V2): quatro cartões de situação com ícone; "Já sei o ser
 
 test('HOME: seções posteriores exigidas (insegurança, prova, benefícios, funcionamento, experiência, FAQ, CTA final)', async () => {
   const html = await read('index.html');
-  for (const block of ['preview-explainer', 'reassurance', 'benefits', 'technical-proof', 'selected-experience', 'faq']) {
+  // Home V02: a seção de benefícios foi substituída por "Integração em BIM" e "Escopo e entregas"; a experiência selecionada virou o bloco de prova técnica.
+  for (const block of ['preview-explainer', 'reassurance', 'technical-proof', 'clients', 'deliverables', 'faq', 'final-cta']) {
     assert.match(html, new RegExp(`data-block="${block}"`), `bloco ${block}`);
   }
+  assert.match(html, /aria-labelledby="integracao-title"/, 'seção Integração em BIM');
   assert.match(html, /<details>/, 'FAQ com <details>');
-  const finalCta = html.slice(html.lastIndexOf('class="cta-band"'));
-  assert.match(finalCta, /href="\.\/orcamento\/\?situacao=build">Calcular minha estimativa/);
+  const finalCta = html.slice(html.lastIndexOf('class="section cta-band"'));
+  assert.match(finalCta, /href="\.\/orcamento\/\?situacao=build">Calcular a estimativa dos projetos/);
 });
 
 test('HOME: catálogo de nove frentes não é mais a porta de entrada; nove frentes vivem em /servicos/ (Outros serviços)', async () => {
@@ -92,37 +94,42 @@ test('HOME: catálogo de nove frentes não é mais a porta de entrada; nove fren
   assert.match(home, /href="\.\/servicos\/"/, 'a home ainda conduz a /servicos/');
 });
 
-test('OUTROS SERVIÇOS: nove frentes, H1, resultado primeiro, limites preservados, conduz às landings', async () => {
+test('SERVIÇOS V02: nove destinos, copy corrigida, limites e caminhos por situação preservados', async () => {
   const html = await read('servicos/index.html');
-  const block = html.match(/<section[^>]*data-block="service-summary"[\s\S]*?<\/section>/)?.[0] ?? '';
-  assert.ok(block, 'bloco service-summary presente');
-  assert.equal([...block.matchAll(/<div class="svc-item">/g)].length, 9, 'nove serviços');
-  for (const name of H1_NAMES) assert.ok(html.includes(name), `nome público H1: ${name}`);
-  for (const s of SERVICE_SLUGS) {
-    assert.match(block, new RegExp(`<h3><a href="\\./${s}/">`), `frente enlaça ./${s}/`);
+  const items = [...html.matchAll(/<article class="service"[\s\S]*?<\/article>/g)].map(m => m[0]);
+  assert.equal(items.length, 9, 'nove serviços editáveis, sem omissão');
+  const expected = ['Projeto de arquitetura', 'Projeto estrutural', 'Projeto hidrossanitário', 'Projeto de incêndio — PPCI', 'Projeto de gás / GLP', 'Projeto de terraplanagem', 'Compatibilização BIM', 'Regularização de imóvel', 'Orçamento e cronograma'];
+  const titles = items.map(item => item.match(/<h3><a[^>]*>([^<]+)<\/a><\/h3>/)?.[1]);
+  assert.deepEqual(titles, expected, 'ordem e nomes da copy validada');
+  const slugs = items.map(item => item.match(/<h3><a href="\.\/([a-z-]+)\/">/)?.[1]);
+  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  for (const item of items) {
+    assert.match(item, /<p class="service-limit">[^<]+<\/p>/, 'limite técnico disponível sem interação');
+    assert.match(item, /<img[^>]+src="\.\.\/assets\/icons\/servicos-v02\/[a-z-]+\.svg"[^>]+alt=""/, 'ícone decorativo junto ao nome textual');
   }
-  const linked = [...block.matchAll(/<h3><a href="\.\/([a-z-]+)\/">/g)].map((m) => m[1]);
-  assert.deepEqual(linked.sort(), [...SERVICE_SLUGS].sort(), 'somente os nove slugs canônicos');
-  // cada frente carrega o seu limite técnico/contratual
-  assert.equal([...block.matchAll(/<span class="svc-limit">/g)].length, 9, 'um limite por frente');
-  assert.match(block, /Não inclui execução da obra\./);
-  assert.match(block, /A DEMELLO não executa movimentação de terra\./);
-  assert.match(block, /não garante aprovação pelo órgão competente/);
-  assert.match(block, /Sem promessa de aprovação automática/);
-  assert.match(block, /Não promete o custo final da obra/);
-  assert.doesNotMatch(block, /<ul\b|<ol\b/, 'sem lista de entregáveis renderizada');
-  assert.doesNotMatch(block, /O que (normalmente )?faz parte|entregáveis|entregamos|você recebe/i, 'sem promessa de entregável universal');
-  // não é a principal porta de entrada: aponta primeiro para as rotas por situação
+  const block = items.join('\n');
+  for (const limit of ['Não inclui execução da obra.', 'O projeto define as soluções técnicas para a movimentação de terra e suas interfaces com a implantação e a infraestrutura do empreendimento.', 'não garante aprovação pelo órgão competente', 'Sem promessa de aprovação automática', 'Não promete o custo final da obra']) assert.ok(block.includes(limit), limit);
+  assert.match(block, /planta de casa/);
+  assert.doesNotMatch(block, /Orçamento técnico/);
+  assert.doesNotMatch(block, /O que (normalmente )?faz parte|entregáveis|entregamos|você recebe/i);
   const routes = html.match(/<section[^>]*data-block="routes"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.match(routes, /construir-ou-ampliar\//);
   assert.match(routes, /avaliar-um-problema\//);
   assert.match(routes, /href="\.\/regularizacao\/"/);
   assert.match(routes, /orcamento\/\?situacao=support/);
-  assert.ok(html.indexOf('data-block="service-summary"') < html.indexOf('data-block="routes"'), 'quem já sabe o serviço vê o catálogo primeiro; as rotas por situação vêm depois, como rede de segurança');
-  assert.doesNotMatch(html, /href="\.\.\/servicos\/[a-z-]+\/?"/, 'nenhum slug de serviço absoluto inventado');
+  assert.match(html, /href="\.\.\/orcamento\/\?situacao=known"/);
+  assert.ok(html.indexOf('data-block="service-summary"') < html.indexOf('data-block="routes"'));
 });
 
 test('nove páginas individuais: H1 único, canonical, hero com CTA específico e seções exigidas', async () => {
+  // Páginas V02 (estrutural, hidrossanitário, arquitetura, terraplanagem): CTA `a.cta` com seta; seções do corpo em <h2>; Entregáveis, Como funciona e Escopo e limites
+  // ficam em "Detalhes do escopo" (<h3>). A Infraestrutura não leva estimativa (decisão 97) e seu CTA vai a /contato/.
+  const V02 = {
+    'projeto-estrutural': ['Ver a estimativa do meu projeto estrutural', '../../orcamento/?situacao=known&amp;servico=estrutural'],
+    'projeto-hidrossanitario': ['Ver a estimativa do meu projeto hidrossanitário', '../../orcamento/?situacao=known&amp;servico=hidrossanitario'],
+    'projeto-arquitetura': ['Ver a estimativa do meu projeto de casa', '../../orcamento/?situacao=known&amp;servico=arquitetura'],
+    'projeto-terraplenagem': ['Conversar sobre meu projeto de terraplanagem', '../../contato/'],
+  };
   const CTA = {
     'projeto-estrutural': ['Ver uma estimativa para meu projeto', 'known&amp;servico=estrutural'],
     'projeto-hidrossanitario': ['Calcular estimativa do meu projeto', 'known&amp;servico=hidrossanitario'],
@@ -139,6 +146,18 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
     const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map((m) => m[1].trim());
     assert.equal(h1s.length, 1, `${slug}: H1 único`);
     assert.match(html, /<link rel="canonical" href="https:\/\/demelloeng\.com\.br\/servicos\/[a-z-]+\/">/, `${slug}: canonical`);
+    if (V02[slug]) {
+      const [rotulo, destino] = V02[slug];
+      const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
+      assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
+      assert.doesNotMatch(html, /Conte o que você precisa/, `${slug}: sem o CTA genérico antigo`);
+      const corpo = slug === 'projeto-terraplenagem' ? ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'] : ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'];
+      for (const h2 of corpo) assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
+      const detalhes = slug === 'projeto-terraplenagem' ? ['Entregáveis', 'Como o escopo é definido'] : ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites'];
+      for (const h3 of detalhes) assert.ok(html.includes(`<h3>${h3}</h3>`), `${slug}: detalhe "${h3}"`);
+      assert.doesNotMatch(html.replace(/<div class="rico-imprensa">[\s\S]*?<\/div>/, ''), /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, `${slug}: sem número proibido`);
+      continue;
+    }
     const [label, query] = CTA[slug];
     const cta = new RegExp(`<a class="btn-cta" href="\\.\\./\\.\\./orcamento/\\?situacao=${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}">${label}`);
     assert.match(html, cta, `${slug}: CTA específico no hero`);
@@ -166,9 +185,9 @@ test('preview-explainer distingue estimativa de proposta sem prometer preço', a
   const html = await read('index.html');
   const block = html.match(/<section[^>]*data-block="preview-explainer"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.ok(block, 'bloco preview-explainer presente');
-  assert.match(block, /não é proposta, contrato nem garantia de preço/);
-  assert.match(block, /receber o caso não é aceite comercial/);
-  assert.match(block, /só pedimos o seu contato|contato só é pedido|Só então pedimos/i, 'contato depois do valor entregue');
+  assert.match(block, /não é proposta, contrato nem garantia de preço/i);   // Home V02: "Não é proposta…" no início da frase
+  assert.match(block, /Nada é enviado sem a sua confirmação\./, 'nada é enviado antes da confirmação');
+  assert.match(block, /A proposta vem depois\./, 'a proposta é etapa posterior à estimativa');
   assert.doesNotMatch(block, /proposta enviada|preço garantido|melhor preço|economia de/i);
 });
 

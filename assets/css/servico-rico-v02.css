@@ -1,0 +1,118 @@
+/* Layout rico das páginas de serviço (Home V02): faixa de abertura com a maquete 3D, etapas, sanfona e diagrama.
+   Fonte e cores do design system. Seletores restritos a .servico-rico-v02. */
+.servico-rico-v02{--azul-claro:#9cc2ec;--fundo-escuro:#1b242d}
+.servico-rico-v02 .rico-sec{padding-block:80px 8px}
+.servico-rico-v02 h2{font-size:clamp(30px,4vw,44px);line-height:1.12;font-weight:800;letter-spacing:-.02em;color:var(--blue);margin-bottom:28px}
+
+/* abertura: faixa escura com o render ao fundo, texto à esquerda e a maquete à direita */
+.servico-rico-v02 .rico-hero-fundo{color:#e8f0f8;background:linear-gradient(100deg,rgba(27,36,45,.97) 0%,rgba(27,36,45,.92) 40%,rgba(27,36,45,.66) 100%),url('../images/djalma-render-entardecer-1600.jpg') center right/cover no-repeat,var(--fundo-escuro)}
+.servico-rico-v02 .rico-hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-areas:"titulo caixa" "texto caixa";column-gap:56px;row-gap:22px;padding-block:56px 80px;align-items:start}
+.servico-rico-v02 .rico-titulo{grid-area:titulo}
+.servico-rico-v02 .rico-caixa{grid-area:caixa;align-self:center}
+.servico-rico-v02 .rico-texto{grid-area:texto}
+.servico-rico-v02 .rico-hero .crumb,.servico-rico-v02 .rico-hero .crumb a{color:#9db6cf}
+.servico-rico-v02 .rico-hero h1{font-size:clamp(36px,4.6vw,60px);line-height:1.05;font-weight:800;letter-spacing:-.025em;color:#fff;max-width:14ch;text-wrap:balance}
+.servico-rico-v02 .rico-texto .chamada{font-size:24px;line-height:1.3;font-weight:700;color:#fff;margin-bottom:18px}
+.servico-rico-v02 .rico-texto p{font-size:19px;line-height:1.5;color:#cfdbe8;margin:0 0 14px}
+.servico-rico-v02 .rico-texto .cta-linha{margin:24px 0 6px}
+.servico-rico-v02 .rico-texto .cta{color:var(--azul-claro);font-size:24px;font-weight:700}
+.servico-rico-v02 .rico-texto .micro{font-size:16px;color:#9db6cf}
+.servico-rico-v02 .rico-caixa .caixa{box-shadow:0 30px 80px rgba(0,0,0,.5)}
+
+/* para quem é */
+.servico-rico-v02 .rico-cab p{font-size:21px;color:var(--muted);margin:-12px 0 28px}
+.servico-rico-v02 .rico-opcoes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.servico-rico-v02 .rico-opcoes li{display:flex;gap:18px;align-items:flex-start;padding:24px 26px;background:#fff;border:1px solid var(--line);font-size:20px;line-height:1.4}
+.servico-rico-v02 .rico-opcoes svg{flex:none;width:38px;height:38px;fill:none;stroke:var(--blue);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* o que muda */
+.servico-rico-v02 .rico-tres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.servico-rico-v02 .rico-tres>div{padding:4px 32px}
+.servico-rico-v02 .rico-tres>div:first-child{padding-left:0}
+.servico-rico-v02 .rico-tres>div+div{border-left:1px solid var(--line)}
+.servico-rico-v02 .rico-tres h3{font-size:27px;line-height:1.2;font-weight:800;color:var(--ink);margin-bottom:12px}
+.servico-rico-v02 .rico-tres p{font-size:20px;line-height:1.45;color:var(--muted)}
+
+/* prefeitura: faixa clara com as etapas */
+.servico-rico-v02 .rico-faixa{background:var(--pale);margin-top:80px;padding-block:72px 76px}
+.servico-rico-v02 .rico-etapas{list-style:none;margin:0 0 44px;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.servico-rico-v02 .rico-etapas li{position:relative;padding-right:18px}
+.servico-rico-v02 .rico-etapas li:not(:last-child)::after{content:"";position:absolute;top:9px;left:30px;right:6px;height:2px;background:var(--line)}
+.servico-rico-v02 .rico-etapas .ponto{display:block;width:20px;height:20px;border-radius:50%;border:3px solid var(--blue);background:#fff;position:relative;z-index:1}
+.servico-rico-v02 .rico-etapas .dm .ponto{background:var(--blue)}
+.servico-rico-v02 .rico-etapas .fora .ponto{border-style:dashed;border-color:#8793a1}
+.servico-rico-v02 .rico-etapas b{display:block;margin-top:14px;font-size:21px;line-height:1.2;color:var(--ink)}
+.servico-rico-v02 .rico-etapas em{display:block;margin-top:4px;font-style:normal;font-size:16px;color:var(--muted)}
+.servico-rico-v02 .rico-etapas .dm em{color:var(--blue);font-weight:700}
+.servico-rico-v02 .rico-duas{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:start}
+.servico-rico-v02 .rico-corrido p{font-size:20px;line-height:1.5;margin:0 0 16px}
+.servico-rico-v02 .rico-cartoes{display:grid;gap:16px}
+.servico-rico-v02 .rico-cartao{background:#fff;border:1px solid var(--line);padding:24px 26px}
+.servico-rico-v02 .rico-cartao p{font-size:19px;line-height:1.45;margin:0}
+.servico-rico-v02 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.servico-rico-v02 .chips i{font-style:normal;font-size:15px;font-weight:700;color:var(--blue);border:1px solid var(--blue);padding:3px 10px}
+.servico-rico-v02 .rico-cartao.destaque{background:var(--blue);border-color:var(--blue);color:#fff}
+.servico-rico-v02 .rico-cartao.destaque p{font-size:20px}
+.servico-rico-v02 .rico-cartao.destaque strong{display:block;font-size:26px;line-height:1.2;margin-bottom:8px}
+.servico-rico-v02 .rico-gancho{margin:36px 0 0;padding-top:22px;border-top:1px solid var(--line);font-size:21px;font-weight:600}
+.servico-rico-v02 .rico-gancho a{color:var(--blue);text-decoration:underline}
+
+/* o que a DEMELLO faz */
+.servico-rico-v02 .rico-faz{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center}
+.servico-rico-v02 .rico-bim{width:100%;max-width:460px;height:auto;display:block}
+.servico-rico-v02 .rico-bim .entrada rect{fill:#fff;stroke:var(--blue);stroke-width:1.5}
+.servico-rico-v02 .rico-bim text{font-family:inherit;font-size:20px;font-weight:700;fill:var(--ink)}
+.servico-rico-v02 .rico-bim .fios path{fill:none;stroke:#6aa0d8;stroke-width:2}
+.servico-rico-v02 .rico-bim .modelo rect{fill:var(--blue)}
+.servico-rico-v02 .rico-bim .modelo text{fill:#fff}
+.servico-rico-v02 .rico-bim .t1{font-size:24px;font-weight:800}
+.servico-rico-v02 .rico-bim .t2{font-size:18px;font-weight:600}
+
+/* perguntas em sanfona */
+.servico-rico-v02 .rico-sanfona{max-width:940px;border-bottom:1px solid var(--line)}
+.servico-rico-v02 .rico-pergunta{border-top:1px solid var(--line)}
+.servico-rico-v02 .rico-pergunta summary{position:relative;list-style:none;cursor:pointer;padding:22px 56px 22px 0;font-size:24px;font-weight:700;line-height:1.25}
+.servico-rico-v02 .rico-pergunta summary::-webkit-details-marker{display:none}
+.servico-rico-v02 .rico-pergunta summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-52%);font-size:34px;font-weight:400;color:var(--blue)}
+.servico-rico-v02 .rico-pergunta[open] summary::after{content:"−"}
+.servico-rico-v02 .rico-pergunta summary:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.servico-rico-v02 .rico-pergunta p{margin:0 0 24px;max-width:72ch;font-size:20px;line-height:1.5}
+
+/* prova técnica e experiência */
+.servico-rico-v02 .rico-prova{grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);align-items:center}
+.servico-rico-v02 .rico-numero b{display:block;font-size:clamp(60px,8vw,92px);line-height:1;font-weight:800;letter-spacing:-.03em;color:var(--blue)}
+.servico-rico-v02 .rico-numero span{display:block;margin-top:10px;font-size:19px;color:var(--muted);max-width:22ch}
+.servico-rico-v02 .rico-corrido .nota{margin-top:18px;padding:16px 20px;background:var(--pale);border-left:4px solid var(--blue);font-size:17px;line-height:1.45;color:var(--muted)}
+.servico-rico-v02 .rico-estreito{max-width:860px}
+
+/* fechamento com o render do dia ao fundo */
+.servico-rico-v02 .final-cta{margin-top:80px;background:linear-gradient(rgba(238,242,246,.93),rgba(238,242,246,.88)),url('../images/djalma-render-dia-1600.jpg') center/cover no-repeat,var(--pale)}
+.servico-rico-v02 .bloco.detalhes{margin-top:56px}
+
+@media(max-width:900px){
+.servico-rico-v02 .rico-hero{grid-template-columns:1fr;grid-template-areas:"titulo" "caixa" "texto";padding-block:36px 56px;row-gap:24px}
+.servico-rico-v02 .rico-hero-fundo{background:linear-gradient(rgba(27,36,45,.95),rgba(27,36,45,.88)),url('../images/djalma-render-entardecer-800.jpg') center/cover no-repeat,var(--fundo-escuro)}
+.servico-rico-v02 .rico-duas,.servico-rico-v02 .rico-faz,.servico-rico-v02 .rico-prova{grid-template-columns:1fr;gap:32px}
+.servico-rico-v02 .rico-opcoes{grid-template-columns:1fr}
+.servico-rico-v02 .rico-tres{grid-template-columns:1fr;gap:28px}
+.servico-rico-v02 .rico-tres>div,.servico-rico-v02 .rico-tres>div:first-child{padding:0}
+.servico-rico-v02 .rico-tres>div+div{border-left:0;border-top:1px solid var(--line);padding-top:24px}
+.servico-rico-v02 .rico-etapas{grid-template-columns:1fr;gap:22px}
+.servico-rico-v02 .rico-etapas li{padding:0 0 0 38px}
+.servico-rico-v02 .rico-etapas .ponto{position:absolute;left:0;top:2px}
+.servico-rico-v02 .rico-etapas li:not(:last-child)::after{top:26px;left:9px;right:auto;width:2px;height:calc(100% + 4px)}
+.servico-rico-v02 .rico-etapas b{margin-top:0}
+.servico-rico-v02 .rico-sec{padding-block:56px 4px}
+.servico-rico-v02 .rico-faixa{margin-top:56px;padding-block:52px}
+.servico-rico-v02 .rico-pergunta summary{font-size:21px}}
+
+/* a obra na imprensa */
+.servico-rico-v02 .rico-imprensa{margin-top:36px;max-width:1000px}
+.servico-rico-v02 .rico-imprensa h3{margin:0 0 14px;font-size:22px;font-weight:700;color:var(--ink)}
+.servico-rico-v02 .rico-imprensa ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.servico-rico-v02 .rico-imprensa a{display:flex;flex-direction:column;gap:8px;height:100%;padding:20px 22px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none}
+.servico-rico-v02 .rico-imprensa a:hover{border-color:var(--blue)}
+.servico-rico-v02 .rico-imprensa a:hover .manchete{text-decoration:underline}
+.servico-rico-v02 .rico-imprensa .veiculo{font-size:15px;font-weight:700;color:var(--blue)}
+.servico-rico-v02 .rico-imprensa .manchete{font-size:19px;line-height:1.35}
+@media(max-width:900px){.servico-rico-v02 .rico-imprensa ul{grid-template-columns:1fr}}

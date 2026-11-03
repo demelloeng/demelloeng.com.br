@@ -345,8 +345,8 @@ test('bundle publicado reflete o código-fonte: serviços nativos, dúvida, refo
   for (const gone of ['base-municipal-urbanistica', 'BASE_INDISPONIVEL', 'municipal_estimate', 'REGRA_NAO_AUTORIZADA']) assert.ok(!js.includes(gone), `bundle ainda contém ${gone}`);
 });
 
-test('páginas de serviço de Arquitetura, Orçamento técnico e Terraplenagem descrevem a estimativa nativa, sem falar em "Outro" nem em município', async () => {
-  for (const slug of ['projeto-arquitetura', 'orcamento-tecnico', 'projeto-terraplenagem']) {
+test('páginas de serviço de Arquitetura e Orçamento técnico descrevem a estimativa nativa, sem falar em "Outro" nem em município', async () => {
+  for (const slug of ['projeto-arquitetura', 'orcamento-tecnico']) {   // Infraestrutura (terraplanagem) é exceção: decisão 97, sem estimativa
     const html = await readFile(path.join(siteRoot, `servicos/${slug}/index.html`), 'utf8');
     assert.doesNotMatch(html, /com “Outro”|não calcula valor automático|Receba o enquadramento/, slug);
     assert.match(html, /já selecionado e responda só ao que se aplica ao seu caso/, slug);
@@ -354,4 +354,12 @@ test('páginas de serviço de Arquitetura, Orçamento técnico e Terraplenagem d
   const arq = await readFile(path.join(siteRoot, 'servicos/projeto-arquitetura/index.html'), 'utf8');
   assert.match(arq, /Não sabe a área\? Conta o que imagina para a casa e\/ou informa o terreno/);
   assert.doesNotMatch(arq, /município|legislação do/i);
+});
+
+test('Infraestrutura (terraplanagem): sem estimativa (decisão 97); o chamado leva ao contato e não ao /orcamento/', async () => {
+  const html = await readFile(path.join(siteRoot, 'servicos/projeto-terraplenagem/index.html'), 'utf8');
+  const principal = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+  assert.doesNotMatch(principal, /orcamento\/\?/, 'a página de Infraestrutura não abre a estimativa');
+  assert.match(principal, /<a class="cta" href="\.\.\/\.\.\/contato\/">Conversar sobre meu projeto de terraplanagem/);
+  assert.doesNotMatch(principal, /terraplenagem/i, 'a grafia correta é terraplanagem; a antiga só pode aparecer em endereços');
 });

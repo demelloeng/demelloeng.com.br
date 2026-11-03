@@ -1,0 +1,194 @@
+{
+  "slug": "orcamento-tecnico",
+  "titulo_pagina": "Orçamento técnico | DEMELLO Engenharia",
+  "descricao": "Orçamento técnico como serviço profissional contratado, com escopo próprio — distinto da estimativa do site. Não representa garantia do custo final da obra.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Orçamento técnico\",\"description\":\"Orçamento técnico como serviço profissional contratado, com escopo próprio — distinto da estimativa do site. Não representa garantia do custo final da obra.\",\"url\":\"https://demelloeng.com.br/servicos/orcamento-tecnico/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Orçamento técnico\",\"item\":\"https://demelloeng.com.br/servicos/orcamento-tecnico/\"}]}]}</script>",
+  "h1": "Orçamento técnico: um serviço com escopo próprio para planejar e decidir",
+  "chamada": "Orçamento técnico não é adivinhação de preço de obra. É um serviço técnico com escopo próprio.",
+  "introducao": [
+    "Ele transforma um objeto definido em informação organizada para apoiar planejamento e decisão."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=known&amp;servico=orcamento-tecnico",
+    "rotulo": "Descrever o orçamento que preciso",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido quando existe um projeto, escopo ou conjunto de informações que precisa ser transformado em orçamento técnico para planejamento, comparação ou tomada de decisão."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A profundidade necessária depende da contratação."
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme a contratação:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "planilha orçamentária;",
+            "cronograma;",
+            "demais produtos correlatos previstos no objeto."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Orçamento detalhado e cronograma não devem ser presumidos quando não estiverem contratados."
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Informação organizada para decidir",
+              "texto": "Um objeto definido vira informação organizada para planejar, comparar e decidir."
+            },
+            {
+              "titulo": "Escopo e produtos combinados",
+              "texto": "Planilha orçamentária e, quando previsto, cronograma. O detalhamento acompanha o que foi contratado."
+            },
+            {
+              "titulo": "Sem promessa de custo final",
+              "texto": "Orçamento técnico não é garantia do custo final da obra."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa com “Orçamento técnico” já selecionado e responda só ao que se aplica ao seu caso. Você informa a área que o orçamento técnico vai abranger."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve o orçamento técnico com base no objeto efetivamente contratado e no nível de informação disponível para aquele trabalho."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O produto pode envolver orçamento e planejamento associados, quando previstos no escopo."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A definição parte de:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "qual objeto será orçado;",
+            "abrangência efetivamente contratada;",
+            "área de referência, quando aplicável;",
+            "materiais e informações disponíveis para desenvolver o serviço;",
+            "quais produtos associados fazem parte da contratação."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Quando os dados disponíveis não sustentam determinado nível de precisão, o escopo precisa reconhecer essa limitação."
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O acervo profissional de Marcos de Mello Silva registra 9.451 m² de experiência técnica documentada em serviços de orçamento."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A metragem corresponde à área abrangida pelos serviços de orçamento técnico."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No CECM Djalma Marinho, Marcos respondeu também pelo orçamento dentro do conjunto de responsabilidades técnicas assumidas no empreendimento."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Orçamento técnico ≠ estimativa."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A ferramenta digital do site (“Calcular estimativa”) oferece uma estimativa inicial para contratação de serviços da DEMELLO, que não é proposta nem orçamento de obra."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O orçamento técnico é um serviço profissional contratado."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O orçamento técnico não representa garantia do custo final realizado da obra."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O nível de detalhamento e os produtos associados precisam estar previstos na proposta."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se você precisa contratar um orçamento técnico, comece enquadrando o objeto e o que já existe de informação."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "slug": "projeto-estrutural",
+  "titulo_pagina": "Projeto estrutural | DEMELLO Engenharia",
+  "descricao": "Projeto estrutural para construção nova, ampliação ou contratação da disciplina: concepção, modelagem BIM e coordenação, em nível básico ou executivo.",
+  "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Projeto estrutural\",\"description\":\"Projeto estrutural para construção nova, ampliação ou contratação da disciplina: concepção, modelagem BIM e coordenação, em nível básico ou executivo.\",\"url\":\"https://demelloeng.com.br/servicos/projeto-estrutural/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":[{\"@type\":\"AdministrativeArea\",\"name\":\"Paraná\"},{\"@type\":\"AdministrativeArea\",\"name\":\"São Paulo\"}],\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Projeto estrutural\",\"item\":\"https://demelloeng.com.br/servicos/projeto-estrutural/\"}]}]}</script>",
+  "h1": "Projeto estrutural pensado junto com a arquitetura e as instalações",
+  "chamada": "Antes de calcular a estrutura, é preciso entender o que ela sustenta — e com o que precisa conviver.",
+  "introducao": [
+    "O projeto estrutural organiza as decisões que fazem a edificação se sustentar de forma tecnicamente coerente com sua arquitetura, uso, implantação e demais disciplinas.",
+    "Na DEMELLO, ele pode ser desenvolvido em diferentes níveis, conforme a necessidade real da contratação."
+  ],
+  "cta": {
+    "href": "../../orcamento/?situacao=known&amp;servico=estrutural",
+    "rotulo": "Ver uma estimativa para meu projeto",
+    "micro": "Sem compromisso · contato somente no final"
+  },
+  "blocos": [
+    {
+      "titulo": "Para quem é",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pode fazer sentido em:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "construções novas;",
+            "ampliações;",
+            "contratação específica da disciplina estrutural;",
+            "situações em que fundações integram o escopo estrutural definido para o projeto."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A necessidade não é definida apenas pela área. Tipo de empreendimento, número de pavimentos, fase do projeto, localização e condições do caso também ajudam a determinar o trabalho necessário."
+        }
+      ]
+    },
+    {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Podem incluir, conforme o escopo e o nível contratado:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "modelagem BIM;",
+            "concepção estrutural;",
+            "lançamento e pré-dimensionamento;",
+            "plantas de forma em nível compatível com a contratação;",
+            "memorial técnico;",
+            "compatibilização;",
+            "arquivos e documentos técnicos previstos na proposta."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Produtos executivos e respectivos detalhamentos integram o serviço somente quando previstos no nível contratado."
+        }
+      ]
+    },
+    {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Estrutura decidida em conjunto",
+              "texto": "Estrutura, arquitetura e instalações não são decisões independentes descobrindo umas às outras tarde demais."
+            },
+            {
+              "titulo": "Nível de projeto sob medida",
+              "texto": "Básico ou executivo, conforme a necessidade real. Os dois não são equivalentes, e o conteúdo final é definido na proposta."
+            },
+            {
+              "titulo": "Fundação isolada sem virar outro serviço",
+              "texto": "Precisa só da fundação? Ela é tratada dentro do projeto estrutural, sem virar outro serviço."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Conte o seu caso",
+              "texto": "Abra a estimativa com “Estrutural” já selecionado e responda só ao que se aplica ao seu caso."
+            },
+            {
+              "titulo": "Veja a estimativa",
+              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+            },
+            {
+              "titulo": "Escolha o próximo passo",
+              "texto": "Receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos o seu contato."
+            },
+            {
+              "titulo": "Escopo definido na proposta",
+              "texto": "O nível e o conteúdo final do serviço são confirmados pela equipe e definidos na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO desenvolve o projeto estrutural a partir das premissas do empreendimento e do nível contratado."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O trabalho pode envolver concepção estrutural, lançamento, modelagem BIM, pré-dimensionamento, desenvolvimento das soluções e coordenação com as demais disciplinas."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O objetivo é que estrutura, arquitetura e instalações não sejam decisões independentes descobrindo umas às outras tarde demais."
+        }
+      ]
+    },
+    {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A definição considera, conforme o caso:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "construção nova ou ampliação;",
+            "área do projeto;",
+            "tipo de empreendimento;",
+            "número de pavimentos;",
+            "fase em que o empreendimento se encontra;",
+            "localização;",
+            "sistema estrutural e abrangência pretendida;",
+            "materiais e informações já disponíveis."
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Primeiro se entende o problema. Depois se fecha o que realmente precisa ser projetado."
+        }
+      ]
+    },
+    {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O acervo profissional de Marcos de Mello Silva reúne 67.762 m² de experiência técnica estrutural documentada."
+        },
+        {
+          "tipo": "nota",
+          "texto": "Os quantitativos pertencem à trajetória profissional do responsável técnico e não correspondem exclusivamente ao acervo operacional do atual CNPJ."
+        }
+      ]
+    },
+    {
+      "titulo": "Experiência aplicada — CECM Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No CECM Djalma Marinho, em Campo Largo/PR, Marcos de Mello Silva respondeu pelo projeto estrutural dentro de uma atuação multidisciplinar que também envolveu arquitetura, hidrossanitário, prevenção contra incêndio, terraplenagem, orçamento, regularização e compatibilização BIM."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O terreno apresentava aproximadamente 16 metros de desnível, com nove blocos existentes e uma ampliação que levaria o conjunto a dez."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A atuação ocorreu anteriormente à constituição da DEMELLO Engenharia."
+        }
+      ]
+    },
+    {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O projeto pode ser contratado em nível básico ou executivo."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Esses níveis não são equivalentes."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Um projeto básico pode resolver concepção, lançamento, modelagem e informações suficientes para aquela etapa sem conter todos os detalhamentos próprios de uma contratação executiva."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O conteúdo final é definido na proposta."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Projeto estrutural não inclui execução da obra."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Da mesma forma, a presença de fundações no escopo depende da contratação e não cria automaticamente um serviço separado."
+        }
+      ]
+    }
+  ],
+  "proximo_passo": [
+    {
+      "titulo": "Próximo passo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Se você já tem uma construção, ampliação ou demanda estrutural em estudo, comece pelo enquadramento do caso."
+        }
+      ]
+    }
+  ]
+}

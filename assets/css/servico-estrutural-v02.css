@@ -1,0 +1,22 @@
+/* Página de projeto estrutural: fundos com as imagens de armadura e título dimensionado para o H1 mais longo. */
+.servico-rico-estrutural .rico-hero-fundo{background:linear-gradient(100deg,rgba(27,36,45,.97) 0%,rgba(27,36,45,.93) 42%,rgba(27,36,45,.74) 100%),url('../images/estrutura-armadura-2-1600.jpg') center/cover no-repeat,var(--fundo-escuro)}
+.servico-rico-estrutural .rico-hero h1{font-size:clamp(32px,3.9vw,52px);max-width:19ch}
+.servico-rico-estrutural .final-cta{background:linear-gradient(rgba(238,242,246,.9),rgba(238,242,246,.84)),url('../images/estrutura-armadura-1-1600.jpg') center/cover no-repeat,var(--pale)}
+@media(max-width:900px){
+.servico-rico-estrutural .rico-hero-fundo{background:linear-gradient(rgba(27,36,45,.95),rgba(27,36,45,.88)),url('../images/estrutura-armadura-2-800.jpg') center/cover no-repeat,var(--fundo-escuro)}
+.servico-rico-estrutural .rico-hero h1{max-width:none}}
+
+/* espaço reservado: maquete 3D da obra da experiência aplicada (em breve) */
+.servico-rico-estrutural .rico-embreve{display:flex;align-items:center;gap:22px;margin-top:28px;max-width:860px;padding:26px 28px;border:2px dashed #8aa6c4;border-radius:4px;
+  background:linear-gradient(rgba(37,82,128,.07) 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,rgba(37,82,128,.07) 1px,transparent 1px) 0 0/24px 24px,#f4f8fc}
+.servico-rico-estrutural .rico-embreve svg{flex:none;width:54px;height:54px;fill:none;stroke:var(--blue);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.servico-rico-estrutural .rico-embreve .chip-embreve{display:inline-block;margin-bottom:6px;padding:3px 10px;font-size:15px;font-weight:700;color:var(--blue);border:1px solid var(--blue);border-radius:3px}
+.servico-rico-estrutural .rico-embreve p{margin:0;font-size:20px;line-height:1.4;color:var(--ink)}
+@media(max-width:640px){.servico-rico-estrutural .rico-embreve{padding:20px;gap:16px}.servico-rico-estrutural .rico-embreve svg{width:40px;height:40px}.servico-rico-estrutural .rico-embreve p{font-size:18px}}
+
+/* botão discreto na abertura: abre a maquete do mezanino */
+.servico-rico-estrutural .rico-mezanino-link{margin:18px 0 0}
+.servico-rico-estrutural .rico-link-3d{display:inline-flex;align-items:center;gap:10px;padding:6px 0;font:600 18px/1.2 inherit;font-family:inherit;color:#9db6cf;background:none;border:0;border-bottom:1px dashed #6f8aa6;cursor:pointer}
+.servico-rico-estrutural .rico-link-3d svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.servico-rico-estrutural .rico-link-3d:hover{color:#fff;border-bottom-color:#fff}
+.servico-rico-estrutural .rico-link-3d:focus-visible{outline:3px solid #9cc2ec;outline-offset:3px}
