@@ -18,6 +18,8 @@ branch: claude/hidrossanitario-v01-20261029
 >
 > **Atualização dirigida em 03/11/2026** (branch local `local/contato-v02`, página Contato V02, **ainda não publicada**): `contato/index.html` passa a ser **gerado** por `scripts/gerar-contato-v02.py` a partir da copy `docs/arquivo/contato-v02-20261103/COPY_CONTATO_V03_20261103.md` (a V02 fica como histórico), com o CSS isolado `assets/css/contato-v02.css` (na allowlist). Seção 3.6 nova; a linha do `contato/` na seção 2 e os testes `hotfix` e `commercial_site` foram ajustados. O Cartographer não foi rodado.
 >
+> **Atualização dirigida em 04/11/2026** (branch `claude/construir-menu-facebook-v02`, **ainda não publicada**; a nota anterior diz que a Contato não estava publicada, mas ela foi publicada em 03/11 pelo PR #43): (1) a página **Construir ou ampliar** passa ao visual V02, **gerada** por `scripts/gerar-construir-ou-ampliar-v02.py` (seção 3.7); (2) o menu das oito páginas V02 ganha o botão **Construir ou ampliar** (vazado) antes de "Calcular estimativa" (sólido), com o menu móvel mais cedo (até 1280px nas páginas de `servicos-v02.css` e até 1120px na Home) e o `min-width` do orçamento removido; (3) o rodapé das oito páginas V02 ganha **Facebook** entre Instagram e LinkedIn. Páginas antigas, `verificar` e `/orcamento/` não mudam. O Cartographer não foi rodado.
+>
 > Gerado pelo Cartographer em 2026-10-30T08:01:20Z, por seis leituras em paralelo (calculadora, testes, scripts e publicação, copy central, maquete 3D e páginas HTML).
 > **Leitura estática:** nada foi executado (nem os testes, nem o build). Onde um relatório citou um número que não foi conferido, o texto diz.
 > Estado do repositório no mapeamento: branch `claude/hidrossanitario-v01-20261029` (a nova versão do site, em paralelo; a `main` continua em `27a229e` e é o que está no ar). Dois arquivos sem rastreio no Git: `assets/models/hidro-redes.glb` e `.json`.
@@ -170,6 +172,18 @@ Cada mudança de texto, mesmo de uma frase, gera `V<NN+1>` novo. Cada serviço t
 
 Não usa `gerar-paginas-servico-v02.py` nem `layout_rico.py`. O rodapé é o mesmo das seis páginas lançadas (o teste `commercial_site` agora compara sete). Os links de contato da página ficam fora de `.topbar`, `.nav`, `.site-footer` e `.cta-band`, para o evento sair com a posição `contact_page`.
 
+### 3.7 Construir ou ampliar V02 (gerador próprio, no padrão da Contato)
+
+`construir-ou-ampliar/index.html` **não se edita à mão**. Ciclo: copy nova (`COPY_CONSTRUIR_OU_AMPLIAR_V<NN>_<AAAAMMDD>.md`, arquivo novo; ajustar a constante `COPY`) -> `python scripts/gerar-construir-ou-ampliar-v02.py` -> `--check` -> mostrar em 1440x900 e 390x844 antes de qualquer commit.
+
+| Arquivo | Papel |
+|---|---|
+| `docs/arquivo/construir-ou-ampliar-v02-20261104/COPY_CONSTRUIR_OU_AMPLIAR_V01_20261104.md` | Copy aprovada (uma linha por campo; links na copy: `[rótulo -> /caminho/]`). |
+| `scripts/gerar-construir-ou-ampliar-v02.py` | Só biblioteca padrão; recusa campo a mais ou a menos; confere que cada campo da copy aparece no HTML; exige os dois CTAs `../orcamento/?situacao=build` e as âncoras `#construir` e `#ampliar`. Menu (com o botão como item atual), JSON-LD e rodapé são constantes. |
+| `assets/css/construir-ou-ampliar-v02.css` | CSS isolado (`.construir-v02`); o resto vem de `servicos-v02.css` e `rodape-v02.css`. FAQ em `<details>`; passos em `<ol>` com contador por CSS (o teste de numerais não admite dígitos soltos). |
+
+O menu e o rodapé V02 vivem em **cinco lugares**: `gerar-paginas-servico-v02.py` (4 páginas de projeto), `gerar-contato-v02.py`, `gerar-construir-ou-ampliar-v02.py`, e à mão na Home e em `servicos/index.html`. Os testes `commercial_site` (menu idêntico e rodapé idêntico nas oito páginas V02, Facebook em ordem) e `hotfix` impedem divergência. Não existe módulo compartilhado de propósito: o conjunto é pequeno e fechado.
+
 ## 4. Módulo: maquete 3D
 
 **Propósito:** visualizador three.js (montagem de baixo para cima, separar camadas, raio-X, ficha por peça, vistas) dentro de uma caixa que abre em tela cheia.
@@ -262,7 +276,7 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 5. **Regerar uma página não pode mexer nas outras.** Conferir o `git diff` das demais.
 6. **`conferir` com `.copy.json` não confere o texto novo**, só os blocos antigos mantidos, por substring na página inteira. Não substitui a revisão (subagent `revisor-copy`).
 7. **`otimizar_ifc.py` não existe neste repositório** (está no canônico), mas o conversor e a skill o citam.
-8. **Dois menus convivem; o rodapé é um só nas seis páginas lançadas.** Desde 03/11/2026 a Home, os Serviços e as quatro páginas de projeto têm o mesmo rodapé (o teste `commercial_site` reprova se divergir). As outras 15 páginas seguem com o rodapé antigo (pendência 150). O menu novo (Início, Serviços, Projetos…) está na home, no catálogo e nas 3 páginas ricas; as 6 páginas simples e as institucionais usam o antigo (com "Construir ou ampliar"). `hotfix` e `commercial_site` exigem o rótulo antigo em várias páginas.
+8. **Dois menus convivem; menu e rodapé são um só nas oito páginas V02.** (Texto abaixo é de 03/11; desde 04/11 as oito páginas V02, com a Contato e a Construir ou ampliar, têm o mesmo menu, com o botão "Construir ou ampliar", e o mesmo rodapé, com Facebook; as páginas antigas seguem como estavam. **`gerar-servicos-v02.py` está defasado** (gera rodapé simples e links absolutos): não rodar, porque reverteria o rodapé do `servicos/index.html`, que hoje se edita no HTML.) Desde 03/11/2026 a Home, os Serviços e as quatro páginas de projeto têm o mesmo rodapé (o teste `commercial_site` reprova se divergir). As outras 15 páginas seguem com o rodapé antigo (pendência 150). O menu novo (Início, Serviços, Projetos…) está na home, no catálogo e nas 3 páginas ricas; as 6 páginas simples e as institucionais usam o antigo (com "Construir ou ampliar"). `hotfix` e `commercial_site` exigem o rótulo antigo em várias páginas.
 9. **Sitemap** tem 20 URLs com `lastmod` de 06/10 e não é atualizado pelo pipeline; página nova exige editar `sitemap`, allowlist e `commercial_site`.
 10. **Ordem do `<head>` e dos scripts importa** (sink antes de `site-analytics.mjs`, Pixel `defer`).
 11. **Servidor local:** a porta 8765 já estava ocupada por outro processo servindo outra pasta; usar porta livre.

@@ -21,7 +21,7 @@ body.servicos-v02{margin:0;color:var(--ink);background:var(--white);font:400 20p
 .servicos-v02 .logo img{width:100%;height:auto}
 .servicos-v02 .nav{display:flex;align-items:center;gap:20px;flex:1;font-size:16px;font-weight:600}
 .servicos-v02 .nav a{color:#fff;white-space:nowrap}
-.servicos-v02 .nav-budget{background:var(--blue);padding:16px 24px;margin-left:auto;min-width:244px}
+.servicos-v02 .nav-budget{background:var(--blue);padding:16px 24px}
 .servicos-v02 .nav-toggle{display:none}
 .servicos-v02 .hero{display:grid;grid-template-columns:60% 40%;padding-top:64px;padding-bottom:112px}
 .servicos-v02 .eyebrow{font-size:12px;line-height:16px;text-transform:uppercase;color:var(--blue);font-weight:700}
@@ -138,3 +138,23 @@ body.servicos-v02{font-size:20px}
 
 .servicos-v02 .nav-extra{display:none}
 @media(max-width:760px){.servicos-v02 .nav.is-open .nav-extra{display:block}}
+
+/* Menu V02: botão "Construir ou ampliar" (vazado) ao lado do "Calcular estimativa" (sólido). O botão novo leva a margem
+   automática que empurra o grupo para a direita; o orçamento perdeu o min-width de 244px. Abaixo de 1280px o menu
+   vira hambúrguer, porque com os dois botões ele não cabe numa linha (medido por varredura de larguras). */
+.servicos-v02 .nav-build{margin-left:auto;padding:14px 22px;border:2px solid #fff;font-weight:700}
+.servicos-v02 .nav-build:hover{background:#fff;color:var(--ink);text-decoration:none}
+.servicos-v02 .nav-build[aria-current="page"]{background:#fff;color:var(--ink)}
+.servicos-v02 .nav-build:focus-visible{outline-color:#fff}
+@media(max-width:1280px){
+.servicos-v02 .nav .nav-build{margin:12px 0 0;padding:12px 16px;text-align:center}}
+@media(min-width:761px) and (max-width:1280px){
+.servicos-v02 .header-inner{min-height:93px;justify-content:space-between;position:relative}
+.servicos-v02 .nav-toggle{display:block;color:#fff;border:0;background:transparent;font-size:14px;min-width:48px;min-height:44px;cursor:pointer}
+.servicos-v02 .nav{display:none;position:absolute;top:93px;left:-80px;right:-80px;background:var(--ink);z-index:10;padding:16px 80px 24px;flex-direction:column;align-items:stretch;gap:0;font-size:18px}
+.servicos-v02 .nav.is-open{display:flex}
+.servicos-v02 .nav a{padding:12px 0;white-space:normal}
+.servicos-v02 .nav .nav-budget{margin:12px 0 0;padding:14px 16px}
+.servicos-v02 .nav.is-open .nav-extra{display:block}}
+@media(min-width:761px) and (max-width:1190px){
+.servicos-v02 .nav{left:-40px;right:-40px;padding:16px 40px 24px}}

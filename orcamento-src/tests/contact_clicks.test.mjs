@@ -156,8 +156,8 @@ test('posição e contexto: cada clique carrega página, posição e (quando a p
   const [reg] = await find('servicos/regularizacao/index.html', (a) => a.closest('.topbar'));
   assert.deepEqual(buildEvent(reg, win('/servicos/regularizacao/')).params, { placement: 'topbar', route: 'regularize', service: 'regularizacao', page: '/servicos/regularizacao/' });
   // intenção
-  const [bld] = await find('construir-ou-ampliar/index.html', (a) => a.closest('.topbar'));
-  assert.deepEqual(buildEvent(bld, win('/construir-ou-ampliar/')).params, { placement: 'topbar', route: 'build', page: '/construir-ou-ampliar/' });
+  const [bld] = await find('construir-ou-ampliar/index.html', (a) => a.closest('.nav') && channelOf(a.attrs.href) === 'whatsapp_contact_started');   // página V02: sem .topbar; o WhatsApp do menu leva a rota build
+  assert.deepEqual(buildEvent(bld, win('/construir-ou-ampliar/')).params, { placement: 'menu', route: 'build', page: '/construir-ou-ampliar/' });
   // faixa de chamada final, menu do celular, rodapé, página de contato
   const cta = await find('metodologia/index.html', (a) => a.closest('.cta-band'));
   assert.ok(cta.some((a) => channelOf(a.attrs.href) === 'whatsapp_contact_started' && buildEvent(a, win('/metodologia/')).params.placement === 'cta_band'));

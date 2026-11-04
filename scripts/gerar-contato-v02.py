@@ -75,6 +75,7 @@ ICONES = {
 # Menu V02 (mesmo de Serviços e das páginas de projeto); aqui o item atual é "Contato".
 MENU = ('<a href="../">Início</a><a href="../servicos/">Serviços</a><a href="../experiencia-tecnica/">Projetos</a>'
         '<a href="../metodologia/">Como trabalhamos</a><a href="../contato/" aria-current="page">Contato</a>'
+        '<a class="nav-build" href="../construir-ou-ampliar/">Construir ou ampliar</a>'
         '<a class="nav-budget" href="../orcamento/">Calcular estimativa</a>'
         '<a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a>')
 
@@ -83,7 +84,7 @@ RODAPE = '''<footer class="site-footer rodape"><div class="wrap rodape-grade">
 <div class="rodape-marca"><img src="../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="230" height="67"><p class="tag">projetos possíveis, planos reais</p>
 <p class="legal">Marcos de Mello Silva Engenharia LTDA<br>CNPJ 65.613.230/0001-71<br>CREA-PR PJ nº 92585<br>Responsável técnico: CREA-PR 146906/D</p></div>
 <nav class="rodape-col" aria-label="Rodapé"><p class="t">Navegação</p><a href="../">Início</a><a href="../servicos/">Serviços</a><a href="../experiencia-tecnica/">Projetos</a><a href="../metodologia/">Como trabalhamos</a><a href="../empresa/">Empresa</a><a href="../empresa/trajetoria-do-fundador.html">Trajetória do fundador</a><a href="../contato/">Contato</a><a href="../privacidade/">Privacidade</a></nav>
-<div class="rodape-col"><p class="t">Contato</p><a href="mailto:marcos@demelloeng.com.br">marcos@demelloeng.com.br</a><a href="tel:+5541985124056">(41) 98512-4056</a><a href="tel:+5544998202552">(44) 99820-2552</a><a href="https://wa.me/5541985124056">WhatsApp</a><a href="https://www.instagram.com/demelloeng/" target="_blank" rel="noopener">Instagram</a><a href="https://www.linkedin.com/company/demello-engenharia/" target="_blank" rel="noopener">LinkedIn</a></div>
+<div class="rodape-col"><p class="t">Contato</p><a href="mailto:marcos@demelloeng.com.br">marcos@demelloeng.com.br</a><a href="tel:+5541985124056">(41) 98512-4056</a><a href="tel:+5544998202552">(44) 99820-2552</a><a href="https://wa.me/5541985124056">WhatsApp</a><a href="https://www.instagram.com/demelloeng/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/demelloeng/" target="_blank" rel="noopener">Facebook</a><a href="https://www.linkedin.com/company/demello-engenharia/" target="_blank" rel="noopener">LinkedIn</a></div>
 <div class="rodape-col"><p class="t">Onde estamos</p><span>R. Pedro Ivo, 730, Centro</span><span>Curitiba/PR · CEP 80010-020</span><span>Atendimento em todo o Brasil</span></div>
 </div><div class="wrap rodape-barra"><p>© 2026 Marcos de Mello Silva Engenharia LTDA</p></div></footer>'''
 
@@ -151,7 +152,7 @@ def montar(texto_copy: str) -> str:
 <link rel="icon" href="../assets/images/favicon.png">
 <link rel="preload" href="../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/source-sans-3-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/servicos-v02.css">
+<link rel="stylesheet" href="../assets/css/servicos-v02.css?v=7">
 <link rel="stylesheet" href="../assets/css/rodape-v02.css?v=1">
 <link rel="stylesheet" href="../assets/css/contato-v02.css?v=1">
 <script type="application/ld+json">{JSONLD}</script>

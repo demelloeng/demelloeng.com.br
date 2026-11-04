@@ -28,6 +28,11 @@ const COMMERCIAL = [
 const OTHER = ['empresa/index.html', 'empresa/trajetoria-do-fundador.html', 'privacidade/index.html', 'verificar/index.html'];
 const ALL = [...COMMERCIAL, ...OTHER];
 const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
+// Páginas no visual V02 (menu e rodapé novos). As páginas antigas ficam fora deste conjunto.
+const PAGINAS_V02 = [
+  'index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
+  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`),
+];
 
 const pageUrl = (file) => `${ORIGIN}/${file.replace(/index\.html$/, '')}`;
 const HTML = Object.fromEntries(await Promise.all(ALL.map(async (p) => [p, await read(p)])));
@@ -220,17 +225,40 @@ test('HTML semântico: um H1, landmarks, hierarquia de títulos sem saltos, imag
   }
 });
 
-test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projeto) e o Contato V02 têm o mesmo rodapé', () => {
+test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projeto) e o Contato e o Construir ou ampliar V02 têm o mesmo rodapé', () => {
   // Resolve href/src relativos para caminhos do site, para comparar o bloco sem depender da profundidade da página.
   const normaliza = (file, html) => {
     const rodape = html.match(/<footer[\s\S]*?<\/footer>/)[0].replace(/\r\n/g, '\n');   // o fim de linha dos arquivos varia (CRLF e LF)
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
-  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`), 'contato/index.html'];
+  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html'];
   const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
+});
+
+test('menu V02: mesmos itens, ordem e destinos em todas as páginas V02; "Construir ou ampliar" logo antes do orçamento', () => {
+  // Resolve href relativos para caminhos do site e ignora espaços entre tags; o item atual (aria-current) é a única diferença permitida.
+  const normaliza = (file, html) => {
+    const nav = html.match(/<nav class="nav"[\s\S]*?<\/nav>/)[0].replace(/\r\n/g, '\n').replace(/ aria-current="page"/g, '').replace(/>\s+</g, '><');
+    const dir = path.posix.dirname(`/${file}`);
+    return nav.replace(/href="([^"]+)"/g, (m, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `href="${path.posix.join(dir, v)}"`));
+  };
+  const referencia = normaliza(PAGINAS_V02[0], HTML[PAGINAS_V02[0]]);
+  assert.match(referencia, /<a class="nav-build" href="\/construir-ou-ampliar\/">Construir ou ampliar<\/a><a class="nav-budget" href="\/orcamento\/">Calcular estimativa<\/a>/);
+  for (const file of PAGINAS_V02) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: menu diferente do das demais páginas V02`);
+});
+
+test('rodapé V02: Facebook oficial entre Instagram e LinkedIn, no mesmo padrão dos links sociais', () => {
+  const ig = '<a href="https://www.instagram.com/demelloeng/" target="_blank" rel="noopener">Instagram</a>';
+  const fb = '<a href="https://www.facebook.com/demelloeng/" target="_blank" rel="noopener">Facebook</a>';
+  const li = '<a href="https://www.linkedin.com/company/demello-engenharia/" target="_blank" rel="noopener">LinkedIn</a>';
+  for (const file of PAGINAS_V02) {
+    const rodape = HTML[file].match(/<footer[\s\S]*?<\/footer>/)[0].replace(/\r\n/g, '\n');
+    assert.equal([...rodape.matchAll(/facebook\.com/g)].length, 1, `${file}: um único link do Facebook no rodapé`);
+    assert.ok(rodape.includes(ig + fb + li), `${file}: ordem Instagram → Facebook → LinkedIn`);
+  }
 });
 
 test('navegação: item atual marcado com aria-current na página correspondente', () => {
@@ -332,7 +360,7 @@ test('proveniência: a prova técnica continua atribuída ao acervo profissional
   for (const [file, re] of [
     ['index.html', /Acervo profissional de Marcos de Mello Silva, fundador da DEMELLO Engenharia\./],
     ['index.html', /Esses dados descrevem a trajetória profissional do fundador\./],
-    ['construir-ou-ampliar/index.html', /Não correspondem exclusivamente ao acervo operacional do atual CNPJ/],
+    ['construir-ou-ampliar/index.html', /Acervo profissional de Marcos de Mello Silva\./],   // V02: a ressalva sobre o CNPJ saiu, como nas demais páginas V02 (Voz V07)
     ['servicos/projeto-estrutural/index.html', /O acervo profissional de Marcos de Mello Silva reúne 67\.762 m² de experiência técnica estrutural documentada/],
     ['servicos/projeto-hidrossanitario/index.html', /O acervo profissional de Marcos de Mello Silva registra 42\.789 m² de experiência técnica hidrossanitária documentada/],
     ['servicos/projeto-gas-glp/index.html', /não exclusivamente ao atual CNPJ/],
@@ -342,6 +370,7 @@ test('proveniência: a prova técnica continua atribuída ao acervo profissional
     ['servicos/projeto-terraplenagem/index.html', /4\.959 m³/],
   ]) assert.match(HTML[file], re, file);
   for (const slug of ['projeto-estrutural', 'projeto-hidrossanitario', 'projeto-arquitetura', 'projeto-terraplenagem']) assert.doesNotMatch(HTML[`servicos/${slug}/index.html`], /acervo (?:operacional )?(?:da|do) (?:DEMELLO|CNPJ|empresa)/i, `${slug}: acervo atribuído à empresa`);
+  assert.doesNotMatch(HTML['construir-ou-ampliar/index.html'], /acervo (?:operacional )?(?:da|do) (?:DEMELLO|CNPJ|empresa)/i, 'construir-ou-ampliar: acervo atribuído à empresa');
   // A manchete de imprensa da Arquitetura V11 ("... R$ 8,3 milhões ...") é título de terceiro, com veículo e link; fora desse bloco o valor continua proibido.
   const semImprensa = (html) => html.replace(/<div class="rico-imprensa">[\s\S]*?<\/div>/, '');
   for (const slug of SERVICE_SLUGS) assert.doesNotMatch(semImprensa(HTML[`servicos/${slug}/index.html`]), /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, slug);

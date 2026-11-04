@@ -36,14 +36,16 @@ test('shared navigation: commercial order, estimate CTA highlighted, Contato and
   // Principais, na ordem: Início · Construir ou ampliar · Outros serviços · Experiência · Como trabalhamos · Calcular estimativa.
   // Contato e WhatsApp seguem acessíveis (faixa superior no desktop; dentro do menu no móvel), sem competir com o CTA.
   const expected = ['Início', 'Construir ou ampliar', 'Outros serviços', 'Experiência', 'Como trabalhamos', 'Calcular estimativa', 'Contato', 'WhatsApp'];
-  // Home, Serviços e Contato V02: menu "Início · Serviços · Projetos · Como trabalhamos · Contato · Calcular estimativa · WhatsApp".
-  const expectedV02 = ['Início', 'Serviços', 'Projetos', 'Como trabalhamos', 'Contato', 'Calcular estimativa', 'WhatsApp'];
+  // Páginas V02 (Home, Serviços e Contato): "Início · Serviços · Projetos · Como trabalhamos · Contato · Construir ou ampliar · Calcular estimativa · WhatsApp".
+  const expectedV02 = ['Início', 'Serviços', 'Projetos', 'Como trabalhamos', 'Contato', 'Construir ou ampliar', 'Calcular estimativa', 'WhatsApp'];
   for (const page of pages) {
     const html = await readFile(path.join(siteRoot, page), 'utf8');
     const nav = html.match(/<nav class="nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
     const labels = [...nav.matchAll(/<a[^>]*>([^<]+)<\/a>/g)].map((match) => match[1].trim());
-    assert.deepEqual(labels, ['index.html', 'servicos/index.html', 'contato/index.html'].includes(page) ? expectedV02 : expected, page);
+    assert.deepEqual(labels, ['index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html'].includes(page) ? expectedV02 : expected, page);
     assert.match(nav, /<a class="nav-budget" href="(?:\.\/|(?:\.\.\/)+)orcamento\/"/);
+    // O botão novo vem logo antes do orçamento e leva à jornada principal; só as páginas V02 o têm.
+    if (['index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html'].includes(page)) assert.match(nav, /<a class="nav-build" href="(?:\.\/|(?:\.\.\/)+)construir-ou-ampliar\/"(?: aria-current="page")?>Construir ou ampliar<\/a><a class="nav-budget"/, page);
     assert.match(nav, /<a class="nav-extra nav-whatsapp" href="https:\/\/wa\.me\/5541985124056"/);
   }
 });
