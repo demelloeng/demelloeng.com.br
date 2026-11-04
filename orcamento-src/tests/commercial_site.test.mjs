@@ -28,6 +28,11 @@ const COMMERCIAL = [
 const OTHER = ['empresa/index.html', 'empresa/trajetoria-do-fundador.html', 'privacidade/index.html', 'verificar/index.html'];
 const ALL = [...COMMERCIAL, ...OTHER];
 const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
+// Páginas no visual V02 (menu e rodapé novos). As páginas antigas ficam fora deste conjunto.
+const PAGINAS_V02 = [
+  'index.html', 'servicos/index.html', 'contato/index.html',
+  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`),
+];
 
 const pageUrl = (file) => `${ORIGIN}/${file.replace(/index\.html$/, '')}`;
 const HTML = Object.fromEntries(await Promise.all(ALL.map(async (p) => [p, await read(p)])));
@@ -231,6 +236,17 @@ test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projet
   const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
+});
+
+test('rodapé V02: Facebook oficial entre Instagram e LinkedIn, no mesmo padrão dos links sociais', () => {
+  const ig = '<a href="https://www.instagram.com/demelloeng/" target="_blank" rel="noopener">Instagram</a>';
+  const fb = '<a href="https://www.facebook.com/demelloeng/" target="_blank" rel="noopener">Facebook</a>';
+  const li = '<a href="https://www.linkedin.com/company/demello-engenharia/" target="_blank" rel="noopener">LinkedIn</a>';
+  for (const file of PAGINAS_V02) {
+    const rodape = HTML[file].match(/<footer[\s\S]*?<\/footer>/)[0].replace(/\r\n/g, '\n');
+    assert.equal([...rodape.matchAll(/facebook\.com/g)].length, 1, `${file}: um único link do Facebook no rodapé`);
+    assert.ok(rodape.includes(ig + fb + li), `${file}: ordem Instagram → Facebook → LinkedIn`);
+  }
 });
 
 test('navegação: item atual marcado com aria-current na página correspondente', () => {
