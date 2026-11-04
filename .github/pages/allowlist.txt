@@ -153,6 +153,8 @@ assets/js/maquete-estrutura-3d.js
 assets/js/maquete-hidro-3d.js
 assets/js/maquete-terraplanagem-3d.js
 assets/models/casa-exemplo.glb
+assets/models/estrutura-aco.glb
+assets/models/estrutura-aco.json
 assets/models/estrutura-concreto.glb
 assets/models/estrutura-concreto.json
 assets/models/hidro-casa.glb
