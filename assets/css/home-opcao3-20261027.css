@@ -143,3 +143,19 @@
  .home-opcao3 .integration-grid p:not(.section-label){font-size:22px}
  .home-opcao3 .integration-grid figure img{height:560px}
 }
+
+/* Menu V02: botão "Construir ou ampliar" e menu móvel mais cedo (até 1120px): com o botão novo o menu não cabe numa linha. */
+.home-opcao3 .nav .nav-build{border:2px solid #fff;border-radius:5px;padding:12px 17px;font-weight:700;white-space:nowrap;color:#fff}
+.home-opcao3 .nav .nav-build:hover{background:#fff;color:var(--deep)}
+@media(min-width:1051px) and (max-width:1120px){
+ .home-opcao3 .header-in{min-height:82px}
+ .home-opcao3 .site-header .logo img{width:200px}
+ .home-opcao3 .nav-toggle{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;background:transparent;border:1px solid #ffffff66;border-radius:5px}
+ .home-opcao3 .nav-toggle span{display:block;width:23px;height:14px;border-top:2px solid #fff;border-bottom:2px solid #fff}
+ .home-opcao3 .nav{display:none;position:absolute;left:0;right:0;top:100%;max-height:calc(100dvh - 82px);overflow:auto;padding:20px 32px 28px;background:var(--deep);border-bottom:1px solid #ffffff24;flex-direction:column;align-items:stretch;gap:0}
+ .home-opcao3 .nav.is-open{display:flex}
+ .home-opcao3 .nav a{font-size:18px;padding:15px 0}
+ .home-opcao3 .nav .nav-budget{margin-top:12px;text-align:center;padding:16px}
+ .home-opcao3 .nav-extra{display:flex}}
+@media(max-width:1120px){
+ .home-opcao3 .nav .nav-build{margin-top:12px;text-align:center;padding:14px 17px}}

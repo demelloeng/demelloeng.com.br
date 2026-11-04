@@ -238,6 +238,18 @@ test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projet
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
 });
 
+test('menu V02: mesmos itens, ordem e destinos em todas as páginas V02; "Construir ou ampliar" logo antes do orçamento', () => {
+  // Resolve href relativos para caminhos do site e ignora espaços entre tags; o item atual (aria-current) é a única diferença permitida.
+  const normaliza = (file, html) => {
+    const nav = html.match(/<nav class="nav"[\s\S]*?<\/nav>/)[0].replace(/\r\n/g, '\n').replace(/ aria-current="page"/g, '').replace(/>\s+</g, '><');
+    const dir = path.posix.dirname(`/${file}`);
+    return nav.replace(/href="([^"]+)"/g, (m, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `href="${path.posix.join(dir, v)}"`));
+  };
+  const referencia = normaliza(PAGINAS_V02[0], HTML[PAGINAS_V02[0]]);
+  assert.match(referencia, /<a class="nav-build" href="\/construir-ou-ampliar\/">Construir ou ampliar<\/a><a class="nav-budget" href="\/orcamento\/">Calcular estimativa<\/a>/);
+  for (const file of PAGINAS_V02) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: menu diferente do das demais páginas V02`);
+});
+
 test('rodapé V02: Facebook oficial entre Instagram e LinkedIn, no mesmo padrão dos links sociais', () => {
   const ig = '<a href="https://www.instagram.com/demelloeng/" target="_blank" rel="noopener">Instagram</a>';
   const fb = '<a href="https://www.facebook.com/demelloeng/" target="_blank" rel="noopener">Facebook</a>';

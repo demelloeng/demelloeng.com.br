@@ -75,6 +75,7 @@ ICONES = {
 # Menu V02 (mesmo de Serviços e das páginas de projeto); aqui o item atual é "Contato".
 MENU = ('<a href="../">Início</a><a href="../servicos/">Serviços</a><a href="../experiencia-tecnica/">Projetos</a>'
         '<a href="../metodologia/">Como trabalhamos</a><a href="../contato/" aria-current="page">Contato</a>'
+        '<a class="nav-build" href="../construir-ou-ampliar/">Construir ou ampliar</a>'
         '<a class="nav-budget" href="../orcamento/">Calcular estimativa</a>'
         '<a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a>')
 
@@ -151,7 +152,7 @@ def montar(texto_copy: str) -> str:
 <link rel="icon" href="../assets/images/favicon.png">
 <link rel="preload" href="../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/source-sans-3-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/servicos-v02.css">
+<link rel="stylesheet" href="../assets/css/servicos-v02.css?v=7">
 <link rel="stylesheet" href="../assets/css/rodape-v02.css?v=1">
 <link rel="stylesheet" href="../assets/css/contato-v02.css?v=1">
 <script type="application/ld+json">{JSONLD}</script>

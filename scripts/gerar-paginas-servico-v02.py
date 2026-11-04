@@ -249,13 +249,13 @@ def gerar(slug):
 <link rel="icon" href="../../assets/images/favicon.png">
 <link rel="preload" href="../../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/source-sans-3-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/css/servicos-v02.css?v=6">
+<link rel="stylesheet" href="../../assets/css/servicos-v02.css?v=7">
 <link rel="stylesheet" href="../../assets/css/servico-pagina-v02.css?v=6">
 {extra_head}
 {jsonld}
 </head>
 <body class="{classe_body}"><a class="skip" href="#conteudo">Pular para o conteúdo</a>
-<header class="site-header"><div class="wrap header-inner"><a class="logo" href="../../"><img src="../../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="760" height="220"></a><button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav">Menu</button><nav class="nav" id="site-nav" aria-label="Principal">{nav}<a class="nav-budget" href="../../orcamento/">Calcular estimativa</a><a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a></nav></div></header>
+<header class="site-header"><div class="wrap header-inner"><a class="logo" href="../../"><img src="../../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="760" height="220"></a><button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav">Menu</button><nav class="nav" id="site-nav" aria-label="Principal">{nav}<a class="nav-build" href="../../construir-ou-ampliar/">Construir ou ampliar</a><a class="nav-budget" href="../../orcamento/">Calcular estimativa</a><a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a></nav></div></header>
 <main id="conteudo">
 {principal}
 <section class="final-cta"><div class="wrap"><h2>{prox['titulo']}</h2>{prox_texto}<a class="cta" href="{cta['href']}">{cta['rotulo']} →</a><p class="micro">{cta['micro']}</p></div></section>
