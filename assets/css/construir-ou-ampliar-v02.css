@@ -1,6 +1,7 @@
 /* Construir ou ampliar V02. Só o que a página precisa além de servicos-v02.css e rodape-v02.css; tudo sob .construir-v02,
    sem alterar nenhuma outra página. Cores, fonte e variáveis vêm de servicos-v02.css. */
-.construir-v02 a:focus-visible,.construir-v02 summary:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.construir-v02 main a:focus-visible,.construir-v02 main summary:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.construir-v02 .site-header .logo:focus-visible{outline-color:#fff}
 .construir-v02 .hero{padding-bottom:72px}
 .construir-v02 .hero h1{max-width:none;font-size:64px;line-height:1.08}
 .construir-v02 .hero-copy p+p{margin-top:16px}
