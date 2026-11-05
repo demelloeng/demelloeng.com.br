@@ -1,0 +1,852 @@
+{
+ "ref": "b21e5828b4dc5cd4cd1158c95f2227b8f1c0b488",
+ "count": 141,
+ "files": [
+  {
+   "path": "404.html",
+   "sha256": "a26f711b91cd0f3c2a6d4e18f88b09f5037e2df8e1445db4609e97fb2027a8f2",
+   "bytes": 4126,
+   "reason": "exact"
+  },
+  {
+   "path": "CNAME",
+   "sha256": "a62488dc7e10d0695ed4c8e157b6f06fa1736c5b5f4ee1a7298de886eac8538a",
+   "bytes": 18,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/catalogo-pscip-glp-v02.css",
+   "sha256": "ba12cb6599b82cdd411542cd71aeb8eb8ee83333eb4b8dbf1f806f3c7b738a98",
+   "bytes": 510,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/construir-ou-ampliar-v02.css",
+   "sha256": "ed62a921636fceefdebc8793b1469c25fc9ae2da6f7cccd4602caf1d9ebe744b",
+   "bytes": 6158,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/contato-v02.css",
+   "sha256": "2c80cfa38fd06299a08c9c62190d5d2330c4adc75fc157643d9eae1dfb09b2eb",
+   "bytes": 5495,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/hidrantes-luiz-carlos-v02.css",
+   "sha256": "eae6971bb34fea5fc9e5f5d683b8eb7359bd064199d773e5de16151cf3c3785c",
+   "bytes": 7718,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/home-20261024.css",
+   "sha256": "0476b114d9fad3af21ee833dfce3841cff9539b294515471945e952750269d4d",
+   "bytes": 15987,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/home-opcao3-20261027.css",
+   "sha256": "787db1e872816b7feba457c80cd1b87d7db045296604afedcc02723055716241",
+   "bytes": 11596,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/maquete-3d.css",
+   "sha256": "aaf2e2dfa6b4454f0c333b2cac0d563ce3b4d1edb8f1186faeb798cfc9a7e860",
+   "bytes": 5518,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/maquete-estrutura-3d.css",
+   "sha256": "62c5e7c16093866efe29133c1b58d7fc7c889fb88b3ae100e997c313de39fdc1",
+   "bytes": 3239,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/rodape-v02.css",
+   "sha256": "c78e2aab03db21b4d1a8952ec4904948598054c9e47773c004eb9ba271b06cf6",
+   "bytes": 1437,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servico-estrutural-v02.css",
+   "sha256": "207284a49acc302b0c81f5e5589b2ab54df5fb0c7a593f8fac176e2f4bfd49a7",
+   "bytes": 2714,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servico-hidro-v02.css",
+   "sha256": "a8c7d397a88f48caf3ba193a19a743a9d17cb5d32bb086d8ec83d35a576bd7ae",
+   "bytes": 1375,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servico-infra-v02.css",
+   "sha256": "fd1354c76f552e9bb52b4a40a23bed0d34328f2c12c22c84b5f6319c18612ad6",
+   "bytes": 1346,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servico-pagina-v02.css",
+   "sha256": "9a779a242f5ff98d79a9a6782f8f7e6d428d47b751c24aff2e5a4a0ac1bbc7b2",
+   "bytes": 7338,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servico-pscip-glp-v02.css",
+   "sha256": "8ac293d8573831d587fb36b56e73a432d09111c595d1bbc6b2b2c7ba3e8afc45",
+   "bytes": 3517,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servico-rico-v02.css",
+   "sha256": "99f81a32ab7b28596c2fc679bcd3201b9f847408f348389742e7dcd095416e09",
+   "bytes": 10022,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servicos-v02.css",
+   "sha256": "4cc332c53897fc9be3aad9c7bb02e7e708ace893cfc38332c6501e1add0fe3eb",
+   "bytes": 11547,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/servicos.css",
+   "sha256": "5dc257b7a4e7065c78798214d110bd56da512832febfd90a9239659a3440ba8f",
+   "bytes": 1761,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/style.css",
+   "sha256": "14453b919639d4a5fb85b039bbee75b391253f8d9e4f53f42dffd6029b0ad8e8",
+   "bytes": 52282,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/css/v02-proposta.css",
+   "sha256": "112bc1696e8d8e6b6b1d5394b0d13c8f7569a468a4a64dcd72c19aa378d3b8b0",
+   "bytes": 6891,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/Montserrat-OFL.txt",
+   "sha256": "8b7141c03fa4f8d44e6345d5d4931709290f0f67875e452e95ac1fd3a027802e",
+   "bytes": 4400,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/SpecialElite-LICENSE.txt",
+   "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+   "bytes": 11358,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/montserrat-var-latin.woff2",
+   "sha256": "06b16db7a969135d48d38c49183be7fb88d4452e2a3011957c7851941f4e4879",
+   "bytes": 37956,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/source-sans-3-latin-400-normal.woff2",
+   "sha256": "0f73f35e08cde0a2f10c109c6e01d71459d97e4099ecd9a50f1b6c0209e4de2b",
+   "bytes": 15696,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/source-sans-3-latin-600-normal.woff2",
+   "sha256": "14527d193b0e30bc32ef931549a246cdfd286573bb12869b7e052b8101a39d38",
+   "bytes": 15668,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/source-sans-3-latin-700-normal.woff2",
+   "sha256": "ae35266f2ab0d5314ff9a04127931eb26c793e4f1269bb240046d4d2db4b7bb1",
+   "bytes": 15596,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/source-sans-3-latin-800-normal.woff2",
+   "sha256": "b42d5c20d0730f353996e29dd28872f4782dae9fd0b8ba75365fbeab6f909605",
+   "bytes": 15536,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/fonts/special-elite-latin.woff2",
+   "sha256": "770493d84cbb753cd0573d0f014550583138f40469d137e310d239593a1949d8",
+   "bytes": 53296,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/arquitetura.svg",
+   "sha256": "15badade5513b3b22af45f70cb951f8ecb780135bbb9feab6a4b5bfbc94a7c02",
+   "bytes": 263,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/bim.svg",
+   "sha256": "5cd1d00e7339553a0633cca4a7f0df5862f24d68047d0faef0fb3adff3699287",
+   "bytes": 304,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/estrutural.svg",
+   "sha256": "62f6d85753e8dad47934e82c84d9e66fd130af2669874f692d95c8fec4df8616",
+   "bytes": 267,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/gas-glp.svg",
+   "sha256": "e15335d73e7e9e5da629718f017235aeebd1a67eb422b281d43776b5b17a005a",
+   "bytes": 279,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/hidrossanitario.svg",
+   "sha256": "a2ed68f8a3faf36fad82b63d49d37f7967fe34093e7e9e6593137a39c40ef4e8",
+   "bytes": 269,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/incendio.svg",
+   "sha256": "50b0fc0f37f4293eb19513725decfed2ac81fda970640da347eaa88bde18fcbf",
+   "bytes": 353,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/orcamento.svg",
+   "sha256": "526d36c297cb352cfb1ad1d528323369fbfbed1cd35173280dd5502e7c4035b7",
+   "bytes": 299,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/regularizacao.svg",
+   "sha256": "5406464eeb050be346a910c0ddefbf3a456b4031ddeca628f4d4fe1f6eadb807",
+   "bytes": 253,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/servicos-v02/terraplanagem.svg",
+   "sha256": "b951e6dce7f3fa3ec25755b376586751e201d7f14851f1faae46af838aac0a00",
+   "bytes": 237,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/situacao-ampliar-v1.svg",
+   "sha256": "1f410a8519cbde88a661ff838069f51bdda24a63392e00487438d792db5687c3",
+   "bytes": 237,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/situacao-avaliar-v1.svg",
+   "sha256": "07060a8b35162f6ba8c5429f8aeb42c3dcc6521e61203a5e52f98d86578cfc16",
+   "bytes": 256,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/situacao-construir-v1.svg",
+   "sha256": "99a400ad746a1f34ef90e25ed22366e76b220dfbd4e1b192f32f4a448b268384",
+   "bytes": 237,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/icons/situacao-regularizar-v1.svg",
+   "sha256": "e0006ae3aee6b3b1414ce1bac374e4c34ef441af84e27b7b11c14302ce315f5b",
+   "bytes": 276,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/GERIBELLO_logo_branca.png",
+   "sha256": "52a6c22576c7713a74bad671dc1e0b4a612829bcafe9fba4309bce0d9bf6778e",
+   "bytes": 26495,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/JHE_logo.png",
+   "sha256": "b4d66d81d16b2113f628a19661460330c5f8c4675fe3b5ace534fcb987000f77",
+   "bytes": 13162,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/ODARA_avatar_linktree.jpg",
+   "sha256": "a0e6529df0ca7d1a5838dc7335cee37a2910358c26fee6bd72cb746c38870b24",
+   "bytes": 5820,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/bim-compatibilizacao-v3.jpg",
+   "sha256": "2b6bffdbe96fb6f00ff9a9390ce3cd94005968c2a19df5515df7e15f23b9e10e",
+   "bytes": 96706,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/bim-compatibilizacao-v3.webp",
+   "sha256": "b5935c3c577001a72ef61836eaaeed39ac0a933a67add2b70575249c716a50d5",
+   "bytes": 51140,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/bim-compatibilizacao-v3@2x.webp",
+   "sha256": "09a419e824c1d3b1f214baf30ccfbb01f5c59868dc60935e51d4c28f9bfd8d04",
+   "bytes": 92442,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/djalma-render-dia-1600.jpg",
+   "sha256": "0169277b602ffd2f4ba966f1fc34901daae2f112ed760140d8884235ef82b7ec",
+   "bytes": 378019,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/djalma-render-entardecer-1600.jpg",
+   "sha256": "598e91a503e5d3143cf7637351fbf64322988616478f1d7e9d0f726433a32a04",
+   "bytes": 360290,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/djalma-render-entardecer-800.jpg",
+   "sha256": "cd78977bc63f4bb77ac2b09d948ce493841aa995b10dcee8b97aa30546ad2f42",
+   "bytes": 104637,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/estrutura-armadura-1-1600.jpg",
+   "sha256": "a5d6d4badc12291c9093844479dddb7bcd04af963753b8142787d1a280ca4b78",
+   "bytes": 249943,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/estrutura-armadura-2-1600.jpg",
+   "sha256": "682b0faeadb401d594afd69e85d3e48b0120d6135d4e327b52bebb189d8040fe",
+   "bytes": 212621,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/estrutura-armadura-2-800.jpg",
+   "sha256": "5b7ea0c3bdb9a3475636f55c3ebbc10cb336e61dfff2271a23475be8b6b72a88",
+   "bytes": 64058,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/favicon.png",
+   "sha256": "0fe6ba68047b1007cba2cbc1147d6d58a2b3ee3141a61959cf6748787c463dcc",
+   "bytes": 153913,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-aldeia.png",
+   "sha256": "bc338cb2143899222a1055e110a5c20dde2b9ecefc4940c708fdcab5175dfbc1",
+   "bytes": 830606,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-formatura.png",
+   "sha256": "7823f1492f3282db48f4308503a5c4b59363349c9e7874fac8bbe80a9d3dbcee",
+   "bytes": 1024210,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-mangue-casa.png",
+   "sha256": "0cce09bdcad515bd05aaefe1804cd49da378b6665a0bd1ed2dd53d6beab73a5f",
+   "bytes": 1328998,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-mangue-retrato.png",
+   "sha256": "f72fe496679b75124dff57be3305f54cdc1302b43659dc9c0ee3d7f7ea8ef06f",
+   "bytes": 987401,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-mercado.png",
+   "sha256": "73a54e7fbe0f729855067d2279e0a2091ff6a03cc9fcef1931f9d72bb4b76cff",
+   "bytes": 249200,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-obra-estaca.jpg",
+   "sha256": "11689ec3fc1191b0deaa4db4f0860129870d6edf387a578306bf9af781f42006",
+   "bytes": 251377,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-obra-grupo.jpg",
+   "sha256": "2205d70989b2fa84c2770e7d6474daed99daa53ee11f00173c754c8dcde3ea77",
+   "bytes": 96373,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-trainee.png",
+   "sha256": "b2a3d1c071d0e10d3f57341a68ff93926cc0eec39728f5f988f85bc267e0909a",
+   "bytes": 1073416,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/fundador-treliça.png",
+   "sha256": "130b060772e0cc99f8690f7ab72d09b138c87e40d01b1e70f2db02d0d5c5cfc8",
+   "bytes": 1577970,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/hero-3d-translucido-v3.jpg",
+   "sha256": "7887e0bb1121f86306e7adb612ad651e295d0daae244bfd37db87ef4ea96d544",
+   "bytes": 168534,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/hero-3d-translucido-v3.webp",
+   "sha256": "4acc158c3729a64a8b4156f30124ed880ed2727d7fc3694df56014a94ecf093a",
+   "bytes": 131560,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/hero-3d-translucido-v3@2x.webp",
+   "sha256": "f3aedbaec739b0e2b421d4386e80e70496bd74ac2653cb30913cf6b2ee5d1989",
+   "bytes": 318624,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/hero-djalma-marinho-900.jpg",
+   "sha256": "d4c09cab08d6d902c994a732062e7868bdbdcd4bd4b2f9d61c75c5a70057c147",
+   "bytes": 112473,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/hero-djalma-marinho.jpg",
+   "sha256": "1a0046c51952ad9a5b0c50ea0b9fc363db21a9fd06d47f1ddc622a86b868ca35",
+   "bytes": 339959,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/hidrantes-luiz-carlos-v02.png",
+   "sha256": "ae1bf86257e7b11c01bbf23b73aab826e90b7d5cd4989855eec811a71ffbdba1",
+   "bytes": 109669,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/home-opcao3-hero.webp",
+   "sha256": "0d014b3188db8120ced9dae21393053af8667051a1c5c1485507fab6401aa900",
+   "bytes": 243828,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/home-opcao3-hidro.webp",
+   "sha256": "746835b6d2409a155a4e8e2d607748cd20d824ed561ee9b8800134fbf631689e",
+   "bytes": 187464,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/home-opcao3-incendio.webp",
+   "sha256": "83fb98625d89b18c4bf822944c3f35da16da0a0dd4be9b38085a0c893bbdedb6",
+   "bytes": 248630,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/home-opcao3-integracao.webp",
+   "sha256": "c897dd571e39649b0bfbf613e97d303bef73f2786438177a9bb7b23b65354786",
+   "bytes": 215382,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/logo-branca.png",
+   "sha256": "b7460e1023bfca912e01cca8e8b565c56b3911b676ca9018ef979246f64e9973",
+   "bytes": 51145,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/logo-oficial.png",
+   "sha256": "7f6e1a66583645532579d2f9b7cd8b8b03b3579f8b291182325492d051f6993b",
+   "bytes": 183174,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/logo.png",
+   "sha256": "5b0d3f946d530956e9c202a3795701c2caf47aa21da8499737a78bfdc0318c95",
+   "bytes": 106640,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/textura-blueprint-v1.svg",
+   "sha256": "af2e69726c16d82d7a56cf5b667450b3ca2ddab3d26a566e74d05c3d5ad6ec61",
+   "bytes": 171,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/images/v02-topografia-proposta.svg",
+   "sha256": "57ec9ec62174ce5ee3ce738c9f3ed4e8e7b57d7e7e0f19a2c29102037626ad62",
+   "bytes": 1082,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/analytics-sink.js",
+   "sha256": "66067d71ad41b008ecef4ade7372ae14df5456b0113f272de4c72dc36663bc88",
+   "bytes": 1823,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/analytics.mjs",
+   "sha256": "f637321dc85aeb50b8a604c99484f330c2a51ee64413f7330c1f803933ed9bed",
+   "bytes": 11759,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/contact-clicks.mjs",
+   "sha256": "576a16c709449c214ba83e1f1960d78bc7e2031badeda102b8ce790e977653ff",
+   "bytes": 4489,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/hidrantes-luiz-carlos-ativar.js",
+   "sha256": "169a9693d6eae8e400f8d07c07edc82a65ed48c5e90d48c089b9eedeb9134ca8",
+   "bytes": 1585,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/hidrantes-luiz-carlos-core.mjs",
+   "sha256": "2fbd2dc97c99f47fb3a91e82ffec86b305097d32e3ae19c7554d5ceeab5911c8",
+   "bytes": 491,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/hidrantes-luiz-carlos-v02.js",
+   "sha256": "6d3db1def37129909b5c8ff91ef8a276f01b67272195aaa856835b06e0e26d8b",
+   "bytes": 27325,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/maquete-3d.js",
+   "sha256": "1c3be9abc5bd49b1cf74944b6b77147068e954ba8be1414e6c0788e3dc45c482",
+   "bytes": 19211,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/maquete-estrutura-3d.js",
+   "sha256": "59a01dd75d3eb325b97c3fabbf5b33f8d1dd7313035ba27c88c0938b30e17f44",
+   "bytes": 18465,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/maquete-hidro-3d.js",
+   "sha256": "5f841edbb33da4c791d819f5e7ae47a08b4435633a31f8ee579e444f450ede07",
+   "bytes": 18404,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/maquete-terraplanagem-3d.js",
+   "sha256": "7fa8e545d484ca92cebf7c325749daf0d43a26ffdc8c9d1cad654ec8ab4aaf00",
+   "bytes": 18101,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/meta-pixel.js",
+   "sha256": "f07ee5229c2dc336a03d218faac8b16cba613f7413b4677e6ce1ded132be7c84",
+   "bytes": 2901,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/nav.js",
+   "sha256": "6ea36b3340c366ddb48ee99b53225c2fab0510233f69028f7c8bc7f9cb6090be",
+   "bytes": 575,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/site-analytics.mjs",
+   "sha256": "cc9f1d74fe4447c4c96b90907a315a4a93efe28f1e24dcfe37453adc9890e743",
+   "bytes": 466,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/js/three-d-stage.js",
+   "sha256": "072cca1bb58d363504e415af8b20f694476b206498c07169de31829880649ef5",
+   "bytes": 16612,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/casa-exemplo.glb",
+   "sha256": "b6f3dba49ab33e64d3235bb6be10a7023f3495001da8a14e9c02321c0ac030d0",
+   "bytes": 72100,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/estrutura-aco.glb",
+   "sha256": "916276a6e56f5a5ace30ec10a82ca5886c4c9bc0b37993465d914c897785245c",
+   "bytes": 71328,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/estrutura-aco.json",
+   "sha256": "04f098ce48f5eac78b5308105d5d5e66cee57005da3a5f55de20daba7cb2a344",
+   "bytes": 8381,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/estrutura-concreto.glb",
+   "sha256": "d9191b7a0c56c4d362c5a6429cb071d3782af4523b9bcee698a5cedeac10ae50",
+   "bytes": 1169872,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/estrutura-concreto.json",
+   "sha256": "fe7fae758fe8d65490b15093e9412c51298ec4ed6c7a65921056e98f0032e522",
+   "bytes": 55704,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/guatupe.obj",
+   "sha256": "19f8be3c500c19dc0ab64ac6caea0ec404c0e4c688446cfb9e69cd4727554ae1",
+   "bytes": 2035370,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/hidrantes-luiz-carlos-v02.glb",
+   "sha256": "350b52603363964386270bba4b1fbdda04f9cd26ab4483559f6b12868021c04a",
+   "bytes": 1857508,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/hidrantes-luiz-carlos-v02.json",
+   "sha256": "2e4e019029d304d122a125c6919ea0a9061e30a58890ba4854d03dff8a8feae8",
+   "bytes": 47499,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/hidro-casa.glb",
+   "sha256": "c850b21c007c7c1e27443d5bac55a304be46175329e620393e51a1ab7a715a3d",
+   "bytes": 637032,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/hidro-casa.json",
+   "sha256": "9296b457ee83778009c06685a1347866333ed790f132d09982a176606f14a8dc",
+   "bytes": 9912,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/terraplanagem-djalma.glb",
+   "sha256": "b1ac311f016b23f5c316dc253e2f24053f260724c06fa670ad704b87990c66a9",
+   "bytes": 683412,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/models/terraplanagem-djalma.json",
+   "sha256": "48874b57fe268a28ba0b60742236cfd21a0212838453a4f0ca371a0e8231d247",
+   "bytes": 647,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/vendor/three/LICENSE",
+   "sha256": "852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d",
+   "bytes": 1081,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/vendor/three/ORIGEM.txt",
+   "sha256": "1313f4199e6be17394790c2f3d134f0da1548793e72193a9b22339ff48e946d2",
+   "bytes": 1357,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/vendor/three/build/three.module.js",
+   "sha256": "76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495",
+   "bytes": 1272972,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/vendor/three/examples/jsm/controls/OrbitControls.js",
+   "sha256": "5a44a9e86a2a0fb11933eed69bc2cd33c76a496854c1aed6ed776efa87d7b064",
+   "bytes": 29868,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/vendor/three/examples/jsm/loaders/GLTFLoader.js",
+   "sha256": "d073b438e6a07e1359741dd5d6c76c953420cc0d4fd84eb1bdde94315540e6a3",
+   "bytes": 108522,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/vendor/three/examples/jsm/utils/BufferGeometryUtils.js",
+   "sha256": "9be041e96308775d00e2695cc607645b9a9b64fd7c0e759dd8f7c00a8d92becb",
+   "bytes": 31906,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/videos/djalma-marinho.mp4",
+   "sha256": "39ffe89ba2af14ce51ccdb48811f3fb2be8ccdc8751180b32ebd87b9fc5045ab",
+   "bytes": 8735126,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/videos/projeto-01.mp4",
+   "sha256": "aa981d51f5d984e2ba400042b35201b715efff513648d3bdb10a38ed3603d391",
+   "bytes": 3415569,
+   "reason": "exact"
+  },
+  {
+   "path": "assets/videos/projeto-02.mp4",
+   "sha256": "259b601479eb99f86d6a9b1b60fbc2338f07afb30b29a6042b3797f715b0ef9d",
+   "bytes": 4190664,
+   "reason": "exact"
+  },
+  {
+   "path": "avaliar-um-problema/index.html",
+   "sha256": "a7d9b39c048d81538206e48714146b10eceaafb4bd3afb7dbf074f6086ccb2d0",
+   "bytes": 12078,
+   "reason": "exact"
+  },
+  {
+   "path": "construir-ou-ampliar/index.html",
+   "sha256": "640390326c04a78c5839d8deb2305d1fbb484a5efb4a022e44c1614f1036802d",
+   "bytes": 12582,
+   "reason": "exact"
+  },
+  {
+   "path": "contato/index.html",
+   "sha256": "d2a721521b386dd5bad9be022ae13019b33f6732de4c33f23b9976f0b71de094",
+   "bytes": 10033,
+   "reason": "exact"
+  },
+  {
+   "path": "empresa/index.html",
+   "sha256": "a34c9e9c2be3b32fd563e952c31a97a413649b8d3714c923c72c9465b45acdc7",
+   "bytes": 6878,
+   "reason": "exact"
+  },
+  {
+   "path": "empresa/trajetoria-do-fundador.html",
+   "sha256": "28512876d89733511a7cc1255fe191bc630a3f0747f994f91ae6eb29f5b6a457",
+   "bytes": 12056,
+   "reason": "exact"
+  },
+  {
+   "path": "experiencia-tecnica/index.html",
+   "sha256": "75f87a764c6c22c6703e034ad178ece39809446922bd4a95f547bd9e86fb80e0",
+   "bytes": 11592,
+   "reason": "exact"
+  },
+  {
+   "path": "google1483671950bc0cbc.html",
+   "sha256": "e57410a1c429db87ea3524842a65a235f93a2ceac7cc361dd134a15289c2f548",
+   "bytes": 53,
+   "reason": "exact"
+  },
+  {
+   "path": "index.html",
+   "sha256": "3d65bc118052bfbfa4b28c22100a3139747d38cc7808009c54589932e2da7670",
+   "bytes": 23326,
+   "reason": "exact"
+  },
+  {
+   "path": "metodologia/index.html",
+   "sha256": "9ea55a87f53f563ff913facf1a0e84f44dc20386f53cf0ec0ccaf74e5ecc1c5f",
+   "bytes": 9571,
+   "reason": "exact"
+  },
+  {
+   "path": "orcamento/assets/demello-logo.png",
+   "sha256": "5b0d3f946d530956e9c202a3795701c2caf47aa21da8499737a78bfdc0318c95",
+   "bytes": 106640,
+   "reason": "glob:orcamento/assets/**"
+  },
+  {
+   "path": "orcamento/assets/index-B16Vzy82.css",
+   "sha256": "78a8649253d84450436fc762c47237225377e07119e8a2860e39b72852dbeefc",
+   "bytes": 23051,
+   "reason": "glob:orcamento/assets/**"
+  },
+  {
+   "path": "orcamento/assets/index-CsN7vBmE.js",
+   "sha256": "289c43992e94a884b38ddee804c62681013bc2a3e6deb87b2b806e88bd204a5b",
+   "bytes": 351647,
+   "reason": "glob:orcamento/assets/**"
+  },
+  {
+   "path": "orcamento/index.html",
+   "sha256": "60a3baaa042a29b14bbfb6f8584e25608fcf431554c535fc8a613d2c7c3f3abe",
+   "bytes": 2305,
+   "reason": "exact"
+  },
+  {
+   "path": "privacidade/index.html",
+   "sha256": "409f5d9b8bfba1c727a6201e22fc8dd237aef2322b98530ec06877afcf9e4891",
+   "bytes": 12508,
+   "reason": "exact"
+  },
+  {
+   "path": "robots.txt",
+   "sha256": "b07ca1edbf243e4c4c0d324bc29e02261fa8e6c66a5d83fab3f053f9586f132b",
+   "bytes": 70,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/compatibilizacao-bim/index.html",
+   "sha256": "195143d14b42cb3d9266b2578b2b89fb5f746d96270e7e880f527806b5a9e0b4",
+   "bytes": 12967,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/index.html",
+   "sha256": "9436ac16b6572a9330820cc5d724876f121eb1222c617e5903ac06d5ee69e5fd",
+   "bytes": 13643,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/orcamento-tecnico/index.html",
+   "sha256": "a407767ef9c68a883792714502d69d18c538617d71e4ff1e6744bca23aeffa8f",
+   "bytes": 11268,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/projeto-arquitetura/index.html",
+   "sha256": "b87d026f9753f27f1f55cfb5669c3436795c5e4d3cc49bd17baf6e7354f4e224",
+   "bytes": 20821,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/projeto-estrutural/index.html",
+   "sha256": "5763465c4af19e29c9b7166362251a7761967437f30e14c79638de7a9ba460e9",
+   "bytes": 21696,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/projeto-gas-glp/index.html",
+   "sha256": "cada0fbee464b9dcbb19b82d01b682c6325535d2298a7dd152d830912c515e3c",
+   "bytes": 11034,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/projeto-hidrossanitario/index.html",
+   "sha256": "974631bdd42d3689e49668b49210d8de8ff33625f02dfc5a105f187e70f40a50",
+   "bytes": 19674,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/projeto-prevencao-incendio/index.html",
+   "sha256": "3a72b733029614e3433ca3c2c0d372e5d4ca643523b75ee3bcdb7ea2a21fd907",
+   "bytes": 20521,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/projeto-terraplenagem/index.html",
+   "sha256": "87b02649882096500055815dc3e6e803269f0fd95a62008d5e243d0d38211b76",
+   "bytes": 20419,
+   "reason": "exact"
+  },
+  {
+   "path": "servicos/regularizacao/index.html",
+   "sha256": "f90bdf9ac8503ca12a7910ba307774b790a808bfaafd5ce63365646ffd02e050",
+   "bytes": 12287,
+   "reason": "exact"
+  },
+  {
+   "path": "sitemap.xml",
+   "sha256": "d10ed610c72f602ec097c2361d5c6cd4decf83d4df307d652042d947c8acfc24",
+   "bytes": 2127,
+   "reason": "exact"
+  },
+  {
+   "path": "verificar/index.html",
+   "sha256": "32d8a78b895a2499ed6f4133ee3efecb037e1c338233204e17ec4a7ef3b43c5d",
+   "bytes": 11910,
+   "reason": "exact"
+  }
+ ]
+}

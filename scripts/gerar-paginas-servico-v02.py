@@ -109,6 +109,9 @@ def gerar(slug):
     d = json.loads((DOCS / f'{slug}.json').read_text(encoding='utf-8'))
     caminho_copy = DOCS / f'{slug}.copy.json'
     copia = json.loads(caminho_copy.read_text(encoding='utf-8')) if caminho_copy.exists() else None
+    if slug == 'projeto-gas-glp' and copia is None:
+        from copy_pscip_glp import gas_copy
+        copia = gas_copy(d)
     nome_servico = copia['nome_servico'] if copia else re.sub(r'\s*\|.*$', '', d['titulo_pagina'])
 
     # JSON-LD: preserva tudo; só o nome do breadcrumb acompanha o menu ("Serviços").
@@ -195,7 +198,28 @@ def gerar(slug):
 
     introducao = ''.join(f'<p>{p}</p>' for p in d['introducao'])
     rico = bool(copia and copia.get('layout') == 'rico')
-    if rico:
+    if rico and copia.get('perfil') in ('pscip-glp', 'gas-glp'):
+        import layout_rico as L
+        incendio = copia['perfil'] == 'pscip-glp'
+        markup = (DOCS / 'maquete-hidrantes-markup.html').read_text(encoding='utf-8') if incendio else ''
+        principal = L.frente_incendio(copia, d, markup, bloco_html) if incendio else L.frente_gas(copia, d, bloco_html)
+        extra_head = '<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-pscip-glp-v02.css?v=1">'
+        extra_body = ''
+        if incendio:
+            extra_head += '\n<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">'
+            extra_head += '\n<link rel="stylesheet" href="../../assets/css/hidrantes-luiz-carlos-v02.css?v=1">\n<script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>'
+            extra_body = '<script type="module" src="../../assets/js/hidrantes-luiz-carlos-ativar.js?v=1"></script>'
+        classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-' + copia['perfil']
+        # Mantém os nós existentes e seus URLs; atualiza apenas rótulos editoriais.
+        graph = json.loads(re.search(r'<script[^>]*>(.*?)</script>', jsonld, re.S).group(1))
+        for node in graph.get('@graph', []):
+            if node.get('@type') == 'Service':
+                node['name'] = 'Projeto de prevenção contra incêndio' if incendio else nome_servico
+                node['description'] = copia['descricao']
+            if node.get('@type') == 'BreadcrumbList':
+                node['itemListElement'][-1]['name'] = nome_servico
+        jsonld = '<script type="application/ld+json">' + json.dumps(graph, ensure_ascii=False, separators=(',',':')).replace('<','\\u003c') + '</script>'
+    elif rico:
         import sys as _s
         _s.path.insert(0, str(Path(__file__).resolve().parent))
         import layout_rico as L

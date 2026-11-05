@@ -1,0 +1,38 @@
+<div class="hidrantes-widget" data-hidrantes-widget><div data-runtime inert aria-hidden="true"><div class="vaga">
+    <div class="caixa estrutura" id="caixa" data-glb="../../assets/models/hidrantes-luiz-carlos-v02.glb?v=b52e32d" data-meta="../../assets/models/hidrantes-luiz-carlos-v02.json?v=b52e32d" role="button" tabindex="-1" aria-label="Abrir a maquete 3D do sistema de hidrantes em tela cheia">
+      <div class="palco" id="palco" aria-hidden="true"></div>
+      <div class="carregando" id="carregando">Carregando o sistema de hidrantes…</div>
+      <div class="rotulo" id="rotulo"><b>Maquete 3D</b><span>171 componentes · materiais e equipamentos refinados</span></div>
+      <div class="explorar" id="explorar" aria-hidden="true">Montar e explorar
+        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
+      <div id="marcadores" class="marcadores"></div>
+      <div class="elemento" id="elemento" hidden></div>
+      <div class="ficha" id="ficha" role="status" aria-live="polite" hidden></div>
+
+      <div class="ui-aberta" id="ui" hidden>
+        <div class="topo">
+          <div><h2>Sistema de hidrantes</h2><p>Colégio Luiz Carlos · Selecione uma peça para ver sua identificação.</p></div>
+          <button class="fechar" id="fechar" type="button" aria-label="Fechar a maquete"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+        </div>
+        <div class="baixo"><button type="button" id="controles-mobile" class="chip controles-mobile" aria-expanded="false" aria-controls="painel-expandido">Controles e componentes</button><div id="painel-expandido" class="painel-expandido">
+          <details class="leg" id="leg-det"><summary>Materiais e representação</summary><ul class="legenda" id="legenda" aria-label="Cores das peças"></ul><p class="nota-ilustracao">Bombas, abrigos e outros equipamentos usam complementos ilustrativos genéricos, identificados por peça.</p></details>
+          <p class="dica">Arraste para girar. Role ou pince para aproximar. Clique em um elemento para ver a ficha dele.</p>
+          <div class="painel" role="group" aria-label="Controles da maquete">
+            <div class="grupo"><button class="chip" id="montar" type="button">Montar de novo</button>
+              <label for="construir"><span>Construir <b id="pct">100%</b></span></label><input id="construir" type="range" min="0" max="100" value="100" aria-label="Quanto do sistema está montado"></div>
+            <div class="grupo"><label for="explodir"><span>Separar camadas</span></label><input id="explodir" type="range" min="0" max="100" value="0" aria-label="Separar camadas do sistema"></div>
+            <div class="grupo"><span id="rot-vista">Vista</span>
+              <div class="seg" role="radiogroup" aria-labelledby="rot-vista">
+                <button type="button" role="radio" aria-checked="true" data-vista="3d">3D</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="planta">Planta</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="frente">Frente</button>
+              </div></div>
+            <div class="grupo"><button class="chip" id="raiox" type="button" aria-pressed="false">Raio-X</button>
+              <button class="chip" id="girar" type="button" aria-pressed="true">Girar</button></div>
+            <div class="grupo seletor"><label for="componente">Componente</label><select id="componente" aria-label="Escolher componente"><option>Carregando…</option></select><button class="chip" id="visao-geral" type="button">Visão geral</button></div>
+            <div class="camadas" id="camadas" role="group" aria-label="Camadas visíveis"></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div></div><div class="hidrantes-poster" data-poster><img src="../../assets/images/hidrantes-luiz-carlos-v02.png" width="1000" height="625" alt="Sistema de hidrantes do Colégio Luiz Carlos: tubulações, abrigos, bombas e reservatórios em maquete BIM"><div><p>Colégio Luiz Carlos · Sistema de hidrantes</p><button type="button" data-ativar-hidrantes hidden>Explorar maquete 3D</button><p role="status" aria-live="polite">171 componentes identificados · equipamentos ilustrativos sinalizados por peça.</p><noscript><p>Ative JavaScript para explorar o 3D. O projeto e as estimativas continuam disponíveis nesta página.</p></noscript></div></div></div>

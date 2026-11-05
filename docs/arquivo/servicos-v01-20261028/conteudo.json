@@ -4,55 +4,79 @@
       "title": "Projeto de arquitetura",
       "description": "Precisa da planta de casa ou de outro projeto de arquitetura? O que você pretende construir vira a base para os demais projetos.",
       "limit": "Estudo preliminar, projeto legal, básico e executivo são etapas diferentes. Regularização não está incluída automaticamente.",
-      "url": "https://demelloeng.com.br/servicos/projeto-arquitetura/"
+      "url": "https://demelloeng.com.br/servicos/projeto-arquitetura/",
+      "id": "arquitetura",
+      "grupo": "projetos"
     },
     {
       "title": "Projeto estrutural",
       "description": "A estrutura precisa funcionar com a arquitetura e deixar espaço para as instalações. O projeto pode abranger a estrutura da obra ou somente a fundação, conforme o caso.",
       "limit": "Não inclui execução da obra.",
-      "url": "https://demelloeng.com.br/servicos/projeto-estrutural/"
+      "url": "https://demelloeng.com.br/servicos/projeto-estrutural/",
+      "id": "estrutural",
+      "grupo": "projetos"
     },
     {
       "title": "Projeto hidrossanitário",
       "description": "Água, esgoto e drenagem precisam funcionar juntos. O projeto hidrossanitário organiza essas redes para obra nova, ampliação ou uma rede já existente.",
       "limit": "Drenagem entra aqui, sem cobrança separada. Não inclui execução das instalações.",
-      "url": "https://demelloeng.com.br/servicos/projeto-hidrossanitario/"
+      "url": "https://demelloeng.com.br/servicos/projeto-hidrossanitario/",
+      "id": "hidrossanitario",
+      "grupo": "projetos"
     },
     {
-      "title": "Projeto de incêndio — PPCI",
-      "description": "A prevenção contra incêndio precisa entrar nas decisões de projeto. O PPCI considera os encontros com a arquitetura e as demais disciplinas.",
+      "title": "AVCB, PPCI/PSCIP e gás/GLP",
+      "description": "Projeto de incêndio e de gás/GLP em BIM. Você contrata um ou os dois, conforme o que a edificação precisa.",
       "limit": "Incêndio e gás são serviços distintos. A contratação do projeto não garante aprovação pelo órgão competente.",
-      "url": "https://demelloeng.com.br/servicos/projeto-prevencao-incendio/"
-    },
-    {
-      "title": "Projeto de gás / GLP",
-      "description": "A instalação de gás começa no projeto. O projeto de gás / GLP considera o uso da edificação e os encontros com as demais disciplinas.",
-      "limit": "Não se funde com o projeto de incêndio. Projeto não é instalação e não presume aprovação garantida.",
-      "url": "https://demelloeng.com.br/servicos/projeto-gas-glp/"
+      "url": "https://demelloeng.com.br/servicos/projeto-prevencao-incendio/",
+      "id": "incendio",
+      "grupo": "projetos",
+      "links": [
+        {
+          "rotulo": "Projeto de gás / GLP",
+          "url": "https://demelloeng.com.br/servicos/projeto-gas-glp/"
+        },
+        {
+          "rotulo": "Ver a estimativa de incêndio",
+          "url": "https://demelloeng.com.br/orcamento/?situacao=known&servico=incendio"
+        },
+        {
+          "rotulo": "Ver a estimativa de gás/GLP",
+          "url": "https://demelloeng.com.br/orcamento/?situacao=known&servico=gas-glp"
+        }
+      ]
     },
     {
       "title": "Projeto de terraplanagem",
       "description": "Antes de mexer na terra, é preciso resolver como a obra se encaixa no terreno. O projeto de terraplanagem trata essa relação, coordenado com os demais projetos.",
-      "limit": "Também chamada de terraplenagem. A DEMELLO não executa movimentação de terra.",
-      "url": "https://demelloeng.com.br/servicos/projeto-terraplenagem/"
+      "limit": "O projeto define as soluções técnicas para a movimentação de terra e suas interfaces com a implantação e a infraestrutura do empreendimento.",
+      "url": "https://demelloeng.com.br/servicos/projeto-terraplenagem/",
+      "id": "terraplanagem",
+      "grupo": "projetos"
     },
     {
       "title": "Compatibilização BIM",
       "description": "Coordenar as disciplinas e as interfaces do projeto antes que a obra descubra os conflitos por conta própria.",
       "limit": "Não presume autoria de todos os projetos nem ausência de conflitos.",
-      "url": "https://demelloeng.com.br/servicos/compatibilizacao-bim/"
+      "url": "https://demelloeng.com.br/servicos/compatibilizacao-bim/",
+      "id": "bim",
+      "grupo": "projetos"
     },
     {
       "title": "Regularização de imóvel",
       "description": "O imóvel não bate com os documentos? Há uma exigência de prefeitura ou cartório? Primeiro se descobre o que está irregular. Depois, qual caminho o caso exige.",
       "limit": "Não é um pacote universal: levantamento e projeto legal entram só quando necessários e contratados. Sem promessa de aprovação automática.",
-      "url": "https://demelloeng.com.br/servicos/regularizacao/"
+      "url": "https://demelloeng.com.br/servicos/regularizacao/",
+      "id": "regularizacao",
+      "grupo": "documentos"
     },
     {
       "title": "Orçamento e cronograma",
       "description": "Já sabe o que será feito? O orçamento e o cronograma organizam as informações desse escopo para você planejar e decidir.",
       "limit": "É um serviço profissional contratado, diferente da estimativa deste site. Não promete o custo final da obra.",
-      "url": "https://demelloeng.com.br/servicos/orcamento-tecnico/"
+      "url": "https://demelloeng.com.br/servicos/orcamento-tecnico/",
+      "id": "orcamento",
+      "grupo": "documentos"
     }
   ],
   "common": {

@@ -172,3 +172,39 @@ def mezanino_painel(bloco, cta_href, cta_rotulo):
     corpo = f'<p>{texto[0]}</p><ul>{lis}</ul>' + ''.join(f'<p>{t}</p>' for t in texto[1:])
     return (f'<details class="sobre" id="sobre" hidden open><summary>{bloco["titulo"]}</summary><div class="sobre-corpo">{corpo}'
             f'<p class="aviso">{aviso}</p><a class="sobre-cta" href="{cta_href}">{cta_rotulo} →</a></div></details>')
+
+
+def etapas_incendio(bloco):
+    etapas = _lista(bloco['conteudo'], 'passos')['itens']
+    itens = ''.join(f'<li><span>{i+1:02}</span><h3>{x["titulo"]}</h3><p>{x["texto"]}</p></li>' for i,x in enumerate(etapas))
+    notas = ''.join(f'<p class="micro">{x}</p>' for x in _paragrafos(bloco))
+    return f'<section class="pscip-etapas wrap" data-block="fire-process"><h2>{bloco["titulo"]}</h2><ol>{itens}</ol>{notas}</section>'
+
+
+def prova_instalacoes(bloco):
+    # Renderiza TODOS os parágrafos. Nenhum total entre subescopos distintos.
+    ps = ''.join(f'<p>{p}</p>' for p in _paragrafos(bloco))
+    return f'<section class="rico-sec wrap pscip-prova"><h2>{bloco["titulo"]}</h2><div class="rico-corrido">{ps}</div></section>'
+
+
+def hero_instalacoes(copia, d, visual):
+    cta=d['cta']
+    intro=''.join(f'<p>{p}</p>' for p in d['introducao'])
+    return f'''<section class="rico-hero-fundo" data-block="service-hero"><div class="rico-hero wrap">
+<div class="rico-titulo"><p class="crumb"><a href="../">Serviços</a> / {copia['nome_servico']}</p><h1>{d['h1']}</h1></div>
+<div class="rico-texto"><p class="chamada">{d['chamada']}</p><p class="cta-linha"><a class="cta" href="{cta['href']}">{cta['rotulo']} →</a></p><p class="micro">{cta['micro']}</p></div>
+<div class="rico-caixa">{visual}</div><div class="rico-introducao">{intro}</div></div></section>'''
+
+
+def frente_incendio(copia, d, maquete_html, render_bloco):
+    nv=copia['blocos_novos']; gas=copia['cta_secundario']
+    partes=[hero_instalacoes(copia,d,maquete_html),para_quem(nv['para_quem']),muda(nv['muda']),etapas_incendio(nv['etapas']),faz(nv['faz'])]
+    texto=''.join(f'<p>{p}</p>' for p in _paragrafos(nv['gas']))
+    partes.append(f'<section class="pscip-gas wrap" id="gas-glp" data-block="gas-service"><div><p class="eyebrow">Gás/GLP</p><h2>{nv["gas"]["titulo"]}</h2>{texto}</div><div class="pscip-acao"><a class="cta" href="{gas["href"]}">{gas["rotulo"]} →</a><p class="micro">{d["cta"]["micro"]}</p></div></section>')
+    partes += [djalma(nv['experiencia'],''),prova_instalacoes(nv['prova']),perguntas(nv['perguntas']),render_bloco(nv['limites'])]
+    return '\n'.join(partes)
+
+
+def frente_gas(copia,d,render_bloco):
+    visual='''<div class="glp-visual" role="img" aria-label="Rede e central de GLP coordenadas com os demais projetos"><p class="eyebrow">Projeto de gás/GLP</p><div class="glp-rede"><span>Central de GLP</span><i aria-hidden="true"></i><span>Rede de gás</span></div><p>Arquitetura · Estrutura · Instalações</p><strong>Coordenação em BIM</strong></div>'''
+    return hero_instalacoes(copia,d,visual)+'\n'+'\n'.join(render_bloco(b) for b in copia['blocos_novos'].values())

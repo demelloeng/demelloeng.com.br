@@ -72,7 +72,8 @@ test('HOME (visual V2): quatro cartões de situação com ícone; "Já sei o ser
   const svcPage = await read('servicos/index.html');
   for (const [name, href] of links) {
     assert.ok(await exists(href.replace('./', '') + 'index.html'), `destino existe: ${href}`);
-    assert.ok(svcPage.includes(name), `nome exato presente em /servicos/: ${name}`);
+    const slug = href.replace('./servicos/', '');
+    assert.ok(svcPage.includes(`href="./${slug}"`), `serviço da Home continua acessível no catálogo: ${name}`);
   }
 });
 
@@ -97,12 +98,13 @@ test('HOME: catálogo de nove frentes não é mais a porta de entrada; nove fren
 test('SERVIÇOS V02: nove destinos, copy corrigida, limites e caminhos por situação preservados', async () => {
   const html = await read('servicos/index.html');
   const items = [...html.matchAll(/<article class="service"[\s\S]*?<\/article>/g)].map(m => m[0]);
-  assert.equal(items.length, 9, 'nove serviços editáveis, sem omissão');
-  const expected = ['Projeto de arquitetura', 'Projeto estrutural', 'Projeto hidrossanitário', 'Projeto de incêndio — PPCI', 'Projeto de gás / GLP', 'Projeto de terraplanagem', 'Compatibilização BIM', 'Regularização de imóvel', 'Orçamento e cronograma'];
+  assert.equal(items.length, 8, 'oito agrupamentos comerciais; nove URLs técnicas preservadas');
+  const expected = ['Projeto de arquitetura', 'Projeto estrutural', 'Projeto hidrossanitário', 'AVCB, PPCI/PSCIP e gás/GLP', 'Projeto de terraplanagem', 'Compatibilização BIM', 'Regularização de imóvel', 'Orçamento e cronograma'];
   const titles = items.map(item => item.match(/<h3><a[^>]*>([^<]+)<\/a><\/h3>/)?.[1]);
   assert.deepEqual(titles, expected, 'ordem e nomes da copy validada');
   const slugs = items.map(item => item.match(/<h3><a href="\.\/([a-z-]+)\/">/)?.[1]);
-  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  assert.match(items[3], /href="\.\/projeto-gas-glp\/"/);
   for (const item of items) {
     assert.match(item, /<p class="service-limit">[^<]+<\/p>/, 'limite técnico disponível sem interação');
     assert.match(item, /<img[^>]+src="\.\.\/assets\/icons\/servicos-v02\/[a-z-]+\.svg"[^>]+alt=""/, 'ícone decorativo junto ao nome textual');
@@ -146,28 +148,41 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
     const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map((m) => m[1].trim());
     assert.equal(h1s.length, 1, `${slug}: H1 único`);
     assert.match(html, /<link rel="canonical" href="https:\/\/demelloeng\.com\.br\/servicos\/[a-z-]+\/">/, `${slug}: canonical`);
-    if (V02[slug]) {
+    if (['projeto-prevencao-incendio','projeto-gas-glp'].includes(slug)) {
+      assert.match(html, /class="rico-hero-fundo"/);
+      const id=slug==='projeto-gas-glp'?'gas-glp':'incendio';
+      const destino=`../../orcamento/?situacao=known&amp;servico=${id}`;
+      const rotulo=id==='incendio'?'Ver a estimativa do meu projeto de incêndio':'Ver a estimativa do projeto de gás/GLP';
+      const ctas=[...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].filter(m=>m[1]===destino).map(m=>[m[2],m[1]]);
+      assert.deepEqual(ctas,[[rotulo,destino],[rotulo,destino]],`${slug}: CTA principal no hero e fechamento`);
+      const sections=['Para quem é','O que muda para você','Prova técnica','Escopo e limites','Próximo passo',...(id==='gas-glp'?['Entregáveis','Como funciona']:['Do projeto ao AVCB','Rede e central de gás/GLP'])];
+      for(const section of sections) assert.ok(html.includes(`<h2>${section}</h2>`),`${slug}: ${section}`);
+      const nodes=[...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap(m=>JSON.parse(m[1])['@graph']??[]);
+      const services=nodes.filter(n=>n['@type']==='Service');
+      assert.equal(services.length,1,`${slug}: somente o próprio Service`);
+      assert.equal(services[0].url,`https://demelloeng.com.br/servicos/${slug}/`);
+      if(id==='incendio') assert.match(html, /AVCB ou o documento aplicável no estado \(no Paraná, CVCB ou CLCB\)/);
+    } else if (V02[slug]) {
       const [rotulo, destino] = V02[slug];
       const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
       assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
-      assert.doesNotMatch(html, /Conte o que você precisa/, `${slug}: sem o CTA genérico antigo`);
       const corpo = slug === 'projeto-terraplenagem' ? ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'] : ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'];
       for (const h2 of corpo) assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
       const detalhes = slug === 'projeto-terraplenagem' ? ['Entregáveis', 'Como o escopo é definido'] : ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites'];
       for (const h3 of detalhes) assert.ok(html.includes(`<h3>${h3}</h3>`), `${slug}: detalhe "${h3}"`);
-      assert.doesNotMatch(html.replace(/<div class="rico-imprensa">[\s\S]*?<\/div>/, ''), /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, `${slug}: sem número proibido`);
-      continue;
-    }
+    } else {
     const [label, query] = CTA[slug];
     const cta = new RegExp(`<a class="btn-cta" href="\\.\\./\\.\\./orcamento/\\?situacao=${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}">${label}`);
     assert.match(html, cta, `${slug}: CTA específico no hero`);
     assert.equal([...html.matchAll(new RegExp(`>${label}<svg`, 'g'))].length, 2, `${slug}: o mesmo CTA no hero e no fechamento`);
-    assert.doesNotMatch(html, /Conte o que você precisa/, `${slug}: sem o CTA genérico antigo`);
     for (const h2 of ['Para quem é', 'Entregáveis', 'O que muda para você', 'Como funciona', 'Prova técnica', 'Escopo e limites', 'Próximo passo']) {
       assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
     }
+    }
+    // Invariantes comuns passam por TODOS os perfis, sem continue que os ignore.
+    assert.doesNotMatch(html, /Conte o que você precisa/, `${slug}: sem o CTA genérico antigo`);
     // as nove páginas de serviço não reabrem números/afirmações fora da copy congelada
-    assert.doesNotMatch(html, /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, `${slug}: sem número proibido`);
+    assert.doesNotMatch(html.replace(/<div class="rico-imprensa">[\s\S]*?<\/div>/, ''), /R\$ ?8[.,]3|8,3 milh|Acervo Público|60 ARTs/i, `${slug}: sem número proibido`);
   }
 });
 

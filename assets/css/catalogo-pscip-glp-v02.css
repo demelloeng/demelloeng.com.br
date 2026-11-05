@@ -1,0 +1,2 @@
+.service-actions{display:flex;flex-wrap:wrap;gap:12px 22px;grid-column:2/-1;margin-top:8px}.service-actions a{min-height:44px;display:inline-flex;align-items:center;font-weight:700;color:#255280}.service-actions a:focus-visible{outline:3px solid #255280;outline-offset:4px}@media(max-width:700px){.service-actions{grid-column:1/-1;flex-direction:column;align-items:flex-start}}
+.servicos-v02 .site-header a:focus-visible,.servicos-v02 .site-footer a:focus-visible{outline:3px solid #bfe3ff;outline-offset:4px}

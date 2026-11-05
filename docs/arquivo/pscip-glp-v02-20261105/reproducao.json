@@ -1,0 +1,25 @@
+{
+  "base": "c6541bd132c797ab4eee1cb7002b4236738c8b8e",
+  "generation_1": {
+    "docs/arquivo/paginas-servico-v02/projeto-prevencao-incendio.copy.json": "756bbdb5bc38838ff974b47d34685075464adfaa7cba30cd80e7dbdc92c21cb8",
+    "servicos/projeto-prevencao-incendio/index.html": "3a72b733029614e3433ca3c2c0d372e5d4ca643523b75ee3bcdb7ea2a21fd907",
+    "servicos/projeto-gas-glp/index.html": "cada0fbee464b9dcbb19b82d01b682c6325535d2298a7dd152d830912c515e3c",
+    "servicos/index.html": "9436ac16b6572a9330820cc5d724876f121eb1222c617e5903ac06d5ee69e5fd"
+  },
+  "generation_2": {
+    "docs/arquivo/paginas-servico-v02/projeto-prevencao-incendio.copy.json": "756bbdb5bc38838ff974b47d34685075464adfaa7cba30cd80e7dbdc92c21cb8",
+    "servicos/projeto-prevencao-incendio/index.html": "3a72b733029614e3433ca3c2c0d372e5d4ca643523b75ee3bcdb7ea2a21fd907",
+    "servicos/projeto-gas-glp/index.html": "cada0fbee464b9dcbb19b82d01b682c6325535d2298a7dd152d830912c515e3c",
+    "servicos/index.html": "9436ac16b6572a9330820cc5d724876f121eb1222c617e5903ac06d5ee69e5fd"
+  },
+  "identical": true,
+  "protected_html_unchanged": {
+    "index.html": true,
+    "contato/index.html": true,
+    "construir-ou-ampliar/index.html": true,
+    "servicos/projeto-arquitetura/index.html": true,
+    "servicos/projeto-estrutural/index.html": true,
+    "servicos/projeto-hidrossanitario/index.html": true,
+    "servicos/projeto-terraplenagem/index.html": true
+  }
+}
