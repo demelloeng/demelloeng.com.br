@@ -1,5 +1,4 @@
 """Contratos da frente #12. Executar: python -B -m unittest discover -s scripts -p test_pscip_glp.py."""
-import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -12,7 +11,7 @@ import unittest
 ROOT = Path(__file__).resolve().parent.parent
 DOC = ROOT / 'docs/arquivo/paginas-servico-v02'
 SLUG = 'projeto-prevencao-incendio'
-COPY = 'COPY_PSCIP_GLP_V02_20261105.md'
+COPY = 'COPY_PSCIP_GLP_V03_20261105.md'
 
 class Frente(unittest.TestCase):
     def test_copy_completa_e_notas_condicionais(self):
@@ -65,12 +64,24 @@ class Frente(unittest.TestCase):
     def test_pipeline_deterministico_e_perfis_preservados(self):
         protected = ['index.html', 'contato/index.html', 'construir-ou-ampliar/index.html'] + [f'servicos/{s}/index.html' for s in ['projeto-arquitetura','projeto-estrutural','projeto-hidrossanitario','projeto-terraplenagem']]
         before = {p: (ROOT / p).read_bytes() for p in protected}
-        targets = [DOC / f'{SLUG}.copy.json'] + [ROOT / p for p in ['servicos/index.html', f'servicos/{SLUG}/index.html', 'servicos/projeto-gas-glp/index.html']]
-        def generate():
-            cmds = [['scripts/importar-copy-servico-v02.py',SLUG,COPY,'Projeto de incêndio e gás/GLP'], ['scripts/gerar-paginas-servico-v02.py','gerar',SLUG],['scripts/gerar-paginas-servico-v02.py','gerar','projeto-gas-glp'],['scripts/gerar-servicos-v02.py']]
-            for cmd in cmds: subprocess.run([sys.executable, '-B', *cmd], cwd=ROOT, check=True, capture_output=True)
-            return {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in targets}
-        self.assertEqual(generate(), generate())
+        html_paths = ['servicos/index.html', f'servicos/{SLUG}/index.html', 'servicos/projeto-gas-glp/index.html']
+        # A referência é a saída rastreada em servicos/, antes de gerar qualquer coisa.
+        subprocess.run(['git','ls-files','--error-unmatch',*html_paths],cwd=ROOT,check=True,capture_output=True)
+        targets = [*html_paths, f'docs/arquivo/paginas-servico-v02/{SLUG}.copy.json']
+        versionado = {p:(ROOT / p).read_bytes() for p in targets}
+        with tempfile.TemporaryDirectory(prefix='pscip-test-',dir=ROOT) as tmp:
+            target=Path(tmp)
+            shutil.copytree(ROOT/'scripts',target/'scripts')
+            shutil.copytree(DOC,target/'docs/arquivo/paginas-servico-v02')
+            shutil.copytree(ROOT/'docs/arquivo/servicos-v01-20261028',target/'docs/arquivo/servicos-v01-20261028')
+            for p in html_paths: (target/p).parent.mkdir(parents=True,exist_ok=True)
+            def generate():
+                cmds = [['scripts/importar-copy-servico-v02.py',SLUG,COPY,'Projeto de incêndio e gás/GLP'], ['scripts/gerar-paginas-servico-v02.py','gerar',SLUG],['scripts/gerar-paginas-servico-v02.py','gerar','projeto-gas-glp'],['scripts/gerar-servicos-v02.py']]
+                for cmd in cmds: subprocess.run([sys.executable, '-B', *cmd], cwd=target, check=True, capture_output=True)
+                return {p:(target/p).read_bytes() for p in targets}
+            primeira=generate()
+            for p in targets: self.assertEqual(primeira[p],versionado[p],f'{p}: saída gerada difere do arquivo versionado')
+            self.assertEqual(primeira,generate(),'segunda geração difere da primeira')
         self.assertEqual(before, {p: (ROOT / p).read_bytes() for p in protected})
 
 if __name__ == '__main__': unittest.main()

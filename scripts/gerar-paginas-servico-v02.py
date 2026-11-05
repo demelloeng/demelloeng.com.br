@@ -218,8 +218,6 @@ def gerar(slug):
                 node['description'] = copia['descricao']
             if node.get('@type') == 'BreadcrumbList':
                 node['itemListElement'][-1]['name'] = nome_servico
-        if incendio:
-            graph['@graph'].append({'@type':'Service','@id':'https://demelloeng.com.br/servicos/projeto-gas-glp/#service','name':'Projeto de gás / GLP','url':'https://demelloeng.com.br/servicos/projeto-gas-glp/','provider':{'@id':'https://demelloeng.com.br/#organization'},'areaServed':{'@type':'Country','name':'Brasil'}})
         jsonld = '<script type="application/ld+json">' + json.dumps(graph, ensure_ascii=False, separators=(',',':')).replace('<','\\u003c') + '</script>'
     elif rico:
         import sys as _s

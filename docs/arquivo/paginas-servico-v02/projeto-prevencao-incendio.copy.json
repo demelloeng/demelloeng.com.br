@@ -1,13 +1,13 @@
 {
   "slug": "projeto-prevencao-incendio",
   "nome_servico": "Projeto de incêndio e gás/GLP",
-  "fonte_copy": "COPY_PSCIP_GLP_V02_20261105.md",
+  "fonte_copy": "COPY_PSCIP_GLP_V03_20261105.md",
   "layout": "rico",
   "perfil": "pscip-glp",
   "titulo_pagina": "AVCB, PPCI e PSCIP: projeto de incêndio e gás/GLP | DEMELLO",
   "descricao": "Projeto de incêndio e de gás/GLP aprovado no Corpo de Bombeiros, para o seu AVCB. Em BIM. Veja a estimativa antes do contato.",
   "h1": "Projeto de incêndio (PPCI e PSCIP) aprovado para o seu AVCB",
-  "chamada": "O Corpo de Bombeiros aprova o projeto e, depois da obra, vistoria e emite o AVCB. A DEMELLO cuida do projeto e da aprovação.",
+  "chamada": "O Corpo de Bombeiros aprova o projeto e, depois da obra, vistoria e emite o AVCB ou o documento aplicável no estado (no Paraná, CVCB ou CLCB). A DEMELLO cuida do projeto e da aprovação.",
   "introducao": [
     "Hidrante, bomba e reservatório ocupam espaço. A central de gás também. Quem não reservou esse espaço descobre na obra.",
     "Hidrante que bate em viga é ajuste no projeto. Na obra, é quebra de laje e dinheiro perdido. A DEMELLO fica em Curitiba e atende todo o Brasil."
