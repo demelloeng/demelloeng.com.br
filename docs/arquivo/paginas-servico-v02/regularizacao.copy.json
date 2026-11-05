@@ -1,0 +1,286 @@
+{
+  "slug": "regularizacao",
+  "nome_servico": "Regularização de imóvel",
+  "fonte_copy": "COPY_REGULARIZACAO_V02_20261105.md",
+  "layout": "rico",
+  "perfil": "regularizacao",
+  "titulo_pagina": "Regularização de imóvel e Habite-se | DEMELLO Engenharia",
+  "descricao": "Regularize casa sem Habite-se, ampliação sem aprovação ou área divergente. A DEMELLO levanta o imóvel, faz o projeto e acompanha o processo na prefeitura.",
+  "h1": "Regularização de imóvel: descubra o que falta e como resolver",
+  "chamada": "Casa sem Habite-se. Ampliação sem aprovação. Área que não bate com os documentos.",
+  "introducao": [
+    "A DEMELLO levanta o imóvel, prepara o projeto e acompanha o caso na prefeitura. Você não precisa saber o nome do documento. Conte o que está acontecendo."
+  ],
+  "cta": {
+    "rotulo": "Entender o que meu imóvel precisa",
+    "micro": "Sem compromisso · contato somente no final",
+    "href": "../../orcamento/?situacao=regularize"
+  },
+  "blocos_novos": {
+    "situacoes": {
+      "titulo": "Qual é a situação do seu imóvel?",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Escolha a que mais se parece com a sua. A calculadora usa as mesmas opções."
+        },
+        {
+          "tipo": "cartoes",
+          "itens": [
+            {
+              "titulo": "A área do IPTU e a da matrícula não batem",
+              "texto": "A diferença pode ter origem na construção, no cadastro da prefeitura ou no registro do imóvel. A DEMELLO levanta o imóvel e identifica se a causa pede projeto e regularização."
+            },
+            {
+              "titulo": "Construí ou ampliei e não regularizei",
+              "texto": "Casa sem Habite-se, ampliação sem aprovação, obra sem alvará. O projeto legal mostra a construção como ela existe e segue para a prefeitura."
+            },
+            {
+              "titulo": "Está faltando algum documento",
+              "texto": "Habite-se, planta aprovada, averbação. A DEMELLO confere o que existe e define o que falta."
+            },
+            {
+              "titulo": "A prefeitura ou o cartório apontou uma pendência",
+              "texto": "Traga a notificação ou a exigência. A DEMELLO lê o que ela pede e atende a parte técnica."
+            },
+            {
+              "titulo": "O imóvel está diferente da planta ou do projeto",
+              "texto": "Parede removida, área coberta, cômodo novo. A DEMELLO compara o que existe com o que foi aprovado e prepara a atualização."
+            },
+            {
+              "titulo": "Não sei exatamente o que está irregular",
+              "texto": "Comece pelo que você sabe. Uma frase é suficiente."
+            }
+          ]
+        }
+      ]
+    },
+    "contextos": {
+      "titulo": "Quando a pendência aparece",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Quase sempre, a pendência aparece quando você precisa do documento."
+        },
+        {
+          "tipo": "cartoes",
+          "itens": [
+            {
+              "titulo": "Na venda do imóvel",
+              "texto": "O comprador confere a matrícula e a documentação. Se a construção não aparece, ou a área não bate, a venda pode travar ou perder valor. Regularizar antes deixa o imóvel pronto para a conversa."
+            },
+            {
+              "titulo": "No financiamento pela Caixa",
+              "texto": "A Caixa avalia o imóvel antes de financiar e confere a documentação. Divergência entre o que existe e o que está registrado pode virar exigência. A DEMELLO trata a parte técnica e municipal dela."
+            },
+            {
+              "titulo": "No Minha Casa Minha Vida",
+              "texto": "Na compra de um imóvel usado pelo programa, o imóvel passa por análise. Uma pendência técnica ou municipal pode parar o processo. As regras mudam conforme a modalidade."
+            },
+            {
+              "titulo": "Na herança e no inventário",
+              "texto": "Quem herda um imóvel recebe junto as pendências dele. Uma ampliação sem aprovação, ou uma construção fora da matrícula, pode aparecer na partilha ou na venda. A DEMELLO organiza a parte técnica para o caso andar."
+            }
+          ]
+        },
+        {
+          "tipo": "fecho",
+          "texto": "A DEMELLO identifica o que precisa ser resolvido na construção, prepara a documentação técnica e conduz o processo municipal correspondente. Assim, você pode avançar com a regularização necessária ao seu objetivo."
+        }
+      ]
+    },
+    "etapas": {
+      "titulo": "Do problema ao documento",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "O imóvel como ele é",
+              "texto": "Medidas e usos reais, comparados com IPTU, matrícula e projeto."
+            },
+            {
+              "titulo": "O projeto",
+              "texto": "Os desenhos que mostram a construção existente, no formato que a prefeitura analisa."
+            },
+            {
+              "titulo": "A prefeitura",
+              "texto": "O projeto entra no processo municipal e passa pela análise."
+            },
+            {
+              "titulo": "A decisão",
+              "texto": "A prefeitura decide sobre o projeto."
+            },
+            {
+              "titulo": "O Habite-se",
+              "texto": "Se a análise confirma que a construção está regular e as exigências do município foram cumpridas, a prefeitura pode emitir o Habite-se. Em Curitiba, o nome é CVCO."
+            }
+          ]
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "E a averbação? Com o Habite-se, o cartório pode averbar a construção: registrá-la na matrícula. É outra etapa, com os documentos que o cartório indicar."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Cada município tem o seu procedimento. Os nomes e a ordem mudam. A DEMELLO segue o do município do imóvel."
+        }
+      ]
+    },
+    "faz": {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Você recebe o levantamento do imóvel, os projetos que o caso exige, como o projeto legal, e a documentação técnica organizada para a prefeitura. A DEMELLO protocola o processo, atende as exigências da análise e acompanha o caso até a decisão do órgão municipal."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Cada caso pede um conjunto diferente. Você contrata o que o seu caso exige."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Se o imóvel pede um projeto completo, veja <a href=\"../projeto-arquitetura/\">Projeto de arquitetura</a>. Se a obra ainda vai acontecer, veja <a href=\"../../construir-ou-ampliar/\">Construir ou ampliar</a>. Se o assunto é rachadura ou risco, veja <a href=\"../../avaliar-um-problema/\">Avaliar um problema</a>."
+        }
+      ]
+    },
+    "experiencia": {
+      "titulo": "Experiência aplicada: Colégio Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No Colégio Estadual Cívico-Militar Djalma Marinho, em Campo Largo/PR, Marcos assumiu a regularização do conjunto. Ela veio junto com os projetos técnicos e o orçamento da ampliação e reforma do colégio."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A regularização entrou no mesmo trabalho, conduzida pelo mesmo responsável técnico."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas frequentes",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "O que preciso para regularizar um imóvel?",
+              "paragrafos": [
+                "Comece pela situação. Conte o que acontece com o imóvel. Matrícula, IPTU, planta, Habite-se e notificação ajudam, mas você não precisa ter tudo agora. A DEMELLO orienta o que falta, identifica as informações necessárias e conduz as etapas pertinentes ao seu caso."
+              ],
+              "resposta": "Comece pela situação. Conte o que acontece com o imóvel. Matrícula, IPTU, planta, Habite-se e notificação ajudam, mas você não precisa ter tudo agora. A DEMELLO orienta o que falta, identifica as informações necessárias e conduz as etapas pertinentes ao seu caso."
+            },
+            {
+              "pergunta": "Como conseguir o Habite-se de uma casa antiga?",
+              "paragrafos": [
+                "Primeiro se confere a casa existente contra o que a prefeitura tem registrado. Se há diferença, o projeto legal mostra a casa como ela é e segue para a análise. Alguns municípios têm regras próprias para construções antigas. A DEMELLO confere a do seu município."
+              ],
+              "resposta": "Primeiro se confere a casa existente contra o que a prefeitura tem registrado. Se há diferença, o projeto legal mostra a casa como ela é e segue para a análise. Alguns municípios têm regras próprias para construções antigas. A DEMELLO confere a do seu município."
+            },
+            {
+              "pergunta": "Construí ou ampliei sem aprovação. Como regularizar?",
+              "paragrafos": [
+                "A prefeitura analisa a construção existente conforme as regras do município. A DEMELLO confere essas regras antes de protocolar e mostra o que o seu caso permite."
+              ],
+              "resposta": "A prefeitura analisa a construção existente conforme as regras do município. A DEMELLO confere essas regras antes de protocolar e mostra o que o seu caso permite."
+            },
+            {
+              "pergunta": "Qual a diferença entre Habite-se e averbação?",
+              "paragrafos": [
+                "O Habite-se é da prefeitura: confirma que a construção está concluída e regular. Em Curitiba, chama-se CVCO. A averbação é do cartório: registra a construção na matrícula. O cartório costuma pedir o documento municipal."
+              ],
+              "resposta": "O Habite-se é da prefeitura: confirma que a construção está concluída e regular. Em Curitiba, chama-se CVCO. A averbação é do cartório: registra a construção na matrícula. O cartório costuma pedir o documento municipal."
+            },
+            {
+              "pergunta": "Posso vender ou financiar uma casa sem Habite-se?",
+              "paragrafos": [
+                "Depende do comprador, do banco e do cartório. Muitos olham a regularidade da construção. Por isso a pendência aparece na hora do negócio, e regularizar antes ajuda a fechar."
+              ],
+              "resposta": "Depende do comprador, do banco e do cartório. Muitos olham a regularidade da construção. Por isso a pendência aparece na hora do negócio, e regularizar antes ajuda a fechar."
+            },
+            {
+              "pergunta": "A Caixa ou o Minha Casa Minha Vida aceitam imóvel irregular?",
+              "paragrafos": [
+                "A Caixa é a instituição financeira: ela analisa o imóvel e a documentação da operação. O Minha Casa Minha Vida é um programa habitacional, e seus requisitos mudam conforme a modalidade e a operação. Em ambos, uma pendência técnica ou municipal pode parar o processo. Se o impedimento é técnico ou municipal, a DEMELLO trabalha nele."
+              ],
+              "resposta": "A Caixa é a instituição financeira: ela analisa o imóvel e a documentação da operação. O Minha Casa Minha Vida é um programa habitacional, e seus requisitos mudam conforme a modalidade e a operação. Em ambos, uma pendência técnica ou municipal pode parar o processo. Se o impedimento é técnico ou municipal, a DEMELLO trabalha nele."
+            },
+            {
+              "pergunta": "Uma pendência pode afetar inventário ou herança?",
+              "paragrafos": [
+                "Pode aparecer na partilha, na venda ou na escritura do imóvel herdado. A DEMELLO resolve a parte técnica e municipal do imóvel."
+              ],
+              "resposta": "Pode aparecer na partilha, na venda ou na escritura do imóvel herdado. A DEMELLO resolve a parte técnica e municipal do imóvel."
+            },
+            {
+              "pergunta": "Quanto custa e quanto tempo leva?",
+              "paragrafos": [
+                "O valor depende da área, da situação e do município. A calculadora mostra uma estimativa quando os dados permitem. Outros casos passam por avaliação antes do valor. O prazo depende do levantamento, das exigências e da análise da prefeitura."
+              ],
+              "resposta": "O valor depende da área, da situação e do município. A calculadora mostra uma estimativa quando os dados permitem. Outros casos passam por avaliação antes do valor. O prazo depende do levantamento, das exigências e da análise da prefeitura."
+            }
+          ]
+        }
+      ]
+    },
+    "entregaveis": {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Levantamento e documentação técnica. Projetos necessários à regularização. Protocolo e acompanhamento do processo municipal. Atendimento às exigências técnicas da prefeitura."
+        }
+      ]
+    },
+    "como_funciona": {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Você conta o caso na calculadora. A DEMELLO apresenta a proposta com o escopo. Depois vêm o levantamento, o projeto, o protocolo e o acompanhamento."
+        }
+      ]
+    },
+    "como_definido": {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pesa a finalidade da regularização, o tipo de imóvel e o local. Pesa o que você já tem: matrícula, IPTU, planta, Habite-se, notificação. Pesa a área envolvida e a origem da pendência."
+        }
+      ]
+    },
+    "escopo_limites": {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O escopo é fechado na proposta, caso a caso: do levantamento ao acompanhamento até a decisão da prefeitura. A decisão pertence ao órgão municipal."
+        }
+      ]
+    }
+  },
+  "ordem": [
+    {
+      "detalhes": {
+        "titulo": "Detalhes do escopo",
+        "resumo": "Entregáveis, como funciona, como o escopo é definido e escopo e limites",
+        "blocos": [
+          "entregaveis",
+          "como_funciona",
+          "como_definido",
+          "escopo_limites"
+        ]
+      }
+    }
+  ],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Comece pela situação do seu imóvel.",
+      "A calculadora organiza o caso: situação, finalidade, local, imóvel e documentos. Quando os dados permitem, ela mostra uma estimativa. Outros casos passam por avaliação antes do valor. A estimativa não é proposta nem contrato."
+    ]
+  },
+  "notas_editoriais": [],
+  "removidos": []
+}

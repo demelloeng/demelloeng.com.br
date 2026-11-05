@@ -1,0 +1,58 @@
+{
+  "1440x900": {
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "overflowHorizontal": false,
+    "h1": 1,
+    "h2": 7,
+    "h3": 14,
+    "situacoes": 6,
+    "contextos": 4,
+    "etapas": 5,
+    "perguntas": 8,
+    "detalhes": 1,
+    "ctas": [
+      "../../orcamento/?situacao=regularize",
+      "../../orcamento/?situacao=regularize"
+    ],
+    "textosMenoresQue15px": 0,
+    "altura": 5668,
+    "linksVerificados": 5,
+    "linksComErro": [],
+    "consoleErrosEAvisos": [],
+    "respostasHttpComErro": [],
+    "falhasDeRede": [],
+    "hostsConsultados": [
+      "127.0.0.1:8731"
+    ],
+    "alturaComDetalhesAbertos": 7148
+  },
+  "390x844": {
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "overflowHorizontal": false,
+    "h1": 1,
+    "h2": 7,
+    "h3": 14,
+    "situacoes": 6,
+    "contextos": 4,
+    "etapas": 5,
+    "perguntas": 8,
+    "detalhes": 1,
+    "ctas": [
+      "../../orcamento/?situacao=regularize",
+      "../../orcamento/?situacao=regularize"
+    ],
+    "textosMenoresQue15px": 0,
+    "altura": 9976,
+    "linksVerificados": 5,
+    "linksComErro": [],
+    "consoleErrosEAvisos": [],
+    "respostasHttpComErro": [],
+    "falhasDeRede": [],
+    "hostsConsultados": [
+      "127.0.0.1:8731"
+    ],
+    "alturaComDetalhesAbertos": 12460
+  }
+}

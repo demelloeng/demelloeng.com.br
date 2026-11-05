@@ -162,6 +162,26 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       assert.equal(services.length,1,`${slug}: somente o próprio Service`);
       assert.equal(services[0].url,`https://demelloeng.com.br/servicos/${slug}/`);
       if(id==='incendio') assert.match(html, /AVCB ou o documento aplicável no estado \(no Paraná, CVCB ou CLCB\)/);
+    } else if (slug === 'regularizacao') {
+      // Regularização V02 (issue #16): copy V02 aprovada. CTA único para a rota exclusiva, no hero e no fechamento.
+      assert.match(html, /class="rico-hero-fundo"/, `${slug}: hero no layout rico`);
+      const destino = '../../orcamento/?situacao=regularize';
+      const rotulo = 'Entender o que meu imóvel precisa';
+      const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
+      assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
+      for (const h2 of ['Qual é a situação do seu imóvel?', 'Quando a pendência aparece', 'Do problema ao documento', 'O que a DEMELLO faz', 'Experiência aplicada: Colégio Djalma Marinho', 'Perguntas frequentes', 'Próximo passo']) {
+        assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
+      }
+      for (const h3 of ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites']) assert.ok(html.includes(`<h3>${h3}</h3>`), `${slug}: detalhe "${h3}"`);
+      assert.equal([...html.matchAll(/<li><svg viewBox="0 0 24 24" aria-hidden="true">[\s\S]*?<h3>/g)].length, 6, `${slug}: seis situações`);
+      assert.equal([...html.matchAll(/<article><h3>/g)].length, 4, `${slug}: quatro contextos comerciais`);
+      assert.equal([...html.matchAll(/<details class="rico-pergunta"/g)].length, 8, `${slug}: oito perguntas`);
+      assert.equal([...html.matchAll(/<ol class="rico-etapas reg-etapas"[\s\S]*?<\/ol>/g)].map((m) => (m[0].match(/<li>/g) ?? []).length)[0], 5, `${slug}: cinco etapas`);
+      const nodes = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap((m) => JSON.parse(m[1])['@graph'] ?? []);
+      const services = nodes.filter((n) => n['@type'] === 'Service');
+      assert.equal(services.length, 1, `${slug}: somente o próprio Service`);
+      assert.equal(services[0].url, `https://demelloeng.com.br/servicos/${slug}/`);
+      for (const href of ['../projeto-arquitetura/', '../../construir-ou-ampliar/', '../../avaliar-um-problema/']) assert.ok(html.includes(`<a href="${href}">`), `${slug}: link interno ${href}`);
     } else if (V02[slug]) {
       const [rotulo, destino] = V02[slug];
       const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
