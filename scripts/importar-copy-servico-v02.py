@@ -31,6 +31,7 @@ IMPRENSA = {
     ],
 }
 LAYOUTS = {'projeto-arquitetura': 'rico', 'projeto-estrutural': 'rico', 'projeto-hidrossanitario': 'rico', 'projeto-terraplenagem': 'rico'}
+LAYOUTS['projeto-prevencao-incendio'] = 'rico'
 PERFIS = {'projeto-estrutural': 'estrutura', 'projeto-hidrossanitario': 'hidro', 'projeto-terraplenagem': 'infra'}   # layout próprio: maquete estrutural e bloco "Da fundação à laje"   # as demais páginas ficam no layout simples até terem copy aprovada
 FIGURAS = {
     'projeto-arquitetura': {
@@ -61,6 +62,9 @@ ROTULOS = ['TITULO', 'DESCRICAO', 'H1', 'CHAMADA', 'INTRODUCAO 1', 'INTRODUCAO 2
 
 
 def rotulos_de(slug):
+    if slug == 'projeto-prevencao-incendio':
+        from copy_pscip_glp import LABELS
+        return LABELS
     perfil = PERFIS.get(slug)
     meio = {'estrutura': 'DA FUNDACAO A LAJE', 'hidro': "DA CAIXA D'AGUA AO COLETOR", 'infra': 'DO TERRENO NATURAL AO TERRAPLANADO'}.get(perfil)
     novos = [(meio if (r.startswith('PREFEITURA') and meio) else r) for r in ROTULOS]
@@ -86,6 +90,12 @@ def paragrafos(corpo):
 
 def main(slug, arquivo, nome_servico):
     texto = (DOCS / 'copy' / arquivo).read_text(encoding='utf-8')
+    if slug == 'projeto-prevencao-incendio':
+        from copy_pscip_glp import parse_copy
+        dados = parse_copy(texto, slug, arquivo, nome_servico)
+        (DOCS / f'{slug}.copy.json').write_text(json.dumps(dados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+        print(f'{slug}: copy.json gerado a partir de {arquivo}')
+        return
     s = secoes(texto, rotulos_de(slug))
 
     quem = paragrafos(s['PARA QUEM E'])

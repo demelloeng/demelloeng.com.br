@@ -1,0 +1,10 @@
+compatibilizacao-bim: antigo 84 | novo 84 | faltam 0 | a mais 0
+orcamento-tecnico: antigo 58 | novo 58 | faltam 0 | a mais 0
+projeto-arquitetura: COPY NOVA (COPY_ARQUITETURA_V11_20261030.md) | blocos antigos mantidos 6 | trechos ausentes 0
+projeto-estrutural: COPY NOVA (COPY_ESTRUTURAL_V06_20261030.md) | blocos antigos mantidos 5 | trechos ausentes 0
+projeto-gas-glp: FONTE CENTRAL COMPLETA | 55 trechos | ausentes 0
+projeto-hidrossanitario: COPY NOVA (COPY_HIDROSSANITARIO_V18_20261102.md) | blocos antigos mantidos 5 | trechos ausentes 0
+projeto-prevencao-incendio: FONTE CENTRAL COMPLETA | 67 trechos | ausentes 0
+projeto-terraplenagem: COPY NOVA (COPY_INFRAESTRUTURA_V02_20261102.md) | blocos antigos mantidos 2 | trechos ausentes 0
+regularizacao: antigo 81 | novo 81 | faltam 0 | a mais 0
+SEM PERDA DE TEXTO

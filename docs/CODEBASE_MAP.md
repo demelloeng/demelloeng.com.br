@@ -8,6 +8,36 @@ branch: claude/hidrossanitario-v01-20261029
 
 # Mapa do código: site da DEMELLO Engenharia
 
+> **Candidata local PSCIP + GLP V02 — 05/11/2026, issue #12. Não publicada.** Base `main` conferida: `c6541bd`. Duas URLs mantidas e indexáveis, incêndio como página integrada e gás/GLP como página específica. Catálogo transitoriamente com oito cartões e nove URLs técnicas. Nenhuma alteração em preços, seleção, payload ou bundle da calculadora. Atualização dirigida dos módulos afetados; Cartographer não executado (não houve ordem para sua execução paralela geral).
+
+### Frente PSCIP + GLP: fontes e reprodução
+
+- `docs/arquivo/paginas-servico-v02/copy/COPY_PSCIP_GLP_V02_20261105.md` é a fonte editorial nova. O importador delega o perfil `pscip-glp` para `scripts/copy_pscip_glp.py::parse_copy`: rótulos fechados, quatro etapas, FAQ com vários parágrafos, notas editoriais ligadas à pergunta e excluídas do HTML, dois CTAs. Gera `projeto-prevencao-incendio.copy.json`. O bloco antigo de limites não é herdado.
+- `projeto-gas-glp.json` continua sendo a fonte própria de GLP. `gas_copy()` a adapta ao perfil rico `gas-glp`, sem duplicar a copy de AVCB. Os deltas removem negativas de capacidade e ressalva de CNPJ (Voz V07), corrigem a referência à calculadora e acrescentam duas ligações contextuais à página integrada. Incêndio tem duas ligações contextuais para GLP, em bloco técnico/comercial e no fechamento.
+- `scripts/layout_rico.py`: `hero_instalacoes()` prioriza chamada e CTA antes das introduções; `etapas_incendio()` renderiza Projeto → Aprovação → Obra → Vistoria; `frente_incendio()` e `frente_gas()` compõem os perfis; `prova_instalacoes()` preserva todos os parágrafos e não soma subescopos. Perfis anteriores mantidos.
+- `scripts/gerar-paginas-servico-v02.py::gerar()` seleciona esses perfis e os recursos exclusivos. Os metadados mantêm URLs próprias; JSON-LD é atualizado estruturalmente apenas nesses perfis. Há dois serviços distintos na página integrada.
+- Catálogo: `docs/arquivo/servicos-v01-20261028/conteudo.json` e `icones.json`, mais `header.template.html`, `footer.template.html` e `head.template.html`. `gerar-servicos-v02.py::row(item)` usa ID estável e grupo explícito, sem índices de serviço para B2B/agrupamento. O limite de Infraestrutura foi trazido do HTML aprovado para a fonte central, eliminando a reversão anterior. Menu com Construir ou ampliar e rodapé com Facebook são reproduzíveis.
+- Estilos locais: `servico-pscip-glp-v02.css`, `catalogo-pscip-glp-v02.css`, `hidrantes-luiz-carlos-v02.css`. Nenhuma mudança nas folhas compartilhadas das oito páginas anteriores.
+- Maquete aceita `b52e32d`: `assets/models/hidrantes-luiz-carlos-v02.glb` e `.json` copiados sem alteração, com token de versão comum. GLB 1.857.508 bytes, 171 identidades. `hidrantes-luiz-carlos-ativar.js` só importa o runtime após clique; `hidrantes-luiz-carlos-v02.js` e `hidrantes-luiz-carlos-core.mjs` preservam as interações, com proteção contra abertura assíncrona obsoleta após fechar. Pôster PNG capturado do visualizador aceito. Sem IFC, ZIP, conversores ou evidências na allowlist.
+- `conferir-paginas-servico-v02.py`: verifica todos os blocos novos, SEO, microtexto e CTAs desses dois perfis; notas condicionais não podem vazar. A normalização de breadcrumb é simétrica para os perfis legados.
+- Testes: `scripts/test_pscip_glp.py` (parser, rejeição de fontes inválidas, mutação da copy/CTA, reprodução de quatro perfis anteriores e determinismo); `orcamento-src/tests/pscip_glp.test.mjs` (URLs, links, CTAs, catálogo e hashes); `pscip_race.test.mjs` (fechamento concorrente). Suíte Node e contratos Python incluídos em `pages.yml`; isso não altera seu gatilho de publicação.
+- Capturas/relatório de navegador: `docs/arquivo/pscip-glp-v02-20261105/`, fora do artefato público. Harnesses locais `scripts/pscip-glp.browser.cjs` e `pscip-glp-race.browser.cjs` aceitam somente localhost. Capturas em 1440×900 e 390×844; aparelho físico e aceite da página integrada continuam humanos.
+
+Fluxo na raiz (não usar `extrair` nem `gerar --todas`):
+
+```text
+python -B scripts/importar-copy-servico-v02.py projeto-prevencao-incendio COPY_PSCIP_GLP_V02_20261105.md "Projeto de incêndio e gás/GLP"
+python -B scripts/gerar-paginas-servico-v02.py gerar projeto-prevencao-incendio
+python -B scripts/gerar-paginas-servico-v02.py gerar projeto-gas-glp
+python -B scripts/gerar-servicos-v02.py
+python -B scripts/conferir-paginas-servico-v02.py
+python -B -m unittest discover -s scripts -p test_pscip_glp.py
+npm --prefix orcamento-src test
+npm --prefix orcamento-src run publish-guard
+```
+
+A segunda geração deve produzir os mesmos bytes. Gates locais de artefato mantêm a interface `build <commit> --out <pasta>`, `validate <commit> --artifact <pasta>`, `smoke-local --artifact <pasta>`. Nunca disparar `pages.yml` para validar esta candidata: o workflow publica.
+
 > **Documento canônico do site (decisão de Marcos, 30/10/2026).** Fica no repositório, versionado junto com o código. **Toda mudança estrutural no site muda este mapa na mesma entrega:** página nova, serviço renomeado ou agrupado, script novo, teste novo, arquivo na allowlist, mudança de menu, de rodapé ou de publicação. A skill `gerar-pagina-servico` inclui esse passo. Para atualizar, rodar o Cartographer em modo de atualização (ele reaproveita o que não mudou).
 
 > **Atualização dirigida em 02/11/2026, release parcial** (branch de trabalho `prep/release-parcial-20261102`): three.js hospedado, allowlist ampliada em 56 caminhos e testes do G1 atualizados para a Home V02 e as páginas V02 (seções de maquete, publicação, armadilhas e o guia de navegação). Conteúdo **não verificado de novo**: contagens de arquivo e de tokens do cabeçalho.

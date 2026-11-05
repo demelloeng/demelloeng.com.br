@@ -1,16 +1,17 @@
 {
   "slug": "projeto-gas-glp",
   "titulo_pagina": "Projeto de gás / GLP | DEMELLO Engenharia",
-  "descricao": "Projeto de gás / GLP como disciplina própria, distinta da prevenção contra incêndio. Projeto, não instalação — escopo e produtos definidos na contratação.",
+  "descricao": "Projeto de rede e central de gás/GLP em BIM, coordenado com arquitetura e instalações. Veja o escopo e a estimativa antes do contato.",
   "jsonld": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Service\",\"name\":\"Projeto de gás / GLP\",\"description\":\"Projeto de gás / GLP como disciplina própria, distinta da prevenção contra incêndio. Projeto, não instalação — escopo e produtos definidos na contratação.\",\"url\":\"https://demelloeng.com.br/servicos/projeto-gas-glp/\",\"provider\":{\"@id\":\"https://demelloeng.com.br/#organization\"},\"areaServed\":{\"@type\":\"Country\",\"name\":\"Brasil\"},\"inLanguage\":\"pt-BR\"},{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Início\",\"item\":\"https://demelloeng.com.br/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Outros serviços\",\"item\":\"https://demelloeng.com.br/servicos/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Projeto de gás / GLP\",\"item\":\"https://demelloeng.com.br/servicos/projeto-gas-glp/\"}]}]}</script>",
   "h1": "Projeto de gás / GLP para a instalação prevista no seu empreendimento",
-  "chamada": "Gás é uma disciplina de projeto. Não um complemento automático do incêndio.",
+  "chamada": "A instalação de gás começa no projeto. Rede e central de GLP, coordenadas com as demais disciplinas.",
   "introducao": [
-    "O projeto de gás / GLP trata tecnicamente a instalação prevista para o empreendimento dentro de um escopo próprio, ainda que exista interface com outras disciplinas."
+    "O projeto de gás / GLP trata tecnicamente a instalação prevista para o empreendimento dentro de um escopo próprio, ainda que exista interface com outras disciplinas.",
+    "Conheça também o <a href=\"../projeto-prevencao-incendio/\">projeto de incêndio para AVCB, PPCI e PSCIP</a>. Você pode contratar uma ou ambas as disciplinas."
   ],
   "cta": {
     "href": "../../orcamento/?situacao=known&amp;servico=gas-glp",
-    "rotulo": "Avaliar meu projeto",
+    "rotulo": "Ver a estimativa do projeto de gás/GLP",
     "micro": "Sem compromisso · contato somente no final"
   },
   "blocos": [
@@ -65,8 +66,8 @@
               "texto": "A área atendida, o tipo de empreendimento, a fase e a localização dimensionam o escopo."
             },
             {
-              "titulo": "Projeto, não instalação",
-              "texto": "A DEMELLO projeta o sistema. Instalar não faz parte deste serviço."
+              "titulo": "Projeto coordenado",
+              "texto": "A DEMELLO projeta a rede e a central de gás/GLP, coordenando as interfaces previstas na contratação."
             }
           ]
         }
@@ -84,7 +85,7 @@
             },
             {
               "titulo": "Veja a estimativa",
-              "texto": "Com informação suficiente, o valor inicial aparece na própria página, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
+              "texto": "Com informação suficiente, o valor inicial aparece na calculadora, antes de qualquer contato. Se o caso pedir avaliação, você recebe o enquadramento."
             },
             {
               "titulo": "Escolha o próximo passo",
@@ -133,7 +134,7 @@
       "conteudo": [
         {
           "tipo": "paragrafo",
-          "texto": "O acervo profissional do responsável técnico registra:"
+          "texto": "O acervo profissional de Marcos de Mello Silva registra:"
         },
         {
           "tipo": "lista",
@@ -145,10 +146,6 @@
         {
           "tipo": "paragrafo",
           "texto": "Os dois quantitativos correspondem a subescopos distintos e, por isso, são apresentados separadamente."
-        },
-        {
-          "tipo": "nota",
-          "texto": "Os dados pertencem ao acervo profissional de Marcos de Mello Silva e não exclusivamente ao atual CNPJ."
         }
       ]
     },
@@ -165,14 +162,6 @@
         },
         {
           "tipo": "paragrafo",
-          "texto": "Projeto ≠ instalação."
-        },
-        {
-          "tipo": "paragrafo",
-          "texto": "A DEMELLO projeta o sistema; a execução da instalação não faz parte deste serviço."
-        },
-        {
-          "tipo": "paragrafo",
           "texto": "Protocolo e acompanhamento só entram quando contratados, e a contratação do projeto não garante aprovação administrativa."
         }
       ]
@@ -185,6 +174,10 @@
         {
           "tipo": "paragrafo",
           "texto": "Se já existe uma necessidade de gás / GLP ou se você ainda precisa entender a abrangência do projeto, comece pelo enquadramento do caso."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Precisa também atender às exigências dos Bombeiros? Veja a <a href=\"../projeto-prevencao-incendio/\">frente de AVCB e projeto de incêndio</a>."
         }
       ]
     }

@@ -72,7 +72,8 @@ test('HOME (visual V2): quatro cartões de situação com ícone; "Já sei o ser
   const svcPage = await read('servicos/index.html');
   for (const [name, href] of links) {
     assert.ok(await exists(href.replace('./', '') + 'index.html'), `destino existe: ${href}`);
-    assert.ok(svcPage.includes(name), `nome exato presente em /servicos/: ${name}`);
+    const slug = href.replace('./servicos/', '');
+    assert.ok(svcPage.includes(`href="./${slug}"`), `serviço da Home continua acessível no catálogo: ${name}`);
   }
 });
 
@@ -97,12 +98,13 @@ test('HOME: catálogo de nove frentes não é mais a porta de entrada; nove fren
 test('SERVIÇOS V02: nove destinos, copy corrigida, limites e caminhos por situação preservados', async () => {
   const html = await read('servicos/index.html');
   const items = [...html.matchAll(/<article class="service"[\s\S]*?<\/article>/g)].map(m => m[0]);
-  assert.equal(items.length, 9, 'nove serviços editáveis, sem omissão');
-  const expected = ['Projeto de arquitetura', 'Projeto estrutural', 'Projeto hidrossanitário', 'Projeto de incêndio — PPCI', 'Projeto de gás / GLP', 'Projeto de terraplanagem', 'Compatibilização BIM', 'Regularização de imóvel', 'Orçamento e cronograma'];
+  assert.equal(items.length, 8, 'oito agrupamentos comerciais; nove URLs técnicas preservadas');
+  const expected = ['Projeto de arquitetura', 'Projeto estrutural', 'Projeto hidrossanitário', 'AVCB, PPCI/PSCIP e gás/GLP', 'Projeto de terraplanagem', 'Compatibilização BIM', 'Regularização de imóvel', 'Orçamento e cronograma'];
   const titles = items.map(item => item.match(/<h3><a[^>]*>([^<]+)<\/a><\/h3>/)?.[1]);
   assert.deepEqual(titles, expected, 'ordem e nomes da copy validada');
   const slugs = items.map(item => item.match(/<h3><a href="\.\/([a-z-]+)\/">/)?.[1]);
-  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  assert.match(items[3], /href="\.\/projeto-gas-glp\/"/);
   for (const item of items) {
     assert.match(item, /<p class="service-limit">[^<]+<\/p>/, 'limite técnico disponível sem interação');
     assert.match(item, /<img[^>]+src="\.\.\/assets\/icons\/servicos-v02\/[a-z-]+\.svg"[^>]+alt=""/, 'ícone decorativo junto ao nome textual');
@@ -146,6 +148,13 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
     const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map((m) => m[1].trim());
     assert.equal(h1s.length, 1, `${slug}: H1 único`);
     assert.match(html, /<link rel="canonical" href="https:\/\/demelloeng\.com\.br\/servicos\/[a-z-]+\/">/, `${slug}: canonical`);
+    if (['projeto-prevencao-incendio','projeto-gas-glp'].includes(slug)) {
+      assert.match(html, /class="rico-hero-fundo"/);
+      const id=slug==='projeto-gas-glp'?'gas-glp':'incendio';
+      assert.match(html,new RegExp(`href="../../orcamento/\\?situacao=known&amp;servico=${id}"`));
+      for(const section of ['Para quem é','O que muda para você','Prova técnica','Escopo e limites','Próximo passo']) assert.ok(html.includes(`<h2>${section}</h2>`),`${slug}: ${section}`);
+      continue; // Contratos específicos da frente em pscip_glp.test.mjs.
+    }
     if (V02[slug]) {
       const [rotulo, destino] = V02[slug];
       const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);

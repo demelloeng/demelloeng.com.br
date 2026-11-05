@@ -31,7 +31,7 @@ const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
 // Páginas no visual V02 (menu e rodapé novos). As páginas antigas ficam fora deste conjunto.
 const PAGINAS_V02 = [
   'index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
-  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`),
+  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp'].map((s) => `servicos/${s}/index.html`),
 ];
 
 const pageUrl = (file) => `${ORIGIN}/${file.replace(/index\.html$/, '')}`;
@@ -232,7 +232,7 @@ test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projet
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
-  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html'];
+  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html'];
   const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
@@ -266,7 +266,7 @@ test('navegação: item atual marcado com aria-current na página correspondente
   assert.deepEqual(current('index.html'), ['Início']);
   assert.deepEqual(current('construir-ou-ampliar/index.html'), ['Construir ou ampliar']);
   // Páginas V02 (Serviços e as quatro de projeto com copy nova): o item atual do menu é "Serviços". As demais seguem com "Outros serviços".
-  const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem']);
+  const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp']);
   assert.deepEqual(current('servicos/index.html'), ['Serviços']);
   for (const s of SERVICE_SLUGS) assert.deepEqual(current(`servicos/${s}/index.html`), V02_SERVICES.has(s) ? ['Serviços'] : ['Outros serviços'], s);
   assert.deepEqual(current('experiencia-tecnica/index.html'), ['Experiência']);
@@ -363,9 +363,9 @@ test('proveniência: a prova técnica continua atribuída ao acervo profissional
     ['construir-ou-ampliar/index.html', /Acervo profissional de Marcos de Mello Silva\./],   // V02: a ressalva sobre o CNPJ saiu, como nas demais páginas V02 (Voz V07)
     ['servicos/projeto-estrutural/index.html', /O acervo profissional de Marcos de Mello Silva reúne 67\.762 m² de experiência técnica estrutural documentada/],
     ['servicos/projeto-hidrossanitario/index.html', /O acervo profissional de Marcos de Mello Silva registra 42\.789 m² de experiência técnica hidrossanitária documentada/],
-    ['servicos/projeto-gas-glp/index.html', /não exclusivamente ao atual CNPJ/],
+    ['servicos/projeto-gas-glp/index.html', /O acervo profissional de Marcos de Mello Silva registra:/],
     ['servicos/projeto-arquitetura/index.html', /O acervo profissional de Marcos de Mello Silva registra 4\.981 m² de experiência técnica arquitetônica documentada/],
-    ['servicos/projeto-prevencao-incendio/index.html', /registra 12\.879 m² de experiência técnica documentada na disciplina/],
+    ['servicos/projeto-prevencao-incendio/index.html', /registra 12\.879 m² de experiência técnica em prevenção contra incêndio/],
     ['servicos/projeto-terraplenagem/index.html', /O acervo profissional de Marcos de Mello Silva registra:/],
     ['servicos/projeto-terraplenagem/index.html', /4\.959 m³/],
   ]) assert.match(HTML[file], re, file);
@@ -396,6 +396,8 @@ const NUMERIC_FACTS = new Set([
 
 // Numerais que só valem em UMA página, cada um com a fonte conferida (nada é liberado para o site inteiro).
 const PAGE_FACTS = {
+  // Maquete Luiz Carlos V02 aceita (b52e32d): 171 IDs; 100% é estado do controle.
+  'servicos/projeto-prevencao-incendio/index.html': ['171', '100'],
   // referências de preço da tabela DEMELLO V2: Resolução SECID/PR e Credenciamento Fundepar (orcamento-src/src/pricing/pricing-table.v2.json; journey.mjs)
   'index.html': ['009/2026', '001/2025'],
   // data das matérias de imprensa citadas (scripts/importar-copy-servico-v02.py, IMPRENSA, aprovadas na Arquitetura V11)
@@ -419,7 +421,7 @@ test('nenhum número técnico, case ou credencial novo: todo numeral visível ex
   // quantidade de disciplinas/etapas descritas por extenso continua batendo com a estrutura
   assert.equal([...HTML['metodologia/index.html'].matchAll(/<div class="step">/g)].length, 6, 'seis etapas');
   // Serviços V02: um <article class="service"> por frente
-  assert.equal([...HTML['servicos/index.html'].matchAll(/<article class="service"[\s\S]*?<h3><a href="\.\/[a-z-]+\/">/g)].length, 9, 'nove frentes');
+  assert.equal([...HTML['servicos/index.html'].matchAll(/<article class="service"[\s\S]*?<h3><a href="\.\/[a-z-]+\/">/g)].length, 8, 'oito cartões comerciais; nove URLs de serviço');
 });
 
 test('Como trabalhamos: as seis etapas pedidas, nesta ordem; BIM aparece como método, não como abertura', () => {
