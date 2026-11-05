@@ -96,6 +96,12 @@ def main(slug, arquivo, nome_servico):
         (DOCS / f'{slug}.copy.json').write_text(json.dumps(dados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
         print(f'{slug}: copy.json gerado a partir de {arquivo}')
         return
+    if slug == 'regularizacao':
+        from copy_regularizacao import parse_copy
+        dados = parse_copy(texto, slug, arquivo, nome_servico)
+        (DOCS / f'{slug}.copy.json').write_text(json.dumps(dados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+        print(f'{slug}: copy.json gerado a partir de {arquivo}')
+        return
     s = secoes(texto, rotulos_de(slug))
 
     quem = paragrafos(s['PARA QUEM E'])

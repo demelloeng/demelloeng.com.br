@@ -153,8 +153,10 @@ test('posição e contexto: cada clique carrega página, posição e (quando a p
   const wa = (await find('servicos/projeto-estrutural/index.html', (a) => a.closest('.nav') && channelOf(a.attrs.href) === 'whatsapp_contact_started'))[0];
   assert.ok(wa, 'WhatsApp no menu da página V02');
   assert.deepEqual(buildEvent(wa, win('/servicos/projeto-estrutural/')), { event: 'whatsapp_contact_started', params: { placement: 'menu', route: 'known', service: 'estrutural', page: '/servicos/projeto-estrutural/' } });
-  const [reg] = await find('servicos/regularizacao/index.html', (a) => a.closest('.topbar'));
-  assert.deepEqual(buildEvent(reg, win('/servicos/regularizacao/')).params, { placement: 'topbar', route: 'regularize', service: 'regularizacao', page: '/servicos/regularizacao/' });
+  // Regularização V02 também não tem .topbar: o WhatsApp do menu leva a posição "menu" com a rota exclusiva e o serviço.
+  const [reg] = await find('servicos/regularizacao/index.html', (a) => a.closest('.nav') && channelOf(a.attrs.href) === 'whatsapp_contact_started');
+  assert.ok(reg, 'WhatsApp no menu da Regularização V02');
+  assert.deepEqual(buildEvent(reg, win('/servicos/regularizacao/')).params, { placement: 'menu', route: 'regularize', service: 'regularizacao', page: '/servicos/regularizacao/' });
   // intenção
   const [bld] = await find('construir-ou-ampliar/index.html', (a) => a.closest('.nav') && channelOf(a.attrs.href) === 'whatsapp_contact_started');   // página V02: sem .topbar; o WhatsApp do menu leva a rota build
   assert.deepEqual(buildEvent(bld, win('/construir-ou-ampliar/')).params, { placement: 'menu', route: 'build', page: '/construir-ou-ampliar/' });

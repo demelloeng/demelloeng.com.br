@@ -170,6 +170,7 @@ assets/vendor/three/examples/jsm/utils/BufferGeometryUtils.js
 
 # Frente PSCIP + GLP V02 — somente recursos públicos de runtime
 assets/css/servico-pscip-glp-v02.css
+assets/css/servico-regularizacao-v02.css
 assets/css/catalogo-pscip-glp-v02.css
 assets/css/hidrantes-luiz-carlos-v02.css
 assets/js/hidrantes-luiz-carlos-ativar.js

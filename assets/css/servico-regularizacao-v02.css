@@ -1,0 +1,41 @@
+/* Regularização V02 (issue #16): exceções locais ao design system V02; não afeta as demais páginas. */
+.servico-rico-regularizacao .rico-hero-fundo{background:radial-gradient(ellipse at 82% 30%,#284766 0,transparent 62%),#1b242d}
+.servico-rico-regularizacao .rico-hero h1{max-width:20ch;font-size:clamp(34px,4.2vw,54px)}
+.servico-rico-regularizacao .rico-texto .cta{font-size:22px;white-space:normal}
+.servico-rico-regularizacao .rico-caixa{display:flex;justify-content:center}
+.servico-rico-regularizacao .final-cta{background:#eef2f6}
+.servico-rico-regularizacao a:focus-visible{outline:3px solid #255280;outline-offset:5px}
+.servico-rico-regularizacao .site-header a:focus-visible,.servico-rico-regularizacao .site-footer a:focus-visible,.servico-rico-regularizacao .rico-hero a:focus-visible{outline-color:#bfe3ff}
+
+/* composição estática da abertura */
+.reg-fluxo{width:100%;max-width:520px;height:auto;display:block}
+.reg-fluxo text{font-family:inherit;font-size:19px;font-weight:700;fill:#e8f0f8}
+.reg-fluxo .entrada rect,.reg-fluxo .saida rect{fill:rgba(255,255,255,.06);stroke:#9dbbd6;stroke-width:1.5}
+.reg-fluxo .centro rect{fill:#255280;stroke:#bfe3ff;stroke-width:1.5}
+.reg-fluxo .centro text{font-size:16px}
+.reg-fluxo .fios path{fill:none;stroke:#6aa0d8;stroke-width:2}
+
+/* Bloco 02: as seis situações */
+.servico-rico-regularizacao .reg-situacoes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.servico-rico-regularizacao .reg-situacoes li{flex-direction:column;gap:14px}
+.reg-situacoes h3{font-size:22px;line-height:1.25;font-weight:800;color:var(--ink);margin:0 0 8px}
+.reg-situacoes p{font-size:18px;line-height:1.45;color:var(--muted);margin:0}
+
+/* Bloco 03: os quatro contextos */
+.reg-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.reg-grade article{background:#fff;border:1px solid var(--line);padding:26px 28px}
+.reg-grade h3{font-size:24px;line-height:1.25;font-weight:800;color:var(--ink);margin:0 0 10px}
+.reg-grade p{font-size:19px;line-height:1.5;margin:0}
+.reg-fecho{margin:32px 0 0;padding:24px 28px;background:var(--pale);border-left:4px solid var(--blue);font-size:21px;line-height:1.5;font-weight:600}
+
+/* Bloco 04: etapas com texto curto abaixo do título */
+.reg-etapas li{padding-right:22px}
+.reg-etapas em{font-size:17px;line-height:1.45}
+
+/* Bloco 05: links internos no cartão */
+.reg-links p{font-size:20px;line-height:1.55}
+.reg-links a{color:var(--blue);text-decoration:underline}
+
+@media(max-width:900px){.servico-rico-regularizacao .rico-hero{grid-template-areas:"titulo" "texto" "caixa"}}
+@media(max-width:1100px){.servico-rico-regularizacao .reg-situacoes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.servico-rico-regularizacao .reg-situacoes,.reg-grade{grid-template-columns:1fr}.reg-fecho{font-size:19px;padding:20px}.servico-rico-regularizacao .rico-hero h1{max-width:22ch}.servico-rico-regularizacao .rico-texto .cta{font-size:19px}}
