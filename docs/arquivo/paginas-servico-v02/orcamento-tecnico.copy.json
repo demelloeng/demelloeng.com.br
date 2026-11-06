@@ -1,0 +1,262 @@
+{
+  "slug": "orcamento-tecnico",
+  "nome_servico": "Orçamento e cronograma",
+  "fonte_copy": "COPY_ORCAMENTO_CRONOGRAMA_V02_20261105.md",
+  "layout": "rico",
+  "perfil": "orcamento",
+  "titulo_pagina": "Orçamento e cronograma de obra | DEMELLO Engenharia",
+  "descricao": "Planilha orçamentária e cronograma a partir do projeto da sua obra. Para planejar custos e etapas antes de contratar quem vai construir.",
+  "h1": "Orçamento e cronograma: o custo previsto e as etapas da obra, antes de começar",
+  "chamada": "Planilha orçamentária a partir do projeto. Etapas organizadas no tempo.",
+  "introducao": [
+    "Descobrir o custo no meio da obra sai caro. A DEMELLO transforma o que o projeto define em planilha orçamentária e, quando contratado, em cronograma. Você planeja antes de assinar com quem vai construir."
+  ],
+  "cta": {
+    "rotulo": "Calcular a estimativa deste serviço",
+    "micro": "Sem compromisso · contato somente no final",
+    "href": "../../orcamento/?situacao=known&amp;servico=orcamento-tecnico"
+  },
+  "blocos_novos": {
+    "situacoes": {
+      "titulo": "Quando o orçamento faz diferença",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Ele serve antes da obra, quando ainda dá para decidir."
+        },
+        {
+          "tipo": "cartoes",
+          "itens": [
+            {
+              "titulo": "Antes de contratar a construtora",
+              "texto": "Você chega à conversa com uma referência técnica dos custos previstos, útil para avaliar a proposta da construtora."
+            },
+            {
+              "titulo": "Para comparar propostas",
+              "texto": "Cada empreiteiro orça de um jeito. A planilha serve de base comum para comparar as propostas."
+            },
+            {
+              "titulo": "Para organizar o dinheiro da obra",
+              "texto": "Com o cronograma no escopo contratado, você planeja quando contratar cada serviço e cada compra."
+            },
+            {
+              "titulo": "Para saber se a obra cabe no plano",
+              "texto": "Ajustar o projeto custa menos que parar a obra."
+            }
+          ]
+        }
+      ]
+    },
+    "precisa": {
+      "titulo": "O que você precisa ter",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O projeto da obra, ou o que dele já existe. Quanto mais definido, mais detalhado o orçamento. Não precisa ter tudo agora. Conte o que existe."
+        }
+      ]
+    },
+    "recebe": {
+      "titulo": "O que você recebe",
+      "conteudo": [
+        {
+          "tipo": "cartoes",
+          "itens": [
+            {
+              "titulo": "Planilha orçamentária",
+              "texto": "Os serviços e materiais da obra, com quantidades e custos previstos."
+            },
+            {
+              "titulo": "Cronograma, quando contratado",
+              "texto": "As etapas da obra em ordem, com a duração de cada uma."
+            },
+            {
+              "titulo": "Produtos correlatos",
+              "texto": "O que mais a proposta prever para o seu caso."
+            }
+          ]
+        },
+        {
+          "tipo": "fecho",
+          "texto": "O nível de detalhe acompanha o projeto que você tem."
+        }
+      ]
+    },
+    "etapas": {
+      "titulo": "Do projeto à planilha",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "O projeto",
+              "texto": "A DEMELLO lê o que está definido e o que falta."
+            },
+            {
+              "titulo": "Os serviços da obra",
+              "texto": "O projeto vira uma lista de serviços e quantidades."
+            },
+            {
+              "titulo": "A planilha",
+              "texto": "Cada serviço recebe o seu custo previsto."
+            },
+            {
+              "titulo": "O cronograma",
+              "texto": "Quando contratado, os serviços entram em ordem, etapa por etapa."
+            },
+            {
+              "titulo": "A decisão",
+              "texto": "Você usa a planilha e o cronograma para planejar e contratar a obra."
+            }
+          ]
+        }
+      ]
+    },
+    "distincao": {
+      "titulo": "Orçamento ou estimativa?",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A estimativa do site indica o valor inicial do serviço da DEMELLO. Ela ajuda você a decidir se contrata o orçamento."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O orçamento técnico é diferente da estimativa: é o trabalho profissional que organiza o custo previsto da sua obra."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A estimativa sai das suas respostas. O orçamento sai do projeto."
+        }
+      ]
+    },
+    "prova": {
+      "titulo": "Prova técnica",
+      "conteudo": [
+        {
+          "tipo": "numero",
+          "valor": "9.451 m²",
+          "texto": "de experiência técnica documentada em serviços de orçamento"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Esse é o acervo de Marcos de Mello Silva, responsável técnico da DEMELLO Engenharia."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A metragem é a área abrangida por esses orçamentos."
+        }
+      ]
+    },
+    "experiencia": {
+      "titulo": "Experiência aplicada: Colégio Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No Colégio Estadual Cívico-Militar Djalma Marinho, em Campo Largo/PR, Marcos fez o orçamento da ampliação e reforma do colégio."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O orçamento veio junto com os projetos técnicos, compatibilizados em BIM sob um único responsável técnico."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas frequentes",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "Preciso ter o projeto pronto para pedir o orçamento?",
+              "paragrafos": [
+                "Não precisa estar tudo pronto. O orçamento acompanha o que o projeto já define. O detalhamento do orçamento depende da qualidade das informações disponíveis."
+              ],
+              "resposta": "Não precisa estar tudo pronto. O orçamento acompanha o que o projeto já define. O detalhamento do orçamento depende da qualidade das informações disponíveis."
+            },
+            {
+              "pergunta": "O orçamento garante o preço da obra?",
+              "paragrafos": [
+                "Ele mostra o custo previsto com base no projeto, nas premissas e nas referências de custo adotadas. Mudança de projeto, de material ou de mercado muda o custo."
+              ],
+              "resposta": "Ele mostra o custo previsto com base no projeto, nas premissas e nas referências de custo adotadas. Mudança de projeto, de material ou de mercado muda o custo."
+            },
+            {
+              "pergunta": "O orçamento vem com cronograma?",
+              "paragrafos": [
+                "Vem quando você contrata. A proposta diz se o cronograma entra e com que detalhe."
+              ],
+              "resposta": "Vem quando você contrata. A proposta diz se o cronograma entra e com que detalhe."
+            },
+            {
+              "pergunta": "Quanto custa o serviço e quanto tempo leva?",
+              "paragrafos": [
+                "O valor depende da área e do que o projeto já define. A calculadora mostra uma estimativa quando os dados permitem. Outros casos passam por avaliação antes do valor. O prazo é combinado na proposta."
+              ],
+              "resposta": "O valor depende da área e do que o projeto já define. A calculadora mostra uma estimativa quando os dados permitem. Outros casos passam por avaliação antes do valor. O prazo é combinado na proposta."
+            }
+          ]
+        }
+      ]
+    },
+    "entregaveis": {
+      "titulo": "Entregáveis",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Planilha orçamentária. Cronograma, quando contratado. Produtos correlatos previstos na proposta."
+        }
+      ]
+    },
+    "como_funciona": {
+      "titulo": "Como funciona",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Você descreve o caso na calculadora e informa a área que o orçamento vai abranger. A DEMELLO confirma o escopo e apresenta a proposta. Depois vêm a leitura do projeto, a planilha e, se contratado, o cronograma."
+        }
+      ]
+    },
+    "como_definido": {
+      "titulo": "Como o escopo é definido",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Pesa o que será orçado e a área abrangida. Pesa o projeto e as informações disponíveis. Pesa os produtos que entram na contratação."
+        }
+      ]
+    },
+    "escopo_limites": {
+      "titulo": "Escopo e limites",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O detalhe do orçamento acompanha o detalhe do projeto. O custo final da obra depende da execução e do mercado. O escopo é fechado na proposta."
+        }
+      ]
+    }
+  },
+  "ordem": [
+    {
+      "detalhes": {
+        "titulo": "Detalhes do escopo",
+        "resumo": "Entregáveis, como funciona, como o escopo é definido e escopo e limites",
+        "blocos": [
+          "entregaveis",
+          "como_funciona",
+          "como_definido",
+          "escopo_limites"
+        ]
+      }
+    }
+  ],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Comece pelo que você já tem.",
+      "A calculadora pergunta o que será orçado e qual é a área. Quando os dados permitem, ela mostra a estimativa do serviço. A estimativa não é proposta nem contrato.",
+      "Os projetos ainda não conversam entre si? Antes de orçar, veja <a href=\"../compatibilizacao-bim/\">Compatibilização BIM</a>."
+    ]
+  },
+  "notas_editoriais": [],
+  "removidos": []
+}

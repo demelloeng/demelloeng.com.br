@@ -349,7 +349,8 @@ test('páginas de serviço de Arquitetura e Orçamento técnico descrevem a esti
   for (const slug of ['projeto-arquitetura', 'orcamento-tecnico']) {   // Infraestrutura (terraplanagem) é exceção: decisão 97, sem estimativa
     const html = await readFile(path.join(siteRoot, `servicos/${slug}/index.html`), 'utf8');
     assert.doesNotMatch(html, /com “Outro”|não calcula valor automático|Receba o enquadramento/, slug);
-    assert.match(html, /já selecionado e responda só ao que se aplica ao seu caso/, slug);
+    // Orçamento e cronograma V02 (issue #15): a copy aprovada descreve a estimativa pela área que o orçamento vai abranger.
+    assert.match(html, slug === 'orcamento-tecnico' ? /informa a área que o orçamento vai abranger/ : /já selecionado e responda só ao que se aplica ao seu caso/, slug);
   }
   const arq = await readFile(path.join(siteRoot, 'servicos/projeto-arquitetura/index.html'), 'utf8');
   assert.match(arq, /Não sabe a área\? Conta o que imagina para a casa e\/ou informa o terreno/);
