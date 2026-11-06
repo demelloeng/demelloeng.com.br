@@ -1,0 +1,57 @@
+/* Metodologia V02: componentes locais sobre o padrão V02 publicado. */
+.metodologia-v02 main{overflow-wrap:break-word}
+.metodologia-v02 main p{max-width:48em;line-height:1.5}
+.metodologia-v02 main p+p{margin-top:16px}
+.metodologia-v02 main h2{font-size:40px;line-height:1.15;max-width:24em}
+.metodologia-v02 main h3{font-size:27px;line-height:1.2}
+.metodologia-v02 main h2+p{margin-top:24px}
+.metodologia-v02 main a:not(.acao){text-decoration:underline;text-underline-offset:4px}
+.metodologia-v02 main a:focus-visible{outline:3px solid var(--ink);outline-offset:5px}
+.metodologia-v02 .site-header .logo:focus-visible{outline-color:#fff}
+.metodologia-v02 .hero{padding-block:56px 72px}
+.metodologia-v02 .hero h1{font-size:60px;line-height:1.07;max-width:11em}
+.metodologia-v02 .hero .eyebrow{margin-bottom:24px}
+.metodologia-v02 .hero-copy p:first-child{font-weight:600}
+.metodologia-v02 main .acoes{margin-top:24px}
+.metodologia-v02 .acao{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 28px;border:2px solid var(--blue);font-weight:700;line-height:1.2;text-align:center}
+.metodologia-v02 main .acao-principal{background:var(--blue);color:#fff}
+.metodologia-v02 main .acao-principal:hover{background:var(--ink);border-color:var(--ink);text-decoration:none}
+.metodologia-v02 main .micro{margin-top:14px;font-size:16px;color:var(--muted)}
+.metodologia-v02 .percurso{background:var(--pale);padding-block:64px}
+.metodologia-v02 .momentos{margin:40px 0 32px;padding:0;list-style:none;counter-reset:momento}
+.metodologia-v02 .momento{counter-increment:momento;display:grid;grid-template-columns:56px minmax(180px,280px) minmax(0,1fr);gap:24px 32px;border-top:1px solid var(--line);padding-block:32px;align-items:start}
+.metodologia-v02 .momento::before{content:counter(momento,decimal-leading-zero);font-size:24px;font-weight:800;line-height:1.2;color:var(--blue)}
+.metodologia-v02 .momento>div{min-width:0}
+.metodologia-v02 .variacoes,.metodologia-v02 .escopo{padding-block:64px}
+.metodologia-v02 .modalidades{margin-top:36px}
+.metodologia-v02 .modalidade{display:grid;grid-template-columns:minmax(200px,320px) minmax(0,1fr);gap:24px 56px;padding-block:32px;border-top:1px solid var(--line)}
+.metodologia-v02 .modalidade>div{min-width:0}
+.metodologia-v02 .bim{padding-block:64px;background:var(--ink);color:#fff}
+.metodologia-v02 .bim h2{color:#fff}
+.metodologia-v02 .bim p{max-width:44em}
+.metodologia-v02 .bim a{display:inline-block;min-height:44px;padding-block:8px;color:#fff}
+.metodologia-v02 .bim a:focus-visible{outline-color:#fff}
+.metodologia-v02 .cta-final{padding-block:64px 72px;background:var(--blue);color:#fff}
+.metodologia-v02 .cta-final h2{color:#fff}
+.metodologia-v02 .cta-final .acao-principal{background:#fff;color:var(--blue);border-color:#fff}
+.metodologia-v02 .cta-final .acao-principal:hover{background:var(--pale);border-color:var(--pale)}
+.metodologia-v02 .cta-final .micro{color:#dbe6f1}
+.metodologia-v02 .cta-final a:not(.acao){display:inline-block;min-height:44px;padding-block:8px;color:#fff}
+.metodologia-v02 .cta-final a:focus-visible{outline-color:#fff}
+@media(max-width:1000px){
+.metodologia-v02 .hero h1{font-size:48px}
+.metodologia-v02 .momento{grid-template-columns:48px minmax(0,1fr);gap:16px 24px}
+.metodologia-v02 .momento>div{grid-column:2}
+.metodologia-v02 .modalidade{gap:24px 32px}}
+@media(max-width:760px){
+.metodologia-v02 .hero{padding-block:32px 48px;gap:24px}
+.metodologia-v02 .hero h1{font-size:40px;max-width:none}
+.metodologia-v02 main h2{font-size:30px}
+.metodologia-v02 main h3{font-size:25px}
+.metodologia-v02 main p{font-size:19px}
+.metodologia-v02 .percurso,.metodologia-v02 .variacoes,.metodologia-v02 .bim,.metodologia-v02 .escopo,.metodologia-v02 .cta-final{padding-block:44px 48px}
+.metodologia-v02 .acao{width:100%;font-size:20px}
+.metodologia-v02 .momentos{margin-top:32px}
+.metodologia-v02 .momento{grid-template-columns:36px minmax(0,1fr);column-gap:16px;padding-block:24px}
+.metodologia-v02 .momento::before{font-size:21px}
+.metodologia-v02 .modalidade{grid-template-columns:minmax(0,1fr);gap:16px;padding-block:24px}}
