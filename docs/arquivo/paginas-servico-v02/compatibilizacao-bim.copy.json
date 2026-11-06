@@ -1,0 +1,231 @@
+{
+  "slug": "compatibilizacao-bim",
+  "nome_servico": "Compatibilização BIM",
+  "fonte_copy": "COPY_COMPATIBILIZACAO_BIM_V02_20261106.md",
+  "layout": "rico",
+  "perfil": "compatibilizacao",
+  "titulo_pagina": "Compatibilização BIM de projetos | DEMELLO Engenharia",
+  "descricao": "Compatibilização BIM de projetos: as disciplinas se encontram no modelo, não na obra. Veja a estimativa antes do contato.",
+  "h1": "Compatibilização BIM: as disciplinas se acertam no projeto, antes da obra",
+  "chamada": "Tubulação encontra uma viga. Na reforma, novas instalações precisam caber num espaço que já existe. No projeto, é ajuste. Na obra, pode virar quebra, atraso e retrabalho.",
+  "introducao": [
+    "Arquitetura, estrutura e instalações dividem o mesmo espaço. Compatibilizar é fazer essas decisões combinarem antes da obra. No trabalho em BIM, modelos e informações ajudam a localizar essas incompatibilidades.",
+    "A DEMELLO coordena esse trabalho entre as disciplinas, em projetos dela ou de outros escritórios."
+  ],
+  "cta": {
+    "rotulo": "Calcular a estimativa da compatibilização",
+    "micro": "Sem compromisso · contato somente no final",
+    "href": "../../orcamento/?situacao=known&amp;servico=compatibilizacao"
+  },
+  "blocos_novos": {
+    "situacoes": {
+      "titulo": "Quando vale compatibilizar",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Faz sentido quando:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "arquitetura, estrutura e instalações vêm de escritórios diferentes;",
+            "uma revisão na arquitetura mexe na estrutura ou nas instalações;",
+            "duas disciplinas disputam o mesmo lugar: laje, forro, shaft, parede;",
+            "o projeto vai para orçamento ou para a obra sem conferir as interfaces;",
+            "uma reforma exige integrar novas instalações à arquitetura e à estrutura existentes."
+          ]
+        }
+      ]
+    },
+    "muda": {
+      "titulo": "O que muda para você",
+      "conteudo": [
+        {
+          "tipo": "beneficios",
+          "itens": [
+            {
+              "titulo": "Interferências identificadas antes da obra",
+              "texto": "A análise das interfaces entre instalações, estrutura e arquitetura ajuda a encontrar incompatibilidades enquanto ainda é possível discutir os ajustes no projeto."
+            },
+            {
+              "titulo": "A decisão é tomada com tempo",
+              "texto": "Quem decide é a equipe de projeto, com calma. Não a obra, com pressa."
+            },
+            {
+              "titulo": "Menos retrabalho no canteiro",
+              "texto": "Resolver conflitos no projeto reduz o risco de quebra, atraso e retrabalho no canteiro."
+            }
+          ]
+        }
+      ]
+    },
+    "faz": {
+      "titulo": "O que a DEMELLO faz",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A DEMELLO coordena as disciplinas como um conjunto. Na prática:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "analisa onde os projetos se encontram;",
+            "identifica interferências e incompatibilidades;",
+            "coordena as decisões técnicas para resolver cada conflito;",
+            "encaminha a cada responsável técnico as alterações da disciplina dele;",
+            "verifica se as soluções se integram, dentro do escopo contratado."
+          ]
+        },
+        {
+          "tipo": "casos",
+          "itens": [
+            {
+              "titulo": "Projeto de outro profissional:",
+              "texto": "a DEMELLO aponta o conflito e coordena a solução. Quem altera é o responsável técnico daquela disciplina."
+            },
+            {
+              "titulo": "Projeto sob responsabilidade técnica da DEMELLO:",
+              "texto": "o ajuste é feito direto."
+            }
+          ]
+        },
+        {
+          "tipo": "fecho",
+          "texto": "A DEMELLO responde pela coordenação; cada autor, pelo seu projeto."
+        }
+      ]
+    },
+    "etapas": {
+      "titulo": "Das interfaces às decisões coordenadas",
+      "conteudo": [
+        {
+          "tipo": "passos",
+          "itens": [
+            {
+              "titulo": "Leitura dos projetos",
+              "texto": "A DEMELLO analisa os projetos e documentos que você já tem."
+            },
+            {
+              "titulo": "Interferências",
+              "texto": "Identifica onde as disciplinas se cruzam e o que não combina."
+            },
+            {
+              "titulo": "Coordenação",
+              "texto": "Leva cada conflito aos responsáveis e coordena a solução."
+            },
+            {
+              "titulo": "Integração",
+              "texto": "Confere se as decisões se encaixam, dentro do escopo contratado."
+            }
+          ]
+        },
+        {
+          "tipo": "fecho",
+          "texto": "A ordem pode mudar conforme o caso. O que você recebe em cada etapa é definido na proposta."
+        }
+      ]
+    },
+    "experiencia": {
+      "titulo": "Experiência aplicada: Colégio Djalma Marinho",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "No Colégio Estadual Cívico Militar Djalma Marinho, em Campo Largo/PR, o terreno tem cerca de 16 metros de desnível. Eram nove blocos já construídos. A ampliação levaria o conjunto a dez."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Marcos de Mello Silva respondeu, como único responsável técnico, pelos projetos de arquitetura (com doze rampas integrando os espaços), estrutural, hidrossanitário, incêndio e terraplanagem. Tudo compatibilizado em BIM."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O seu projeto pode ser menor. A pergunta é a mesma: onde as disciplinas se cruzam e quem decide."
+        },
+        {
+          "tipo": "nota",
+          "texto": "Colégio Estadual Cívico Militar Djalma Marinho, Campo Largo/PR. Acervo profissional de Marcos de Mello Silva."
+        }
+      ]
+    },
+    "perguntas": {
+      "titulo": "Perguntas frequentes",
+      "conteudo": [
+        {
+          "tipo": "perguntas",
+          "itens": [
+            {
+              "pergunta": "Meus projetos estão em PDF ou DWG. Serve?",
+              "paragrafos": [
+                "Podem servir como ponto de partida. A DEMELLO recebe projetos em PDF, DWG, DXF ou IFC. A forma de utilizar esses arquivos e a eventual necessidade de modelagem dependem das condições do material e do escopo contratado."
+              ],
+              "resposta": "Podem servir como ponto de partida. A DEMELLO recebe projetos em PDF, DWG, DXF ou IFC. A forma de utilizar esses arquivos e a eventual necessidade de modelagem dependem das condições do material e do escopo contratado."
+            },
+            {
+              "pergunta": "Preciso ter todos os projetos prontos?",
+              "paragrafos": [
+                "Não. Dá para compatibilizar com o projeto em andamento. Quanto antes as incompatibilidades são identificadas, mais cedo é possível discutir as soluções. O estágio de cada projeto entra no escopo."
+              ],
+              "resposta": "Não. Dá para compatibilizar com o projeto em andamento. Quanto antes as incompatibilidades são identificadas, mais cedo é possível discutir as soluções. O estágio de cada projeto entra no escopo."
+            },
+            {
+              "pergunta": "A compatibilização garante uma obra sem conflito?",
+              "paragrafos": [
+                "Conflito zero não existe. A compatibilização traz para o projeto as interferências que os documentos permitem ver. Quanto mais completos os projetos, menos a obra descobre sozinha."
+              ],
+              "resposta": "Conflito zero não existe. A compatibilização traz para o projeto as interferências que os documentos permitem ver. Quanto mais completos os projetos, menos a obra descobre sozinha."
+            },
+            {
+              "pergunta": "Compatibilização é o mesmo que detecção de interferências?",
+              "paragrafos": [
+                "Não. A detecção identifica possíveis interferências entre elementos dos modelos. A compatibilização vai além: analisa os conflitos, coordena as soluções entre disciplinas e verifica os ajustes.",
+                "BIM é uma metodologia de trabalho baseada na integração de modelos e informações. Os softwares apoiam esse processo. As decisões técnicas continuam com os profissionais responsáveis.",
+                "<a href=\"../../metodologia/\">Conheça como a DEMELLO trabalha com BIM</a>."
+              ],
+              "resposta": "Não. A detecção identifica possíveis interferências entre elementos dos modelos. A compatibilização vai além: analisa os conflitos, coordena as soluções entre disciplinas e verifica os ajustes.</p><p>BIM é uma metodologia de trabalho baseada na integração de modelos e informações. Os softwares apoiam esse processo. As decisões técnicas continuam com os profissionais responsáveis.</p><p><a href=\"../../metodologia/\">Conheça como a DEMELLO trabalha com BIM</a>."
+            },
+            {
+              "pergunta": "Compatibilização e orçamento são o mesmo serviço?",
+              "paragrafos": [
+                "Não. A compatibilização faz os projetos combinarem. O orçamento transforma o projeto em custo e prazo. Os dois se complementam. Veja <a href=\"../orcamento-tecnico/\">Orçamento e cronograma</a>."
+              ],
+              "resposta": "Não. A compatibilização faz os projetos combinarem. O orçamento transforma o projeto em custo e prazo. Os dois se complementam. Veja <a href=\"../orcamento-tecnico/\">Orçamento e cronograma</a>."
+            }
+          ]
+        }
+      ]
+    },
+    "escopo": {
+      "titulo": "Detalhes do escopo",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O que define o escopo:"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "as disciplinas que entram na coordenação;",
+            "quantas interfaces existem entre elas;",
+            "a área do escopo;",
+            "o estágio de cada projeto;",
+            "o responsável técnico de cada projeto;",
+            "o formato e a condição dos arquivos."
+          ]
+        },
+        {
+          "tipo": "estimativa",
+          "titulo": "Como funciona a estimativa:",
+          "texto": "a calculadora usa a área do escopo. Com informação suficiente, o valor inicial aparece na tela, antes de qualquer contato. A estimativa não é proposta nem contrato. Formatos de entrega e rodadas de revisão são definidos na proposta."
+        }
+      ]
+    }
+  },
+  "ordem": [],
+  "proximo_passo": {
+    "titulo": "Próximo passo",
+    "paragrafos": [
+      "Tem projetos que precisam combinar antes da obra? Comece pela estimativa."
+    ]
+  },
+  "notas_editoriais": [],
+  "removidos": []
+}

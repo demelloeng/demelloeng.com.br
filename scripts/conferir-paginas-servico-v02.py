@@ -61,7 +61,7 @@ perdas = 0
 for pagina in sorted((REPO / 'servicos').glob('*/index.html')):
     slug = pagina.parent.name
     caminho_copy = REPO / 'docs/arquivo/paginas-servico-v02' / f'{slug}.copy.json'
-    if slug in ('projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico') and (caminho_copy.exists() or slug == 'projeto-gas-glp'):
+    if slug in ('projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim') and (caminho_copy.exists() or slug == 'projeto-gas-glp'):
         import json
         from copy_pscip_glp import gas_copy
         copia = (json.loads(caminho_copy.read_text(encoding='utf-8')) if caminho_copy.exists() else
