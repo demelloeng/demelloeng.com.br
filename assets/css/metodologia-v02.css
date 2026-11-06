@@ -43,6 +43,9 @@
 .metodologia-v02 .momento{grid-template-columns:48px minmax(0,1fr);gap:16px 24px}
 .metodologia-v02 .momento>div{grid-column:2}
 .metodologia-v02 .modalidade{gap:24px 32px}}
+@media(min-width:761px) and (max-width:850px){
+.metodologia-v02 .hero{grid-template-columns:minmax(0,1fr);gap:24px}
+.metodologia-v02 .hero-copy{padding-top:0}}
 @media(max-width:760px){
 .metodologia-v02 .hero{padding-block:32px 48px;gap:24px}
 .metodologia-v02 .hero h1{font-size:40px;max-width:none}
