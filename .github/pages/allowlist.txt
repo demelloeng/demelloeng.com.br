@@ -183,3 +183,6 @@ assets/models/hidrantes-luiz-carlos-v02.glb
 assets/models/hidrantes-luiz-carlos-v02.json
 assets/images/hidrantes-luiz-carlos-v02.png
 assets/css/metodologia-v02.css
+assets/css/experiencia-v02.css
+assets/js/experiencia-bim.js
+assets/images/experiencia-terraplanagem-djalma.png
