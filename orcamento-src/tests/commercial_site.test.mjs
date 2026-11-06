@@ -30,6 +30,7 @@ const ALL = [...COMMERCIAL, ...OTHER];
 const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
 // Páginas no visual V02 (menu e rodapé novos). As páginas antigas ficam fora deste conjunto.
 const PAGINAS_V02 = [
+  'metodologia/index.html',
   'avaliar-um-problema/index.html',
   'index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
   ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`),
@@ -233,8 +234,8 @@ test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projet
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
-  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html'];
-  const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
+  const LANCADAS = ['metodologia/index.html', 'index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html'];
+  const referencia = normaliza('servicos/projeto-arquitetura/index.html', HTML['servicos/projeto-arquitetura/index.html']);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
 });
@@ -285,7 +286,7 @@ test('navegação: "Empresa" deixa de ser eixo principal, mas a página e as URL
   for (const p of ['empresa/index.html', 'empresa/trajetoria-do-fundador.html', 'servicos/index.html', 'metodologia/index.html', 'experiencia-tecnica/index.html', 'contato/index.html', 'orcamento/index.html', 'verificar/index.html']) {
     assert.ok(await exists(p), p);
   }
-  assert.match(HTML['metodologia/index.html'], /href="\.\.\/empresa\/">Conheça a empresa<\/a>/, 'a função de Empresa foi absorvida por Como trabalhamos (responsabilidade técnica)');
+  assert.match(HTML['metodologia/index.html'], /href="\.\.\/empresa\/">Conheça a empresa\.<\/a>/, 'Metodologia mantém o link institucional com o rótulo aprovado');
 });
 
 // ---- conteúdo ---------------------------------------------------------------------------------------------------
@@ -420,21 +421,32 @@ test('nenhum número técnico, case ou credencial novo: todo numeral visível ex
   }
   assert.deepEqual(unexpected, []);
   // quantidade de disciplinas/etapas descritas por extenso continua batendo com a estrutura
-  assert.equal([...HTML['metodologia/index.html'].matchAll(/<div class="step">/g)].length, 6, 'seis etapas');
+  assert.equal([...HTML['metodologia/index.html'].matchAll(/<li class="momento">/g)].length, 5, 'cinco momentos aprovados');
   // Serviços V02: um <article class="service"> por frente
   assert.equal([...HTML['servicos/index.html'].matchAll(/<article class="service"[\s\S]*?<h3><a href="\.\/[a-z-]+\/">/g)].length, 8, 'oito cartões comerciais; nove URLs de serviço');
 });
 
-test('Como trabalhamos: as seis etapas pedidas, nesta ordem; BIM aparece como método, não como abertura', () => {
+test('Como trabalhamos V02: cinco momentos, responsabilidade transversal e entrada geral preservada', () => {
   const html = HTML['metodologia/index.html'];
-  const titles = [...html.matchAll(/<div class="step"><span class="step-n">\d\d<\/span><div class="step-in"><h2>([^<]+)<\/h2>/g)].map((m) => m[1]);
-  assert.deepEqual(titles, ['Compreensão da necessidade', 'Definição do escopo', 'Desenvolvimento', 'Compatibilização', 'Documentação e entrega', 'Responsabilidade técnica']);
-  assert.match(html, /<h1[^>]*>Como será trabalhar com a DEMELLO\?<\/h1>/);
-  const hero = html.slice(html.indexOf('<main'), html.indexOf('data-block="steps"'));
-  assert.doesNotMatch(hero, /BIM/, 'a abertura não trata BIM como protagonista isolado');
-  const bim = html.match(/data-block="bim-method"[\s\S]*?<\/section>/)[0];
-  for (const t of ['Coordenação', 'Antecipação de conflitos', 'Organização', 'Compatibilização']) assert.ok(bim.includes(`<strong>${t}:</strong>`), t);
-  assert.match(html, /href="\.\.\/orcamento\/">Calcular minha estimativa/, 'CTA de retorno à estimativa');
+  const main = mainOf(html);
+  assert.deepEqual([...main.matchAll(/data-block="([^"]+)"/g)].map(m => m[1]),
+    ['method-hero', 'service-process', 'service-differences', 'bim-method', 'scope-responsibility', 'final-cta']);
+  const process = main.match(/data-block="service-process"[\s\S]*?<\/section>/)[0];
+  const titles = [...process.matchAll(/<li class="momento"><h3>([^<]+)<\/h3>/g)].map(m => m[1]);
+  assert.deepEqual(titles, ['Entendimento da necessidade', 'Definição do escopo e da proposta',
+    'Realização do trabalho técnico', 'Verificação e coordenação', 'Entrega e orientações']);
+  assert.doesNotMatch(process, /<h3>Responsabilidade técnica/);
+  assert.match(main, /<h1[^>]*>Como será trabalhar com a DEMELLO\?<\/h1>/);
+  const hero = main.slice(0, main.indexOf('data-block="service-process"'));
+  assert.doesNotMatch(hero, /BIM/);
+  assert.equal([...main.matchAll(/href="\.\.\/orcamento\/">Começar pelo meu caso<\/a>/g)].length, 2);
+  for (const href of ['../avaliar-um-problema/', '../servicos/orcamento-tecnico/', '../servicos/regularizacao/',
+    '../servicos/compatibilizacao-bim/', '../empresa/', '../empresa/trajetoria-do-fundador.html']) {
+    assert.ok(main.includes(`href="${href}"`), href);
+  }
+  assert.match(main, /href="https:\/\/wa\.me\/5541985124056"/);
+  assert.doesNotMatch(main, /no mesmo modelo|em tempo real|se atualizam junto|nenhuma fica para depois|Primeiro o valor inicial/);
+  assert.doesNotMatch(html, /"@type":"Service"/);
 });
 
 test('Avaliar um problema: reconhecimento, enquadramento, limites, segurança sem diagnóstico remoto e regras de retenção preservadas', async () => {

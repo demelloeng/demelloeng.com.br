@@ -182,3 +182,4 @@ assets/js/hidrantes-luiz-carlos-core.mjs
 assets/models/hidrantes-luiz-carlos-v02.glb
 assets/models/hidrantes-luiz-carlos-v02.json
 assets/images/hidrantes-luiz-carlos-v02.png
+assets/css/metodologia-v02.css
