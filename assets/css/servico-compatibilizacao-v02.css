@@ -3,6 +3,10 @@
 .servico-rico-compatibilizacao .rico-hero h1{max-width:20ch;font-size:clamp(34px,4.2vw,54px)}
 .servico-rico-compatibilizacao .rico-texto .cta{font-size:22px;white-space:normal}
 .servico-rico-compatibilizacao .rico-caixa{display:flex;justify-content:center}
+/* abertura no molde da PSCIP + GLP: introdução abaixo do CTA, ao lado do visual */
+.servico-rico-compatibilizacao .rico-hero{grid-template-areas:"titulo caixa" "texto caixa" "intro caixa"}
+.servico-rico-compatibilizacao .rico-introducao{grid-area:intro;color:#c8d9e9;font-size:20px;line-height:1.5}
+.servico-rico-compatibilizacao .rico-introducao p{margin:0 0 16px}
 .servico-rico-compatibilizacao .final-cta{background:#eef2f6}
 .servico-rico-compatibilizacao .rico-sanfona a{color:var(--blue);text-decoration:underline}
 .servico-rico-compatibilizacao a:focus-visible{outline:3px solid #255280;outline-offset:5px}
@@ -32,5 +36,5 @@
 /* detalhes do escopo: a estimativa ao lado da lista */
 .bim-estimativa p{margin:0;font-size:19px;line-height:1.5}
 
-@media(max-width:900px){.servico-rico-compatibilizacao .rico-hero{grid-template-areas:"titulo" "texto" "caixa"}}
+@media(max-width:900px){.servico-rico-compatibilizacao .rico-hero{grid-template-areas:"titulo" "texto" "caixa" "intro"}.servico-rico-compatibilizacao .rico-introducao{font-size:18px}}
 @media(max-width:700px){.bim-fecho{font-size:19px;padding:20px}.servico-rico-compatibilizacao .rico-hero h1{max-width:22ch}.servico-rico-compatibilizacao .rico-texto .cta{font-size:19px}}

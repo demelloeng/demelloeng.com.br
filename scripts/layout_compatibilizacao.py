@@ -9,7 +9,7 @@ import layout_rico as L
 # modelo único ou entrega presumida.
 VISUAL = '''<svg class="bim-interfaces" viewBox="0 0 440 320" role="img" aria-label="Arquitetura, estrutura e instalações dividem o mesmo espaço; onde elas se cruzam ficam as interfaces">
 <g class="disciplinas"><circle cx="220" cy="118" r="92"/><circle cx="160" cy="214" r="92"/><circle cx="280" cy="214" r="92"/></g>
-<g class="centro"><circle cx="220" cy="182" r="30"/></g>
+<g class="centro"><circle cx="220" cy="182" r="44"/></g>
 <g class="rotulos"><text x="220" y="62" text-anchor="middle">Arquitetura</text><text x="112" y="260" text-anchor="middle">Estrutura</text><text x="328" y="260" text-anchor="middle">Instalações</text></g>
 <text class="t-centro" x="220" y="188" text-anchor="middle">Interfaces</text>
 </svg>'''
@@ -61,5 +61,7 @@ def escopo(bloco):
 def frente(copia, d):
     """Página inteira, na ordem das nove seções da copy aprovada (a nona, Próximo passo, é o fechamento comum)."""
     nv = copia['blocos_novos']
-    return '\n'.join([L.hero(copia, d, VISUAL), L.para_quem(nv['situacoes']), L.muda(nv['muda']), faz(nv['faz']),
+    # Abertura no molde da PSCIP + GLP (hero_instalacoes): chamada e CTA logo após o H1, introdução depois do visual,
+    # para o CTA ficar na primeira tela do celular. O texto é o mesmo; só a ordem visual da abertura muda.
+    return '\n'.join([L.hero_instalacoes(copia, d, VISUAL), L.para_quem(nv['situacoes']), L.muda(nv['muda']), faz(nv['faz']),
                       etapas(nv['etapas']), experiencia(nv['experiencia']), L.perguntas(nv['perguntas']), escopo(nv['escopo'])])
