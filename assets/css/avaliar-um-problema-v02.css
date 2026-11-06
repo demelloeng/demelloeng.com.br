@@ -1,0 +1,89 @@
+/* Entrada Avaliar um problema V02. Base publicada: servicos-v02 + rodape-v02.
+   Escopo local, sem alterar as demais páginas ou a calculadora. */
+.avaliar-v02 main{line-height:1.45}
+.avaliar-v02 main h2{font-size:40px;line-height:1.15;max-width:26em}
+.avaliar-v02 main h3{font-size:27px;line-height:1.2}
+.avaliar-v02 main p+p{margin-top:16px}
+.avaliar-v02 main a:not(.acao){text-decoration:underline;text-underline-offset:3px}
+.avaliar-v02 .hero{grid-template-columns:1fr 1fr;gap:64px;padding-top:48px;padding-bottom:64px}
+.avaliar-v02 .hero h1{font-size:64px;line-height:1.07;max-width:11em}
+.avaliar-v02 .hero .eyebrow{margin-bottom:24px}
+.avaliar-v02 .hero-copy{padding-top:38px}
+.avaliar-v02 .acoes{margin-top:28px}
+.avaliar-v02 .acao{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 28px;background:var(--blue);color:#fff;border:2px solid var(--blue);font-size:20px;font-weight:700;text-align:center;line-height:1.2}
+.avaliar-v02 .acao:hover{background:var(--ink);border-color:var(--ink);text-decoration:none}
+.avaliar-v02 .hero-copy .acao{color:#fff}
+.avaliar-v02 .hero-copy .acao:focus-visible{outline-color:var(--ink)}
+.avaliar-v02 .micro{font-size:16px;line-height:1.4;color:var(--muted)}
+.avaliar-v02 .seguranca{padding:0 0 64px}
+.avaliar-v02 .aviso{border:1px solid var(--line);border-left:4px solid var(--blue);padding:32px;background:var(--pale)}
+.avaliar-v02 .aviso h2{font-size:28px;margin-bottom:20px}
+.avaliar-v02 .aviso p{font-size:18px;max-width:64em}
+.avaliar-v02 .situacoes{padding-bottom:64px}
+.avaliar-v02 .intro{margin-top:24px;max-width:52em}
+.avaliar-v02 .situacoes-grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:36px}
+.avaliar-v02 .situacao{border-top:2px solid var(--blue);padding-top:24px}
+.avaliar-v02 .situacao h3+p{margin-top:20px}
+.avaliar-v02 .situacao p{font-size:19px}
+.avaliar-v02 .regularizacao{margin-top:32px;max-width:54em}
+.avaliar-v02 .como{padding:64px 0;background:var(--pale)}
+.avaliar-v02 .passos{counter-reset:passo;list-style:none;padding:0;margin:36px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
+.avaliar-v02 .passos li{counter-increment:passo}
+.avaliar-v02 .passos li::before{content:counter(passo);display:grid;place-items:center;width:44px;height:44px;border:2px solid var(--blue);border-radius:50%;font-size:22px;font-weight:700;color:var(--blue);margin-bottom:16px}
+.avaliar-v02 .passos h3{font-size:25px;margin-bottom:16px}
+.avaliar-v02 .passos p{font-size:19px}
+.avaliar-v02 .nota-fotos{border-left:3px solid var(--blue);padding-left:16px}
+.avaliar-v02 .fecho{margin-top:32px;max-width:56em}
+.avaliar-v02 .atendimento{padding-top:64px;padding-bottom:64px}
+.avaliar-v02 .atendimento>.intro+p{margin-top:16px;max-width:54em}
+.avaliar-v02 .tecnicos-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:36px}
+.avaliar-v02 .tecnico{padding:28px;background:var(--pale)}
+.avaliar-v02 .tecnico h3+p{margin-top:20px}
+.avaliar-v02 .tecnico p{font-size:19px}
+.avaliar-v02 .destaque{margin-top:32px;padding-top:24px;border-top:1px solid var(--blue);font-weight:700;max-width:55em}
+.avaliar-v02 .faq{padding-bottom:64px}
+.avaliar-v02 .pergunta{border-bottom:1px solid var(--line)}
+.avaliar-v02 .faq h2+.pergunta{margin-top:28px;border-top:1px solid var(--line)}
+.avaliar-v02 summary{position:relative;list-style:none;cursor:pointer;padding:22px 48px 22px 0;font-size:24px;line-height:1.3;font-weight:700;min-height:56px}
+.avaliar-v02 summary::-webkit-details-marker{display:none}
+.avaliar-v02 summary::after{content:"+";position:absolute;right:6px;top:16px;font-size:32px;color:var(--blue);font-weight:400}
+.avaliar-v02 details[open] summary::after{content:"−"}
+.avaliar-v02 .pergunta>div{padding:0 48px 24px 0;max-width:56em}
+.avaliar-v02 .cta-final{background:var(--blue);color:#fff;padding:64px 0}
+.avaliar-v02 .cta-final h2+p{margin-top:24px}
+.avaliar-v02 .cta-final p{max-width:54em}
+.avaliar-v02 .cta-final .acao{background:#fff;color:var(--blue);border-color:#fff}
+.avaliar-v02 .cta-final .acao:hover{background:var(--pale);border-color:var(--pale)}
+.avaliar-v02 .cta-final .micro{color:#fff}
+.avaliar-v02 .secundaria a{display:inline-block;color:#fff;padding:8px 0}
+.avaliar-v02 .cta-final a:focus-visible{outline-color:#fff}
+.avaliar-v02 summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+@media(max-width:1100px){
+ .avaliar-v02 .hero{gap:32px}
+ .avaliar-v02 .hero h1{font-size:52px}
+ .avaliar-v02 .situacoes-grade{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+ .avaliar-v02 .hero{grid-template-columns:1fr;gap:20px;padding-top:28px;padding-bottom:40px}
+ .avaliar-v02 .hero .eyebrow{margin-bottom:16px}
+ .avaliar-v02 .hero h1{font-size:38px;line-height:1.08;max-width:none}
+ .avaliar-v02 .hero-copy{padding-top:0;font-size:19px}
+ .avaliar-v02 .hero-copy p+p{margin-top:12px}
+ .avaliar-v02 .acao{width:100%;min-height:54px}
+ .avaliar-v02 .hero-copy .acoes{margin-top:24px}
+ .avaliar-v02 .micro{font-size:15px}
+ .avaliar-v02 main h2{font-size:30px}
+ .avaliar-v02 main h3{font-size:25px}
+ .avaliar-v02 .seguranca,.avaliar-v02 .situacoes,.avaliar-v02 .faq{padding-bottom:44px}
+ .avaliar-v02 .aviso{padding:24px}
+ .avaliar-v02 .aviso h2{font-size:25px}
+ .avaliar-v02 .aviso p{font-size:17px}
+ .avaliar-v02 .situacoes-grade,.avaliar-v02 .tecnicos-grade,.avaliar-v02 .passos{grid-template-columns:1fr;gap:28px;margin-top:28px}
+ .avaliar-v02 .como,.avaliar-v02 .cta-final{padding:44px 0}
+ .avaliar-v02 .atendimento{padding-top:44px;padding-bottom:44px}
+ .avaliar-v02 .tecnico{padding:24px}
+ .avaliar-v02 summary{font-size:21px;padding-top:20px;padding-bottom:20px}
+ .avaliar-v02 .pergunta>div{padding-right:0;font-size:19px}
+ .avaliar-v02 .secundaria a{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){.avaliar-v02 *{animation:none!important;transition:none!important}}

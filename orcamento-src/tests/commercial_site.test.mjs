@@ -30,6 +30,7 @@ const ALL = [...COMMERCIAL, ...OTHER];
 const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
 // Páginas no visual V02 (menu e rodapé novos). As páginas antigas ficam fora deste conjunto.
 const PAGINAS_V02 = [
+  'avaliar-um-problema/index.html',
   'index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
   ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`),
 ];
@@ -232,7 +233,7 @@ test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projet
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
-  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html'];
+  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html'];
   const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
@@ -438,13 +439,19 @@ test('Como trabalhamos: as seis etapas pedidas, nesta ordem; BIM aparece como m�
 
 test('Avaliar um problema: reconhecimento, enquadramento, limites, segurança sem diagnóstico remoto e regras de retenção preservadas', async () => {
   const html = HTML['avaliar-um-problema/index.html'];
-  for (const b of ['landing-hero', 'situations', 'safety', 'framing', 'limits', 'faq']) assert.match(html, new RegExp(`data-block="${b}"`), b);
+  // Copy V02 aprovada: o bloco antigo de negativas cede lugar ao atendimento técnico.
+  assert.deepEqual([...mainOf(html).matchAll(/data-block="([^"]+)"/g)].map((m) => m[1]), ['landing-hero', 'safety', 'situations', 'framing', 'technical-care', 'faq', 'final-cta']);
   const text = visibleText(mainOf(html));
   assert.match(text, /não existe diagnóstico remoto|sem diagnóstico remoto/i);
   assert.match(text, /não confirmam a segurança do imóvel/);
-  assert.match(text, /fissura ou rachadura/);
-  assert.match(text, /antes de comprar ou vender/);
-  assert.match(text, /nenhum valor é calculado a partir d/i);
+  assert.match(text, /Fissuras, rachaduras/);
+  assert.match(text, /antes de comprar/);
+  assert.match(text, /não há preço calculado automaticamente/i);
+  assert.match(text, /O envio do relato não representa contratação/);
+  assert.match(text, /não são transmitidas à DEMELLO nem analisadas automaticamente/);
+  const jsonld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  assert.deepEqual(jsonld['@graph'].map((n) => n['@type']), ['BreadcrumbList']);
+  assert.equal((html.match(/<details class="pergunta">/g) ?? []).length, 7);
   // a regra de retenção continua no código da jornada, intacta
   const journey = await readFile(path.join(appRoot, 'src/journey.mjs'), 'utf8');
   assert.match(journey, /desab\|colapso\|desmoron\|caindo\|caiu\|soltando\|cedendo\|aumentou\|aumentando\|piorou\|rapida\|de repente/);

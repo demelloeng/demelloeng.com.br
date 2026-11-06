@@ -107,6 +107,7 @@ google1483671950bc0cbc.html
 # --- release parcial (02/11/2026): Home V02, Serviços V02 e as quatro páginas de projeto (Arquitetura, Estrutural, Hidrossanitário, Infraestrutura) ---
 # Só caminhos exatos. Dependências conferidas com as páginas renderizadas (CSS, fontes, ícones, imagens, JS, modelos 3D) e o three.js hospedado (assets/vendor/three/, MIT, ver ORIGEM.txt).
 assets/css/construir-ou-ampliar-v02.css
+assets/css/avaliar-um-problema-v02.css
 assets/css/contato-v02.css
 assets/css/home-20261024.css
 assets/css/home-opcao3-20261027.css

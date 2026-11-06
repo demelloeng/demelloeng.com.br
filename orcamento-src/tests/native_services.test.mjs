@@ -326,7 +326,10 @@ test('documentação: contrato municipal, classificação Worker/CRM e pendênci
 
 test('193 e 199 permanecem exatamente como estavam (não alterados nem declarados validados)', async () => {
   const html = await readFile(path.join(siteRoot, 'avaliar-um-problema/index.html'), 'utf8');
-  assert.equal([...html.matchAll(/Corpo de Bombeiros \(193\) ou a Defesa Civil \(199\)/g)].length, 2);
+  // A Copy V02 mantém uma orientação protegida, sem duplicação na FAQ.
+  assert.equal([...html.matchAll(/Corpo de Bombeiros \(193\) ou a Defesa Civil \(199\)/g)].length, 1);
+  const safety = html.match(/data-block="safety"[\s\S]*?<\/section>/)?.[0] ?? '';
+  assert.ok(safety.includes('Se o problema estiver aumentando, aparecendo de repente ou envolver risco de desabamento, não espere a resposta de um formulário: afaste as pessoas da área e, em risco imediato, acione o Corpo de Bombeiros (193) ou a Defesa Civil (199).'));
   assert.doesNotMatch(html, /validad[oa]/i);
 });
 
