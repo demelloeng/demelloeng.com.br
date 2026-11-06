@@ -13,6 +13,7 @@
 .avaliar-v02 .acao{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 28px;background:var(--blue);color:#fff;border:2px solid var(--blue);font-size:20px;font-weight:700;text-align:center;line-height:1.2}
 .avaliar-v02 .acao:hover{background:var(--ink);border-color:var(--ink);text-decoration:none}
 .avaliar-v02 .hero-copy .acao{color:#fff}
+.avaliar-v02 .hero-copy .acao:focus-visible{outline-color:var(--ink)}
 .avaliar-v02 .micro{font-size:16px;line-height:1.4;color:var(--muted)}
 .avaliar-v02 .seguranca{padding:0 0 64px}
 .avaliar-v02 .aviso{border:1px solid var(--line);border-left:4px solid var(--blue);padding:32px;background:var(--pale)}
