@@ -225,6 +225,21 @@ def gerar(slug):
         extra_head = '<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-regularizacao-v02.css?v=1">'
         extra_body = ''
         classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-regularizacao'
+    elif rico and copia.get('perfil') == 'orcamento':
+        import layout_orcamento as O
+        principal = O.frente(copia, d, detalhes_html)
+        extra_head = '<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-orcamento-v02.css?v=1">'
+        extra_body = ''
+        classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-orcamento'
+        # Mantém os nós e as URLs; o nome visível do serviço passa a ser o aprovado (decisão 75).
+        graph = json.loads(re.search(r'<script[^>]*>(.*?)</script>', jsonld, re.S).group(1))
+        for node in graph.get('@graph', []):
+            if node.get('@type') == 'Service':
+                node['name'] = nome_servico
+                node['description'] = copia['descricao']
+            if node.get('@type') == 'BreadcrumbList':
+                node['itemListElement'][-1]['name'] = nome_servico
+        jsonld = '<script type="application/ld+json">' + json.dumps(graph, ensure_ascii=False, separators=(',',':')).replace('<','\\u003c') + '</script>'
     elif rico:
         import sys as _s
         _s.path.insert(0, str(Path(__file__).resolve().parent))

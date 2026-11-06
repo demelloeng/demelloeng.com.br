@@ -182,6 +182,26 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       assert.equal(services.length, 1, `${slug}: somente o próprio Service`);
       assert.equal(services[0].url, `https://demelloeng.com.br/servicos/${slug}/`);
       for (const href of ['../projeto-arquitetura/', '../../construir-ou-ampliar/', '../../avaliar-um-problema/']) assert.ok(html.includes(`<a href="${href}">`), `${slug}: link interno ${href}`);
+    } else if (slug === 'orcamento-tecnico') {
+      // Orçamento e cronograma V02 (issue #15): copy V01 aprovada. URL e identificador da calculadora preservados.
+      assert.match(html, /class="rico-hero-fundo"/, `${slug}: hero no layout rico`);
+      const destino = '../../orcamento/?situacao=known&amp;servico=orcamento-tecnico';
+      const rotulo = 'Calcular a estimativa deste serviço';
+      const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
+      assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
+      for (const h2 of ['Quando o orçamento faz diferença', 'O que você precisa ter', 'O que você recebe', 'Do projeto à planilha', 'Orçamento ou estimativa?', 'Prova técnica', 'Experiência aplicada: Colégio Djalma Marinho', 'Perguntas frequentes', 'Próximo passo']) {
+        assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
+      }
+      for (const h3 of ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites']) assert.ok(html.includes(`<h3>${h3}</h3>`), `${slug}: detalhe "${h3}"`);
+      assert.equal([...html.matchAll(/<ul class="rico-opcoes orc-situacoes">[\s\S]*?<\/ul>/g)].map((m) => (m[0].match(/<li>/g) ?? []).length)[0], 4, `${slug}: quatro situações`);
+      assert.equal([...html.matchAll(/<ol class="rico-etapas orc-etapas"[\s\S]*?<\/ol>/g)].map((m) => (m[0].match(/<li>/g) ?? []).length)[0], 5, `${slug}: cinco etapas`);
+      assert.equal([...html.matchAll(/<details class="rico-pergunta"/g)].length, 4, `${slug}: quatro perguntas`);
+      const nodes = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap((m) => JSON.parse(m[1])['@graph'] ?? []);
+      const services = nodes.filter((n) => n['@type'] === 'Service');
+      assert.equal(services.length, 1, `${slug}: somente o próprio Service`);
+      assert.equal(services[0].url, `https://demelloeng.com.br/servicos/${slug}/`);
+      assert.equal(services[0].name, 'Orçamento e cronograma', `${slug}: nome vigente do serviço (decisão 75)`);
+      assert.ok(html.includes('<a href="../compatibilizacao-bim/">Compatibilização BIM</a>'), `${slug}: link para Compatibilização BIM`);
     } else if (V02[slug]) {
       const [rotulo, destino] = V02[slug];
       const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
