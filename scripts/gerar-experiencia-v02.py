@@ -10,7 +10,7 @@ import runpy
 
 ROOT = Path(__file__).resolve().parent.parent
 COPY = ROOT / 'docs/arquivo/experiencia-tecnica-v02-20261106/COPY_EXPERIENCIA_TECNICA_V01_CONSOLIDADA_20261106.md'
-COPY_SHA256 = 'c6e0f15be20241df630b38a2da16554245bd6c5de1617e77327c27c9a45fab0a'
+COPY_SHA256 = '403e62e0f67784dfa6a964a55601a9823eeed31b0fcbe0471c9f4431155e2e9a'
 OUT = ROOT / 'experiencia-tecnica/index.html'
 BASE = runpy.run_path(str(ROOT / 'scripts/gerar-construir-ou-ampliar-v02.py'))
 MENU = BASE['MENU'].replace(' aria-current="page"', '').replace('href="../experiencia-tecnica/"', 'href="../experiencia-tecnica/" aria-current="page"')

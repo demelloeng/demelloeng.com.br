@@ -12,12 +12,12 @@ Arquitetura, estruturas, instalações e orçamento. Conheça trabalhos do acerv
 
 Veja os serviços registrados em cada empreendimento e explore demonstrações BIM.
 
-**CTA principal:** Começar pelo meu caso  
+**CTA principal:** Começar pelo meu caso
 **Destino:** `/orcamento/`
 
 **Microcopy:** Sem compromisso · contato somente no final
 
-**Link secundário:** Explorar projetos  
+**Link secundário:** Explorar projetos
 **Destino:** seção “Projetos que mostram a experiência na prática”, nesta página.
 
 ---
@@ -28,13 +28,13 @@ Veja os serviços registrados em cada empreendimento e explore demonstrações B
 
 Registros que ajudam a dimensionar a experiência apresentada nos projetos.
 
-**60**  
+**60**
 ARTs documentadas
 
-**23**  
+**23**
 Municípios identificados
 
-**Paraná e São Paulo**  
+**Paraná e São Paulo**
 Estados com serviços documentados
 
 **Nota de fonte:** Acervo profissional de Marcos de Mello Silva. Base documental consolidada em 03/08/2026.
@@ -92,7 +92,7 @@ Regularização e ampliação de um conjunto escolar em terreno com desnível ac
 
 Os seis registros identificam a abrangência dos serviços apresentados. A demonstração ilustrativa de terraplanagem está no bloco de modelos desta página, com seus limites de representação.
 
-**Link contextual:** Conheça o serviço de projeto de arquitetura.  
+**Link contextual:** Conheça o serviço de projeto de arquitetura.
 **Destino:** `/servicos/projeto-arquitetura/`
 
 #### Colégio Interventor Manoel Ribas
@@ -120,7 +120,7 @@ A ART contém referência a coautoria. A participação apresentada corresponde 
 
 Tubulação e central de GLP são subescopos distintos.
 
-**Link contextual:** Conheça o projeto de gás/GLP.  
+**Link contextual:** Conheça o projeto de gás/GLP.
 **Destino:** `/servicos/projeto-gas-glp/`
 
 #### Colégio Luiz Carlos de Paula e Souza
@@ -143,7 +143,7 @@ A atuação reúne estrutura, instalações hidrossanitárias e prevenção cont
 
 A demonstração apresenta o sistema de hidrantes, com componentes técnicos e complementos ilustrativos identificados. Seu conteúdo não abrange todas as disciplinas ou a totalidade do empreendimento.
 
-**Link contextual:** Conheça o projeto de prevenção contra incêndio.  
+**Link contextual:** Conheça o projeto de prevenção contra incêndio.
 **Destino:** `/servicos/projeto-prevencao-incendio/`
 
 #### Colégio Carmelina Ferreira Pedroso
@@ -166,7 +166,7 @@ No Carmelina, a experiência aparece em três frentes de projeto: estrutura, ins
 
 As três ARTs documentam serviços com abrangências próprias.
 
-**Link contextual:** Conheça o serviço de projeto estrutural.  
+**Link contextual:** Conheça o serviço de projeto estrutural.
 **Destino:** `/servicos/projeto-estrutural/`
 
 ---
@@ -183,7 +183,7 @@ O acervo também reúne projetos de instalações, estruturas e saneamento, alé
 
 **Serviço registrado:** Projeto hidrossanitário.
 
-**Rótulo da expansão:** Consultar registro  
+**Rótulo da expansão:** Consultar registro
 **Conteúdo expandido:** ART 1720245688653 — projeto hidrossanitário.
 
 #### Colégio Semiramis Barros Braga
@@ -192,7 +192,7 @@ O acervo também reúne projetos de instalações, estruturas e saneamento, alé
 
 **Serviço registrado:** Projeto hidrossanitário.
 
-**Rótulo da expansão:** Consultar registro  
+**Rótulo da expansão:** Consultar registro
 **Conteúdo expandido:** ART 1720250192920 — projeto hidrossanitário. Identificação do empreendimento conforme a base documental reconciliada.
 
 #### Colégio Otalípio Pereira de Andrade
@@ -201,7 +201,7 @@ O acervo também reúne projetos de instalações, estruturas e saneamento, alé
 
 **Serviços registrados:** Projeto hidrossanitário e projeto estrutural.
 
-**Rótulo da expansão:** Consultar registros  
+**Rótulo da expansão:** Consultar registros
 **Conteúdo expandido:**
 
 - Hidrossanitário — ART 1720253762611.
@@ -213,7 +213,7 @@ O acervo também reúne projetos de instalações, estruturas e saneamento, alé
 
 **Serviços registrados:** Projeto hidrossanitário e projeto estrutural.
 
-**Rótulo da expansão:** Consultar registros  
+**Rótulo da expansão:** Consultar registros
 **Conteúdo expandido:**
 
 - Hidrossanitário — ART 1720250267873.
@@ -227,7 +227,7 @@ A ART estrutural também menciona outra unidade escolar nas observações. Esta 
 
 **Serviços registrados:** Projeto estrutural e orçamento técnico.
 
-**Rótulo da expansão:** Consultar registros  
+**Rótulo da expansão:** Consultar registros
 **Conteúdo expandido:**
 
 - Estrutural — ART 1720257202300.
@@ -241,7 +241,7 @@ Os registros abrangem serviços distintos sobre o empreendimento. As áreas das 
 
 **Serviços registrados:** Arquitetura, estrutura, hidráulica e orçamento para reforma de módulos sanitários domiciliares.
 
-**Rótulo da expansão:** Consultar registro  
+**Rótulo da expansão:** Consultar registro
 **Conteúdo expandido:** ART 20181316947 — projetos e orçamento vinculados ao atendimento do DSEI Litoral Sul. O local da intervenção é São Sebastião/SP, conforme a descrição técnica reconciliada.
 
 #### Polo EAD Unicesumar
@@ -250,7 +250,7 @@ Os registros abrangem serviços distintos sobre o empreendimento. As áreas das 
 
 **Serviço registrado:** Consultoria técnica em controle de fumaça.
 
-**Rótulo da expansão:** Consultar registro  
+**Rótulo da expansão:** Consultar registro
 **Conteúdo expandido:** ART 20163587193 — assistência, assessoria e consultoria em cálculo do controle de fumaça. O registro não corresponde à autoria do projeto completo de prevenção contra incêndio da edificação.
 
 ---
@@ -304,7 +304,7 @@ A geometria proveniente do arquivo técnico IFC recebe complementos ilustrativos
 
 **Mensagem sem JavaScript:** Ative JavaScript para explorar o modelo 3D. As informações do projeto e os links continuam disponíveis nesta página.
 
-**Link de apoio:** Conheça o projeto de prevenção contra incêndio.  
+**Link de apoio:** Conheça o projeto de prevenção contra incêndio.
 **Destino:** `/servicos/projeto-prevencao-incendio/`
 
 #### Colégio Djalma Marinho — terraplanagem
@@ -317,7 +317,7 @@ A demonstração apresenta o terreno e as áreas de corte e aterro, com recursos
 
 **Aviso técnico:** O terreno natural foi reconstruído para a demonstração. O relevo tem exagero vertical de duas vezes, e as contenções são ilustrativas. A maquete não substitui levantamento topográfico, não representa um projeto executivo completo e não deve ser usada para conferir quantitativos.
 
-**Link de acesso:** Explorar a demonstração de terraplanagem.  
+**Link de acesso:** Explorar a demonstração de terraplanagem.
 **Destino:** `/servicos/projeto-terraplenagem/`
 
 **Microcopy:** A demonstração abre na página do serviço de terraplanagem.
@@ -328,15 +328,15 @@ Conheça também um anteprojeto estrutural em concreto, um modelo preliminar de 
 
 Esses exemplos apresentam outras aplicações das disciplinas. Não são identificados como modelos dos colégios deste portfólio.
 
-**Link:** Explorar as demonstrações de concreto e estrutura metálica.  
+**Link:** Explorar as demonstrações de concreto e estrutura metálica.
 **Destino:** `/servicos/projeto-estrutural/`
 
-**Link:** Explorar as instalações de uma residência.  
+**Link:** Explorar as instalações de uma residência.
 **Destino:** `/servicos/projeto-hidrossanitario/`
 
 Para entender como as interfaces entre disciplinas são analisadas e as soluções são coordenadas:
 
-**Link:** Conheça a coordenação e a compatibilização BIM.  
+**Link:** Conheça a coordenação e a compatibilização BIM.
 **Destino:** `/servicos/compatibilizacao-bim/`
 
 ---
@@ -365,14 +365,14 @@ Pode ser um projeto completo ou uma demanda pontual de engenharia. Conte o que v
 
 O formulário ajuda a organizar as informações. Conforme o caso, apresenta uma estimativa ou encaminha a demanda para avaliação técnica.
 
-**CTA principal:** Começar pelo meu caso  
+**CTA principal:** Começar pelo meu caso
 **Destino:** `/orcamento/`
 
 **Microcopy:** Sem compromisso · contato somente no final
 
 **Texto de expectativa:** A estimativa é uma referência inicial. A proposta depende da definição do escopo e da confirmação das informações.
 
-**CTA secundário:** Prefere conversar? Fale pelo WhatsApp.  
+**CTA secundário:** Prefere conversar? Fale pelo WhatsApp.
 **Destino:** `https://wa.me/5541985124056`
 
 ---
