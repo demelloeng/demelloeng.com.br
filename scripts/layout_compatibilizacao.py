@@ -24,8 +24,8 @@ def faz(bloco):
     abertura = _item(bloco, 'paragrafo')['texto']
     lis = ''.join(f'<li>{x}</li>' for x in _item(bloco, 'lista')['itens'])
     casos = _item(bloco, 'casos')['itens']
-    cartoes = ''.join(f'<div class="rico-cartao{" destaque" if i else ""}"><p><strong>{c["titulo"]}</strong> {c["texto"]}</p></div>'
-                      for i, c in enumerate(casos))
+    # Os dois casos têm o mesmo peso visual: o mesmo cartão, sem destaque em nenhum (ajuste da auditoria de 06/11).
+    cartoes = ''.join(f'<div class="rico-cartao"><p><strong>{c["titulo"]}</strong> {c["texto"]}</p></div>' for c in casos)
     return (f'<section class="rico-sec wrap" data-block="coordination"><h2>{bloco["titulo"]}</h2>'
             f'<div class="rico-duas"><div class="rico-corrido"><p>{abertura}</p><ul class="lista bim-atividades">{lis}</ul></div>'
             f'<div class="rico-cartoes bim-casos">{cartoes}</div></div>'
