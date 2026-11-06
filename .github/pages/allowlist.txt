@@ -172,6 +172,7 @@ assets/vendor/three/examples/jsm/utils/BufferGeometryUtils.js
 assets/css/servico-pscip-glp-v02.css
 assets/css/servico-regularizacao-v02.css
 assets/css/servico-orcamento-v02.css
+assets/css/servico-compatibilizacao-v02.css
 assets/css/catalogo-pscip-glp-v02.css
 assets/css/hidrantes-luiz-carlos-v02.css
 assets/js/hidrantes-luiz-carlos-ativar.js

@@ -31,7 +31,7 @@ const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
 // Páginas no visual V02 (menu e rodapé novos). As páginas antigas ficam fora deste conjunto.
 const PAGINAS_V02 = [
   'index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
-  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico'].map((s) => `servicos/${s}/index.html`),
+  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`),
 ];
 
 const pageUrl = (file) => `${ORIGIN}/${file.replace(/index\.html$/, '')}`;
@@ -232,7 +232,7 @@ test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projet
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
-  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html'];
+  const LANCADAS = ['index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html'];
   const referencia = normaliza(LANCADAS[2], HTML[LANCADAS[2]]);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
@@ -266,7 +266,7 @@ test('navegação: item atual marcado com aria-current na página correspondente
   assert.deepEqual(current('index.html'), ['Início']);
   assert.deepEqual(current('construir-ou-ampliar/index.html'), ['Construir ou ampliar']);
   // Páginas V02 (Serviços e as quatro de projeto com copy nova): o item atual do menu é "Serviços". As demais seguem com "Outros serviços".
-  const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico']);
+  const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim']);
   assert.deepEqual(current('servicos/index.html'), ['Serviços']);
   for (const s of SERVICE_SLUGS) assert.deepEqual(current(`servicos/${s}/index.html`), V02_SERVICES.has(s) ? ['Serviços'] : ['Outros serviços'], s);
   assert.deepEqual(current('experiencia-tecnica/index.html'), ['Experiência']);

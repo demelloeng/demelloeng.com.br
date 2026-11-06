@@ -96,10 +96,12 @@ def main(slug, arquivo, nome_servico):
         (DOCS / f'{slug}.copy.json').write_text(json.dumps(dados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
         print(f'{slug}: copy.json gerado a partir de {arquivo}')
         return
-    if slug in ('regularizacao', 'orcamento-tecnico'):
+    if slug in ('regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'):
         from copy_regularizacao import parse_copy
         if slug == 'orcamento-tecnico':   # Orçamento e cronograma V02 (issue #15): contrato próprio
             from copy_orcamento import parse_copy
+        if slug == 'compatibilizacao-bim':   # Compatibilização BIM V02 (issue #15): contrato próprio
+            from copy_compatibilizacao import parse_copy
         dados = parse_copy(texto, slug, arquivo, nome_servico)
         (DOCS / f'{slug}.copy.json').write_text(json.dumps(dados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
         print(f'{slug}: copy.json gerado a partir de {arquivo}')

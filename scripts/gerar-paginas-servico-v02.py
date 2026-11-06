@@ -240,6 +240,13 @@ def gerar(slug):
             if node.get('@type') == 'BreadcrumbList':
                 node['itemListElement'][-1]['name'] = nome_servico
         jsonld = '<script type="application/ld+json">' + json.dumps(graph, ensure_ascii=False, separators=(',',':')).replace('<','\\u003c') + '</script>'
+    elif rico and copia.get('perfil') == 'compatibilizacao':
+        # Compatibilização BIM V02 (issue #15): o JSON-LD antigo é preservado; só a descrição acompanha a copy (acima).
+        import layout_compatibilizacao as B
+        principal = B.frente(copia, d)
+        extra_head = '<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-compatibilizacao-v02.css?v=1">'
+        extra_body = ''
+        classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-compatibilizacao'
     elif rico:
         import sys as _s
         _s.path.insert(0, str(Path(__file__).resolve().parent))
