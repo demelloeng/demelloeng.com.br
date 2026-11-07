@@ -1,6 +1,6 @@
 # Contrato de mensuração do funil — DEMELLO Engenharia
 
-Estado: **implementado no site, sem nenhum fornecedor conectado.** Nenhum evento sai do navegador para qualquer serviço externo.
+Estado: **implementado no site, com carregadores de Simple Analytics e Meta Pixel.** O código pode transmitir medições a esses fornecedores, respeitados seus controles. Configuração de contas e entrega externa não foram verificadas nesta revisão local.
 Este documento não é publicado (fora da allowlist de `.github/pages/allowlist.txt`).
 
 ## 1. Como funciona
@@ -27,7 +27,7 @@ Este documento não é publicado (fora da allowlist de `.github/pages/allowlist.
 | `situation_selected` | site | Mesmo momento; uma vez por (rota, disciplina). Rota trocada depois gera novo evento. | `route`, `entry`, `service`*, `step` |
 | `estimate_completed` | site | Ao exibir o resultado **com estimativa calculada** (X3A + motor `CALCULATED`). Novo evento só se as respostas mudarem. | `route`, `service`, `service_count`, `result_status`, `step` |
 | `framing_delivered` *(extra)* | site | Ao exibir resultado **sem valor** (avaliação humana ou sinal de risco). | idem |
-| `proposal_requested` | site | **Depois** do envio aceito pelo CRM (HTTP 202) com a escolha "Quero receber uma proposta". | `route`, `service`, `service_count`, `request_intent`, `step` |
+| `proposal_requested` | site | **Depois** da captura aceita pelo Worker (HTTP 202), persistida em D1, com a escolha "Quero receber uma proposta". Não comprova processamento no CRM. | `route`, `service`, `service_count`, `request_intent`, `step` |
 | `scope_question_requested` | site | Idem, escolha "Tenho uma dúvida sobre o escopo". | idem |
 | `evaluation_requested` *(extra)* | site | Idem, caso enviado apenas para avaliação. | idem |
 | `qualified_lead` | site (R1) ou crm | Envio aceito **e** regra objetiva R1 satisfeita (§4). | `route`, `service`, `service_count`, `rule` |
@@ -73,7 +73,7 @@ Todo parâmetro tem **validador fechado** (enum ou padrão estrito). Valor fora 
 
 `qualified_lead` só é emitido quando **todas** as condições são verdadeiras (`evaluateQualifiedLead`, `src/funnel.mjs`):
 
-1. o CRM aceitou o envio (HTTP 202 `accepted`);
+1. o Worker aceitou e persistiu a captura em D1 (HTTP 202 `accepted`); isso não confirma processamento no CRM;
 2. a escolha foi **"Quero receber uma proposta"** (`request_intent = proposal`);
 3. a estimativa foi **calculada e mostrada antes do contato** (`resultKind = calculated`);
 4. o caso **não** tem sinal de risco (`safety_hold = false`);
@@ -89,22 +89,26 @@ Dúvida sobre escopo, avaliação humana e retenção de segurança **nunca** qu
 - Pedidos (`*_requested`, `qualified_lead`): chave = `submission_id` idempotente devolvido pelo Worker. "Tentar enviar novamente" não duplica.
 - Cobertura: `orcamento-src/tests/analytics.test.mjs`.
 
-## 6. Dados enviados ao CRM (separado da mensuração)
+## 6. Dados enviados ao Worker de captura (separado da mensuração)
 
-O envio existente ao CRM (`submit.mjs`, Worker de captura) **não mudou**. A escolha pós-resultado entra em `answers` do payload V2 (a dúvida escrita vai em `answers.scope_question`, só no envio confirmado; a proveniência da área da Arquitetura, em `answers.architecture_area`):
+O envio existente ao Worker (`submit.mjs`) **não mudou**. O Worker persiste a captura em D1; o CRM permanece em espera. HTTP 202 não comprova conclusão de CRM nem entrega à Meta. A escolha pós-resultado entra em `answers` do payload V2 (a dúvida escrita vai em `answers.scope_question`, só no envio confirmado; a proveniência da área da Arquitetura, em `answers.architecture_area`):
 
 | Estado de negócio | `answers.request_intent` | `answers.estimate_state` | `answers.lead_stage` |
 |---|---|---|---|
-| Estimativa concluída (sem pedido; **não** é enviada ao CRM) | — | — | — |
+| Estimativa concluída sem envio final (a geração da prévia tem fluxo próprio) | — | — | — |
 | Proposta solicitada | `proposal` | `completed` | `proposta_solicitada` |
 | Dúvida sobre o escopo | `scope_question` | `completed` | `duvida_sobre_escopo` |
 | Caso enviado apenas para avaliação | `evaluation_only` | `not_available` | `caso_para_avaliacao` |
 
-Contrato Worker/CRM: localizado e validado (Marcos); ver `docs/CLASSIFICACAO_WORKER_CRM.md` (os arquivos de esquema não estão neste pacote).
+Contrato Worker/CRM: localizado e validado (Marcos); ver `docs/CLASSIFICACAO_WORKER_CRM.md` (os arquivos de esquema não estão neste pacote). A existência desse contrato não representa CRM operacional.
 
-## 7. Como conectar uma ferramenta depois (não feito nesta entrega)
+## 7. Meta implementada e exemplos de outras ferramentas
 
-Nada abaixo existe hoje. Exemplos de **onde** ligar — sempre via `subscribe`, sem editar `analytics.mjs`:
+O carregador vigente `assets/js/meta-pixel.js` envia `PageView`; mapeia `estimate_completed` para `EstimateCompleted`, `qualified_lead` para `QualifiedLead` e cliques de contato para `Contact`. DNT/GPC impedem o carregamento inicial; as verificações do adaptador também barram eventos explícitos posteriores. Isso não comprova interrupção de toda atividade de uma biblioteca já carregada.
+
+No canônico, o Worker pode enviar `Lead` pela CAPI após captura nova em D1, se houver configuração e nenhum opt-out aplicável. O evento usa `submission_id` como `event_id`; repost idempotente não reenvia. IP, user-agent e identificadores de anúncio opcionais podem acompanhar o evento. `Contact`, `QualifiedLead` e `Lead` não são presumidos equivalentes para deduplicação. Configuração externa, entrega e fundamento/consentimento permanecem pendentes de comprovação e deliberação.
+
+Os exemplos abaixo de GA4 e GTM não estão implementados. Indicam **onde** conectar outra ferramenta, sem editar `analytics.mjs`:
 
 ```js
 // GA4 (gtag.js carregado pela página, com consentimento) — exemplo, NÃO implementado
@@ -113,8 +117,6 @@ window.DemelloAnalytics.subscribe((e) => gtag('event', e.name, e.params), { repl
 // GTM — exemplo, NÃO implementado
 window.DemelloAnalytics.subscribe((e) => window.dataLayer.push({ event: e.name, ...e.params }), { replay: true });
 
-// Meta Pixel (conversões) — exemplo, NÃO implementado; mapear só proposal_requested / qualified_lead
-window.DemelloAnalytics.subscribe((e) => { if (e.name === 'proposal_requested') fbq('trackCustom', 'ProposalRequested'); });
 ```
 
 Passos para conectar de verdade (decisões humanas): (1) escolher a ferramenta e criar a conta/ID; (2) definir a política de consentimento (LGPD) e só carregar a tag após o aceite; (3) incluir o carregador **em um arquivo novo** da allowlist (ex.: `assets/js/analytics-sink.mjs`) e importá-lo depois de `site-analytics.mjs` nas páginas; (4) no `/orcamento/`, o bundle é reconstruído (`pnpm build`) e `build_artifact.py` precisa dos novos nomes (o teste `commercial_site.test.mjs` acusa divergência); (5) ligar `proposal_sent` e `contract_won` a partir do CRM/back-office, não do navegador.

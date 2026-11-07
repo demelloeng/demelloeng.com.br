@@ -74,7 +74,9 @@ test('destino de mensuração: Simple Analytics só liga sem DNT/GPC; page_view 
   r.listeners['demello:analytics']({ detail: { name: 'estimate_started', params: { route: 'build', entry: 'manual', step: 'S1', obj: { a: 1 }, fn() {} } } });
   assert.equal(JSON.stringify(sent), JSON.stringify([['estimate_started', { route: 'build', entry: 'manual', step: 'S1' }]]), 'só metadados primitivos do contrato');
   r.listeners['demello:analytics']({ detail: { name: 'Proposal Requested!', params: {} } });
-  assert.equal(sent[1][0], 'proposal_requested_', 'nome sanitizado para [a-z0-9_]');
+  assert.equal(sent.length, 1, 'evento fora do contrato é descartado, não renomeado');
+  r.listeners['demello:analytics']({ detail: { name: 'proposal_requested', params: { route: 'build', request_intent: 'proposal', email: 'pessoa@example.test' } } });
+  assert.equal(JSON.stringify(sent[1]), JSON.stringify(['proposal_requested', { route: 'build', request_intent: 'proposal' }]), 'evento vigente aceito sem dado de contato');
   assert.doesNotMatch(src, /document\.cookie|localStorage|sessionStorage|indexedDB/, 'o destino não guarda nada no navegador');
 });
 
@@ -102,33 +104,54 @@ test('política × código: o que o site carrega está declarado; nada que o sit
   const sink = await read('assets/js/analytics-sink.js');
   assert.match(sink, /simpleanalyticscdn\.com/);
   assert.match(txt, /Simple Analytics/);
-  const stage = await read('assets/js/three-d-stage.js');
-  assert.match(stage, /unpkg\.com/);
-  assert.match(txt, /unpkg\.com/);
+  // Conferir os import maps executados, não exemplos antigos em comentários.
+  let maps = 0;
+  for (const p of await staticPages()) {
+    for (const match of (await read(p)).matchAll(/<script type="importmap">([\s\S]*?)<\/script>/g)) {
+      const imports = JSON.parse(match[1]).imports;
+      if (!imports.three) continue;
+      maps += 1;
+      for (const target of Object.values(imports)) {
+        assert.doesNotMatch(target, /^(?:https?:)?\/\//, `${p}: biblioteca 3D local`);
+        assert.match(target, /assets\/vendor\/three\//);
+        await access(path.resolve(siteRoot, path.dirname(p), target));
+      }
+    }
+  }
+  assert.ok(maps > 0, 'import maps da biblioteca 3D encontrados');
+  assert.doesNotMatch(txt, /unpkg\.com/i, 'não declara CDN removida');
   const bundle = (await readdir(path.join(siteRoot, 'orcamento/assets'))).find((f) => f.endsWith('.js'));
   const js = await read(`orcamento/assets/${bundle}`);
   assert.match(js, /workers\.dev/);
   assert.match(txt, /Cloudflare/);
   assert.match(txt, /GitHub Pages/);
   assert.match(txt, /WhatsApp/);
-  assert.match(txt, /não usa cookies/);
-  assert.match(txt, /não guarda nada no seu navegador/);
+  assert.match(txt, /cookies de publicidade/, 'informa a possibilidade de cookies do Pixel');
+  assert.match(txt, /IP, dados do navegador e identificadores técnicos/);
   for (const p of ['assets/js/analytics-sink.js', 'assets/js/analytics.mjs', 'assets/js/site-analytics.mjs', 'assets/js/nav.js']) {
     assert.doesNotMatch(await read(p), /document\.cookie|localStorage|sessionStorage|indexedDB/, `${p}: sem armazenamento no navegador`);
   }
   assert.doesNotMatch(txt, /Google Analytics|GA4|Google Fonts|Hotjar/i, 'não cita ferramentas que o site não usa');
   assert.match(txt, /Pixel da Meta/);
-  assert.match(txt, /art\. 7º, IX\)/, 'base legal do Pixel: legítimo interesse');
-  assert.match(txt, /Do Not Track ou Global Privacy Control, o script da Meta não é carregado/);
-  assert.match(txt, /_fbp e _fbc/);
-  assert.match(txt, /fotos[^.]*não são enviadas/i);
-  assert.match(txt, /Lei 13\.709\/2018/);
-  assert.match(txt, /art\. 7º, V/);
+  assert.doesNotMatch(txt, /legítimo interesse|art\. 7º, IX\)/i, 'não presume fundamento da publicidade');
+  assert.match(txt, /Do Not Track ou Global Privacy Control/);
+  assert.match(txt, /ao abrir a página[^.]*não carrega as ferramentas de medição/);
+  assert.match(txt, /identificadores de anúncio/);
+  assert.match(txt, /nome, tamanho e tipo/, 'distingue metadados dos arquivos');
+  assert.match(txt, /arquivos de imagem não fazem parte desse envio/);
+  for (const right of ['acesso', 'correção', 'anonimização', 'bloqueio', 'eliminação', 'portabilidade', 'compartilhamentos', 'consentimento']) {
+    assert.ok(txt.includes(right), `direito informado: ${right}`);
+  }
   assert.match(txt, /ANPD/);
   assert.match(txt, /Última atualização: \d{1,2} de [a-zç]+ de 20\d\d/);
   const app = await readFile(path.join(appRoot, 'src/GlobalApp.jsx'), 'utf8');
   assert.match(app, /As fotos não são enviadas/);
-  assert.match(txt, /concluir e confirmar/);
+  assert.match(txt, /Antes do contato final, gerar a prévia verificável já envia dados à Cloudflare/);
+  assert.match(txt, /prévia fica guardada em um banco de dados/);
+  assert.match(txt, /Quem tem o código pode consultar seu conteúdo público/);
+  assert.match(txt, /Ao confirmar o envio final/);
+  assert.match(txt, /em espera de processamento pela DEMELLO/);
+  assert.doesNotMatch(txt, /cadastro concluído no CRM|dados ficam apenas no navegador/i);
 });
 
 test('política: nenhuma página carrega recurso de host externo (script, estilo, imagem, vídeo, iframe) além do declarado', async () => {

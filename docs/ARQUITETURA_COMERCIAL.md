@@ -43,7 +43,7 @@ Arquitetura (`ARQUITETURA`, Q_NOVA), Orçamento técnico (`ORCAMENTO`, Q_ESCOPO)
 
 ## 3. Fluxo da estimativa (o que mudou e o que não mudou)
 
-Preservado: cinco rotas, perguntas condicionais, motor determinístico (`src/pricing/`, texto de paridade com o motor Python), resumo editável, resultado antes do contato, retenção por sinal de risco, envio ao CRM com retentativa, tratamento de falha, geração/verificação da prévia.
+Preservado: cinco rotas, perguntas condicionais, motor determinístico (`src/pricing/`, texto de paridade com o motor Python), resumo editável, resultado antes do contato, retenção por sinal de risco, envio ao Worker de captura com retentativa, tratamento de falha, geração/verificação da prévia. HTTP 202 confirma captura persistida em D1; não comprova conclusão no CRM, que permanece em espera.
 
 Novo, depois do resultado (o contato só existe depois dele):
 

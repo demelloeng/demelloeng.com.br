@@ -64,6 +64,9 @@ jobs:
       - name: Contratos do gerador Experiência Técnica
         run: python3 -B -m unittest discover -s scripts -p test_experiencia.py
 
+      - name: Contratos do gerador Privacidade
+        run: python3 -B -m unittest discover -s scripts -p test_privacidade.py
+
       - name: Montar artefato Pages (allowlist V1)
         run: |
           python3 .github/pages/build_artifact.py build "$GITHUB_SHA" \

@@ -4,7 +4,7 @@
    - NÃO carrega para quem envia Do Not Track ou Global Privacy Control;
    - nos demais casos, carrega com a página (sem aviso de consentimento, mesma lógica do site do Amor em Todos os Cantos);
    - o evento Lead (pedido de proposta, dúvida de escopo, avaliação) NÃO sai daqui: sai do Worker, pela API de Conversões,
-     depois que o CRM aceita o envio (sem duplicidade);
+     depois de uma captura nova persistida em D1 (sem duplicidade por reenvio idempotente);
    - envia à Meta, deste navegador, só PageView e os eventos do contrato fechado (assets/js/analytics.mjs), com parâmetros de lista fechada:
      nunca nome, contato, texto digitado ou foto;
    - sem correspondência avançada (nenhum e-mail ou telefone, nem em hash, sai do navegador).
@@ -15,12 +15,15 @@
   var FB_SRC = 'https://connect.facebook.net/en_US/fbevents.js';
   if (!PIXEL_ID) return;
 
-  var nav = window.navigator || {};
-  try {
-    if (nav.doNotTrack === '1' || window.doNotTrack === '1' || nav.globalPrivacyControl === true) return;
-  } catch (e) { return; }
+  function trackingAllowed() {
+    try {
+      var nav = window.navigator || {};
+      return !(nav.doNotTrack === '1' || window.doNotTrack === '1' || nav.globalPrivacyControl === true);
+    } catch (e) { return false; }
+  }
+  if (!trackingAllowed()) return;
 
-  var SAFE = { route: /^(build|regularize|problem|known|support)$/, service: /^[a-z_]{2,30}$/ };
+  var SAFE = { route: /^(build|regularize|problem|known|support)$/, service: /^(estrutural|hidrossanitario|incendio|gas_glp|arquitetura|regularizacao|orcamento|terraplenagem|compatibilizacao|consultoria_tecnica|mentoria_tecnica|multiple|none)$/ };
   function safeParams(p) {
     var out = {};
     p = p || {};
@@ -51,11 +54,14 @@
     window.fbq('init', PIXEL_ID);
     window.fbq('track', 'PageView');
     window.addEventListener('demello:analytics', function (e) {
-      var ev = e && e.detail;
-      if (!ev || typeof ev.name !== 'string' || !MAP[ev.name]) return;
-      try { window.fbq(MAP[ev.name][0], MAP[ev.name][1], safeParams(ev.params)); } catch (err) { /* medição nunca derruba a página */ }
+      try {
+        if (!trackingAllowed()) return;
+        var ev = e && e.detail;
+        if (!ev || typeof ev.name !== 'string' || !Object.hasOwn(MAP, ev.name)) return;
+        window.fbq(MAP[ev.name][0], MAP[ev.name][1], safeParams(ev.params));
+      } catch (err) { /* medição nunca derruba a página */ }
     });
   }
 
-  loadPixel();
+  try { loadPixel(); } catch (err) { /* DOM ou fornecedor indisponível: a navegação continua */ }
 })();
