@@ -221,7 +221,7 @@ test('Trajetória do fundador: alcançável do rodapé de qualquer página e da 
   assert.match(exp, /<a[^>]*href="\.\.\/empresa\/trajetoria-do-fundador\.html">Veja a trajetória do fundador\.<\/a>/);
   assert.ok(await exists('empresa/trajetoria-do-fundador.html'));
   assert.match(await read('sitemap.xml'), /\/empresa\/trajetoria-do-fundador\.html/);
-  assert.match(await read('empresa/index.html'), /href="\.\/trajetoria-do-fundador\.html">Trajetória do fundador →/);
+  assert.match(await read('empresa/index.html'), /<a class="acao" href="\.\.\/empresa\/trajetoria-do-fundador\.html">Conhecer a trajetória do fundador<\/a>/);
 });
 
 test('Pixel da Meta: respeita DNT/GPC, não envia dado pessoal e está em todas as páginas', async () => {
