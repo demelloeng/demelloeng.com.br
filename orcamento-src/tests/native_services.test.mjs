@@ -341,7 +341,7 @@ test('bundle publicado reflete o código-fonte: serviços nativos, dúvida, refo
   const { readdir } = await import('node:fs/promises');
   const files = await readdir(dir);
   const js = await readFile(path.join(dir, files.find((n) => /^index-.*\.js$/.test(n))), 'utf8');
-  for (const marker of ['Qual é a sua dúvida?', 'Reformar sem aumentar a área', 'Qual a área do imóvel a reformar?', 'Qual a área abrangida pelo orçamento técnico?',
+  for (const marker of ['Qual é a sua dúvida?', 'Reformar sem aumentar a área', 'Qual a área do imóvel a reformar?', 'Qual a área abrangida pelo orçamento e cronograma?',
     'ARQ_EST_V1', 'LOT_ONLY_ESTIMATE', 'PROGRAM_AND_LOT_ESTIMATE', 'Seu ponto de partida', 'scope_question', 'ARQUITETURA', 'TERRAPLENAGEM', 'ORCAMENTO']) {
     assert.ok(js.includes(marker), `bundle sem "${marker}" — reconstruir o orcamento-src`);
   }

@@ -128,3 +128,7 @@ input:not([type=radio]):not([type=checkbox]):focus,select:focus,textarea:focus{b
 .contact-fields .field-error{font-size:14px;margin:0;font-weight:500}
 .contact-fields .field-hint{margin:-4px 0 0}
 @media(max-width:900px){.location-fields.picker{grid-template-columns:1fr}}
+
+/* P04 — badge oficial do Simple Analytics no rodapé da calculadora (mesmo link e imagem do gerador oficial). */
+.site-footer nav .sa-badge{display:flex;align-items:center;flex-shrink:0}
+.site-footer nav .sa-badge img{display:block;height:24px;width:auto}

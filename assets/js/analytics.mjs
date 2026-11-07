@@ -45,7 +45,7 @@ export const PARAMS = Object.freeze({
   program_size_band: (v) => ['na', 'lt_80', '80_140', '140_220', 'gt_220'].includes(v),
   estimation_version: (v) => typeof v === 'string' && /^ARQ_EST_V\d{1,3}$/.test(v),
   // Contato direto (WhatsApp, telefone, e-mail): só a POSIÇÃO do botão, em lista fechada. Nunca número, nome, texto ou endereço.
-  placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'body'].includes(v),
+  placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'floating', 'body'].includes(v),
 });
 
 // emitters: quem tem autoridade para emitir. 'site' = navegador do visitante; 'crm' = back-office.

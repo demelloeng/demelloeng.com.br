@@ -127,6 +127,7 @@ def montar(texto_copy: str) -> str:
 </main>
 {RODAPE}<script src="../assets/js/nav.js" defer></script>
 <script src="../assets/js/analytics-sink.js" defer></script>
+<script src="../assets/js/contato-flutuante.js" defer></script>
 <script src="../assets/js/meta-pixel.js" defer></script>
 <script type="module" src="../assets/js/site-analytics.mjs"></script>
 </body></html>

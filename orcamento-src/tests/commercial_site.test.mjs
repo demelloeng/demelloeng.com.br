@@ -50,6 +50,8 @@ const EXTERNAL_ALLOWED = [
   /^https:\/\/wa\.me\/5541985124056$/, /^mailto:marcos@demelloeng\.com\.br$/, /^tel:\+55\d{10,11}$/,
   /^https:\/\/www\.instagram\.com\/demelloeng\/$/, /^https:\/\/www\.linkedin\.com\/company\/demello-engenharia\/$/,
   /^https:\/\/www\.facebook\.com\/demelloeng\/$/,   // Contato V02 (IT039): Facebook oficial, URL personalizada confirmada pelo proprietário
+  // P04: badge oficial do Simple Analytics (plano gratuito). O link é o do gerador oficial; a imagem é cópia local inalterada.
+  /^https:\/\/www\.simpleanalytics\.com\?utm_source=demelloeng\.com\.br&utm_content=badge$/,
   /^https:\/\/www\.educacao\.pr\.gov\.br\//, /^https:\/\/fonts\.(googleapis|gstatic)\.com(\/|$)/, /^https:\/\/unpkg\.com\/three@/,
   // Arquitetura V11: matérias de imprensa citadas na página (scripts/importar-copy-servico-v02.py, IMPRENSA). URLs exatas, não domínios.
   /^https:\/\/www\.instagram\.com\/reel\/DZpkXZBOcjA\/$/,
@@ -230,10 +232,11 @@ test('HTML semântico: um H1, landmarks, hierarquia de títulos sem saltos, imag
 
 test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projeto) e o Contato e o Construir ou ampliar V02 têm o mesmo rodapé', () => {
   // Resolve href/src relativos para caminhos do site, para comparar o bloco sem depender da profundidade da página.
+  // Caminho que já começa com / (a imagem da badge, P04) é absoluto e não depende da profundidade: fica como está.
   const normaliza = (file, html) => {
     const rodape = html.match(/<footer[\s\S]*?<\/footer>/)[0].replace(/\r\n/g, '\n');   // o fim de linha dos arquivos varia (CRLF e LF)
     const dir = path.posix.dirname(`/${file}`);
-    return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
+    return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#|\/)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
   const LANCADAS = ['metodologia/index.html', 'index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html'];
   const referencia = normaliza('servicos/projeto-arquitetura/index.html', HTML['servicos/projeto-arquitetura/index.html']);
@@ -538,7 +541,7 @@ test('/orcamento/: texto estático e indexável no HTML (decisão 89), nas duas 
     assert.doesNotMatch(html, /name="robots" content="noindex/, `${p}: indexável`);
   }
   const publicada = await read('orcamento/index.html');
-  assert.ok(publicada.includes('/orcamento/assets/index-CsN7vBmE.js') && publicada.includes('/orcamento/assets/index-B16Vzy82.css'), 'a página publicada segue apontando para o bundle e o CSS ancorados (G5)');
+  assert.ok(publicada.includes('/orcamento/assets/index-5K0GYM6y.js') && publicada.includes('/orcamento/assets/index-kpxtIlde.css'), 'a página publicada segue apontando para o bundle e o CSS ancorados (G5)');
 });
 
 test('JSON-LD das nove páginas de serviço: atendimento em todo o Brasil (não só PR e SP)', () => {

@@ -41,7 +41,7 @@
     lot_area_band: (v) => ['na', 'lt_200', '200_360', '360_600', '600_1000', 'gt_1000'].includes(v),
     program_size_band: (v) => ['na', 'lt_80', '80_140', '140_220', 'gt_220'].includes(v),
     estimation_version: (v) => typeof v === 'string' && /^ARQ_EST_V\d{1,3}$/.test(v),
-    placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'body'].includes(v),
+    placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'floating', 'body'].includes(v),
   });
 
   const EVENTS = Object.freeze({
