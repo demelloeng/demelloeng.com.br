@@ -244,6 +244,10 @@ test('documentação e política: a medição de contato direto está descrita; 
   assert.match(doc, /não é lead qualificado|não se confunde com lead qualificado/i);
   assert.match(doc, /conversão intermediária|conversões intermediárias/i);
   const policy = (await read('privacidade/index.html')).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-  assert.match(policy, /cliques nos botões de WhatsApp, telefone e e-mail/);
-  assert.match(policy, /nunca o seu número, o seu e-mail ou o que você escrever/);
+  const clickDisclosure = policy.match(/[^.!?]*\beventos de clique\b[^.!?]*[.!?]\s*[^.!?]*[.!?]/i)?.[0];
+  assert.ok(clickDisclosure, 'a política descreve a medição dos cliques');
+  assert.match(clickDisclosure, /código do site/i, 'a declaração se limita aos eventos próprios do site');
+  for (const field of ['telefone', 'e-mail', 'mensagem']) {
+    assert.match(clickDisclosure, new RegExp(`não incluem[^.!?]*\\b${field}\\b`, 'i'), `eventos próprios de clique não incluem ${field}`);
+  }
 });

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
+import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 import { createTracker, EVENTS, PARAMS, SCHEMA, normalizePath, originOf, trackPageView, subscribe as subscribeSite } from '../../assets/js/analytics.mjs';
@@ -324,3 +325,102 @@ test('a interface só usa a ponte controlada (nenhuma chamada direta ao adaptado
   const calls = [...app.matchAll(/tracking\.(\w+)\(/g)].map((m) => m[1]).sort();
   assert.deepEqual(calls, ['pageView', 'result', 'situation', 'submissionAccepted']);
 });
+
+// Adaptadores externos: fornecedor e DOM isolados; nenhuma rede real.
+
+async function adapter(file, {navigator = {}, brokenDOM = false} = {}) {
+ const sent = [], scripts = [], listeners = {};
+ const document = {createElement(){if(brokenDOM)throw Error('DOM unavailable');return {};}, head:{appendChild(s){scripts.push(s);}},getElementsByTagName(){return [{parentNode:{insertBefore(s){scripts.push(s);}}}];}};
+ const window = {navigator, sa_event:(...a)=>sent.push(a), fbq:(...a)=>sent.push(a), addEventListener:(name,fn)=>listeners[name]=fn};
+ const source = await readFile(new URL(`../../assets/js/${file}`,import.meta.url),'utf8');
+ if(brokenDOM)delete window.fbq;
+ vm.runInNewContext(source,{window,document});
+ sent.length=0;
+ return {sent,scripts,window,emit(detail){listeners['demello:analytics']?.({detail});}};
+}
+const values = {page:'/contato/',origin:'direct',origin_page:'/',route:'build',entry:'manual',service:'estrutural',service_count:1,step:'X3A',result_status:'calculated',request_intent:'proposal',rule:'R1',area_source:'USER_DECLARED',area_band:'60_100',lot_area_band:'200_360',program_size_band:'80_140',estimation_version:'ARQ_EST_V1',placement:'footer'};
+
+test('Simple Analytics rejects unknown and back-office events from the public bus',async()=>{
+ const a=await adapter('analytics-sink.js');
+ for(const name of ['Maria Silva','Proposal Requested!','proposal_sent','contract_won','__proto__'])a.emit({name,params:{email:'fixture@example.invalid'}});
+ assert.deepEqual(a.sent,[]);
+});
+test('Simple Analytics strips out-of-contract keys and invalid values even inside valid event params',async()=>{
+ const a=await adapter('analytics-sink.js');
+ a.emit({name:'estimate_started',params:{route:'Maria_Silva',entry:'manual',step:'fixture@example.invalid',email:'fixture@example.invalid',service:'estrutural'}});
+ assert.equal(JSON.stringify(a.sent),JSON.stringify([['estimate_started',{entry:'manual'}]]));
+});
+test('Simple Analytics preserves every site event and its valid producer params without re-deduplicating',async()=>{
+ const a=await adapter('analytics-sink.js');
+ for(const [name,def]of Object.entries(EVENTS)){
+  if(name==='page_view'||!def.emitters.includes('site'))continue;
+  const tracker=createTracker();
+  tracker.subscribe(ev=>a.emit(ev));
+  const params=Object.fromEntries(def.params.map(k=>[k,values[k]]));
+  for(const [k,v]of Object.entries(params))assert.equal(PARAMS[k](v),true,k);
+  tracker.track(name,params,{dedupeKey:'first'});
+  tracker.track(name,params,{dedupeKey:'second-result'});
+  const last=a.sent.slice(-2);
+  assert.equal(last.length,2,name);
+  for(const [sentName,metadata]of last){assert.equal(sentName,name);assert.deepEqual(JSON.parse(JSON.stringify(metadata)),params);}
+ }
+});
+test('Meta only sends closed service codes for mapped events and rejects inherited map keys',async()=>{
+ const a=await adapter('meta-pixel.js');
+ a.emit({name:'estimate_completed',params:{route:'known',service:'maria_silva',email:'fixture@example.invalid'}});
+ assert.equal(JSON.stringify(a.sent),JSON.stringify([['trackCustom','EstimateCompleted',{route:'known'}]]));
+ a.emit({name:'__proto__',params:{}});
+ assert.equal(a.sent.length,1);
+ a.emit({name:'whatsapp_contact_started',params:{route:'known',service:'gas_glp'}});
+ assert.equal(JSON.stringify(a.sent[1]),JSON.stringify(['track','Contact',{route:'known',service:'gas_glp'}]));
+});
+for(const file of ['analytics-sink.js','meta-pixel.js']){
+ test(`${file}: a privacy signal enabled after load stops later explicit events`,async()=>{
+  for(const signal of ['doNotTrack','globalPrivacyControl']){
+   const navigator={};const a=await adapter(file,{navigator});
+   a.emit({name:'estimate_completed',params:{route:'build'}});
+   assert.equal(a.sent.length,1);
+   navigator[signal]=signal==='doNotTrack'?'1':true;
+   a.emit({name:'estimate_completed',params:{route:'known'}});
+   assert.equal(a.sent.length,1);
+  }
+ });
+ test(`${file}: unavailable script DOM never throws into page execution`,async()=>{
+  await assert.doesNotReject(()=>adapter(file,{brokenDOM:true}));
+ });
+}
+
+
+test('adapters preserve every closed service code and reject arbitrary strings in allowed fields', async () => {
+ const services=['estrutural','hidrossanitario','incendio','gas_glp','arquitetura','regularizacao','orcamento','terraplenagem','compatibilizacao','consultoria_tecnica','mentoria_tecnica','multiple','none'];
+ for(const file of ['analytics-sink.js','meta-pixel.js']){
+  const a=await adapter(file);
+  for(const service of services){
+   a.emit({name:'estimate_completed',params:{route:'known',service}});
+   const args=a.sent.at(-1),params=args.at(-1);
+   assert.equal(params.service,service);
+  }
+  for(const [name,def]of Object.entries(EVENTS)){
+   if(!def.emitters.includes('site')||name==='page_view')continue;
+   const params=Object.fromEntries(def.params.map(k=>[k,'fixture@example.invalid']));
+   a.emit({name,params});
+   if(file==='analytics-sink.js')assert.deepEqual(JSON.parse(JSON.stringify(a.sent.at(-1)[1])),{});
+  }
+ }
+});
+for(const file of ['analytics-sink.js','meta-pixel.js']){
+ test(`${file}: privacy signals prevent initial resources and later window DNT stops forwarding`,async()=>{
+  for(const navigator of [{doNotTrack:'1'},{globalPrivacyControl:true}]){
+   const a=await adapter(file,{navigator});
+   assert.equal(a.scripts.length,0);a.emit({name:'estimate_completed',params:{route:'build'}});assert.equal(a.sent.length,0);
+  }
+  const a=await adapter(file);a.window.doNotTrack='1';
+  a.emit({name:'estimate_completed',params:{route:'build'}});assert.equal(a.sent.length,0);
+ });
+ test(`${file}: malformed bus detail and provider exceptions do not escape`,async()=>{
+  const a=await adapter(file);
+  assert.doesNotThrow(()=>a.emit({get name(){throw Error('bad detail');}}));
+  a.window.sa_event=a.window.fbq=()=>{throw Error('provider unavailable');};
+  assert.doesNotThrow(()=>a.emit({name:'estimate_completed',params:{route:'build'}}));
+ });
+}

@@ -302,10 +302,12 @@ test('promessa de contato: toda página com CTA de estimativa diz que o contato 
   for (const file of COMMERCIAL) assert.doesNotMatch(visibleText(mainOf(HTML[file])), /entraremos em contato (agora|imediatamente)|ligamos em|retornamos em \d/i, file);
 });
 
-test('terminologia: "estimativa" é o termo da oferta; "previsão/prévia/Faça seu orçamento" não aparecem nas páginas', () => {
+test('terminologia: estimativa é a oferta; prévia pode descrever o tratamento de dados na política', () => {
   for (const file of ALL.filter((f) => f !== 'verificar/index.html')) {
     const text = visibleText(HTML[file]);
-    assert.doesNotMatch(text, /\bprévia\b|\bprevisão\b|faça seu orçamento/i, `${file}: termo antigo`);
+    assert.doesNotMatch(text, file === 'privacidade/index.html'
+      ? /\bprevisão\b|faça seu orçamento/i
+      : /\bprévia\b|\bprevisão\b|faça seu orçamento/i, `${file}: termo antigo`);
   }
   // "orçamento técnico" = serviço contratado; nunca confundido com a estimativa
   assert.match(visibleText(HTML['servicos/orcamento-tecnico/index.html']), /diferente da estimativa|Orçamento técnico ≠ estimativa/i);
