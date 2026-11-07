@@ -86,7 +86,7 @@ test('P05: toda camada mapeia para um serviço real do motor, e o painel está l
   const table = JSON.parse(await readFile(new URL('../src/pricing/pricing-table.v2.json', import.meta.url), 'utf8'));
   for (const k of Object.keys(LAYER_OF)) assert.ok(table.services[k], `serviço ${k} existe na tabela`);
   const app = await readFile(new URL('../src/GlobalApp.jsx', import.meta.url), 'utf8');
-  assert.match(app, /<LivePlan answers=\{answers\}\/>/);
+  assert.match(app, /<LivePlan answers=\{answers\} expanded=\{expanded\}\/>/);
   const comp = await readFile(new URL('../src/LivePlan.jsx', import.meta.url), 'utf8');
   assert.match(comp, /prefers-reduced-motion/);
   assert.match(comp, /role="img"/);
@@ -97,5 +97,5 @@ test('P01/P05: a mensagem neutra de porte acima do limite vale para o resultado 
   const app = await readFile(new URL('../src/GlobalApp.jsx', import.meta.url), 'utf8');
   assert.match(app, /:aboveLimit\(pv\)\?<>/);
   assert.ok(!/isPreview&&aboveLimit/.test(app), 'o ramo do limite não depende de isPreview');
-  assert.match(app, /Esse porte pede uma avaliação da equipe\./);
+  assert.match(app, /Esse porte pede avaliação da equipe\./);
 });

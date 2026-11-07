@@ -26,7 +26,7 @@ export const LAYER_LABEL = {
   terreno: 'Terraplanagem',
 };
 
-export const ILLUSTRATIVE_NOTICE = 'Desenho ilustrativo: mostra a ordem de grandeza e as disciplinas escolhidas, não o seu projeto.';
+export const ILLUSTRATIVE_NOTICE = 'Maquete do seu escopo. Ela cresce com a sua área. O projeto de verdade vem depois.';
 
 const MAX_FLOORS_DRAWN = 8;
 

@@ -38,8 +38,8 @@ export function LocationPicker({value,onChange}){
    {shown&&<ul id={listId} role="listbox" aria-label={`Municípios de ${uf}`} className="combo-list">{results.map((r,i)=><li key={r.id} id={`${uid}-o${i}`} role="option" aria-selected={i===active} className={i===active?'active':''} onMouseDown={e=>e.preventDefault()} onClick={()=>pick(r)}>{r.nome}{r.apelido&&<small> · {r.apelido}</small>}</li>)}</ul>}
   </div>
   <p id={statusId} className="field-hint" aria-live="polite">{status}</p>
-  {uf==='DF'&&<p className="field-hint">No Distrito Federal o município é Brasília. Taguatinga, Ceilândia e as demais são regiões administrativas: ao digitar o nome, a lista leva a Brasília.</p>}
-  {catalog==='error'&&<div role="alert" className="field-error">Não foi possível carregar a lista de municípios. <button type="button" className="text-button" onClick={load}>Tentar de novo</button> · Ou <a href="/contato/">fale direto com a DEMELLO</a>.</div>}
+  {uf==='DF'&&<p className="field-hint">No Distrito Federal, o município é Brasília. Taguatinga, Ceilândia e as demais são regiões administrativas. Digite o nome e a lista leva a Brasília.</p>}
+  {catalog==='error'&&<div role="alert" className="field-error">Não foi possível carregar a lista agora. <button type="button" className="text-button" onClick={load}>Tentar de novo</button> ou <a href="/contato/">fale direto com a DEMELLO</a>.</div>}
  </div>;
 }
 

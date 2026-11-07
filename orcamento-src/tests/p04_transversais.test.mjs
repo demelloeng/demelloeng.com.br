@@ -134,7 +134,9 @@ function rodarBotao({ estreita, path = '/servicos/', foco = null } = {}) {
   const mk = (tag) => {
     const e = {
       tagName: tag.toUpperCase(), className: '', style: {}, children: [], attrs: {}, listeners: {}, isContentEditable: false,
-      classList: { _s: new Set(), add(c) { this._s.add(c); }, remove(c) { this._s.delete(c); }, contains(c) { return this._s.has(c); } },
+      classList: { _s: new Set(), add(c) { this._s.add(c); }, remove(c) { this._s.delete(c); }, contains(c) { return this._s.has(c); }, toggle(c, on) { if (on) this._s.add(c); else this._s.delete(c); } },
+      insertBefore(c, ref) { const i = this.children.indexOf(ref); if (i < 0) this.children.push(c); else this.children.splice(i, 0, c); return c; },
+      querySelector() { return null; },
       setAttribute(k, v) { this.attrs[k] = v; }, getAttribute(k) { return this.attrs[k] ?? null; },
       appendChild(c) { this.children.push(c); return c; }, addEventListener(t, f) { (this.listeners[t] ??= []).push(f); },
       getBoundingClientRect: () => ({ left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 }),
@@ -144,13 +146,16 @@ function rodarBotao({ estreita, path = '/servicos/', foco = null } = {}) {
   };
   const docListeners = {};
   const body = mk('body'); body.className = '';
+  const header = mk('header'); const footer = mk('footer'); const voltar = mk('a');
+  header.children.push(voltar); header.querySelector = (sel) => (sel === '.site-link' ? voltar : null);
   const document = {
     head: mk('head'), body, createElement: mk,
     addEventListener: (t, f) => { (docListeners[t] ??= []).push(f); },
     querySelectorAll: () => [],
+    querySelector: (sel) => (sel === '.site-header' ? header : sel === '.site-footer' ? footer : null),
   };
   const window = {
-    matchMedia: (q) => ({ matches: q.includes('520') ? !!estreita : false }),
+    matchMedia: (q) => ({ matches: q.includes('520') || q.includes('900') ? !!estreita : false, addEventListener() {} }),
     innerHeight: 800, addEventListener() {}, MutationObserver: undefined,
   };
   window.window = window;
@@ -158,7 +163,7 @@ function rodarBotao({ estreita, path = '/servicos/', foco = null } = {}) {
     window, document, location: { pathname: path }, encodeURIComponent, getComputedStyle: () => ({ bottom: '100px' }),
     setTimeout: (f, ms) => { timers.push({ f, ms }); return timers.length; }, clearTimeout: () => {}, parseFloat, requestAnimationFrame: (f) => f(),
   });
-  return { ctx, run: (code) => vm.runInContext(code, ctx), els, docListeners, timers, body, document };
+  return { ctx, run: (code) => vm.runInContext(code, ctx), els, docListeners, timers, body, document, header, footer, voltar };
 }
 
 test('botão (execução): nasce uma vez por página, com texto no desktop que se recolhe sozinho', async () => {
@@ -179,18 +184,32 @@ test('botão (execução): nasce uma vez por página, com texto no desktop que s
   assert.ok(!fabs[0].className.includes('dm-fab--calc'), 'fora da calculadora não reserva a faixa da barra fixa');
 });
 
-test('botão (execução): no celular já nasce recolhido; na calculadora fica acima da barra fixa e reserva espaço', async () => {
+test('botão (execução): na calculadora ele não flutua — acopla ao cabeçalho no celular e ao rodapé no computador', async () => {
   const code = await read('assets/js/contato-flutuante.js');
-  const t = rodarBotao({ estreita: true, path: '/orcamento/' });
-  t.run(code);
-  const wrap = t.els.find((e) => e.className.startsWith('dm-fab') && !e.className.includes('__'));
-  assert.ok(wrap.className.includes('dm-fab--recolhido'), 'sem texto em tela estreita');
-  assert.ok(wrap.className.includes('dm-fab--calc'));
-  assert.ok(t.body.className.includes('dm-fab-on'));
-  assert.ok(!t.timers.some((x) => x.ms === 6000), 'sem temporizador de recolhimento');
-  const css = t.els.find((e) => e.id === 'dm-fab-css').textContent;
-  assert.match(css, /body\.dm-fab-on \.question-panel\{padding-bottom/);
-  assert.match(css, /var\(--footer,94px\)/);
+  const m = rodarBotao({ estreita: true, path: '/orcamento/' });
+  m.run(code);
+  const wrapM = m.els.find((e) => e.className.startsWith('dm-fab') && !e.className.includes('__'));
+  assert.ok(wrapM.className.includes('dm-fab--recolhido'), 'sem texto em tela estreita');
+  assert.ok(wrapM.className.includes('dm-fab--calc'));
+  assert.ok(wrapM.classList.contains('dm-fab--docked'));
+  assert.deepEqual(m.header.children.map((c) => c === wrapM), [true, false], 'no cabeçalho, antes do link "Voltar ao site"');
+  assert.equal(m.footer.children.length, 0, 'não vai ao rodapé no celular');
+  assert.ok(m.body.classList.contains('dm-fab-no-cabecalho'));
+  assert.ok(!m.timers.some((x) => x.ms === 6000), 'sem temporizador de recolhimento');
+  const d = rodarBotao({ estreita: false, path: '/orcamento/' });
+  d.run(code);
+  const wrapD = d.els.find((e) => e.className.startsWith('dm-fab') && !e.className.includes('__'));
+  assert.ok(d.footer.children.includes(wrapD), 'no computador, dentro do rodapé fixo');
+  assert.equal(d.header.children.includes(wrapD), false);
+  const css = d.els.find((e) => e.id === 'dm-fab-css').textContent;
+  assert.match(css, /\.dm-fab--docked\{position:static/);
+  assert.ok(!/dm-fab--evitar|body\.dm-fab-on|visibility:hidden/.test(css), 'sem esquiva, sem faixa reservada e sem esconder o botão');
+  assert.ok(!/opacity:\s*0?\.[0-9]+[^;}]*dm-fab/.test(css), 'sem opacidade reduzida');
+});
+
+test('botão (código): sem algoritmo de esquiva e sem leitura de conteúdo da página', async () => {
+  const code = await read('assets/js/contato-flutuante.js');
+  assert.ok(!/CONTROLES|topoDoConflito|getBoundingClientRect|dm-fab--evitar/.test(code), 'o botão não calcula sobreposição: ele fica numa barra fixa');
 });
 
 test('botão (execução): some enquanto o teclado do celular está em campo de texto e volta ao sair', async () => {

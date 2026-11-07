@@ -7,8 +7,9 @@
    único de contato (assets/js/contact-clicks.mjs) com a posição "floating". Um evento por clique.
 
    Acessibilidade: link de verdade (Enter e toque), nome acessível fixo, foco visível, contraste AA (verde escuro com
-   texto branco), alvo de 56 px, "prefers-reduced-motion" sem animação, sai de cima do campo quando o teclado do
-   celular abre (foco em campo de texto) e nunca cobre o fim da página: ela ganha espaço embaixo. */
+   texto branco), alvo de 56 px (44 px quando acoplado), "prefers-reduced-motion" sem animação, sai de cima do campo quando o
+   teclado do celular abre (foco em campo de texto). Nas páginas ele flutua no canto; na calculadora ele fica acoplado ao rodapé
+   (computador) ou ao cabeçalho (celular) e não cobre nada. */
 (function () {
   'use strict';
   if (window.__dmFlutuante) return;
@@ -22,9 +23,7 @@
   var CSS = [
     '.dm-fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:900;display:flex;align-items:center;gap:6px;font-family:"Montserrat",Arial,sans-serif;animation:dm-fab-in .24s ease-out both}',
     '.dm-fab[hidden]{display:none}',
-    '.dm-fab--calc{bottom:calc(var(--footer,94px) + 12px + env(safe-area-inset-bottom,0px))}',
     '.dm-fab--teclado{display:none}',
-    '.dm-fab--evitar{visibility:hidden;pointer-events:none}',
     '.dm-fab__link{display:flex;align-items:center;gap:10px;min-height:56px;min-width:56px;padding:0 16px;border-radius:28px;background:#0f7a3c;color:#fff;text-decoration:none;font-size:15px;font-weight:600;line-height:1.2;box-shadow:0 0 0 2px #fff,0 4px 14px rgba(0,0,0,.28);justify-content:center}',
     '.dm-fab__link:hover{background:#0b6631}',
     '.dm-fab__link:focus-visible,.dm-fab__fechar:focus-visible{outline:3px solid #fff;box-shadow:0 0 0 6px #0643a7}',
@@ -34,10 +33,14 @@
     '.dm-fab--recolhido .dm-fab__link{padding:0}',
     '.dm-fab--recolhido .dm-fab__fechar{display:none}',
     '.dm-fab__fechar{width:32px;height:32px;border:0;border-radius:50%;background:#fff;color:#0a2d55;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}',
-    /* Calculadora: o botão ocupa a faixa logo acima da barra fixa; a pergunta e o resumo reservam essa faixa, então ele
-       nunca cobre "Continuar", "Voltar", campos nem o lápis de edição do resumo. */
-    'body.dm-fab-on .question-panel{padding-bottom:calc(34px + 76px)}',
-    '@media (min-width:901px){body.dm-fab-on .case-panel{padding-bottom:calc(40px + 76px)}}',
+    /* Calculadora: o botão fica dentro da barra fixa do rodapé, como um item dela (ícone no celular, ícone e texto no computador). */
+    '.dm-fab--docked{position:static;animation:none;z-index:auto;margin-left:12px;flex:none}',
+    '.dm-fab--docked .dm-fab__fechar{display:none}',
+    '.dm-fab--docked .dm-fab__link{min-height:44px;min-width:44px;padding:0 14px;border-radius:22px;font-size:14px}',
+    '.dm-fab--docked .dm-fab__link svg{width:24px;height:24px}',
+    '@media (max-width:900px){.dm-fab--docked .dm-fab__rotulo{display:none}.dm-fab--docked .dm-fab__link{padding:0;justify-content:center}}',
+    '@media (max-width:900px){.dm-fab--docked{margin-left:auto;margin-right:8px}}',
+    '@media (max-width:420px){body.dm-fab-no-cabecalho .site-header>span{display:none}}',
     '@keyframes dm-fab-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}',
     '@media (max-width:520px){.dm-fab{right:12px}}',
     '@media (prefers-reduced-motion:reduce){.dm-fab{animation:none}.dm-fab__rotulo{transition:none}}',
@@ -53,7 +56,6 @@
   wrap.className = 'dm-fab';
   if (location.pathname.indexOf('/orcamento') === 0) {
     wrap.className += ' dm-fab--calc';
-    document.body.className += ' dm-fab-on';
   }
 
   var link = document.createElement('a');
@@ -85,47 +87,29 @@
   if (estreita) recolher();
   fechar.addEventListener('click', function () { clearTimeout(timer); });
 
-  // Calculadora: a jornada é um formulário. O botão nunca fica por cima de um controle (botão, campo, lista): se o
-  // lugar de sempre estiver ocupado, sobe para logo acima dele; se não houver lugar, some até o controle sair de baixo.
-  // Roda só quando algo muda (rolagem, redimensionamento, nova pergunta), no máximo uma conta a cada 60 ms.
+  // Calculadora: a jornada é um formulário com rolagem. Por isso o botão não flutua sobre ela: fica ACOPLADO a uma barra fixa,
+  // onde nunca há campo, valor, legenda nem controle por baixo. Acima de 900 px ele entra no rodapé; até 900 px, no cabeçalho
+  // (o rodapé do celular não tem espaço livre). Sem sobreposição possível, sem esquiva e sem opacidade reduzida.
+  // A calculadora desenha as duas barras depois deste script: o botão espera por elas e troca de lugar quando a largura muda.
   if (wrap.className.indexOf('dm-fab--calc') !== -1) {
-    // Controles E conteúdo que não pode ficar coberto (marcado com data-fab-evitar, ex.: o total do orçamento em movimento).
-    var CONTROLES = 'button,input,select,textarea,summary,a[href],[data-fab-evitar]';
-    var base = null;
-    var agendado = false;
-    var esquiva = function () {
-      agendado = false;
-      wrap.style.bottom = '';
-      wrap.classList.remove('dm-fab--evitar');
-      if (base === null) base = parseFloat(getComputedStyle(wrap).bottom) || 0;
-      var lista = document.querySelectorAll(CONTROLES);
-      for (var volta = 0; volta < 4; volta++) {
-        var f = wrap.getBoundingClientRect();
-        var topoDoConflito = null;
-        for (var i = 0; i < lista.length; i++) {
-          var e = lista[i];
-          if (wrap.contains(e) || e.closest('.site-footer,.demo-bar,.skip-link')) continue;
-          var r = e.getBoundingClientRect();
-          if (!r.width || !r.height) continue;
-          var ix = Math.min(f.right, r.right) - Math.max(f.left, r.left);
-          var iy = Math.min(f.bottom, r.bottom) - Math.max(f.top, r.top);
-          if (ix > 2 && iy > 2 && (topoDoConflito === null || r.top < topoDoConflito)) topoDoConflito = r.top;
-        }
-        if (topoDoConflito === null) return;
-        var novoBottom = window.innerHeight - topoDoConflito + 12;
-        if (novoBottom + f.height > window.innerHeight - 96) { wrap.classList.add('dm-fab--evitar'); return; }
-        wrap.style.bottom = novoBottom + 'px';
+    var estreitaCalc = window.matchMedia ? window.matchMedia('(max-width:900px)') : { matches: false };
+    var acoplar = function () {
+      var noCabecalho = estreitaCalc.matches;
+      var barra = document.querySelector(noCabecalho ? '.site-header' : '.site-footer');
+      if (!barra) return false;
+      wrap.classList.add('dm-fab--docked');
+      document.body.classList.toggle('dm-fab-no-cabecalho', noCabecalho);
+      if (wrap.parentNode !== barra) {
+        var voltar = noCabecalho ? barra.querySelector('.site-link') : null;
+        if (voltar) barra.insertBefore(wrap, voltar); else barra.appendChild(wrap);
       }
-      wrap.classList.add('dm-fab--evitar');
+      return true;
     };
-    var agenda = function () { if (!agendado) { agendado = true; setTimeout(esquiva, 60); } };
-    window.addEventListener('scroll', agenda, { passive: true });
-    window.addEventListener('resize', function () { base = null; agenda(); });
-    // Mudanças feitas pelo próprio botão não reiniciam a conta (senão ela nunca terminaria).
-    if (window.MutationObserver) new MutationObserver(function (lista) {
-      for (var i = 0; i < lista.length; i++) if (!wrap.contains(lista[i].target)) { agenda(); return; }
-    }).observe(document.body, { childList: true, subtree: true, attributes: true, characterData: true });
-    agenda();
+    if (!acoplar() && window.MutationObserver) {
+      var espera = new MutationObserver(function () { if (acoplar()) espera.disconnect(); });
+      espera.observe(document.body, { childList: true, subtree: true });
+    }
+    if (estreitaCalc.addEventListener) estreitaCalc.addEventListener('change', acoplar);
   }
 
   // Teclado do celular: com foco em campo de texto, o botão sai de cima do que a pessoa está preenchendo.

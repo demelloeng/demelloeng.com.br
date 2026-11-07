@@ -1,14 +1,21 @@
-import {Component,useEffect,useRef,useState} from 'react';
+import {Component,useEffect,useMemo,useRef,useState} from 'react';
 import {livePlanModel,LAYER_LABEL} from './live_plan.mjs';
+import {sceneSpec,describeScene,VIEWS,LAYER_COLOR,isoShapes,isoViewBox} from './maquete_model.mjs';
 import {friendlyServiceName as serviceName} from './client_summary.mjs';
 import {brlStr} from './pricing/decimal.mjs';
 
-// P05 — "Planta que se desenha" + "Orçamento em movimento". Só lê o modelo (dados reais do motor); não calcula preço.
+// Maquete que se forma enquanto a pessoa responde + estimativa. Só lê o modelo (dados reais do motor); não calcula preço.
+// Primeira pintura: SVG isométrico (instantâneo, também serve sem WebGL). Depois, a cena 3D carrega por cima, sem travar o formulário.
 
 const reduced=()=>typeof window!=='undefined'&&typeof window.matchMedia==='function'&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const useMedia=query=>{
+ const get=()=>typeof window!=='undefined'&&typeof window.matchMedia==='function'&&window.matchMedia(query).matches;
+ const [on,setOn]=useState(get);
+ useEffect(()=>{if(typeof window.matchMedia!=='function')return undefined;const mq=window.matchMedia(query),f=()=>setOn(mq.matches);mq.addEventListener('change',f);return()=>mq.removeEventListener('change',f);},[query]);
+ return on;
+};
 
-// O valor "anda" até o novo total em ~450 ms. Usa setInterval (e não rAF) para continuar andando em aba de fundo;
-// com movimento reduzido, salta direto. O valor final é sempre exatamente o do motor (último passo = alvo, sem arredondar).
+// O valor "anda" até o novo total em ~450 ms (setInterval, que continua em aba de fundo). O último passo é exatamente o valor do motor.
 function useTween(target){
  const [shown,setShown]=useState(target);
  const from=useRef(target);
@@ -25,49 +32,84 @@ function useTween(target){
  return shown;
 }
 
-const W=320,H=190;
-
-function Layer({id,x,y,w,h}){
- const px=f=>x+w*f,py=f=>y+h*f;
- if(id==='estrutura')return <g className="lp-layer lp-estrutura" data-layer={id}>{[0.12,0.5,0.88].flatMap(fx=>[0.15,0.5,0.85].map(fy=><rect key={`${fx}-${fy}`} x={px(fx)-3} y={py(fy)-3} width="6" height="6"/>))}<path pathLength="1" className="lp-draw" d={`M${px(0.12)} ${py(0.5)}H${px(0.88)}M${px(0.5)} ${py(0.15)}V${py(0.85)}`}/></g>;
- if(id==='hidrossanitario')return <g className="lp-layer lp-hidro" data-layer={id}><path pathLength="1" className="lp-draw" d={`M${px(0.18)} ${py(0.25)}H${px(0.55)}V${py(0.75)}H${px(0.82)}`}/><path pathLength="1" className="lp-draw lp-dash" d={`M${px(0.2)} ${py(0.4)}H${px(0.7)}V${py(0.9)}`}/></g>;
- if(id==='eletrica')return <g className="lp-layer lp-eletrica" data-layer={id}><path pathLength="1" className="lp-draw" d={`M${px(0.15)} ${py(0.6)}L${px(0.3)} ${py(0.3)}L${px(0.5)} ${py(0.6)}L${px(0.7)} ${py(0.3)}L${px(0.85)} ${py(0.6)}`}/>{[[0.15,0.6],[0.5,0.6],[0.85,0.6]].map(([fx,fy])=><circle key={fx} cx={px(fx)} cy={py(fy)} r="3.2"/>)}</g>;
- if(id==='incendio')return <g className="lp-layer lp-incendio" data-layer={id}>{[[0.2,0.2],[0.8,0.8]].map(([fx,fy])=><path key={fx} pathLength="1" className="lp-draw" d={`M${px(fx)-5} ${py(fy)-5}l10 10m0 -10l-10 10`}/>)}<circle cx={px(0.5)} cy={py(0.5)} r="5"/></g>;
- if(id==='gas')return <g className="lp-layer lp-gas" data-layer={id}><path pathLength="1" className="lp-draw lp-dot" d={`M${px(0.1)} ${py(0.92)}H${px(0.9)}`}/></g>;
- return null;
+// Desenho isométrico: fallback e primeira pintura.
+function IsoSvg({spec,view,label}){
+ const vb=isoViewBox(spec,view);
+ const shapes=isoShapes(spec,view);
+ return <svg className="mq-svg" viewBox={`${vb.x.toFixed(2)} ${vb.y.toFixed(2)} ${vb.w.toFixed(2)} ${vb.h.toFixed(2)}`} role="img" aria-label={label} focusable="false">
+  {shapes.map((s,i)=>{
+   if(s.points)return <polygon key={i} className={`mq-${s.kind}`} points={s.points}/>;
+   if(s.d)return <path key={i} className={`mq-${s.kind}`} d={s.d}/>;
+   if(s.cx!==undefined)return <circle key={i} className={`mq-${s.kind}`} cx={s.cx} cy={s.cy} r="0.45"/>;
+   return null;
+  })}
+ </svg>;
 }
 
-function Terrain({x,y,w,h}){
- return <g className="lp-layer lp-terreno" data-layer="terreno">{[0.3,0.5,0.7].map(f=><path key={f} pathLength="1" className="lp-draw" d={`M${x} ${y+h*f}Q${x+w*0.3} ${y+h*(f-0.18)} ${x+w*0.55} ${y+h*f}T${x+w} ${y+h*(f-0.05)}`}/>)}</g>;
+function Stage({spec,view,setView,want3d,mobile,label,compact}){
+ const stage=useRef(null),host=useRef(null),scene=useRef(null);
+ const [ready,setReady]=useState(false);
+ const [failed,setFailed]=useState(false);
+ const specKey=JSON.stringify(spec);
+ const latest=useRef({spec,view});
+ latest.current={spec,view};
+
+ // Carrega a cena só quando pedida e visível; libera a GPU quando deixa de ser pedida.
+ useEffect(()=>{
+  if(!want3d)return undefined;
+  let dead=false,io=null;
+  (async()=>{
+   try{
+    const m=await import('./maquete3d.mjs');
+    if(dead||!m.webglAvailable()){if(!dead)setFailed(true);return;}
+    const sc=await m.createMaquete(host.current,{reduced:reduced(),mobile});
+    if(dead){sc.destroy();return;}
+    scene.current=sc;
+    sc.update(latest.current.spec,latest.current.view);
+    setReady(true);
+    io=new IntersectionObserver(([e])=>sc.setVisible(e.isIntersecting));
+    io.observe(stage.current);
+   }catch{if(!dead)setFailed(true);}
+  })();
+  return()=>{dead=true;io?.disconnect();scene.current?.destroy();scene.current=null;setReady(false);};
+ },[want3d,mobile]);
+
+ // Atualiza a cena quando as respostas mudam (com pequena espera: a pessoa ainda está digitando).
+ useEffect(()=>{
+  if(!scene.current)return undefined;
+  const id=setTimeout(()=>scene.current?.update(latest.current.spec,latest.current.view),140);
+  return()=>clearTimeout(id);
+ },[specKey,ready]);
+ useEffect(()=>{scene.current?.setView(view);},[view,ready]);
+
+ return <div className={`mq-stage${compact?' mq-compact':''}`} ref={stage} data-3d={ready?'ready':failed?'fallback':'loading'}>
+  <IsoSvg spec={spec} view={view} label={label}/>
+  <div className="mq-host" ref={host} tabIndex={ready?0:-1} aria-label={ready?'Maquete 3D. Arraste ou use as setas para girar.':undefined} role={ready?'group':undefined}/>
+  {!compact&&<div className="mq-tabs" role="group" aria-label="Vista da maquete">{VIEWS.map(v=><button key={v.id} type="button" className="mq-tab" aria-pressed={view===v.id} onClick={()=>setView(v.id)}>{v.label}</button>)}</div>}
+ </div>;
 }
 
-function LivePlanInner({answers}){
+function LivePlanInner({answers,expanded}){
  const m=livePlanModel(answers);
  const tween=useTween(m?m.total:null);
+ const mobile=useMedia('(max-width:900px)');
+ const [picked,setPicked]=useState(null);
+ const spec=useMemo(()=>m?sceneSpec(m):null,[m&&JSON.stringify([m.area?.footprint,m.floorsDrawn,m.layers,m.area?.kind])]);
  if(!m)return null;
+ const compact=mobile&&!expanded;
+ const view=picked??(spec.layers.length?'camadas':'conjunto');
  const total=tween??m.total;
- const fp=m.area?.footprint;
- const terrain=m.area?.kind==='terrain';
- const w=fp?fp.w:150,h=fp?fp.h:100,x=(W-w)/2-14,y=(H-h)/2;
- const layerNames=m.layers.map(l=>LAYER_LABEL[l]);
- const label=`Planta ilustrativa${m.area?` de ${m.area.value.replace('.',',')} m²`:' sem área informada'}${m.floors?`, ${m.floors} ${m.floors===1?'pavimento':'pavimentos'}`:''}${layerNames.length?`. Camadas: ${layerNames.join(', ')}.`:'.'}`;
- return <section className={`live-plan lp-${m.mode}`} aria-label="Planta e orçamento em movimento">
-  {m.rows.length>0&&<div className="lp-head"><h3>Orçamento em movimento</h3>
-   <p className="lp-total" data-fab-evitar="" role="status" aria-live="polite">{m.total!==null?<>Estimativa inicial <strong>{brlStr(total)}</strong></>:m.mode==='over_limit'?'Sem valor automático: o porte pede avaliação da equipe.':'Sem valor ainda: faltam informações para estimar.'}</p>
-  </div>}
+ const layerNames=[...m.layers].map(l=>LAYER_LABEL[l]);
+ const label=`${describeScene(spec,LAYER_LABEL)}${m.area?` Área informada: ${m.area.value.replace('.',',')} m².`:''}`;
+ return <section className={`live-plan lp-${m.mode}`} aria-label="Maquete e estimativa">
   <figure className="lp-figure">
-   <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} focusable="false">
-    <rect className={`lp-footprint ${m.area?'':'lp-empty'}`} x={x} y={y} width={w} height={h} rx="2"/>
-    {!m.area&&<text className="lp-hint" x={x+w/2} y={y+h/2+4} textAnchor="middle">área ainda não informada</text>}
-    {m.layers.filter(l=>l!=='terreno').map(l=><Layer key={l} id={l} x={x} y={y} w={w} h={h}/>)}
-    {m.layers.includes('terreno')&&<Terrain x={x} y={y} w={w} h={h}/>}
-    {m.floorsDrawn!==null&&<g className="lp-section" aria-hidden="true">{Array.from({length:m.floorsDrawn},(_,i)=><rect key={i} x={W-46} y={H-24-(i+1)*15} width="32" height="12" rx="1"/>)}</g>}
-   </svg>
-   <figcaption>{m.floors?`${m.floors} ${m.floors===1?'pavimento':'pavimentos'}${m.floorsExtra?` (desenhados ${m.floorsDrawn})`:''} · `:''}{m.notice}</figcaption>
+   <Stage spec={spec} view={view} setView={setPicked} want3d={!compact} mobile={mobile} label={label} compact={compact}/>
+   <figcaption>{m.floors?`${m.floors} ${m.floors===1?'pavimento':'pavimentos'}. `:''}{m.notice}</figcaption>
   </figure>
-  {layerNames.length>0&&<ul className="lp-legend" aria-label="Camadas">{m.layers.map(l=><li key={l} className={`lp-key lp-key-${l}`}><span className="lp-swatch" aria-hidden="true"/>{LAYER_LABEL[l]}</li>)}</ul>}
+  {layerNames.length>0&&<ul className="lp-legend" aria-label="Disciplinas escolhidas">{m.layers.map(l=><li key={l} className="lp-key"><span className="lp-swatch" style={{background:LAYER_COLOR[l]}} aria-hidden="true"/>{LAYER_LABEL[l]}</li>)}</ul>}
   {m.rows.length>0&&<div className="lp-budget">
-   <ul>{m.rows.map(r=><li key={r.key} data-fab-evitar="" className={`lp-row lp-${r.state}`}><span>{serviceName(r.service)}</span><strong>{r.state==='priced'?brlStr(r.total):r.state==='over_limit'?'Avaliação da equipe':'A confirmar'}</strong></li>)}</ul>
+   <ul>{m.rows.map(r=><li key={r.key} className={`lp-row lp-${r.state}`}><span>{serviceName(r.service)}</span><strong>{r.state==='priced'?brlStr(r.total):r.state==='over_limit'?'Avaliação da equipe':'Aguardando dados'}</strong></li>)}</ul>
+   <p className="lp-total" role="status" aria-live="polite">{m.total!==null?<>Estimativa inicial <strong>{brlStr(total)}</strong></>:m.mode==='over_limit'?'Esse porte pede avaliação da equipe, sem valor automático.':'Faltam dados para somar o valor.'}</p>
   </div>}
  </section>;
 }
@@ -79,12 +121,16 @@ class Guard extends Component{
  componentDidCatch(){}
  render(){return this.state.failed?null:this.props.children;}
 }
-export function LivePlan({answers}){return <Guard><LivePlanInner answers={answers}/></Guard>;}
+export function LivePlan({answers,expanded}){return <Guard><LivePlanInner answers={answers} expanded={expanded}/></Guard>;}
 
-// Resumo de uma linha para o painel recolhido no celular: só aparece quando o motor calculou o conjunto.
+// Miniatura e resumo de uma linha para o painel recolhido no celular: a maquete em ponto pequeno e a estimativa quando o motor calculou.
 function LiveChipInner({answers}){
  const m=livePlanModel(answers);
- if(!m||m.total===null)return null;
- return <p className="lp-chip">Estimativa inicial <strong>{brlStr(m.total)}</strong></p>;
+ if(!m)return null;
+ const spec=sceneSpec(m);
+ return <div className="lp-chip">
+  <span className="lp-thumb"><IsoSvg spec={spec} view="conjunto" label=""/></span>
+  {m.total!==null&&<p>Estimativa inicial <strong>{brlStr(m.total)}</strong></p>}
+ </div>;
 }
 export function LiveChip({answers}){return <Guard><LiveChipInner answers={answers}/></Guard>;}

@@ -21,11 +21,11 @@ export const DDDS = new Set([
 export const PHONE_MESSAGE = Object.freeze({
   vazio: 'Informe o número com DDD ou use o e-mail.',
   caractere_invalido: 'Use só números, espaço, parênteses, hífen e o + no começo.',
-  curto: 'Faltam dígitos. Informe DDD + número, por exemplo (41) 98765-4321.',
-  longo: 'Tem dígitos a mais. Informe DDD + número, por exemplo (41) 98765-4321.',
-  internacional: 'Este campo aceita número do Brasil (+55). Use o e-mail se o seu contato é de outro país.',
-  ddd_invalido: 'O DDD informado não existe. Confira os dois primeiros dígitos.',
-  formato: 'O número não parece de celular nem de telefone fixo do Brasil. Confira os dígitos.',
+  curto: 'Faltam dígitos. Informe o DDD e o número, como (41) 9XXXX-XXXX.',
+  longo: 'Sobraram dígitos. Informe o DDD e o número, como (41) 9XXXX-XXXX.',
+  internacional: 'Este campo é para números do Brasil (+55). Se o seu contato é de outro país, use o e-mail.',
+  ddd_invalido: 'Esse DDD não existe. Confira os dois primeiros dígitos.',
+  formato: 'Esse número não parece de celular nem de telefone fixo. Confira os dígitos.',
   artificial: 'Esse número parece de teste. Informe o número que você usa de verdade.',
 });
 

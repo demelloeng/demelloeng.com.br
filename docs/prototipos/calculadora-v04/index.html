@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Calculadora V04 — três composições da maquete (exploração)</title>
+<style>
+:root{--ink:#0A2D55;--blue:#0D65C2;--grafite:#1b242d;--linha:#2c3b49;--azul-claro:#9cc2ec}
+*{box-sizing:border-box}
+body{margin:0;font-family:Montserrat,Arial,sans-serif;color:var(--ink);background:#eef3f8;padding:24px}
+h1{font-size:20px;margin:0 0 4px}p.lead{margin:0 0 20px;color:#5B7086;font-size:14px;max-width:70ch}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+.frame{background:#fff;border:1px solid #D2E1EF;border-radius:6px;overflow:hidden}
+.frame h2{font-size:14px;margin:0;padding:12px 16px;border-bottom:1px solid #D2E1EF}
+.frame small{display:block;padding:10px 16px;color:#5B7086;font-size:12px;line-height:1.5;border-top:1px solid #D2E1EF}
+.stage{position:relative;height:340px;background:radial-gradient(120% 90% at 50% 38%,#26323e 0%,#1b242d 62%,#141b22 100%);touch-action:pan-y}
+.stage .mq-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.tabs{position:absolute;left:10px;bottom:10px;display:flex;gap:6px}
+.tabs button{font:600 12px Montserrat,Arial,sans-serif;color:#cfe6fa;background:rgba(27,36,45,.7);border:1px solid #3b5875;border-radius:4px;padding:7px 10px;cursor:pointer}
+.tabs button[aria-pressed=true]{background:#0D65C2;border-color:#0D65C2;color:#fff}
+.budget{position:absolute;right:10px;top:10px;width:46%;max-width:210px;background:rgba(255,255,255,.96);border-radius:4px;padding:10px 12px;font-size:12px}
+.budget b{display:block;font-size:20px;color:var(--blue);margin:2px 0 6px}
+.budget div{display:flex;justify-content:space-between;padding:4px 0;border-top:1px solid #D2E1EF}
+</style>
+</head>
+<body>
+<h1>Maquete da calculadora — três composições</h1>
+<p class="lead">Mesma cena paramétrica (Three.js hospedado), mesmos dados de exemplo: 63,5 m², 2 pavimentos, Estrutural + Hidrossanitário + Elétrica. Exploração interna; não publicada.</p>
+<div class="row">
+  <section class="frame"><h2>A — Maquete isométrica em camadas</h2><div class="stage" id="a" tabindex="0"></div><small>Pavimentos afastados, camadas por disciplina, ponto de vista de maquete. Estrutura, água e elétrica legíveis de uma vez.</small></section>
+  <section class="frame"><h2>B — Corte tridimensional</h2><div class="stage" id="b" tabindex="0"></div><small>Metade do volume removida: o interior mostra níveis e instalações. Boa para pavimentos; menos para o conjunto.</small></section>
+  <section class="frame"><h2>C — Estúdio de orçamento técnico</h2><div class="stage" id="c" tabindex="0"><div class="budget"><span>Estimativa inicial</span><b>R$ 878,84</b><div><span>Hidrossanitário</span><span>R$ 441,96</span></div><div><span>Projeto Elétrico</span><span>R$ 436,88</span></div></div></div><small>Volume como protagonista e a conta sobre a cena. Forte no resultado; cobre parte da maquete e disputa espaço no celular.</small></section>
+</div>
+<script type="module">
+import { sceneSpec } from '/orcamento-src/src/maquete_model.mjs';
+import { createMaquete, webglAvailable } from '/orcamento-src/src/maquete3d.mjs';
+const model = { area: { kind: 'building', footprint: { w: 150, h: 100 } }, floorsDrawn: 2, layers: ['estrutura', 'hidrossanitario', 'eletrica'] };
+const spec = sceneSpec(model);
+const q = new URLSearchParams(location.search);
+async function mount(id, view) {
+  const host = document.getElementById(id);
+  if (!webglAvailable()) { host.textContent = 'WebGL indisponível'; return; }
+  const m = await createMaquete(host, { reduced: q.has('reduzido') });
+  m.update(spec, view);
+  window['mq_' + id] = m;
+}
+await mount('a', 'camadas');
+await mount('b', 'corte');
+await mount('c', 'conjunto');
+document.documentElement.dataset.pronto = '1';
+</script>
+</body>
+</html>
