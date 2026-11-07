@@ -16,7 +16,7 @@ import { TABLE_LABEL, ENTRY_COUNT, ENTRY_COUNT_WORD } from '../src/labels.mjs';
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
 const readSrc = (p) => readFile(path.join(appRoot, 'src', p), 'utf8');
-const LOC = { city: 'Curitiba', uf: 'PR' };
+const LOC = { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' };
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Deep links por SITUAÇÃO
@@ -51,7 +51,7 @@ test('deep link por situação: valores inválidos caem no HOME, sem estado parc
 // ---------------------------------------------------------------------------------------------------------------------
 test('deep link por disciplina: as nove frentes têm entrada explícita e testada', () => {
   assert.deepEqual(Object.keys(SERVICE_DEEPLINKS).sort(), [
-    'arquitetura', 'compatibilizacao', 'estrutural', 'gas-glp', 'hidrossanitario', 'incendio', 'orcamento-tecnico', 'regularizacao', 'terraplenagem',
+    'arquitetura', 'compatibilizacao', 'estrutural', 'gas-glp', 'hidrossanitario', 'incendio', 'orcamento-tecnico', 'regularizacao', 'terraplanagem', 'terraplenagem',
   ]);
   const EXPECT = {
     estrutural: { id: 'S1', route: 'known', services: ['Estrutural'] },
@@ -173,7 +173,13 @@ test('contato continua POSTERIOR ao resultado: a ordem dos nós e o código da i
   // 1) campos de contato só são renderizados no nó X4
   const contactBlocks = [...app.matchAll(/\{id==='X4'&&!submitted&&<>/g)];
   assert.equal(contactBlocks.length, 1, 'formulário de contato exclusivo de X4');
-  assert.match(app, /\[\['name','Nome','text'\],\['whatsapp','WhatsApp','tel'\],\['email','E-mail','email'\]\]/);
+  // P02: os campos moraram em pickers.jsx; o componente só é montado dentro do bloco exclusivo de X4.
+  const pickers = await readSrc('pickers.jsx');
+  assert.match(pickers, /field\('name','Nome','text'/);
+  assert.match(pickers, /field\('whatsapp','WhatsApp','tel'/);
+  assert.match(pickers, /field\('email','E-mail','email'/);
+  assert.equal([...app.matchAll(/<ContactFields /g)].length, 1, 'ContactFields só aparece no bloco de X4');
+  assert.ok(app.indexOf("{id==='X4'&&!submitted&&<>") < app.indexOf('<ContactFields '), 'ContactFields dentro do bloco de X4');
   // 2) o resultado não avança por "Continuar": só pelas escolhas pós-resultado
   assert.match(app, /resultStep\?<div className="intent-actions"/);
   assert.match(app, /&&!id\.startsWith\('X3'\)/, 'canContinue é falso nos resultados');
@@ -224,8 +230,9 @@ test('a escolha pós-resultado é invalidada por qualquer resposta alterada (e o
   assert.equal(contactEdit.request_intent, 'proposal', 'preencher o contato mantém a escolha');
   assert.equal(titleOf('X4', { request_intent: 'proposal' }), 'Para onde enviamos sua proposta?');
   assert.equal(titleOf('X4', { request_intent: 'scope_question' }), 'Como podemos responder à sua dúvida?');
-  assert.equal(titleOf('X4', { request_intent: 'evaluation_only' }), 'Quer receber esta análise?');
-  assert.equal(titleOf('X4', {}), 'Quer receber esta análise?');
+  // P01 (pendência 178): o caso sem valor não promete "análise"; pergunta para onde enviar o caso.
+  assert.equal(titleOf('X4', { request_intent: 'evaluation_only' }), 'Para onde enviamos seu caso?');
+  assert.equal(titleOf('X4', {}), 'Para onde enviamos seu caso?');
 });
 
 test('lead qualificado só com regra objetiva R1 (envio aceito + proposta + estimativa calculada + sem risco + contato válido)', () => {

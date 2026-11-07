@@ -9,7 +9,7 @@ import { buildClientSummary } from '../src/client_summary.mjs';
 const area = (v) => ({ value: v, unknown: false });
 const contact = { name: 'Fulano Fictício', whatsapp: '41999990000', email: 'x@exemplo.invalid' };
 const build = (over = {}) => ({
-  route: 'build', CA1: 'Construir do zero', CA_AREA: area('200'), property: 'Comercial', location: { city: 'Curitiba', uf: 'PR' },
+  route: 'build', CA1: 'Construir do zero', CA_AREA: area('200'), property: 'Comercial', location: { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' },
   phase: 'Arquitetura pronta', CA5: area('3'), CA6: 'Médio', services: ['Estrutural'], deadline: '3–6 meses', contact, ...over,
 });
 

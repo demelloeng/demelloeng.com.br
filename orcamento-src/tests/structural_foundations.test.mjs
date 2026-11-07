@@ -123,7 +123,7 @@ test('Fundações isoladas = FOUNDATION_ONLY sobre Q_FUNDACAO', () => {
 test('Primeira jornada real reemitida agora: sem Q_FUNDACAO falha fechado; com a projeção informada usa o regime corrente', () => {
   const answers = {
     route: 'known', services: ['Estrutural', 'Hidrossanitário', 'Fundações', 'Outro'], otherService: 'projeto elétrico',
-    property: 'Casa/sobrado', S3: area('63,5'), location: { city: 'São luís', uf: 'MA' },
+    property: 'Casa/sobrado', S3: area('63,5'), location: { city: 'São Luís', uf: 'MA', ibge_id: '2111300' },
     contact: { name: 'Cliente Ficticio', whatsapp: '98999990000', email: 'x@exemplo.invalid' }, photos: [],
   };
   const semProjecao = packageForCRMv2(answers);

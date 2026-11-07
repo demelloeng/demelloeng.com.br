@@ -11,7 +11,7 @@ import { buildPricingPreview } from '../src/pricing/engine.mjs';
 
 const area = (v) => ({ value: v, unknown: false });
 const contact = { name: 'Fulano Fictício', whatsapp: '41999990000', email: 'x@exemplo.invalid' };
-const LOC = { city: 'Curitiba', uf: 'PR' };
+const LOC = { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' };
 
 // Caminha a jornada nó a nó a partir da rota, respondendo com `values[id]` (default seguro por tipo).
 function walk(route, values) {

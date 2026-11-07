@@ -22,6 +22,8 @@ export const SERVICE_DEEPLINKS = Object.freeze({
  'compatibilizacao':Object.freeze({services:['Compatibilização BIM'],analytics:'compatibilizacao'}),
  'arquitetura':Object.freeze({services:['Arquitetura'],analytics:'arquitetura'}),
  'orcamento-tecnico':Object.freeze({services:['Orçamento técnico'],analytics:'orcamento'}),
+ // Grafia pública atual e grafia histórica: os dois endereços abrem o mesmo serviço (links já distribuídos continuam valendo).
+ 'terraplanagem':Object.freeze({services:['Terraplenagem'],analytics:'terraplenagem'}),
  'terraplenagem':Object.freeze({services:['Terraplenagem'],analytics:'terraplenagem'}),
  'regularizacao':Object.freeze({route:'regularize',analytics:'regularizacao'}),
 });

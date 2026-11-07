@@ -2,6 +2,8 @@ import {map} from './map.js';
 import {area, classify, ufs} from './flow.mjs';
 import {needsArchitectureTerrain, needsArchitectureProgram, architectureMissing, architectureEstimate} from './architecture.mjs';
 import {programError, programSummaryText, SOURCE as ARQ_SOURCE} from './architecture_estimator.mjs';
+import {locationValid} from './municipios.mjs';
+import {contactCheck} from './phone.mjs';
 export {ufs,area};
 // Nós de área onde 0 é semanticamente válido (ex.: matrícula sem área averbada).
 // Todo o resto de área mantém a regra atual (0 inválido) até decisão específica.
@@ -15,9 +17,11 @@ const n=(title,type,choices=[],extra={})=>({title,type,options:opts(choices),...
 export const properties=['Casa/sobrado','Residencial multifamiliar','Comercial','Industrial','Outro'];
 export const phases=['Só uma ideia / estudo','Arquitetura em desenvolvimento','Arquitetura pronta','Obra já começou'];
 export const deadlines=['Até 30 dias','1–3 meses','3–6 meses','Mais de 6 meses','Ainda sem prazo'];
-// "Elétrica" foi extirpada do catálogo DEMELLO: referência de preço existir != serviço ofertável.
-export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem','Incêndio','Gás','Compatibilização BIM','Arquitetura','Orçamento técnico','Terraplenagem','Consultoria Técnica','Mentoria Técnica','Outro'];
-const buildServices=[{value:'Estrutural',label:'Estruturas'},{value:'Hidrossanitário',label:'Água e esgoto'},'Drenagem','Incêndio','Gás','Compatibilização BIM','Não sei quais preciso'];
+// P03: a DEMELLO oferece projeto elétrico predial de baixa tensão (decisão expressa do proprietário). O valor gravado
+// continua "Elétrica" (o identificador histórico); o texto da tela é "Projeto Elétrico" (DISPLAY_LABELS).
+// Sem referência de preço na Tabela V2, o motor devolve avaliação humana: nenhum valor é inventado.
+export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem','Incêndio','Gás','Elétrica','Compatibilização BIM','Arquitetura','Orçamento técnico','Terraplenagem','Consultoria Técnica','Mentoria Técnica','Outro'];
+const buildServices=[{value:'Estrutural',label:'Estruturas'},{value:'Hidrossanitário',label:'Água e esgoto'},'Drenagem','Incêndio','Gás','Elétrica','Compatibilização BIM','Não sei quais preciso'];
 // Reforma SEM aumento de área: não existe "área nova"; só a área existente é perguntada.
 export const REFORMA='Reformar sem aumentar a área';
 export const nodes={
@@ -45,12 +49,12 @@ export const nodes={
  S4:n('Onde será o projeto?','location',[],{key:'location',next:'S5'}),
  S5:n('Em que fase está?','single',phases,{key:'phase',label:'Fase do projeto',next:'S6'}),
  S6:n('Quando pretende precisar dos projetos?','single',deadlines,{key:'deadline',label:'Prazo',next:'X1'}),
- X1:n('Seu caso, organizado','summary'),X3A:n('Já dá para fazer uma primeira conta.','result'),X3B:n('Já conseguimos organizar seu caso.','result'),X4:n('Quer receber esta análise?','contact',[],{key:'contact'}),
+ X1:n('Seu caso, organizado','summary'),X3A:n('Já dá para fazer uma primeira conta.','result'),X3B:n('Já conseguimos organizar seu caso.','result'),X4:n('Para onde enviamos seu caso?','contact',[],{key:'contact'}),
  // Perguntas condicionais de área, só quando o serviço as exige (Gás -> Q_ATENDIDA; Compatibilização -> Q_ESCOPO).
  Q_GAS:n('Qual a área aproximada atendida pela instalação de gás?','area',[],{key:'area_atendida',label:'Área atendida (gás)'}),
  Q_COMPAT:n('Qual a área total de projeto a compatibilizar?','area',[],{key:'area_escopo',label:'Área do escopo (compatibilização)'}),
  // Orçamento técnico (ORCAMENTO, base Q_ESCOPO): área abrangida pelo orçamento técnico — não é a estimativa do site nem o orçamento final da obra.
- Q_ORC:n('Qual a área abrangida pelo orçamento técnico?','area',[],{key:'area_orcamento',label:'Área do orçamento técnico'}),
+ Q_ORC:n('Qual a área abrangida pelo orçamento e cronograma?','area',[],{key:'area_orcamento',label:'Área do orçamento e cronograma'}),
  // Terraplenagem (TERRAPLENAGEM, base Q_TERRENO): somente a área do terreno; nunca convertida de área construída, nova, total ou volume.
  Q_TERR:n('Qual a área do terreno?','area',[],{key:'area_terreno',label:'Área do terreno'}),
  // Arquitetura sem área do projeto (ramificação condicional): terreno (opcional) e programa de necessidades (opcional). Sem base municipal.
@@ -97,6 +101,10 @@ nodes.REG_R1.options.forEach((o,i)=>o.label=regularSituation[i]);
 nodes.REG_C1.options=opts(['Venda','Inventário / partilha','Financiamento','Exigência da prefeitura','Exigência do cartório','Quero deixar o imóvel regular','Outro']);
 nodes.REG_C4.options.forEach(o=>o.label=o.label.replaceAll('/',' / '));
 Object.values(nodes).forEach(node=>node.options.forEach(o=>{if(o.value==='Casa/sobrado')o.label='Casa / sobrado';}));
+// Rótulo exibido ≠ valor gravado. O valor continua sendo o identificador contratual (payload, CRM, deep link);
+// só o texto que o visitante lê acompanha o nome público do serviço (decisões 75 e 100 do Doc03).
+export const DISPLAY_LABELS=Object.freeze({'Orçamento técnico':'Orçamento e cronograma',Terraplenagem:'Terraplanagem','Elétrica':'Projeto Elétrico'});
+Object.values(nodes).forEach(node=>node.options.forEach(o=>{if(Object.hasOwn(DISPLAY_LABELS,o.value))o.label=DISPLAY_LABELS[o.value];}));
 const detailLabels={A1:'Área no IPTU',A2:'Área na matrícula',A3:'Motivo da diferença',B1:'Alteração',B2:'Área da alteração',B3:'Projeto da alteração','C-R1':'Documento faltante','C-R2':'Falta apontada por',D1:'Pendência apontada por',D2:'Exigência disponível',D3:'Assunto da exigência',E1:'Alteração no imóvel',E2:'Área afetada',E3:'Sabe quando aconteceu',F1:'Como soube',F2:'IPTU e matrícula',F3:'Recebeu explicação',G1:'Você informou',R1:'Situação',C1:'Finalidade',C4:'Documentos disponíveis'};
 for(const [id,label] of Object.entries(detailLabels))nodes['REG_'+id].label=label;
 const regStarts={A:'REG_A1',B:'REG_B1',C:'REG_C-R1',D:'REG_D1',E:'REG_E1',F:'REG_F1',G:'REG_G1'};
@@ -107,14 +115,14 @@ export const titleOf=(id,a)=>id==='X4'&&X4_TITLE[a.request_intent]?X4_TITLE[a.re
 export function valid(id,a){
  const node=nodes[id],v=a[keyOf(id)];
  if(['summary','result'].includes(node.type))return true;
- if(node.type==='location')return !!v?.city?.trim()&&ufs.includes(v.uf);
+ if(node.type==='location')return ufs.includes(v?.uf)&&locationValid(v);
  if(node.type==='area')return v?.unknown===true||areaFor(id,v)!==null;
  if(node.type==='hours')return hoursOf(v)!==null;
  if(node.type==='integer')return v?.unknown===true||(/^\d+$/.test(v?.value??'')&&Number(v.value)>0&&Number(v.value)<=200);
  if(node.type==='program')return v?.unknown===true||programError(v)===null;
  if(node.type==='story')return !!v?.trim()||!!a.photos?.length;
  if(node.type==='text')return !!v?.trim();
- if(node.type==='contact'){const p=v?.whatsapp?.replace(/\D/g,'')??'';return !!v?.name?.trim()&&!!(p||v?.email?.trim())&&(!v?.whatsapp?.trim()||/^\d{10,13}$/.test(p))&&(!v?.email?.trim()||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim()));}
+ if(node.type==='contact')return contactCheck(v).ok;
  if(node.type==='multi'){
    if(!Array.isArray(v)||!v.length||v.some(s=>!node.options.some(o=>o.value===s)))return false;
    if(id==='REG_C4'&&v.includes('Não sei/não tenho agora')&&v.length>1)return false;
@@ -179,7 +187,7 @@ export function equivalentService(text){const t=normalized(text);const reg=/regu
 export function safetyHold(a){
  if(a.route!=='problem')return false;
  const t=normalized(a.P2);
- return /desab|colapso|desmoron|caindo|caiu|soltando|cedendo|aumentou|aumentando|piorou|rapida|de repente/.test(t);
+ return /desab|colapso|desmoron|caindo|caiu|soltando|cedendo|aumentou|aumentando|piorou|rapida|de repente|estalo|estalando|balancando|inclinando|cheiro de gas|vazamento de gas|faisca|choque eletrico/.test(t);
 }
 export function needsReview(a){return safetyHold(a)||(a.route==='problem'&&a.photos?.length&&!a.P2?.trim())||(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))||(a.route==='known'&&a.services?.includes('Outro'))||!!a.carriedServices?.length||(a.route==='support'&&a.support_kind==='nao_sei')||hourlyServices(a).length>=2||(hourlyServices(a).length===1&&a.hours_known==='nao');}
 export function resultFor(a,mode){return !needsReview(a)&&mode==='preview'?'X3A':'X3B';}
@@ -263,6 +271,7 @@ export function missingData(a){
  if(a.route==='build'&&a.services?.includes('Não sei quais preciso')&&!a.suggestionConfirmed)list.push('Confirmação dos projetos a avaliar');
  if(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))list.push('Enquadramento do caso para avaliação');
  if(a.route==='known'&&a.services?.includes('Outro'))list.push('Definição do escopo do serviço informado');
+ if((a.route==='build'||a.route==='known')&&effectiveServices(a).includes('Elétrica'))list.push('Valor do Projeto Elétrico, definido pela equipe DEMELLO');
  if(a.carriedServices?.length)list.push('Escopo dos serviços também informados');
  return [...new Set(list)];
 }

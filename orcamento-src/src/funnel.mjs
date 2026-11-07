@@ -5,7 +5,7 @@
 //
 // Tudo aqui é determinístico e puro (sem DOM, sem rede, sem IA). O contato só é pedido DEPOIS
 // do resultado: o único caminho até o nó de contato (X4) passa por uma destas escolhas.
-import {safetyHold,resultFor} from './journey.mjs';
+import {safetyHold,resultFor,advance} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
 
 export const REQUEST_INTENTS=Object.freeze(['proposal','scope_question','evaluation_only']);
@@ -26,6 +26,16 @@ export function resultKind(answers,mode='preview'){
  const id=resultFor(answers,mode);
  if(id==='X3A'&&packageForCRMv2(answers).pricing_preview.status==='CALCULATED')return 'calculated';
  return 'review';
+}
+
+// Tela de resultado = estado efetivo do motor. X3A só quando há valor CALCULADO; qualquer outro caso (inclusive o que
+// não tem dado suficiente para o motor) é enquadramento, X3B, sem promessa de valor (pendência 178).
+export const resultStepFor=(answers,mode='preview')=>resultKind(answers,mode)==='calculated'?'X3A':'X3B';
+
+// advance() da jornada + resultado coerente com o motor. Só a saída do resumo (X1) muda; o resto é a jornada como era.
+export function advanceJourney(id,answers,mode='preview'){
+ const r=advance(id,answers,mode);
+ return id==='X1'&&(r.id==='X3A'||r.id==='X3B')?{...r,id:resultStepFor(r.answers,mode)}:r;
 }
 
 export function allowedIntents(answers,mode='preview'){

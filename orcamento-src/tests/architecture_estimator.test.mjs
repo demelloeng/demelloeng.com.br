@@ -22,7 +22,7 @@ import { submitToCRM } from '../src/submit.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
-const LOC = { city: 'Curitiba', uf: 'PR' };
+const LOC = { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' };
 const unk = { value: '', unknown: true };
 const known = (svc, extra = {}) => ({ route: 'known', services: svc, S2: 'Casa/sobrado', S3: { value: '200' }, location: LOC, S5: 'Só uma ideia / estudo', S6: 'Ainda sem prazo', ...extra });
 const semArea = (svc, extra = {}) => known(svc, { S3: unk, ...extra });

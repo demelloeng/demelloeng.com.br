@@ -55,8 +55,8 @@ Todo parâmetro tem **validador fechado** (enum ou padrão estrito). Valor fora 
 | `origin_page` | caminho interno de onde o visitante veio | `document.referrer` do mesmo domínio | `page_view` (quando `origin=internal`) |
 | `route` | `build` · `regularize` · `problem` · `known` · `support` | `answers.route` | eventos da jornada |
 | `entry` | `deeplink` · `manual` · `redirect` | como a rota foi aberta | `estimate_started`, `situation_selected` |
-| `service` (Arquitetura, Orçamento técnico e Terraplenagem são serviços nativos: `arquitetura`, `orcamento`, `terraplenagem`) | `estrutural` · `hidrossanitario` · `incendio` · `gas_glp` · `arquitetura` · `regularizacao` · `orcamento` · `terraplenagem` · `compatibilizacao` · `consultoria_tecnica` · `mentoria_tecnica` · `multiple` · `none` | códigos do motor (`derivePricingInputs`) ou da tabela de deep links | jornada |
-| `service_count` | inteiro 0–11 | idem | jornada |
+| `service` (Arquitetura, Orçamento técnico e Terraplenagem são serviços nativos: `arquitetura`, `orcamento`, `terraplenagem`) | `estrutural` · `hidrossanitario` · `incendio` · `gas_glp` · `arquitetura` · `regularizacao` · `orcamento` · `terraplenagem` · `compatibilizacao` · `consultoria_tecnica` · `mentoria_tecnica` · `eletrica` · `multiple` · `none` | códigos do motor (`derivePricingInputs`) ou da tabela de deep links | jornada |
+| `service_count` | inteiro 0–12 | idem | jornada |
 | `step` | id de nó da jornada (`CA1`, `S1`, `X3A`, `X4`, …) | `id` do nó atual | jornada |
 | `result_status` | `calculated` · `needs_review` · `safety_hold` | `resultKind()` | `estimate_completed`, `framing_delivered` |
 | `request_intent` | `proposal` · `scope_question` · `evaluation_only` | escolha pós-resultado | pedidos |
