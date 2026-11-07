@@ -232,7 +232,7 @@ test('renderPreviewPng falha se o registro não é confirmado (sem PNG)', async 
 test('/verificar/index.html: estática, consome PUBLIC_PREVIEW_V1, sem hash-no-browser nem fingerprint nem fator', async () => {
   const html = await readFile(path.join(siteRoot, 'verificar', 'index.html'), 'utf8');
   assert.match(html, /<link rel="canonical" href="https:\/\/demelloeng\.com\.br\/verificar\/">/);
-  assert.match(html, /assets\/css\/style\.css/);
+  assert.match(html, /assets\/css\/servicos-v02\.css/);
   assert.match(html, /URLSearchParams\(location\.search\)\.get\("codigo"\)/);
   assert.match(html, /noindex/);
   // integridade vem do servidor

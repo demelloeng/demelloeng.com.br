@@ -39,7 +39,7 @@ jobs:
             tests/submit.test.mjs tests/site_ux.test.mjs tests/preview.test.mjs \
             tests/structural_foundations.test.mjs tests/foundation_area.test.mjs tests/python_parity.test.mjs \
             tests/hourly_services.test.mjs tests/deeplink.test.mjs \
-            tests/commercial_funnel.test.mjs tests/analytics.test.mjs tests/commercial_site.test.mjs tests/native_services.test.mjs tests/architecture_estimator.test.mjs tests/privacy_and_sink.test.mjs tests/contact_clicks.test.mjs tests/pscip_glp.test.mjs tests/pscip_race.test.mjs
+            tests/commercial_funnel.test.mjs tests/analytics.test.mjs tests/commercial_site.test.mjs tests/native_services.test.mjs tests/architecture_estimator.test.mjs tests/privacy_and_sink.test.mjs tests/contact_clicks.test.mjs tests/pscip_glp.test.mjs tests/pscip_race.test.mjs tests/verificar_page.test.mjs
           node scripts/publish-guard.mjs
 
       # Montagem determinística — copia só o allowlisted, bytes crus do commit.
@@ -69,6 +69,9 @@ jobs:
 
       - name: Contratos do gerador Empresa
         run: python3 -B -m unittest discover -s scripts -p test_empresa.py
+
+      - name: Contratos do gerador Verificar e 404
+        run: python3 -B -m unittest discover -s scripts -p test_verificar_404.py
 
       - name: Montar artefato Pages (allowlist V1)
         run: |

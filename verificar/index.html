@@ -1,100 +1,72 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<!doctype html>
+<html lang="pt-BR"><head>
 <meta charset="utf-8">
+<!-- Gerado por scripts/gerar-verificar-404-v02.py. Fontes: docs/arquivo/verificar-404-v02-20261107/COPY_VERIFICAR_20261107.md (SHA-256 e379ff19174bf4f4eb3b561664963510a3e5dd9ffb6a783f7aa16b7179cd413a) e docs/arquivo/verificar-404-v02-20261107/LOGICA_VERIFICAR_20261107.js (SHA-256 6be590a991789895eb1bbe2bf27ca8e7a620a01eb6416a5404ec05f47a4d0a5f). Não editar HTML à mão. -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Verificar prévia | DEMELLO Engenharia</title>
 <meta name="description" content="Verificação de uma prévia inicial DEMELLO emitida pela DEMELLO Engenharia.">
-<meta name="theme-color" content="#0B345C">
+<meta name="theme-color" content="#26323e">
 <meta name="robots" content="noindex, follow">
 <link rel="canonical" href="https://demelloeng.com.br/verificar/">
 <link rel="icon" href="../assets/images/favicon.png">
-<link rel="preload" href="../assets/fonts/montserrat-var-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/style.css?v=8">
-<style>
-  .vf-wrap{max-width:760px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(20px,3vw,48px)}
-  .vf-status{border:1px solid var(--line);border-left-width:4px;padding:clamp(20px,3vw,28px);margin:24px 0}
-  .vf-status.ok{border-left-color:var(--steel)}
-  .vf-status.bad{border-left-color:var(--carimbo)}
-  .vf-status h2{font-weight:700;font-size:clamp(20px,2.4vw,26px);color:var(--navy);margin:0 0 8px}
-  .vf-status p{margin:0;color:var(--body);font-size:16px;line-height:1.6}
-  .vf-dl{display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:12px 20px;margin:24px 0}
-  .vf-dl dt{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .vf-dl dd{margin:0;font-size:17px;color:var(--ink)}
-  .vf-total{font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(30px,4vw,44px);color:var(--navy);margin:8px 0 0}
-  .vf-note{border-left:2px solid var(--line);padding-left:24px;margin-top:28px}
-  .vf-note p{font-size:14.5px;line-height:1.6;color:var(--muted);margin:0 0 10px}
-  .vf-code{font-family:"JetBrains Mono",ui-monospace,monospace}
-  @media(max-width:560px){.vf-dl{grid-template-columns:1fr}}
-</style>
+<link rel="preload" href="../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/source-sans-3-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/servicos-v02.css?v=7">
+<link rel="stylesheet" href="../assets/css/rodape-v02.css?v=1">
+<style>.erro-v02 main,.verificar-v02 main{overflow-wrap:break-word}
+.erro-v02 main h1,.verificar-v02 main h1{font-size:clamp(36px,4.6vw,60px);line-height:1.08;font-weight:800;letter-spacing:-.02em;color:var(--blue)}
+.erro-v02 main .eyebrow,.verificar-v02 main .eyebrow{margin-bottom:24px}
+.erro-v02 main a:focus-visible,.verificar-v02 main a:focus-visible{outline:3px solid var(--ink);outline-offset:5px}
+.erro-v02 .site-header .logo:focus-visible,.verificar-v02 .site-header .logo:focus-visible{outline-color:#fff}
+.verificar-v02 .vf-hero{padding-block:56px 80px}
+.verificar-v02 .vf-col{max-width:760px}
+.verificar-v02 .vf-col .lead{font-size:20px;line-height:1.5;color:var(--muted)}
+.verificar-v02 main .eyebrow{font-size:13px;line-height:18px}
+.verificar-v02 .vf-status{border:1px solid var(--line);border-left-width:6px;padding:24px 28px;margin:24px 0;background:#fff}
+.verificar-v02 .vf-status.ok{border-left-color:var(--blue)}
+.verificar-v02 .vf-status.bad{border-left-color:#b42318}
+.verificar-v02 .vf-status h2{margin:0 0 8px;font-size:26px;line-height:1.2;font-weight:700;color:var(--ink)}
+.verificar-v02 .vf-status p{font-size:18px;line-height:1.5;color:var(--ink)}
+.verificar-v02 .vf-dl{display:grid;grid-template-columns:minmax(120px,200px) minmax(0,1fr);gap:12px 24px;margin:24px 0}
+.verificar-v02 .vf-dl dt{font-size:14px;line-height:1.5;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.verificar-v02 .vf-dl dd{margin:0;font-size:19px;line-height:1.4;color:var(--ink);overflow-wrap:anywhere}
+.verificar-v02 .vf-code{font-family:ui-monospace,Consolas,"Courier New",monospace}
+.verificar-v02 .vf-total{margin:8px 0 0;font-size:clamp(32px,4vw,48px);line-height:1.1;font-weight:800;color:var(--blue)}
+.verificar-v02 .vf-note{border-left:3px solid var(--line);padding-left:24px;margin-top:28px}
+.verificar-v02 .vf-note p{margin:0 0 10px;font-size:17px;line-height:1.55;color:var(--muted)}
+.verificar-v02 .vf-note strong{color:var(--ink)}
+@media(max-width:760px){
+.verificar-v02 .vf-hero{padding-block:32px 56px}
+.verificar-v02 .vf-status{padding:20px}
+.verificar-v02 .vf-status h2{font-size:24px}
+.verificar-v02 .vf-dl{grid-template-columns:minmax(0,1fr);gap:4px}
+.verificar-v02 .vf-dl dd{margin-bottom:12px}
+.verificar-v02 .vf-note{padding-left:16px}}</style>
 </head>
-<body>
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
-<header class="site-header">
-  <div class="topbar"><div class="wrap topbar-in">
-    <a href="../contato/">Contato</a>
-    <a class="nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a>
-  </div></div>
-  <div class="wrap header-in">
-    <a class="logo" href="../"><img src="../assets/images/logo.png" alt="DEMELLO Engenharia" width="760" height="196"></a>
-    <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav"><span></span></button>
-    <nav class="nav" id="site-nav" aria-label="Principal">
-      <a href="../">Início</a>
-      <a href="../construir-ou-ampliar/">Construir ou ampliar</a>
-      <a href="../servicos/">Outros serviços</a>
-      <a href="../experiencia-tecnica/">Experiência</a>
-      <a href="../metodologia/">Como trabalhamos</a>
-      <a class="nav-budget" href="../orcamento/">Calcular estimativa</a>
-      <a class="nav-extra" href="../contato/">Contato</a>
-      <a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a>
-    </nav>
-  </div>
-</header>
+<body class="servicos-v02 verificar-v02"><a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header"><div class="wrap header-inner"><a class="logo" href="../"><img src="../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="760" height="220"></a><button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav">Menu</button><nav class="nav" id="site-nav" aria-label="Principal"><a href="../">Início</a><a href="../servicos/">Serviços</a><a href="../experiencia-tecnica/">Projetos</a><a href="../metodologia/">Como trabalhamos</a><a href="../contato/">Contato</a><a class="nav-build" href="../construir-ou-ampliar/">Construir ou ampliar</a><a class="nav-budget" href="../orcamento/">Calcular estimativa</a><a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a></nav></div></header>
 <main id="conteudo">
-<section class="white bb">
-  <div class="vf-wrap">
-    <p class="eyebrow">Verificação</p>
-    <h1 class="h1" style="font-size:clamp(30px,4vw,44px)">Prévia inicial DEMELLO</h1>
-    <div id="vf-out" aria-live="polite">
-      <p class="lead" style="margin-top:20px">Carregando…</p>
-    </div>
-    <div class="vf-note">
-      <p>Uma prévia verificada confirma apenas que <strong>este registro foi emitido pela DEMELLO Engenharia</strong> com os valores e as informações abaixo, na data indicada.</p>
-      <p>Não significa proposta aceita, contrato, escopo confirmado, conferência documental nem preço atual garantido. As informações do caso foram fornecidas pelo usuário.</p>
-    </div>
-  </div>
+<section class="vf-hero">
+<div class="wrap"><div class="vf-col">
+<p class="eyebrow">Verificação</p>
+<h1>Prévia inicial DEMELLO</h1>
+<div id="vf-out" aria-live="polite">
+<p class="lead" style="margin-top:20px">Carregando…</p>
+</div>
+<div class="vf-note">
+<p>Uma prévia verificada confirma apenas que <strong>este registro foi emitido pela DEMELLO Engenharia</strong> com os valores e as informações abaixo, na data indicada.</p>
+<p>Não significa proposta aceita, contrato, escopo confirmado, conferência documental nem preço atual garantido. As informações do caso foram fornecidas pelo usuário.</p>
+</div>
+</div></div>
 </section>
 </main>
-<footer class="site-footer">
-  <div class="wrap footer-in">
-    <div>
-      <img src="../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="760" height="196">
-      <p class="footer-tag">projetos possíveis, planos reais</p>
-      <p class="footer-legal">CNPJ 65.613.230/0001-71<br>CREA-PR PJ nº 92585<br>Resp. técnico: CREA-PR 146906/D</p>
-    </div>
-    <div class="fcol">
-      <p class="t">Navegação</p>
-      <a href="../">Início</a>
-      <a href="../construir-ou-ampliar/">Construir ou ampliar</a>
-      <a href="../avaliar-um-problema/">Avaliar um problema</a>
-      <a href="../servicos/">Outros serviços</a>
-      <a href="../experiencia-tecnica/">Experiência</a>
-      <a href="../metodologia/">Como trabalhamos</a>
-      <a href="../orcamento/">Calcular estimativa</a>
-      <a href="../empresa/">Empresa</a>
-      <a href="../empresa/trajetoria-do-fundador.html">Trajetória do fundador</a>
-      <a href="../contato/">Contato</a>
-      <a href="../privacidade/">Privacidade</a>
-    </div>
-    <div class="fcol">
-      <p class="t">Contato</p>
-      <a href="mailto:marcos@demelloeng.com.br">marcos@demelloeng.com.br</a>
-      <a href="tel:+5541985124056">(41) 98512-4056</a>
-    </div>
-  </div>
-  <div class="wrap footer-bar"><p>© 2026 Marcos de Mello Silva Engenharia LTDA</p></div>
-</footer>
-<script src="../assets/js/nav.js" defer></script>
+<footer class="site-footer rodape"><div class="wrap rodape-grade">
+<div class="rodape-marca"><img src="../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="230" height="67"><p class="tag">projetos possíveis, planos reais</p>
+<p class="legal">Marcos de Mello Silva Engenharia LTDA<br>CNPJ 65.613.230/0001-71<br>CREA-PR PJ nº 92585<br>Responsável técnico: CREA-PR 146906/D</p></div>
+<nav class="rodape-col" aria-label="Rodapé"><p class="t">Navegação</p><a href="../">Início</a><a href="../servicos/">Serviços</a><a href="../experiencia-tecnica/">Projetos</a><a href="../metodologia/">Como trabalhamos</a><a href="../empresa/">Empresa</a><a href="../empresa/trajetoria-do-fundador.html">Trajetória do fundador</a><a href="../contato/">Contato</a><a href="../privacidade/">Privacidade</a></nav>
+<div class="rodape-col"><p class="t">Contato</p><a href="mailto:marcos@demelloeng.com.br">marcos@demelloeng.com.br</a><a href="tel:+5541985124056">(41) 98512-4056</a><a href="tel:+5544998202552">(44) 99820-2552</a><a href="https://wa.me/5541985124056">WhatsApp</a><a href="https://www.instagram.com/demelloeng/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/demelloeng/" target="_blank" rel="noopener">Facebook</a><a href="https://www.linkedin.com/company/demello-engenharia/" target="_blank" rel="noopener">LinkedIn</a></div>
+<div class="rodape-col"><p class="t">Onde estamos</p><span>R. Pedro Ivo, 730, Centro</span><span>Curitiba/PR · CEP 80010-020</span><span>Atendimento em todo o Brasil</span></div>
+</div><div class="wrap rodape-barra"><p>© 2026 Marcos de Mello Silva Engenharia LTDA</p></div></footer><script src="../assets/js/nav.js" defer></script>
 <script src="../assets/js/analytics-sink.js" defer></script>
 <script src="../assets/js/meta-pixel.js" defer></script>
 <script type="module" src="../assets/js/site-analytics.mjs"></script>
@@ -216,5 +188,4 @@
     });
 })();
 </script>
-</body>
-</html>
+</body></html>
