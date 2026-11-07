@@ -30,6 +30,7 @@ const ALL = [...COMMERCIAL, ...OTHER];
 const INDEXABLE = ALL.filter((p) => p !== 'verificar/index.html');
 // Páginas no visual V02 (menu e rodapé novos). As páginas antigas ficam fora deste conjunto.
 const PAGINAS_V02 = [
+  'experiencia-tecnica/index.html',
   'metodologia/index.html',
   'avaliar-um-problema/index.html',
   'index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
@@ -271,7 +272,7 @@ test('navegação: item atual marcado com aria-current na página correspondente
   const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim']);
   assert.deepEqual(current('servicos/index.html'), ['Serviços']);
   for (const s of SERVICE_SLUGS) assert.deepEqual(current(`servicos/${s}/index.html`), V02_SERVICES.has(s) ? ['Serviços'] : ['Outros serviços'], s);
-  assert.deepEqual(current('experiencia-tecnica/index.html'), ['Experiência']);
+  assert.deepEqual(current('experiencia-tecnica/index.html'), ['Projetos']);
   assert.deepEqual(current('metodologia/index.html'), ['Como trabalhamos']);
   assert.deepEqual(current('contato/index.html'), ['Contato']);
 });
@@ -340,20 +341,18 @@ test('referências obsoletas: sem "quatro entradas" e sem TABELA V1 em nenhum te
   assert.doesNotMatch(js, /quatro entradas|FAÇA SEU ORÇAMENTO|PREVISÃO DEMELLO"\}|Cálculo offline pela TABELA V2/);
 });
 
-test('experiência: um único case documentado, estruturado e com a proveniência preservada', () => {
+test('experiência V02: portfólio aprovado, atribuição e duas demonstrações', () => {
   const html = HTML['experiencia-tecnica/index.html'];
-  const cases = [...html.matchAll(/data-block="case-card"/g)].length;
-  assert.equal(cases, 1, 'um case');
-  for (const h of ['Situação', 'Trabalho desenvolvido', 'Resultado ou entrega', 'Disciplinas']) assert.ok(html.includes(`<h3>${h}</h3>`), h);
-  assert.match(html, /Único case documentado disponível até o momento/);
-  assert.match(html, /em atuação anterior à DEMELLO Engenharia/);
-  assert.match(html, /Não correspondem ao acervo operacional próprio do CNPJ atual/);
-  assert.match(html, /Quantitativos vinculados ao acervo profissional de Marcos de Mello Silva/);
-  assert.ok(html.indexOf('data-block="case-card"') < html.indexOf('data-block="technical-proof"'), 'case antes dos números');
-  // disciplinas só como informação complementar (lista), depois de situação/trabalho/resultado
-  assert.ok(html.indexOf('<h3>Disciplinas</h3>') > html.indexOf('<h3>Resultado ou entrega</h3>'));
-  // personalidade da marca preservada, em citação atribuída
-  assert.match(html, /<blockquote class="case-quote">[\s\S]*Todo em BIM\. Meu projeto mais querido\.[\s\S]*<cite>Marcos de Mello Silva<\/cite>/);
+  assert.equal([...html.matchAll(/data-block=/g)].length, 7);
+  assert.equal([...html.matchAll(/class="projeto-principal"/g)].length, 4);
+  assert.equal([...html.matchAll(/class="projeto-complementar"/g)].length, 7);
+  assert.match(html, /acervo técnico-profissional de Marcos de Mello Silva/);
+  assert.match(html, /referências a equipe e coautoria/);
+  assert.match(html, /1720261281228/);
+  assert.doesNotMatch(html, /1720261245965|Único case|modelo estrutural original|Modelo 3D.IFC|three-d-stage/);
+  assert.equal([...html.matchAll(/data-hidrantes-widget/g)].length, 1);
+  assert.match(html, /experiencia-bim.js/);
+  assert.match(html, /href="..\/servicos\/projeto-terraplenagem\/"/);
 });
 
 test('proveniência: a prova técnica continua atribuída ao acervo profissional do responsável técnico, nunca ao CNPJ', () => {
@@ -398,6 +397,8 @@ const NUMERIC_FACTS = new Set([
 
 // Numerais que só valem em UMA página, cada um com a fonte conferida (nada é liberado para o site inteiro).
 const PAGE_FACTS = {
+  // Fonte integral aprovada: números restritos ao portfólio, sem liberar para outras páginas.
+  'experiencia-tecnica/index.html': [...new Set((await read('docs/arquivo/experiencia-tecnica-v02-20261106/COPY_EXPERIENCIA_TECNICA_V01_CONSOLIDADA_20261106.md')).match(/\d[\d.,/-]*\d|\d/g)), '100'],
   // Maquete Luiz Carlos V02 aceita (b52e32d): 171 IDs; 100% é estado do controle.
   'servicos/projeto-prevencao-incendio/index.html': ['171', '100'],
   // referências de preço da tabela DEMELLO V2: Resolução SECID/PR e Credenciamento Fundepar (orcamento-src/src/pricing/pricing-table.v2.json; journey.mjs)

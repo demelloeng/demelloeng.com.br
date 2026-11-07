@@ -195,7 +195,7 @@ test('SEO: título até 60 e descrição até 160 caracteres; JSON-LD válido e 
 
 test('Trajetória do fundador: alcançável do rodapé de qualquer página e da página Experiência; a página existe e está no sitemap', async () => {
   const exp = await read('experiencia-tecnica/index.html');
-  assert.match(exp, /<a class="link-arrow"[^>]*href="\.\.\/empresa\/trajetoria-do-fundador\.html">Ver a trajetória do fundador →<\/a>/);
+  assert.match(exp, /<a[^>]*href="\.\.\/empresa\/trajetoria-do-fundador\.html">Veja a trajetória do fundador\.<\/a>/);
   assert.ok(await exists('empresa/trajetoria-do-fundador.html'));
   assert.match(await read('sitemap.xml'), /\/empresa\/trajetoria-do-fundador\.html/);
   assert.match(await read('empresa/index.html'), /href="\.\/trajetoria-do-fundador\.html">Trajetória do fundador →/);
