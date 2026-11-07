@@ -1,4 +1,5 @@
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { packageForCRMv2, derivePricingInputs, V2_SOURCE } from '../src/payload_v2.mjs';
 import { buildPricingPreview } from '../src/pricing/engine.mjs';

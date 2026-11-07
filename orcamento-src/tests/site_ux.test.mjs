@@ -276,9 +276,9 @@ test('INVARIANTES do intake: 4 rotas originais + entrada de apoio técnico, 9 SE
 
   const table = JSON.parse(await readSrc('pricing/pricing-table.v2.json'));
   assert.deepEqual(Object.keys(table.services).sort(), [
-    'ARQUITETURA', 'COMPATIBILIZACAO', 'CONSULTORIA_TECNICA', 'ESTRUTURAL', 'GAS_GLP', 'HIDROSSANITARIO',
+    'ARQUITETURA', 'COMPATIBILIZACAO', 'CONSULTORIA_TECNICA', 'ELETRICA', 'ESTRUTURAL', 'GAS_GLP', 'HIDROSSANITARIO',
     'INCENDIO', 'MENTORIA_TECNICA', 'ORCAMENTO', 'REGULARIZACAO', 'TERRAPLENAGEM',
-  ], 'nove SERVICE_IDs originais + CONSULTORIA_TECNICA/MENTORIA_TECNICA na tabela V2');
+  ], 'nove SERVICE_IDs originais + CONSULTORIA_TECNICA/MENTORIA_TECNICA + ELETRICA (P03) na tabela V2');
 
   const payload = await readSrc('payload_v2.mjs');
   assert.match(payload, /schema:\s*'site-intake\/payload\/2'/);

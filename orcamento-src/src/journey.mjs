@@ -19,7 +19,7 @@ export const phases=['Só uma ideia / estudo','Arquitetura em desenvolvimento','
 export const deadlines=['Até 30 dias','1–3 meses','3–6 meses','Mais de 6 meses','Ainda sem prazo'];
 // P03: a DEMELLO oferece projeto elétrico predial de baixa tensão (decisão expressa do proprietário). O valor gravado
 // continua "Elétrica" (o identificador histórico); o texto da tela é "Projeto Elétrico" (DISPLAY_LABELS).
-// Sem referência de preço na Tabela V2, o motor devolve avaliação humana: nenhum valor é inventado.
+// Preço: tipologia residencial (CASA) pela base documentada da Tabela V2; as demais tipologias vão para avaliação humana.
 export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem','Incêndio','Gás','Elétrica','Compatibilização BIM','Arquitetura','Orçamento técnico','Terraplenagem','Consultoria Técnica','Mentoria Técnica','Outro'];
 const buildServices=[{value:'Estrutural',label:'Estruturas'},{value:'Hidrossanitário',label:'Água e esgoto'},'Drenagem','Incêndio','Gás','Elétrica','Compatibilização BIM','Não sei quais preciso'];
 // Reforma SEM aumento de área: não existe "área nova"; só a área existente é perguntada.
@@ -190,7 +190,12 @@ export function safetyHold(a){
  return /desab|colapso|desmoron|caindo|caiu|soltando|cedendo|aumentou|aumentando|piorou|rapida|de repente|estalo|estalando|balancando|inclinando|cheiro de gas|vazamento de gas|faisca|choque eletrico/.test(t);
 }
 export function needsReview(a){return safetyHold(a)||(a.route==='problem'&&a.photos?.length&&!a.P2?.trim())||(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))||(a.route==='known'&&a.services?.includes('Outro'))||!!a.carriedServices?.length||(a.route==='support'&&a.support_kind==='nao_sei')||hourlyServices(a).length>=2||(hourlyServices(a).length===1&&a.hours_known==='nao');}
-export function resultFor(a,mode){return !needsReview(a)&&mode==='preview'?'X3A':'X3B';}
+// AUTORIDADE ÚNICA do resultado: X3A só quando o motor devolve CALCULATED (e o caso não pede revisão). O motor é registrado por
+// payload_v2.mjs (que já importa este módulo): assim a jornada não conhece preço e não há dependência circular. Sem autoridade
+// registrada, o resultado é X3B (nunca promete valor). A navegação, o payload, o funil e a medição usam esta mesma função.
+let resultAuthority=null;
+export const registerResultAuthority=fn=>{resultAuthority=fn;};
+export function resultFor(a,mode='preview'){return mode==='preview'&&resultAuthority!==null&&!needsReview(a)&&resultAuthority(a)==='CALCULATED'?'X3A':'X3B';}
 function direct(id,a){
  if(id==='HOME')return starts[a.route];
  if(id==='CA1')return a.CA1==='Construir do zero'?'CA_AREA':a.CA1==='Ampliar um imóvel existente'?'CA_EXISTING':a.CA1===REFORMA?'CA_REFORMA':'CA2';
@@ -271,7 +276,6 @@ export function missingData(a){
  if(a.route==='build'&&a.services?.includes('Não sei quais preciso')&&!a.suggestionConfirmed)list.push('Confirmação dos projetos a avaliar');
  if(a.route==='regularize'&&a.REG_R1==='G'&&!classify(a.REG_G1))list.push('Enquadramento do caso para avaliação');
  if(a.route==='known'&&a.services?.includes('Outro'))list.push('Definição do escopo do serviço informado');
- if((a.route==='build'||a.route==='known')&&effectiveServices(a).includes('Elétrica'))list.push('Valor do Projeto Elétrico, definido pela equipe DEMELLO');
  if(a.carriedServices?.length)list.push('Escopo dos serviços também informados');
  return [...new Set(list)];
 }

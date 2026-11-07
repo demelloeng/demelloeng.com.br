@@ -14,6 +14,15 @@ const COMPONENT_STATES = ['DETERMINED', 'NOT_REQUIRED', 'UNDETERMINED'];
 const CALC = 'CALCULATED';
 const REVIEW = 'NEEDS_HUMAN_REVIEW';
 
+// Protecao da ESTIMATIVA AUTOMATICA: limite por base de quantidade, na propria tabela (automatic_estimate_limits).
+// Acima do limite o servico vai para avaliacao humana (o porte informado exige analise especifica); o valor informado
+// e preservado. Nao e limite de habilitacao nem de capacidade. Espelho: scripts/site_intake_pricing.py (_above_limit).
+const LIMITS = TABLE.automatic_estimate_limits || {};
+export const REASON_ABOVE_AUTOMATIC_LIMIT = 'porte informado acima do limite da estimativa automática';
+function aboveLimit(basis, q) {
+  return q !== null && basis !== '_nota' && Object.prototype.hasOwnProperty.call(LIMITS, basis) && cmp(q, dec(LIMITS[basis])) > 0;
+}
+
 const REASON_SYSTEM_SCOPE_UNDOCUMENTED = 'SYSTEM_SCOPE_UNDOCUMENTED';
 const REASON_TYPOLOGY_NOT_APPLICABLE = 'TYPOLOGY_NOT_APPLICABLE';
 const REASON_TYPOLOGY_NOT_CONFIRMED = 'TYPOLOGY_NOT_CONFIRMED';
@@ -242,6 +251,10 @@ function priceStructural(inp) {
     }
   }
 
+  for (const [limitBasis, limitQ] of [['Q_SUPERESTRUTURA', qSup], ['Q_FUNDACAO', qFun]]) {
+    if (aboveLimit(limitBasis, limitQ)) return structuralReview(inp, ctx, basis, REASON_ABOVE_AUTOMATIC_LIMIT);
+  }
+
   const supTbl = svcTbl.components.SUPERESTRUTURA;
   const funTbl = svcTbl.components.FUNDACAO;
   const candidates = [];
@@ -372,6 +385,10 @@ export function priceService(service, inp, hourly = null) {
   if (q === null) {
     return { service, status: REVIEW, q: null, q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
       reason: `quantidade essencial (${basis}) não informada` };
+  }
+  if (aboveLimit(basis, q)) {
+    return { service, status: REVIEW, q: numberOut(q), q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
+      reason: REASON_ABOVE_AUTOMATIC_LIMIT };
   }
   const applicable = [];
   for (const [sourceId, ref] of Object.entries(svcTbl.references)) {

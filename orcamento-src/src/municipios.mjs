@@ -84,16 +84,16 @@ let current = null;
 export const setIndex = (index) => { current = index; };
 export const getIndex = () => current;
 
-// Resposta de localização válida: UF da lista, código IBGE de 7 dígitos com prefixo da UF escolhida e, com o catálogo
-// carregado, nome e UF iguais aos do registro oficial daquele código. Sem catálogo (nunca ocorre na tela, que só
-// oferece itens do catálogo) vale o prefixo; o servidor pode conferir o resto pelo código.
+// Resposta de localização válida: UF da lista, código IBGE de 7 dígitos com prefixo da UF escolhida E nome e UF iguais aos do
+// registro oficial daquele código, conferidos no catálogo. SEM catálogo carregado nada é confirmado: a resposta é inválida
+// (falha segura) e a tela mostra "tentar de novo". O servidor confere de novo o formato do código e o prefixo da UF.
 export function locationValid(v, index = current) {
   if (!v || typeof v !== 'object') return false;
   const city = typeof v.city === 'string' ? v.city.trim() : '';
   const id = String(v.ibge_id ?? '');
   if (!city || !Object.values(UF_CODES).includes(v.uf)) return false;
   if (ufOfId(id) !== v.uf) return false;
-  if (!index) return true;
+  if (!index) return false;
   const official = index.byId.get(id);
   return !!official && official.uf === v.uf && official.nome === city;
 }

@@ -56,3 +56,19 @@ substitui apenas a coluna do resumo e a tela de resultado. O histórico do naveg
 - O desenho pode ser lido como projeto: mitigado pela legenda; decidir no aceite se a legenda aparece também no resultado impresso/baixado.
 - Em tela muito baixa o desenho ocupa cerca de um quarto da altura; o carimbo some nessa faixa.
 - Só cinco disciplinas têm camada; arquitetura, compatibilização, orçamento e terraplanagem ainda não têm representação.
+
+## Implementação real (07/11/2026) e homologação
+
+O desenho deixou de ser só protótipo: `orcamento-src/src/live_plan.mjs` (modelo puro, testado em `tests/p05_planta_orcamento.test.mjs`) e `LivePlan.jsx` entram no painel "Seu caso" da calculadora real, com os dados do motor
+(`pricing_inputs` e `pricing_preview`); nada é inventado e o total só aparece quando o motor calculou todos os serviços. O desenho é sempre ilustrativo (aviso fixo no painel). Estados: sem preço, com preço e acima do limite da estimativa automática.
+No celular o painel recolhido mostra uma linha com a estimativa; expandido mostra o desenho, a legenda e os valores.
+
+Evidências visuais (capturas do navegador embutido, servidor local, dados fictícios): `evidencias-p05/` — 1440 sem preço, com preço e acima do limite; 768, 390, 360 e 320 com preço, painel expandido.
+
+### Homologação do P04 (WhatsApp flutuante e badge do Simple Analytics)
+
+| Ambiente | Resultado |
+|---|---|
+| Navegador embutido do aplicativo (Chromium), 320, 360, 390, 768 e 1440 px | Sem rolagem horizontal; botão fora do "Continuar"; recolhido no celular o botão não cobre o resumo. Com o painel expandido em tela baixa o botão passa ao modo translúcido previsto (`dm-fab--evitar`) e pode ficar sobre a última linha da lista |
+| Defeito reproduzido e corrigido | O total do orçamento ficava coberto pelo botão: o total foi para o topo do painel e o script passou a evitar elementos marcados com `data-fab-evitar` |
+| NÃO testado | Safari/iOS, Firefox, Chrome no Android real, leitor de tela, teclado virtual real de celular, `prefers-reduced-motion` ativado no sistema (só conferido no CSS) |

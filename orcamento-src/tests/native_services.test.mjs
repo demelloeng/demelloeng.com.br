@@ -2,6 +2,7 @@
 // reforma sem aumento de área, parâmetros duplicados, R1 vigente e disciplina preservada no funil.
 // Os registros/regras municipais abaixo são FIXTURES DE TESTE (nunca embarcados): servem só para provar o encanamento.
 import assert from 'node:assert/strict';
+import './support/catalogo.mjs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';

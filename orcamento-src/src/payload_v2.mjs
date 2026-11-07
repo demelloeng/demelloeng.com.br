@@ -6,7 +6,7 @@
 // prototype:false, pricing_preview determinístico. Nenhum proposal_value, nenhum
 // MA_ACOES / gate / APPROVED / CONTACT / SEND. Nada é enviado: o payload só é
 // serializado para download local.
-import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf, REFORMA } from './journey.mjs';
+import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf, REFORMA, resultFor, registerResultAuthority } from './journey.mjs';
 import { architectureFields, referenceAreaForPricing } from './architecture.mjs';
 import { parsePhone } from './phone.mjs';
 import { buildPricingPreview } from './pricing/engine.mjs';
@@ -25,7 +25,7 @@ const SERVICE_LABEL_TO_CODE = {
   Arquitetura: 'ARQUITETURA', // Q_NOVA
   'Orçamento técnico': 'ORCAMENTO', // Q_ESCOPO
   Terraplenagem: 'TERRAPLENAGEM', // Q_TERRENO
-  Elétrica: 'ELETRICA', // Q_NOVA, como o hidrossanitário. Sem referência na Tabela V2 => o motor devolve NEEDS_HUMAN_REVIEW (nunca preço inventado)
+  Elétrica: 'ELETRICA', // Q_NOVA, como o hidrossanitário. Preço só na tipologia CASA (base documentada); demais => NEEDS_HUMAN_REVIEW
   'Consultoria Técnica': 'CONSULTORIA_TECNICA', // Q_HORAS
   'Mentoria Técnica': 'MENTORIA_TECNICA', // Q_HORAS
 };
@@ -192,8 +192,11 @@ export function packageForCRMv2(a, mode) {
     contact: contact ? { ...contact, ...whatsappE164(contact) } : { name: '', whatsapp: '', email: '' },
     attachments: (photos ?? []).map(({ name, size, type }) => ({ name, size, type, uploaded: false })),
     safety_review_required: safetyHold(a),
-    // result reflete a realidade do motor: X3A só quando há previsão calculável.
-    result: pricing_preview.status === 'CALCULATED' ? 'X3A' : 'X3B',
+    // result = a MESMA autoridade da navegação (journey.resultFor): X3A só com previsão calculada e caso sem revisão.
+    result: resultFor(a, 'preview'),
     pricing_preview,
   };
 }
+
+// Autoridade do resultado da jornada: o status do motor, sobre os mesmos pricing_inputs do payload.
+registerResultAuthority((answers) => buildPricingPreview(derivePricingInputs(answers)).status);

@@ -1,6 +1,7 @@
 // Camada de mensuração do funil: adaptador neutro, contrato fechado, privacidade, deduplicação e emissores.
 // Nenhum fornecedor externo: os testes usam "sinks" em memória.
 import assert from 'node:assert/strict';
+import './support/catalogo.mjs';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';

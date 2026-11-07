@@ -1,5 +1,6 @@
 // Q_FUNDACAO no fluxo real: a MENOR mudança de UX (uma pergunta condicional) e nenhuma inferência silenciosa.
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { nodes, routeNodes, updateAnswer, advance, valid, summary, missingData, terreoDeclared, needsFoundationArea } from '../src/journey.mjs';
 import { packageForCRMv2 } from '../src/payload_v2.mjs';

@@ -23,20 +23,13 @@ export const INTENT_LABEL=Object.freeze({
 //  - review     : qualquer outro caso (enquadramento sem valor calculado)
 export function resultKind(answers,mode='preview'){
  if(safetyHold(answers))return 'held';
- const id=resultFor(answers,mode);
- if(id==='X3A'&&packageForCRMv2(answers).pricing_preview.status==='CALCULATED')return 'calculated';
- return 'review';
+ return resultFor(answers,mode)==='X3A'?'calculated':'review';
 }
 
-// Tela de resultado = estado efetivo do motor. X3A só quando há valor CALCULADO; qualquer outro caso (inclusive o que
-// não tem dado suficiente para o motor) é enquadramento, X3B, sem promessa de valor (pendência 178).
-export const resultStepFor=(answers,mode='preview')=>resultKind(answers,mode)==='calculated'?'X3A':'X3B';
-
-// advance() da jornada + resultado coerente com o motor. Só a saída do resumo (X1) muda; o resto é a jornada como era.
-export function advanceJourney(id,answers,mode='preview'){
- const r=advance(id,answers,mode);
- return id==='X1'&&(r.id==='X3A'||r.id==='X3B')?{...r,id:resultStepFor(r.answers,mode)}:r;
-}
+// Tela de resultado = journey.resultFor, a AUTORIDADE ÚNICA (estado efetivo do motor): X3A só com valor CALCULADO; qualquer
+// outro caso é enquadramento, X3B, sem promessa de valor (pendência 178). Estes nomes ficam por compatibilidade.
+export const resultStepFor=(answers,mode='preview')=>resultFor(answers,mode);
+export const advanceJourney=advance;
 
 export function allowedIntents(answers,mode='preview'){
  return resultKind(answers,mode)==='calculated'?['proposal','scope_question']:['evaluation_only'];

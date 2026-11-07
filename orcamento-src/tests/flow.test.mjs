@@ -1,4 +1,5 @@
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {map} from '../src/map.js';

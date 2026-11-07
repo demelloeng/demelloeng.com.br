@@ -2,6 +2,18 @@
   "table_version": "DEMELLO_V2",
   "factor_demello": "0.80",
   "currency": "BRL",
+  "automatic_estimate_limits": {
+    "_nota": "Protecao da ESTIMATIVA AUTOMATICA, por base de quantidade. Acima do limite o motor devolve NEEDS_HUMAN_REVIEW (porte exige analise especifica). Nao e limite de habilitacao, de porte atendido nem de capacidade da DEMELLO. Valores operacionais definidos pelo proprietario (07/11/2026).",
+    "Q_NOVA": "10000",
+    "Q_TOTAL": "10000",
+    "Q_SUPERESTRUTURA": "10000",
+    "Q_FUNDACAO": "10000",
+    "Q_ATENDIDA": "10000",
+    "Q_ESCOPO": "10000",
+    "Q_REGULARIZACAO": "10000",
+    "Q_TERRENO": "100000",
+    "Q_HORAS": "200"
+  },
   "note": "TABELA DEMELLO V2. Valores unitarios em R$/m2 ou R$/h como string para calculo Decimal exato. valor_demello = MIN(totais de referencias de ESCOPO EQUIVALENTE aplicaveis) x factor_demello, arredondado somente no total monetario final. Nao usar media. Nao inventar fonte faltante. Fonte nao aplicavel nao participa do MIN. Origem: pacote V2 recuperado (MA_DEMELLO_TABELA_PRECIFICACAO_V02_PACOTE_MINIMO_IMPLEMENTAVEL_V01_20260916) e especificacao consolidada 20260919; o bloco ESTRUTURAL foi reescrito (componentes, cobertura, fonte por componente, aplicabilidade, Q_SUPERESTRUTURA/Q_FUNDACAO, referencia composta AltoQi).",
   "documentation": {
     "ESTRUTURAL": {
@@ -23,7 +35,8 @@
     "MAXICAD_BIM": "MaxiCAD — suporte tecnico BIM/Revit",
     "RFB_BIM": "Receita Federal — capacitacao/consultoria BIM",
     "CIM_AMUNESC_2026": "CIM-AMUNESC — treinamento Revit sincrono 2026",
-    "IBAPE_PR": "IBAPE-PR — hora tecnica"
+    "IBAPE_PR": "IBAPE-PR — hora tecnica",
+    "DEMELLO_ELETRICA_DOCUMENTADA": "DEMELLO - valor comercial documentado de projeto eletrico residencial (Doc03, decisao 27; casos Ricardo e Carina). Base derivada do valor ja com fator; NAO e transcricao da publicacao AltoQi"
   },
   "q_bases": [
     "Q_NOVA",
@@ -352,6 +365,28 @@
         },
         "RFB_BIM": {
           "unit_value": "380.00"
+        }
+      }
+    },
+    "ELETRICA": {
+      "q_basis": "Q_NOVA",
+      "unit": "M2",
+      "references": {
+        "DEMELLO_ELETRICA_DOCUMENTADA": {
+          "by_typology": {
+            "CASA": "8.60"
+          },
+          "provenance": {
+            "tipo": "DERIVADA_DE_DECISAO_COMERCIAL_DOCUMENTADA",
+            "preco_demello_documentado_por_m2": "6.88",
+            "fator_demello": "0.80",
+            "base_implicita_por_m2": "8.60",
+            "casos_documentados": [
+              "Ricardo: 63,5 m2 = R$ 436,88",
+              "Carina: 220 m2 = R$ 1.513,60"
+            ],
+            "observacao": "O fator 0,80 e aplicado UMA vez, sobre a base 8,60 (8,60 x 0,80 = 6,88). Nao ha comprovacao documental de que a tabela AltoQi publique 8,60; por isso a fonte nao se chama AltoQi. Tipologias sem base aprovada seguem para avaliacao humana."
+          }
         }
       }
     }

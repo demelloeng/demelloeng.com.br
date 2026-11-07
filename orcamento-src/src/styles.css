@@ -132,3 +132,30 @@ input:not([type=radio]):not([type=checkbox]):focus,select:focus,textarea:focus{b
 /* P04 — badge oficial do Simple Analytics no rodapé da calculadora (mesmo link e imagem do gerador oficial). */
 .site-footer nav .sa-badge{display:flex;align-items:center;flex-shrink:0}
 .site-footer nav .sa-badge img{display:block;height:24px;width:auto}
+/* P05 — Planta que se desenha + Orçamento em movimento (painel "Seu caso"). Camadas distintas por traço E por legenda, não só por cor. */
+.live-plan{margin:0 0 22px;padding:0 0 18px;border-bottom:1px solid var(--line)}
+.lp-figure{margin:0}.lp-figure svg{display:block;width:100%;height:auto;max-height:150px;background:#fff;border:1px solid var(--line);border-radius:4px}
+.lp-figure figcaption{font-size:13px;line-height:1.45;color:var(--muted);margin-top:8px}
+.lp-footprint{fill:#F4F8FC;stroke:var(--ink);stroke-width:1.6}.lp-footprint.lp-empty{stroke-dasharray:5 4;stroke:var(--muted)}
+.lp-hint{font-size:11px;fill:var(--muted);font-family:var(--font)}
+.lp-section rect{fill:#DCE8F5;stroke:var(--ink);stroke-width:1}
+.lp-layer{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lp-estrutura{stroke:#17263C}.lp-estrutura rect{fill:#17263C;stroke:none}
+.lp-hidro{stroke:#0D65C2}.lp-eletrica{stroke:#9A6700}.lp-eletrica circle{fill:#fff}.lp-incendio{stroke:#B42318}.lp-gas{stroke:#6B3FA0}.lp-terreno{stroke:#2F7A4B}
+.lp-dash{stroke-dasharray:.04 .03}.lp-dot{stroke-dasharray:.01 .03}
+.lp-draw{stroke-dasharray:1;stroke-dashoffset:0;animation:lp-draw .7s ease-out both}
+.lp-draw.lp-dash{stroke-dasharray:.04 .03}.lp-draw.lp-dot{stroke-dasharray:.01 .03}
+@keyframes lp-draw{from{stroke-dashoffset:1;opacity:.2}to{stroke-dashoffset:0;opacity:1}}
+.lp-legend{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px}
+.lp-key{display:flex;align-items:center;gap:7px}.lp-swatch{width:22px;height:0;border-top:3px solid currentColor;display:inline-block}
+.lp-key-estrutura{color:#17263C}.lp-key-hidrossanitario{color:#0D65C2}.lp-key-eletrica{color:#9A6700}.lp-key-incendio{color:#B42318}.lp-key-gas{color:#6B3FA0}.lp-key-terreno{color:#2F7A4B}
+.lp-key-hidrossanitario .lp-swatch{border-top-style:dashed}.lp-key-gas .lp-swatch{border-top-style:dotted}.lp-key-terreno .lp-swatch{border-top-style:double;border-top-width:5px}
+.lp-key{color:var(--ink)}.lp-key .lp-swatch{border-top-color:currentColor}
+.lp-key-estrutura .lp-swatch{border-top-color:#17263C}.lp-key-hidrossanitario .lp-swatch{border-top-color:#0D65C2}.lp-key-eletrica .lp-swatch{border-top-color:#9A6700}.lp-key-incendio .lp-swatch{border-top-color:#B42318}.lp-key-gas .lp-swatch{border-top-color:#6B3FA0}.lp-key-terreno .lp-swatch{border-top-color:#2F7A4B}
+.lp-head{margin:0 0 14px}.lp-head h3{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 6px}.lp-head .lp-total{margin:0}.lp-budget{margin-top:14px}.lp-budget h3{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 8px}
+.lp-budget ul{list-style:none;margin:0;padding:0}.lp-row{display:flex;justify-content:space-between;gap:12px;font-size:15px;padding:6px 0;border-bottom:1px solid var(--line)}
+.lp-row strong{font-weight:600;text-align:right}.lp-pending strong,.lp-over_limit strong{color:var(--muted);font-weight:500}
+.lp-total{font-size:15px;line-height:1.45;margin:12px 0 0}.lp-with_price .lp-total strong{font-size:22px;color:var(--blue);margin-left:6px}
+@media(prefers-reduced-motion:reduce){.lp-draw{animation:none}}
+.lp-chip{display:none;margin:-14px 0 0;font-size:15px}.lp-chip strong{color:var(--blue);font-size:18px;margin-left:4px}
+@media(max-width:900px){.lp-chip{display:block}.live-plan{margin-bottom:16px}.lp-figure svg{max-height:140px}}

@@ -2,6 +2,7 @@
 // isolamento da área inferida, devolutiva educativa, ausência de afirmação legal, mensuração estruturada e preservação do pipeline.
 // Nada aqui consulta município, legislação ou rede: o estimador é determinístico.
 import assert from 'node:assert/strict';
+import './support/catalogo.mjs';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -341,7 +342,7 @@ test('18. SEQUÊNCIA DO PIPELINE preservada: tudo que não é Arquitetura sem á
     }
   }
   // a ordem global das etapas continua a mesma
-  assert.equal(advance('X1', known(['Estrutural']), 'preview').id, 'X3A');
+  assert.equal(advance('X1', known(['Estrutural']), 'preview').id, 'X3B', 'estrutural sem área de projeção não tem valor calculado: enquadramento (autoridade única, P01)');
   assert.equal(advance('X3A', known(['Estrutural']), 'preview').id, 'X4');
   assert.equal(advance('X4', known(['Estrutural']), 'preview').id, 'CRM');
   // Arquitetura COM área: mesma rota de antes; SEM área: só a ramificação entre S3 e S4
@@ -379,8 +380,8 @@ test('ramificação: navegação S3 -> terreno -> programa -> S4, validação do
 
 test('19. regressão: serviços existentes inalterados (preços, tabela, motor, envio por hash) e 20. CRM não homologado = falha segura', async () => {
   const sha = async (f) => createHash('sha256').update((await readFile(path.join(appRoot, f), 'utf8')).replace(/\r\n/g, '\n')).digest('hex');
-  assert.equal(await sha('src/pricing/pricing-table.v2.json'), '9a94f6afac58a79ae3cdeb66d7aea61611b7772fb61b324360c594f71b866dc1', 'Tabela V2 intocada');
-  assert.equal(await sha('src/pricing/engine.mjs'), '12d243d2f9e0d6b519f120895b8ff1dd7cd60a8a513f1b7c331474a83abbb0a7', 'motor intocado');
+  assert.equal(await sha('src/pricing/pricing-table.v2.json'), '3bfb19190ab4512264e386c3f727d64e650687c9f7f6a4ad1017440b41cee425', 'Tabela V2: só ganhou automatic_estimate_limits e ELETRICA; preços das demais disciplinas idênticos');
+  assert.equal(await sha('src/pricing/engine.mjs'), '91ad9b28c5ca3320feef7834e7c44f89a39115b6d8d56a130f56be88ce9e4104', 'motor: só a proteção por limite; fórmulas intocadas');
   assert.equal(await sha('src/pricing/decimal.mjs'), 'de8ff4f5bdba6d159d24d0ef44daa1febef6d01e29be9b86132d054dd87c1a48');
   assert.equal(await sha('src/submit.mjs'), 'c47ec9c376aab58b14dd90d6896c304373ef596ea5a26d28c15c02d48ec31f7d', 'envio ao CRM: só acrescentou transport.meta (dados do anúncio para a CAPI; ver collectMeta)');
   // CRM não homologado: o payload novo segue no mesmo envelope; recusa do Worker (422) e queda de rede não lançam e não repetem indevidamente

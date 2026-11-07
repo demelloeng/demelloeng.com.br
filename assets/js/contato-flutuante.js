@@ -89,7 +89,8 @@
   // lugar de sempre estiver ocupado, sobe para logo acima dele; se não houver lugar, some até o controle sair de baixo.
   // Roda só quando algo muda (rolagem, redimensionamento, nova pergunta), no máximo uma conta a cada 60 ms.
   if (wrap.className.indexOf('dm-fab--calc') !== -1) {
-    var CONTROLES = 'button,input,select,textarea,summary,a[href]';
+    // Controles E conteúdo que não pode ficar coberto (marcado com data-fab-evitar, ex.: o total do orçamento em movimento).
+    var CONTROLES = 'button,input,select,textarea,summary,a[href],[data-fab-evitar]';
     var base = null;
     var agendado = false;
     var esquiva = function () {

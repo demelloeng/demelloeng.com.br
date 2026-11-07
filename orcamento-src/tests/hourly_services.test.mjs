@@ -4,6 +4,7 @@
 // Consultoria + Mentoria => NEEDS_HUMAN_REVIEW (fail-closed, sem total); S2/S3 (área/empreendimento) não se aplicam
 // a serviço só-horário. Preços fechados: R$ 172,08/h (Consultoria) e R$ 218,12/h (Mentoria).
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { nodes, routes, starts, updateAnswer, advance, summary, missingData, valid, hourlyServices } from '../src/journey.mjs';
 import { packageForCRMv2, derivePricingInputs } from '../src/payload_v2.mjs';

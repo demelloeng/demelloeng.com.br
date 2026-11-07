@@ -1,5 +1,6 @@
 // P01 — confiabilidade da calculadora. Cada teste prende um defeito que a suíte anterior não via.
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { nodes, titleOf, safetyHold, summary, advance, DISPLAY_LABELS, valid, updateAnswer } from '../src/journey.mjs';
 import { resultKind, resultStepFor, advanceJourney, allowedIntents } from '../src/funnel.mjs';
@@ -126,4 +127,120 @@ test('histórico do navegador: respostas válidas sobrevivem à navegação (o e
   const r1 = advance('CA_AREA', a, 'missing');
   assert.equal(r1.id, 'CA2');
   assert.deepEqual(r1.answers.CA_AREA, { value: '120' });
+});
+
+// ---------------------------------------------------------------- autoridade única do resultado (3.1)
+import { resultFor, needsReview } from '../src/journey.mjs';
+import { REASON_ABOVE_AUTOMATIC_LIMIT, buildPricingPreview } from '../src/pricing/engine.mjs';
+import TABLE from '../src/pricing/pricing-table.v2.json' with { type: 'json' };
+import { readFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const SRC_ROOT = fileURLToPath(new URL('..', import.meta.url));
+
+test('autoridade única: navegação, payload, funil e medição concordam em todos os casos exercitados', () => {
+  const casos = [
+    { ...base, CA_AREA: { value: '120' } },                      // calculado
+    { ...base, CA_AREA: { unknown: true } },                     // sem área
+    { ...base, CA_AREA: { value: '120' }, CA5: { value: '3' } }, // estrutural sem projeção
+    { ...base, CA_AREA: { value: '20000' } },                    // acima do limite
+  ];
+  for (const a of casos) {
+    const viaPayload = packageForCRMv2(a).result;
+    assert.equal(viaPayload, resultFor(a, 'preview'), 'payload.result = journey.resultFor');
+    assert.equal(advanceJourney('X1', a, 'preview').id, viaPayload, 'navegação');
+    assert.equal(resultStepFor(a), viaPayload, 'funil');
+    assert.equal(resultKind(a) === 'calculated', viaPayload === 'X3A');
+    if (viaPayload === 'X3A') {
+      assert.equal(packageForCRMv2(a).pricing_preview.status, 'CALCULATED', 'X3A exige valor calculado');
+      assert.equal(needsReview(a), false);
+    }
+  }
+});
+
+test('autoridade única: a jornada sozinha nunca promete valor (sem motor registrado, X3B)', () => {
+  const out = execFileSync(process.execPath, ['--input-type=module', '-e',
+    "import {resultFor} from './src/journey.mjs'; console.log(resultFor({route:'build'},'preview'))"], { cwd: SRC_ROOT }).toString().trim();
+  assert.equal(out, 'X3B');
+});
+
+test('autoridade única: sem dependência circular e com uma única função de resultado', async () => {
+  const j = await readFile(new URL('../src/journey.mjs', import.meta.url), 'utf8');
+  assert.ok(!/from '\.\/payload_v2\.mjs'/.test(j), 'journey.mjs não importa payload_v2.mjs');
+  assert.ok(!/from '\.\/funnel\.mjs'/.test(j));
+  assert.equal([...j.matchAll(/function resultFor/g)].length, 1);
+});
+
+// ---------------------------------------------------------------- quantidades extremas (3.3)
+const LIM = TABLE.automatic_estimate_limits;
+const pi = (over) => ({
+  typology: 'CASA', structural_system: null, structural_scope: null, area_existing: null, area_new: null, area_total: null,
+  area_atendida: null, area_terreno: null, area_escopo: null, area_fundacao: null, hours: null, foundations_selected: false,
+  regularizacao: { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' },
+  hidro_scope_includes_existing: null, ...over,
+});
+
+test('limites: configuração única na tabela (10.000 m² de edificação, 100.000 m² de terreno, 200 h), sem número duplicado no código', async () => {
+  for (const b of ['Q_NOVA', 'Q_TOTAL', 'Q_SUPERESTRUTURA', 'Q_FUNDACAO', 'Q_ATENDIDA', 'Q_ESCOPO']) assert.equal(LIM[b], '10000', b);
+  assert.equal(LIM.Q_TERRENO, '100000');
+  assert.equal(LIM.Q_HORAS, '200');
+  for (const f of ['../src/pricing/engine.mjs', '../src/payload_v2.mjs', '../src/journey.mjs']) {
+    const code = (await readFile(new URL(f, import.meta.url), 'utf8')).replace(/^\s*\/\/.*$/gm, '').replace(/\/\/.*$/gm, '');
+    assert.ok(!/\b10[.,]?000\b|\b100[.,]?000\b/.test(code), `${f}: nenhum limite escrito no código`);
+  }
+});
+
+test('limites: no limite calcula; um centésimo acima vai para avaliação humana, sem total', () => {
+  const casos = [
+    ['HIDROSSANITARIO', { area_new: '10000' }, { area_new: '10000.01' }],
+    ['GAS_GLP', { area_atendida: '10000' }, { area_atendida: '10000.01' }],
+    ['ELETRICA', { area_new: '10000' }, { area_new: '10000.01' }],
+    ['TERRAPLENAGEM', { area_terreno: '100000', typology: null }, { area_terreno: '100000.01', typology: null }],
+    ['CONSULTORIA_TECNICA', { hours: '200', typology: null }, { hours: '200.01', typology: null }],
+  ];
+  for (const [svc, ok, over] of casos) {
+    const a = buildPricingPreview(pi({ services: [svc], ...ok }));
+    assert.equal(a.services[0].status, 'CALCULATED', `${svc} no limite`);
+    const b = buildPricingPreview(pi({ services: [svc], ...over }));
+    assert.equal(b.status, 'NEEDS_HUMAN_REVIEW', `${svc} acima`);
+    assert.equal(b.services[0].reason, REASON_ABOVE_AUTOMATIC_LIMIT);
+    assert.equal(b.total_demello, null);
+  }
+});
+
+test('limites: cada base tem o seu limite (50.000 m² de terreno calcula; 50.000 m² de edificação não)', () => {
+  assert.equal(buildPricingPreview(pi({ services: ['TERRAPLENAGEM'], area_terreno: '50000', typology: null })).status, 'CALCULATED');
+  assert.equal(buildPricingPreview(pi({ services: ['HIDROSSANITARIO'], area_new: '50000' })).status, 'NEEDS_HUMAN_REVIEW');
+});
+
+test('limites: estrutural — superestrutura acima do limite vai para revisão', () => {
+  const sup = buildPricingPreview(pi({ services: ['ESTRUTURAL'], area_total: '10000.01', area_fundacao: '5000' }));
+  assert.equal(sup.services[0].reason, REASON_ABOVE_AUTOMATIC_LIMIT);
+});
+
+test('limites: só o serviço afetado deixa o automático; o conjunto não mostra total; preços abaixo do limite iguais aos de antes', () => {
+  const pv = buildPricingPreview(pi({ services: ['HIDROSSANITARIO', 'GAS_GLP'], area_new: '100', area_atendida: '10000.01' }));
+  assert.equal(pv.services.find((s) => s.service === 'HIDROSSANITARIO').status, 'CALCULATED');
+  assert.equal(pv.services.find((s) => s.service === 'GAS_GLP').status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(pv.total_demello, null);
+  assert.equal(buildPricingPreview(pi({ services: ['CONSULTORIA_TECNICA'], hours: '5', typology: null })).total_demello, '860.39');
+});
+
+test('limites: acima do limite o visitante conclui o contato (informação preservada, só avaliação humana)', () => {
+  const a = { ...base, CA_AREA: { value: '20000' } };
+  const p = packageForCRMv2(a);
+  assert.equal(p.pricing_preview.status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(p.answers.CA_AREA.value, '20000', 'o valor informado é preservado');
+  assert.equal(p.result, 'X3B');
+  assert.deepEqual(allowedIntents(a), ['evaluation_only']);
+  assert.equal(advance('X3B', a, 'preview').id, 'X4');
+});
+
+test('limites: entradas inválidas nunca viram quantidade', () => {
+  for (const bad of ['-1', '0', '0,00', 'Infinity', 'NaN', '1e5', '1e400', '0x10', ' ', '99999999999999999999']) {
+    const a = { ...base, CA_AREA: { value: bad } };
+    if (!valid('CA_AREA', a)) assert.notEqual(packageForCRMv2(a).pricing_preview.status, 'CALCULATED', `payload: "${bad}" nunca vira preço`);
+  }
+  for (const good of ['0,01', '1', '120,5', '10000', '10000,01']) assert.equal(valid('CA_AREA', { ...base, CA_AREA: { value: good } }), true, good);
 });

@@ -3,6 +3,7 @@
 // Este motor só EMITE o regime corrente: histórico (legado e STRUCT_INCL_FOUNDATIONS_V2, ex.: primeira
 // submissão real, R$ 1.336,04) nunca é recalculado aqui — é reproduzido pelo motor canônico pelo par gravado.
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { buildPricingPreview } from '../src/pricing/engine.mjs';
 import { derivePricingInputs, packageForCRMv2 } from '../src/payload_v2.mjs';

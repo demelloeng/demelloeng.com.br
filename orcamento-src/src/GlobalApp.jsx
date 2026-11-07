@@ -2,10 +2,12 @@ import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,ArrowRight,Check,CaretDown,PencilSimple,X,DownloadSimple,ClipboardText,Plus} from '@phosphor-icons/react';
 import {REFORMA,nodes,routes,starts,keyOf,titleOf,isProject,valid,toggle,updateAnswer,switchRoute,advance,routeNodes,summary,suggestedServices,safetyHold,missingData,ufs,areaZeroValid,HOURLY} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
+import {REASON_ABOVE_AUTOMATIC_LIMIT} from './pricing/engine.mjs';
 import {initialState,deeplinkInfo} from './deeplink.mjs';
 import {allowedIntents,isIntentAllowed,estimateState,canSend,advanceJourney,INTENT_LABEL,LEAD_STAGE,SCOPE_QUESTION_MAX,scopeQuestionError,SCOPE_QUESTION_MESSAGE} from './funnel.mjs';
 import {snapshot,readSnapshot,navKey,backMode,staleOffset,newSession} from './nav_history.mjs';
 import {LocationPicker,ContactFields} from './pickers.jsx';
+import {LivePlan,LiveChip} from './LivePlan.jsx';
 import {contactCheck} from './phone.mjs';
 import {architectureReturn} from './architecture_return.mjs';
 import {PADROES} from './architecture_estimator.mjs';
@@ -55,6 +57,8 @@ function ProgramForm({value,onChange}){
 function Summary({rows,onEdit}){return <dl className="summary-list">{rows.map((row,i)=><div className={`summary-row ${row.id?'':'derived'}`} key={`${row.id}-${i}`}><dt>{row.label}</dt><dd>{row.value}</dd>{row.id&&<button type="button" className="edit-button" aria-label={`Editar ${row.label}`} onClick={()=>onEdit(row.id)}><PencilSimple size={17}/></button>}</div>)}</dl>;}
 const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida',Q_TERRENO:'área do terreno',Q_ESCOPO:'área do escopo',Q_REGULARIZACAO:'diferença de área',Q_SUPERESTRUTURA:'área estrutural total',Q_FUNDACAO:'área de projeção',Q_HORAS:'horas técnicas'};
 const qUnit=s=>s.q_basis==='Q_HORAS'?'h':'m²';
+// Porte acima do limite da estimativa automática: informação preservada, sem preço automático, avaliação humana, contato liberado.
+const aboveLimit=pv=>pv.services.some(s=>s.reason===REASON_ABOVE_AUTOMATIC_LIMIT);
 const pricingText=pv=>pv.presented_to_customer.text.replace(/Entraremos em contato para confirmar as particularidades e o escopo\./,NEXT_STEP).replace(/nossa previsão inicial/g,'nossa estimativa inicial');
 function Result({answers,isPreview}){
  const held=safetyHold(answers),missing=missingData(answers);
@@ -100,6 +104,7 @@ function Result({answers,isPreview}){
  }
  return <div className={`result-card ${held?'needs-review':''}`}>
   {held?<><h2>Esse caso precisa de avaliação antes de uma estimativa.</h2><p>Procure a equipe DEMELLO para avaliar o caso. Esta interface não confirma a segurança do imóvel.</p></>
+   :aboveLimit(pv)?<><h2>Esse porte pede uma avaliação da equipe.</h2><p>Guardamos as informações que você deu. Para esse porte, o valor não sai de uma estimativa automática: a equipe DEMELLO avalia o caso e retorna com o escopo e o valor.</p>{notes}<p>{NEXT_STEP}</p></>
    :isPreview?<><h2>Ainda não dá para calcular uma estimativa automática.</h2>{notes}<p>{NEXT_STEP}</p></>
    :<><h2>{missing.length?'Falta confirmar:':'O escopo precisa ser confirmado antes da estimativa.'}</h2>{missing.length>0&&<ul>{missing.map(x=><li key={x}>{x}</li>)}</ul>}{notes}</>}
  </div>;}
@@ -218,7 +223,7 @@ export function App(){
  <div className="actions">{!home&&!submitted&&<button className="back-button" onClick={back}><ArrowLeft size={19}/>Voltar</button>}{submitted?(sendState==='sending'?<button className="primary-button" disabled>Enviando…</button>:<button className="primary-button" onClick={reset}>Recomeçar<ArrowRight size={22}/></button>):resultStep?<div className="intent-actions" role="group" aria-label="Como você quer continuar">{allowedIntents(answers,mode).map((intent,i)=><button key={intent} type="button" className={i===0?'primary-button':'secondary-button'} onClick={()=>chooseIntent(intent)}>{INTENT_LABEL[intent]}{i===0&&<ArrowRight size={22}/>}</button>)}</div>:<button className="primary-button" type="submit" form="question-form" disabled={!canContinue}>{id==='X4'?SUBMIT_LABEL[answers.request_intent]??'Enviar meu caso':'Continuar'}<ArrowRight size={22}/></button>}</div>
  {!canContinue&&!resultStep&&<p className="continue-hint">{home||node.type==='single'?'Selecione uma opção para continuar.':suggesting?'Confirme os projetos para avaliação.':node.type==='story'?'Escreva um relato curto ou adicione uma foto.':node.type==='program'?'Preencha quartos, suítes, banheiros, garagem, pavimentos e padrão — ou marque “Ainda não sei os ambientes”.':node.type==='contact'?(sqError?SCOPE_QUESTION_MESSAGE[sqError]:contactHint(value)):node.type==='location'?'Escolha a UF e, na lista, o município.':['area','integer'].includes(node.type)?'Informe o valor ou marque que ainda não sabe.':'Preencha a informação indicada para continuar.'}</p>}
  </main>
- <aside className={`case-panel ${expanded?'expanded':''}`} aria-label="Resumo"><div className="case-heading"><h2>{home?'Seu caso, organizado.':project?'Seu projeto':'Seu caso'}</h2>{!home&&<button className="mobile-summary-toggle" onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded} aria-controls="case-body">{expanded?'Recolher':'Expandir'}<CaretDown size={18}/></button>}</div>{home?<><p className="entry-summary-intro">Suas escolhas vão formar o escopo da sua estimativa.</p><div className="entry-promise"><ClipboardText size={38}/><div><strong>Primeiro, a estimativa.<br/>Depois, seu contato.</strong><p>Alguns casos precisam de avaliação técnica antes do valor.</p></div></div></>:<><p className="case-subtitle">{routes[answers.route]}</p><div className="case-body" id="case-body"><Summary rows={rows} onEdit={edit}/></div></>}</aside>
+ <aside className={`case-panel ${expanded?'expanded':''}`} aria-label="Resumo"><div className="case-heading"><h2>{home?'Seu caso, organizado.':project?'Seu projeto':'Seu caso'}</h2>{!home&&<button className="mobile-summary-toggle" onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded} aria-controls="case-body">{expanded?'Recolher':'Expandir'}<CaretDown size={18}/></button>}</div>{home?<><p className="entry-summary-intro">Suas escolhas vão formar o escopo da sua estimativa.</p><div className="entry-promise"><ClipboardText size={38}/><div><strong>Primeiro, a estimativa.<br/>Depois, seu contato.</strong><p>Alguns casos precisam de avaliação técnica antes do valor.</p></div></div></>:<><p className="case-subtitle">{routes[answers.route]}</p>{!expanded&&<LiveChip answers={answers}/>}<div className="case-body" id="case-body"><LivePlan answers={answers}/><Summary rows={rows} onEdit={edit}/></div></>}</aside>
  </div>
  <footer className="site-footer"><ol className="progress" aria-label="Etapas">{['Seu caso','Escopo','Estimativa',...(home?[]:['Contato'])].map((label,i)=><li key={label} className={`${i===stage?'active':''} ${i<stage?'done':''}`} aria-current={i===stage?'step':undefined}><span className="step-number">{i<stage?<Check size={12}/>:i+1}</span><span>{label}</span></li>)}</ol><nav aria-label="Informações"><button onClick={()=>setModal('how')}>Como funciona</button><button onClick={()=>setModal('privacy')}>Privacidade</button><a className="sa-badge" href="https://www.simpleanalytics.com?utm_source=demelloeng.com.br&utm_content=badge" referrerPolicy="origin" target="_blank"><img src="/assets/images/simple-analytics-badge.svg" width="100" height="24" alt="Simple Analytics" loading="lazy"/></a></nav></footer>
  <div className="demo-bar">Estimativa inicial DEMELLO · Cálculo nesta página pela {TABLE_LABEL} · Envio só ao concluir</div>
