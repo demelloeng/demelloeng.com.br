@@ -379,7 +379,7 @@ export async function createMaquete(host, { reduced = false, mobile = false } = 
     const fovH = 2 * Math.atan(Math.tan(fovV / 2) * aspect);
     const f = Math.min(fovV, fovH);
     const planta = view === 'planta';
-    return (planta ? Math.max(spec.w, spec.d * aspect * 0.7) * 0.78 : r / Math.sin(f / 2)) * 0.7;
+    return (planta ? Math.max(spec.w, spec.d * aspect * 0.7) * 0.78 : r / Math.sin(f / 2)) * 0.92;
   }
 
   // ---- laço sob demanda: roda só enquanto algo se move ----

@@ -9,7 +9,7 @@
    Acessibilidade: link de verdade (Enter e toque), nome acessível fixo, foco visível, contraste AA (verde escuro com
    texto branco), alvo de 56 px (44 px quando acoplado), "prefers-reduced-motion" sem animação, sai de cima do campo quando o
    teclado do celular abre (foco em campo de texto). Nas páginas ele flutua no canto; na calculadora ele fica acoplado ao rodapé
-   (computador) ou ao cabeçalho (celular) e não cobre nada. */
+   (computador) ou ao painel fixo "Seu projeto" (celular) e não cobre nada. */
 (function () {
   'use strict';
   if (window.__dmFlutuante) return;
@@ -39,8 +39,7 @@
     '.dm-fab--docked .dm-fab__link{min-height:44px;min-width:44px;padding:0 14px;border-radius:22px;font-size:14px}',
     '.dm-fab--docked .dm-fab__link svg{width:24px;height:24px}',
     '@media (max-width:900px){.dm-fab--docked .dm-fab__rotulo{display:none}.dm-fab--docked .dm-fab__link{padding:0;justify-content:center}}',
-    '@media (max-width:900px){.dm-fab--docked{margin-left:auto;margin-right:8px}}',
-    '@media (max-width:420px){body.dm-fab-no-cabecalho .site-header>span{display:none}}',
+    '@media (max-width:900px){.case-panel .dm-fab--docked{position:absolute;right:116px;top:12px;width:40px;height:40px;margin:0;z-index:6}.case-panel .dm-fab--docked .dm-fab__link{min-height:40px;min-width:40px;width:40px;height:40px}}',
     '@keyframes dm-fab-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}',
     '@media (max-width:520px){.dm-fab{right:12px}}',
     '@media (prefers-reduced-motion:reduce){.dm-fab{animation:none}.dm-fab__rotulo{transition:none}}',
@@ -88,21 +87,19 @@
   fechar.addEventListener('click', function () { clearTimeout(timer); });
 
   // Calculadora: a jornada é um formulário com rolagem. Por isso o botão não flutua sobre ela: fica ACOPLADO a uma barra fixa,
-  // onde nunca há campo, valor, legenda nem controle por baixo. Acima de 900 px ele entra no rodapé; até 900 px, no cabeçalho
-  // (o rodapé do celular não tem espaço livre). Sem sobreposição possível, sem esquiva e sem opacidade reduzida.
+  // onde nunca há campo, valor, legenda nem controle por baixo. Acima de 900 px ele entra no rodapé; até 900 px, no painel
+  // "Seu projeto", que fica fixo no topo do celular (o cabeçalho rola para fora e o rodapé não tem espaço livre). Sem
+  // sobreposição possível, sem esquiva e sem opacidade reduzida.
   // A calculadora desenha as duas barras depois deste script: o botão espera por elas e troca de lugar quando a largura muda.
   if (wrap.className.indexOf('dm-fab--calc') !== -1) {
     var estreitaCalc = window.matchMedia ? window.matchMedia('(max-width:900px)') : { matches: false };
     var acoplar = function () {
-      var noCabecalho = estreitaCalc.matches;
-      var barra = document.querySelector(noCabecalho ? '.site-header' : '.site-footer');
+      var noPainel = estreitaCalc.matches;
+      var barra = document.querySelector(noPainel ? '.case-panel' : '.site-footer');
       if (!barra) return false;
       wrap.classList.add('dm-fab--docked');
-      document.body.classList.toggle('dm-fab-no-cabecalho', noCabecalho);
-      if (wrap.parentNode !== barra) {
-        var voltar = noCabecalho ? barra.querySelector('.site-link') : null;
-        if (voltar) barra.insertBefore(wrap, voltar); else barra.appendChild(wrap);
-      }
+      document.body.classList.toggle('dm-fab-no-painel', noPainel);
+      if (wrap.parentNode !== barra) barra.appendChild(wrap);
       return true;
     };
     if (!acoplar() && window.MutationObserver) {

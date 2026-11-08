@@ -109,7 +109,7 @@ function LivePlanInner({answers,expanded}){
   {layerNames.length>0&&<ul className="lp-legend" aria-label="Disciplinas escolhidas">{m.layers.map(l=><li key={l} className="lp-key"><span className="lp-swatch" style={{background:LAYER_COLOR[l]}} aria-hidden="true"/>{LAYER_LABEL[l]}</li>)}</ul>}
   {m.rows.length>0&&<div className="lp-budget">
    <ul>{m.rows.map(r=><li key={r.key} className={`lp-row lp-${r.state}`}><span>{serviceName(r.service)}</span><strong>{r.state==='priced'?brlStr(r.total):r.state==='over_limit'?'Avaliação da equipe':'Aguardando dados'}</strong></li>)}</ul>
-   <p className="lp-total" role="status" aria-live="polite">{m.total!==null?<>Estimativa inicial <strong>{brlStr(total)}</strong></>:m.mode==='over_limit'?'Esse porte pede avaliação da equipe, sem valor automático.':'Faltam dados para somar o valor.'}</p>
+   <p className="lp-total" role="status" aria-live="polite">{m.total!==null?<>Estimativa inicial <strong>{brlStr(total)}</strong></>:m.mode==='over_limit'?'Sem valor automático para esse porte.':'Faltam dados para somar o valor.'}</p>
   </div>}
  </section>;
 }

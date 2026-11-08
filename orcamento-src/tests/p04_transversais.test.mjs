@@ -152,7 +152,7 @@ function rodarBotao({ estreita, path = '/servicos/', foco = null } = {}) {
     head: mk('head'), body, createElement: mk,
     addEventListener: (t, f) => { (docListeners[t] ??= []).push(f); },
     querySelectorAll: () => [],
-    querySelector: (sel) => (sel === '.site-header' ? header : sel === '.site-footer' ? footer : null),
+    querySelector: (sel) => (sel === '.case-panel' ? header : sel === '.site-footer' ? footer : null),
   };
   const window = {
     matchMedia: (q) => ({ matches: q.includes('520') || q.includes('900') ? !!estreita : false, addEventListener() {} }),
@@ -184,7 +184,7 @@ test('botão (execução): nasce uma vez por página, com texto no desktop que s
   assert.ok(!fabs[0].className.includes('dm-fab--calc'), 'fora da calculadora não reserva a faixa da barra fixa');
 });
 
-test('botão (execução): na calculadora ele não flutua — acopla ao cabeçalho no celular e ao rodapé no computador', async () => {
+test('botão (execução): na calculadora ele não flutua — acopla ao painel fixo no celular e ao rodapé no computador', async () => {
   const code = await read('assets/js/contato-flutuante.js');
   const m = rodarBotao({ estreita: true, path: '/orcamento/' });
   m.run(code);
@@ -192,9 +192,9 @@ test('botão (execução): na calculadora ele não flutua — acopla ao cabeçal
   assert.ok(wrapM.className.includes('dm-fab--recolhido'), 'sem texto em tela estreita');
   assert.ok(wrapM.className.includes('dm-fab--calc'));
   assert.ok(wrapM.classList.contains('dm-fab--docked'));
-  assert.deepEqual(m.header.children.map((c) => c === wrapM), [true, false], 'no cabeçalho, antes do link "Voltar ao site"');
+  assert.ok(m.header.children.includes(wrapM), 'no celular, dentro do painel "Seu projeto" (fixo no topo)');
   assert.equal(m.footer.children.length, 0, 'não vai ao rodapé no celular');
-  assert.ok(m.body.classList.contains('dm-fab-no-cabecalho'));
+  assert.ok(m.body.classList.contains('dm-fab-no-painel'));
   assert.ok(!m.timers.some((x) => x.ms === 6000), 'sem temporizador de recolhimento');
   const d = rodarBotao({ estreita: false, path: '/orcamento/' });
   d.run(code);
