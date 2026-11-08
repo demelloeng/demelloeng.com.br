@@ -174,3 +174,6 @@ input:not([type=radio]):not([type=checkbox]):focus,select:focus,textarea:focus{b
  .lp-figure .mq-stage{flex:1 1 auto;height:auto;min-height:190px;max-height:460px}
 }
 @media(prefers-reduced-motion:reduce){.mq-svg{transition:none}}
+@media(max-width:900px){
+ .is-entry .case-panel .dm-fab--docked{position:static;margin:16px 0 0 auto}
+}
