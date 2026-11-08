@@ -3,6 +3,7 @@
 // Este motor só EMITE o regime corrente: histórico (legado e STRUCT_INCL_FOUNDATIONS_V2, ex.: primeira
 // submissão real, R$ 1.336,04) nunca é recalculado aqui — é reproduzido pelo motor canônico pelo par gravado.
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { buildPricingPreview } from '../src/pricing/engine.mjs';
 import { derivePricingInputs, packageForCRMv2 } from '../src/payload_v2.mjs';
@@ -123,7 +124,7 @@ test('Fundações isoladas = FOUNDATION_ONLY sobre Q_FUNDACAO', () => {
 test('Primeira jornada real reemitida agora: sem Q_FUNDACAO falha fechado; com a projeção informada usa o regime corrente', () => {
   const answers = {
     route: 'known', services: ['Estrutural', 'Hidrossanitário', 'Fundações', 'Outro'], otherService: 'projeto elétrico',
-    property: 'Casa/sobrado', S3: area('63,5'), location: { city: 'São luís', uf: 'MA' },
+    property: 'Casa/sobrado', S3: area('63,5'), location: { city: 'São Luís', uf: 'MA', ibge_id: '2111300' },
     contact: { name: 'Cliente Ficticio', whatsapp: '98999990000', email: 'x@exemplo.invalid' }, photos: [],
   };
   const semProjecao = packageForCRMv2(answers);

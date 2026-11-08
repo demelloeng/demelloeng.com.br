@@ -100,6 +100,8 @@ privacidade/index.html
 assets/js/analytics-sink.js
 assets/js/meta-pixel.js
 assets/js/contact-clicks.mjs
+assets/js/contato-flutuante.js
+assets/images/simple-analytics-badge.svg
 
 # Verificação do Google Search Console (propriedade https://demelloeng.com.br/) — NUNCA REMOVER
 google1483671950bc0cbc.html

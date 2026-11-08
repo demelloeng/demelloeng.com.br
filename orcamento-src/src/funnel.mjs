@@ -5,7 +5,7 @@
 //
 // Tudo aqui é determinístico e puro (sem DOM, sem rede, sem IA). O contato só é pedido DEPOIS
 // do resultado: o único caminho até o nó de contato (X4) passa por uma destas escolhas.
-import {safetyHold,resultFor} from './journey.mjs';
+import {safetyHold,resultFor,advance} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
 
 export const REQUEST_INTENTS=Object.freeze(['proposal','scope_question','evaluation_only']);
@@ -23,10 +23,13 @@ export const INTENT_LABEL=Object.freeze({
 //  - review     : qualquer outro caso (enquadramento sem valor calculado)
 export function resultKind(answers,mode='preview'){
  if(safetyHold(answers))return 'held';
- const id=resultFor(answers,mode);
- if(id==='X3A'&&packageForCRMv2(answers).pricing_preview.status==='CALCULATED')return 'calculated';
- return 'review';
+ return resultFor(answers,mode)==='X3A'?'calculated':'review';
 }
+
+// Tela de resultado = journey.resultFor, a AUTORIDADE ÚNICA (estado efetivo do motor): X3A só com valor CALCULADO; qualquer
+// outro caso é enquadramento, X3B, sem promessa de valor (pendência 178). Estes nomes ficam por compatibilidade.
+export const resultStepFor=(answers,mode='preview')=>resultFor(answers,mode);
+export const advanceJourney=advance;
 
 export function allowedIntents(answers,mode='preview'){
  return resultKind(answers,mode)==='calculated'?['proposal','scope_question']:['evaluation_only'];

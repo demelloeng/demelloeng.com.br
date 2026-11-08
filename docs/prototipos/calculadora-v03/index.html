@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Protótipo — Calculadora V03 (Planta que se desenha + Orçamento em movimento)</title>
+<style>
+@font-face{font-family:"Montserrat";src:url("../../../assets/fonts/montserrat-var-latin.woff2") format("woff2");font-weight:100 900;font-display:swap}
+:root{--ink:#0a2d55;--blue:#0643a7;--blue2:#0d65c2;--line:#d2e1ef;--muted:#5b7086;--pale:#f7fbff;--paper:#fbfdff;--grid:#e3ecf6;
+  --est:#0a2d55;--hid:#0d65c2;--inc:#b3261e;--gas:#a15c00;--ele:#6a3fb5;--ok:#17623a;--font:"Montserrat",Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);color:var(--ink);background:#fff;min-width:320px}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue2);outline-offset:3px}
+.proto-bar{background:var(--ink);color:#fff;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 16px;font-size:13px}
+.proto-bar strong{letter-spacing:.06em;font-size:12px}
+.proto-bar nav{display:flex;gap:6px;margin-left:auto}
+.proto-bar button{background:transparent;border:1px solid #ffffff66;border-radius:4px;color:#fff;padding:6px 10px;min-height:32px;cursor:pointer;font-size:13px}
+.proto-bar button[aria-pressed=true]{background:#fff;color:var(--ink);border-color:#fff}
+.shell{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:calc(100svh - 48px)}
+.prancha{background:var(--pale);border-right:1px solid var(--line);padding:24px 28px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.prancha h2{margin:0;font-size:12px;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.sheet svg{display:block;width:100%;height:auto}
+.aviso{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
+.carimbo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--ink);font-size:12px;background:#fff}
+.carimbo div{padding:8px 10px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0;overflow-wrap:anywhere}
+.carimbo div:nth-child(3n){border-right:0}
+.carimbo span{display:block;font-size:10px;letter-spacing:.12em;color:var(--muted);margin-bottom:2px}
+.carimbo b{font-weight:600;font-size:13px}
+.painel{padding:36px 56px 40px;display:flex;flex-direction:column;min-width:0}
+.painel h1{font-size:30px;line-height:1.2;margin:8px 0 8px;letter-spacing:-.02em}
+.painel .ajuda{margin:0 0 22px;color:var(--muted);font-size:16px;line-height:1.5}
+.etapas{display:flex;gap:6px;margin:0 0 18px;padding:0;list-style:none}
+.etapas li{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.etapas li.on{background:var(--blue2)}
+.cards{display:grid;gap:10px;border:0;padding:0;margin:0}
+.card{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-height:56px;cursor:pointer;background:#fff}
+.card:has(input:checked){background:#eef3fb;border-color:#a2b9dc}
+.card input{margin-top:3px;width:20px;height:20px;accent-color:var(--blue)}
+.card small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.campo{display:grid;gap:10px;margin-bottom:22px}
+.campo label{font-size:17px}
+.campo .linha{display:flex;gap:14px;align-items:center}
+.campo input[type=number]{width:130px;min-height:48px;padding:0 12px;border:1px solid #8aa2bb;border-radius:4px;font-size:18px}
+.campo input[type=range]{flex:1;min-width:0;accent-color:var(--blue)}
+.passo{display:inline-flex;align-items:center;border:1px solid #8aa2bb;border-radius:4px}
+.passo button{width:48px;height:48px;border:0;background:#fff;font-size:22px;cursor:pointer}
+.passo output{min-width:56px;text-align:center;font-size:20px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:10px;border:0;padding:0;margin:0}
+.chip{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:0 16px 0 12px;min-height:48px;cursor:pointer;background:#fff;font-size:16px}
+.chip:has(input:checked){background:#eef3fb;border-color:#a2b9dc}
+.chip i{width:14px;height:14px;border-radius:50%;flex:none}
+.chip input{width:18px;height:18px;accent-color:var(--blue)}
+.acoes{display:flex;gap:14px;margin-top:auto;padding-top:26px}
+.btn{min-height:52px;padding:0 24px;border-radius:4px;border:1px solid var(--blue);background:var(--blue);color:#fff;font-weight:600;font-size:17px;cursor:pointer}
+.btn.sec{background:#fff;color:var(--blue)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+/* resultado */
+.ex{background:#fff4d6;border:1px solid #e6c36b;border-radius:4px;padding:10px 14px;font-size:14px;line-height:1.5;margin:0 0 18px}
+.total{font-size:42px;font-weight:700;letter-spacing:-.03em;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.livro{list-style:none;padding:0;margin:18px 0;display:grid;gap:12px}
+.livro li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:end}
+.livro .nome{font-weight:600}
+.livro .base{grid-column:1;color:var(--muted);font-size:14px}
+.livro .val{grid-column:2;grid-row:1;font-variant-numeric:tabular-nums;font-weight:600}
+.livro .barra{grid-column:1/-1;height:8px;border-radius:4px;background:#e6eef7;overflow:hidden}
+.livro .barra i{display:block;height:100%;width:0;border-radius:4px;transition:width .5s ease}
+.revisao{border-left:3px solid var(--blue);padding:4px 0 4px 14px;margin:0 0 18px;line-height:1.55}
+.revisao li{margin:4px 0}
+/* desenho */
+.sheet *{transition:opacity .25s ease,transform .3s ease,width .3s ease,height .3s ease,x .3s ease,y .3s ease}
+.camada{opacity:0}
+.camada.on{opacity:1}
+.laje{transform-box:fill-box;transform-origin:center bottom}
+@media (max-width:900px){.prancha{padding:16px}.painel{padding:28px 28px 32px}.painel h1{font-size:26px}}
+@media (max-width:699px){
+ .shell{grid-template-columns:1fr}
+ .prancha{position:sticky;top:0;z-index:5;padding:10px 14px;border-right:0;border-bottom:1px solid var(--line);gap:6px}
+ .prancha h2,.aviso{display:none}
+ .sheet svg{max-height:34svh}
+ .carimbo{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .carimbo div:nth-child(3n){border-right:1px solid var(--line)}
+ .carimbo div:nth-child(2n){border-right:0}
+ .carimbo div:nth-child(n+3){display:none}
+ .painel{padding:22px 18px 28px}
+ .painel h1{font-size:25px}
+ .proto-bar nav{margin-left:0;width:100%}
+ .proto-bar nav button{flex:1}
+}
+/* telas baixas (320 x 568): só o desenho fica fixo no topo; o carimbo vira texto do próprio desenho (aria) e sai da dobra */
+@media (max-width:699px) and (max-height:700px){.sheet svg{max-height:26svh}.carimbo{display:none}}
+@media (max-width:390px){.btn{padding:0 16px;font-size:16px}.acoes{flex-wrap:wrap}.acoes .btn{flex:1}.total{font-size:34px}}
+@media (prefers-reduced-motion:reduce){.sheet *,.livro .barra i{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="proto-bar">
+  <strong>PROTÓTIPO · CALCULADORA V03 · NÃO PUBLICADO</strong>
+  <span>Planta que se desenha + Orçamento em movimento</span>
+  <nav aria-label="Estados do protótipo">
+    <button type="button" data-modo="entrada" aria-pressed="true">1 Entrada</button>
+    <button type="button" data-modo="jornada" aria-pressed="false">2 Jornada</button>
+    <button type="button" data-modo="resultado" aria-pressed="false">3 Resultado</button>
+  </nav>
+</header>
+<main class="shell">
+  <section class="prancha" aria-label="Prancha do seu projeto">
+    <h2>PRANCHA DO SEU PROJETO</h2>
+    <div class="sheet">
+      <svg id="desenho" viewBox="0 0 600 330" role="img" aria-labelledby="desenho-t"><title id="desenho-t">Esquema ilustrativo do projeto</title>
+        <defs>
+          <pattern id="grade" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#e3ecf6" stroke-width="1"/></pattern>
+          <pattern id="hachura" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V8" stroke="#8aa2bb" stroke-width="1"/></pattern>
+        </defs>
+        <rect width="600" height="330" fill="url(#grade)"/>
+        <text x="16" y="22" font-size="10" fill="#5b7086" letter-spacing="1.5">PLANTA</text>
+        <text x="410" y="22" font-size="10" fill="#5b7086" letter-spacing="1.5">CORTE</text>
+        <!-- lote (esquema; sem escala de projeto) -->
+        <rect x="16" y="34" width="360" height="270" fill="none" stroke="#5b7086" stroke-dasharray="6 5" stroke-width="1.4"/>
+        <g id="norte" transform="translate(344 66)"><circle r="12" fill="#fff" stroke="#5b7086"/><path d="M0-9 4 5 0 2-4 5z" fill="#0a2d55"/><text y="24" text-anchor="middle" font-size="9" fill="#5b7086">N</text></g>
+        <!-- pegada da edificação -->
+        <rect id="pegada" x="96" y="96" width="200" height="150" fill="#fff" stroke="#0a2d55" stroke-width="2.4"/>
+        <text id="pegada-t" x="96" y="87" text-anchor="start" font-size="13" font-weight="700" fill="#0a2d55"></text>
+        <!-- camadas por disciplina -->
+        <g id="c-est" class="camada"></g>
+        <g id="c-hid" class="camada"></g>
+        <g id="c-inc" class="camada"></g>
+        <g id="c-gas" class="camada"></g>
+        <g id="c-ele" class="camada"></g>
+        <!-- corte -->
+        <line x1="400" y1="304" x2="588" y2="304" stroke="#0a2d55" stroke-width="2"/>
+        <rect x="400" y="304" width="188" height="12" fill="url(#hachura)"/>
+        <g id="corte"></g>
+      </svg>
+    </div>
+    <div class="carimbo" id="carimbo" aria-live="polite"></div>
+    <p class="aviso">Esquema ilustrativo, sem escala de projeto. Mostra o que você escolheu; não é desenho técnico nem avaliação de engenharia.</p>
+  </section>
+  <section class="painel" aria-live="polite">
+    <ol class="etapas" id="etapas" aria-hidden="true"><li></li><li></li><li></li><li></li></ol>
+    <h1 id="titulo" tabindex="-1"></h1>
+    <p class="ajuda" id="ajuda"></p>
+    <div id="corpo"></div>
+    <div class="acoes"><button type="button" class="btn sec" id="voltar">Voltar</button><button type="button" class="btn" id="seguir">Continuar</button></div>
+  </section>
+</main>
+<script>
+(function(){
+'use strict';
+var SERV={est:{nome:'Estrutural',cor:'var(--est)',base:'área total'},hid:{nome:'Hidrossanitário',cor:'var(--hid)',base:'área total'},inc:{nome:'Incêndio',cor:'var(--inc)',base:'área total'},gas:{nome:'Gás',cor:'var(--gas)',base:'área atendida'},ele:{nome:'Projeto Elétrico',cor:'var(--ele)',base:'área total'}};
+var ROTAS=[['build','Construir ou ampliar','Projetos para uma obra nova, reforma ou ampliação.'],['regularize','Regularizar meu imóvel','Diferenças de área ou pendências nos documentos.'],['problem','Avaliar um problema','Entender uma situação no imóvel ou na obra.'],['known','Já sei o serviço','Ir direto ao projeto ou serviço que preciso.']];
+var S={modo:'entrada',passo:0,rota:null,area:120,pav:2,serv:{est:true,hid:true},semValor:false};
+var reduz=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+var $=function(id){return document.getElementById(id)};
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function ns(tag,at){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(var k in at)e.setAttribute(k,at[k]);return e}
+function limpa(g){while(g.firstChild)g.removeChild(g.firstChild)}
+var PEG={x:96,y:96,w:200,h:150};
+function pegada(){ /* esquema: a pegada é a área dividida pelos pavimentos; o lote é fixo */
+  var foot=Math.min(300,Math.max(30,S.area/S.pav)),w=Math.sqrt(foot*1.3),h=foot/w,px=14; /* esquema: 14 px por metro num lote de exemplo; sem escala de projeto */
+  PEG.w=Math.round(w*px);PEG.h=Math.round(h*px);PEG.x=Math.round(16+(360-PEG.w)/2);PEG.y=Math.round(34+(270-PEG.h)/2+10);
+  var r=$('pegada');r.setAttribute('x',PEG.x);r.setAttribute('y',PEG.y);r.setAttribute('width',PEG.w);r.setAttribute('height',PEG.h);
+  var t=$('pegada-t');t.setAttribute('x',PEG.x);t.setAttribute('y',PEG.y-9);t.textContent=S.area+' m² · '+S.pav+(S.pav>1?' pavimentos':' pavimento');
+}
+function camadas(){
+  var x=PEG.x,y=PEG.y,w=PEG.w,h=PEG.h,g,i;
+  g=$('c-est');limpa(g);
+  [[x,y],[x+w,y],[x,y+h],[x+w,y+h],[x+w/2,y],[x+w/2,y+h]].forEach(function(p){g.appendChild(ns('rect',{x:p[0]-4,y:p[1]-4,width:8,height:8,fill:'#0a2d55'}))});
+  g.appendChild(ns('line',{x1:x,y1:y,x2:x+w,y2:y,stroke:'#0a2d55','stroke-width':2.6}));g.appendChild(ns('line',{x1:x,y1:y+h,x2:x+w,y2:y+h,stroke:'#0a2d55','stroke-width':2.6}));
+  g=$('c-hid');limpa(g);
+  g.appendChild(ns('polyline',{points:(x+w*.22)+','+(y+h*.3)+' '+(x+w*.22)+','+(y+h*.75)+' '+(x+w*.62)+','+(y+h*.75)+' '+(x+w*.62)+','+(y+h+0)+' '+(x+w*.62)+','+(304),fill:'none',stroke:'#0d65c2','stroke-width':3,'stroke-linejoin':'round'}));
+  [[.22,.3],[.22,.55],[.5,.75]].forEach(function(p){g.appendChild(ns('circle',{cx:x+w*p[0],cy:y+h*p[1],r:5,fill:'#fff',stroke:'#0d65c2','stroke-width':2.5}))});
+  g=$('c-inc');limpa(g);
+  g.appendChild(ns('line',{x1:16,y1:y+h*.5,x2:x,y2:y+h*.5,stroke:'#b3261e','stroke-width':3}));
+  g.appendChild(ns('circle',{cx:30,cy:y+h*.5,r:8,fill:'#fff',stroke:'#b3261e','stroke-width':2.5}));
+  g.appendChild(ns('path',{d:'M24 '+(y+h*.5)+'H36M30 '+(y+h*.5-6)+'V'+(y+h*.5+6),stroke:'#b3261e','stroke-width':2}));
+  g=$('c-gas');limpa(g);
+  g.appendChild(ns('line',{x1:x+w*.8,y1:304,x2:x+w*.8,y2:y+h,stroke:'#a15c00','stroke-width':3,'stroke-dasharray':'7 5'}));
+  g.appendChild(ns('rect',{x:x+w*.8-7,y:y+h-16,width:14,height:14,fill:'#fff',stroke:'#a15c00','stroke-width':2.5}));
+  g=$('c-ele');limpa(g);
+  g.appendChild(ns('polyline',{points:(x+w*.1)+','+(y+h*.15)+' '+(x+w*.4)+','+(y+h*.15)+' '+(x+w*.4)+','+(y+h*.5)+' '+(x+w*.9)+','+(y+h*.5)+' '+(x+w*.9)+','+(y+h*.15),fill:'none',stroke:'#6a3fb5','stroke-width':2.5,'stroke-dasharray':'2 5','stroke-linecap':'round'}));
+  [[.1,.15],[.4,.15],[.9,.15],[.65,.5]].forEach(function(p){g.appendChild(ns('circle',{cx:x+w*p[0],cy:y+h*p[1],r:4.5,fill:'#6a3fb5'}))});
+  ['est','hid','inc','gas','ele'].forEach(function(k){$('c-'+k).classList.toggle('on',!!S.serv[k]&&S.modo!=='entrada'&&S.rota!==null)});
+}
+function corte(){
+  var g=$('corte');limpa(g);var base=304,hl=30,gap=2;
+  for(var i=0;i<S.pav;i++){
+    var y=base-(i+1)*(hl+gap)+gap;
+    g.appendChild(ns('rect',{class:'laje',x:420,y:y,width:148,height:hl,fill:i===0?'#eef3fb':'#fff',stroke:'#0a2d55','stroke-width':2.2}));
+    g.appendChild(ns('text',{x:494,y:y+hl/2+4,'text-anchor':'middle','font-size':11,fill:'#5b7086'})).textContent='pav. '+(i+1);
+  }
+  var topo=base-S.pav*(hl+gap)+gap;
+  g.appendChild(ns('path',{d:'M414 '+topo+' L494 '+(topo-22)+' L574 '+topo,fill:'none',stroke:'#0a2d55','stroke-width':2.2}));
+  if(S.serv.est&&S.modo!=='entrada')for(var k=0;k<=3;k++)g.appendChild(ns('rect',{x:418+k*49,y:topo,width:6,height:base-topo,fill:'#0a2d55',opacity:.85}));
+}
+function nomes(){var l=[];for(var k in SERV)if(S.serv[k])l.push(SERV[k].nome);return l}
+/* Como na calculadora real: com Projeto Elétrico no conjunto (ainda sem referência de preço), nada é calculado e o caso vai para avaliação. */
+function sem(){return S.semValor||!!S.serv.ele}
+function carimbo(){
+  var ro=ROTAS.filter(function(r){return r[0]===S.rota})[0];
+  var est=S.modo==='resultado'?(sem()?'Caso para avaliação':'Estimativa pronta'):S.modo==='jornada'?'Em formação':'A definir';
+  var n=nomes();
+  $('carimbo').innerHTML='<div><span>SITUAÇÃO</span><b>'+esc(ro?ro[1]:'A escolher')+'</b></div><div><span>ÁREA · PAV.</span><b>'+(S.rota?S.area+' m² · '+S.pav:'—')+'</b></div><div><span>ESTADO</span><b>'+est+'</b></div><div style="grid-column:1/-1;border-right:0"><span>DISCIPLINAS</span><b>'+esc(S.rota&&n.length?n.join(' · '):'—')+'</b></div>';
+  $('desenho-t').textContent='Esquema ilustrativo: '+(S.rota?S.area+' metros quadrados, '+S.pav+(S.pav>1?' pavimentos':' pavimento')+'; camadas: '+(n.join(', ')||'nenhuma'):'prancha vazia, aguardando sua escolha');
+}
+function etapas(){var n=S.modo==='entrada'?0:S.modo==='jornada'?1+S.passo:4;[].forEach.call($('etapas').children,function(li,i){li.className=i<n?'on':''})}
+function resultado(){
+  var tot=0,linhas=[],mx=0;
+  for(var k in SERV)if(S.serv[k]){var v=S.area*{est:20,hid:10,inc:5,gas:4,ele:0}[k]; /* múltiplos redondos e inventados: exemplo de movimento, não a Tabela V2 */linhas.push({k:k,v:v});tot+=v;mx=Math.max(mx,v)}
+  var h='';
+  if(sem()){
+    h+='<ul class="revisao">'+(S.serv.ele?'<li>O valor do <b>Projeto Elétrico</b> é definido pela equipe DEMELLO, e o conjunto segue para avaliação.</li>':'<li>Falta confirmar a área do projeto.</li>')+'</ul>';
+    h+='<ul class="livro">'+linhas.map(function(l){return '<li><span class="nome">'+SERV[l.k].nome+'</span><span class="val">Avaliação pela equipe</span><span class="base">base: '+SERV[l.k].base+'</span><span class="barra"><i style="background:'+SERV[l.k].cor+';width:100%;opacity:.25"></i></span></li>'}).join('')+'</ul>';
+    h+='<p class="ajuda">Nenhum valor é prometido. Você escolhe como continuar: enviar o caso para avaliação.</p>';
+  }else{
+    h+='<p class="ex"><b>Valores de exemplo.</b> Este protótipo mostra o movimento da tela e não calcula estimativa. Na calculadora real, cada linha vem da Tabela DEMELLO V2.</p>';
+    h+='<div class="total" id="total" aria-label="Total de exemplo">R$ 0,00</div><p class="ajuda" style="margin:0">Estimativa inicial DEMELLO · exemplo</p>';
+    h+='<ul class="livro" id="livro">'+linhas.map(function(l){return '<li><span class="nome">'+SERV[l.k].nome+'</span><span class="val" data-v="'+l.v+'">R$ 0,00</span><span class="base">base: '+SERV[l.k].base+' · '+S.area+' m²</span><span class="barra"><i data-w="'+Math.round(l.v/mx*100)+'" style="background:'+SERV[l.k].cor+'"></i></span></li>'}).join('')+'</ul>';
+    h+='<details><summary>Como chegamos a esse valor</summary><p class="ajuda" style="margin:8px 0 0">Menor referência aplicável × fator DEMELLO, por serviço (texto de exemplo).</p></details>';
+  }
+  return {html:h,total:tot};
+}
+function brl(v){return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function anima(total){
+  var lin=document.querySelectorAll('#livro .barra i'),vals=document.querySelectorAll('#livro .val'),t=$('total');if(!t)return;
+  var fim=function(){lin.forEach(function(b){b.style.width=b.dataset.w+'%'});vals.forEach(function(v){v.textContent=brl(+v.dataset.v)});t.textContent=brl(total)};
+  if(reduz){fim();return}
+  var t0=null;lin.forEach(function(b){b.style.width=b.dataset.w+'%'});
+  function f(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/600),e=1-Math.pow(1-p,3);t.textContent=brl(total*e);vals.forEach(function(v){v.textContent=brl(+v.dataset.v*e)});if(p<1)requestAnimationFrame(f);else fim()}
+  requestAnimationFrame(f);
+}
+function render(){
+  var T=$('titulo'),A=$('ajuda'),C=$('corpo'),V=$('voltar'),N=$('seguir'),h='';
+  pegada();corte();camadas();carimbo();etapas();
+  document.querySelectorAll('.proto-bar button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.modo===S.modo))});
+  V.hidden=S.modo==='entrada';
+  if(S.modo==='entrada'){
+    T.textContent='O que você precisa resolver?';A.textContent='Escolha o que mais se aproxima do seu caso. Não precisa saber o nome técnico.';
+    h='<fieldset class="cards"><legend class="sr" style="position:absolute;left:-9999px">Situação</legend>'+ROTAS.map(function(r){return '<label class="card"><input type="radio" name="rota" value="'+r[0]+'"'+(S.rota===r[0]?' checked':'')+'><span><b>'+r[1]+'</b><small>'+r[2]+'</small></span></label>'}).join('')+'</fieldset>';
+    N.textContent='Continuar';N.disabled=!S.rota;
+  }else if(S.modo==='jornada'){
+    if(S.passo===0){T.textContent='Qual a área aproximada?';A.textContent='A planta ao lado acompanha o que você digita.';
+      h='<div class="campo"><label for="area">Área total</label><div class="linha"><input id="area" type="number" inputmode="decimal" min="40" max="600" step="5" value="'+S.area+'"><span>m²</span><input id="areaR" type="range" min="40" max="600" step="5" value="'+S.area+'" aria-label="Ajustar a área"></div></div>';}
+    else if(S.passo===1){T.textContent='Quantos pavimentos?';A.textContent='O corte ao lado ganha um andar a cada toque.';
+      h='<div class="campo"><label id="pl">Pavimentos</label><div class="passo" role="group" aria-labelledby="pl"><button type="button" id="menos" aria-label="Menos um pavimento">−</button><output id="pav" aria-live="polite">'+S.pav+'</output><button type="button" id="mais" aria-label="Mais um pavimento">+</button></div></div>';}
+    else{T.textContent='Quais projetos você precisa?';A.textContent='Cada projeto liga uma camada na planta. Pode marcar mais de um.';
+      h='<fieldset class="chips"><legend style="position:absolute;left:-9999px">Projetos</legend>'+Object.keys(SERV).map(function(k){return '<label class="chip"><input type="checkbox" value="'+k+'"'+(S.serv[k]?' checked':'')+'><i style="background:'+SERV[k].cor+'"></i>'+SERV[k].nome+'</label>'}).join('')+'</fieldset>';}
+    N.textContent=S.passo<2?'Continuar':'Ver a estimativa';N.disabled=S.passo===2&&nomes().length===0;
+  }else{
+    var r=resultado();
+    T.textContent=sem()?'Já conseguimos organizar seu caso.':'Já dá para fazer uma primeira conta.';
+    A.textContent=sem()?'Ainda não dá para calcular uma estimativa automática.':'Veja de onde vem cada linha. O contato só é pedido depois.';
+    h='<p style="margin:0 0 12px"><label class="chip" style="display:inline-flex"><input type="checkbox" id="sv"'+(S.semValor?' checked':'')+'> Mostrar o caso sem valor automático</label></p>'+r.html;
+    N.textContent=sem()?'Enviar meu caso para avaliação':'Quero receber uma proposta';N.disabled=false;
+  }
+  C.innerHTML=h;
+  if(S.modo==='resultado'&&!sem())anima(resultado().total);
+}
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.name==='rota'){S.rota=t.value;render();}
+  else if(t.matches('.chips input')){S.serv[t.value]=t.checked;pegada();camadas();corte();carimbo();$('seguir').disabled=nomes().length===0;}
+  else if(t.id==='sv'){S.semValor=t.checked;render();}
+  else if(t.id==='area'||t.id==='areaR'){var v=Math.max(40,Math.min(600,Math.round(+t.value||40)));S.area=v;if($('area')&&t.id!=='area')$('area').value=v;if($('areaR'))$('areaR').value=v;pegada();camadas();carimbo();}
+});
+document.addEventListener('input',function(e){var t=e.target;if(t.id==='areaR'){S.area=+t.value;$('area').value=S.area;pegada();camadas();carimbo();}});
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.modo){S.modo=b.dataset.modo;S.passo=0;if(S.modo!=='entrada'&&!S.rota)S.rota='build';render();$('titulo').focus({preventScroll:true});}
+  else if(b.id==='menos'){S.pav=Math.max(1,S.pav-1);$('pav').textContent=S.pav;pegada();camadas();corte();carimbo();}
+  else if(b.id==='mais'){S.pav=Math.min(4,S.pav+1);$('pav').textContent=S.pav;pegada();camadas();corte();carimbo();}
+  else if(b.id==='seguir'){if(S.modo==='entrada'){S.modo='jornada';S.passo=0}else if(S.modo==='jornada'){if(S.passo<2)S.passo++;else S.modo='resultado'}render();$('titulo').focus({preventScroll:true});}
+  else if(b.id==='voltar'){if(S.modo==='resultado'){S.modo='jornada';S.passo=2}else if(S.passo>0)S.passo--;else S.modo='entrada';render();$('titulo').focus({preventScroll:true});}
+});
+render();
+})();
+</script>
+</body>
+</html>

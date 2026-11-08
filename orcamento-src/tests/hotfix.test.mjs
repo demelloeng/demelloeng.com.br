@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import './support/catalogo.mjs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
@@ -75,7 +76,7 @@ test('human summary contains only friendly case, price and applicable reference 
     property: 'Comercial',
     S3: area('1500'),
     area_fundacao: area('1500'),
-    location: { city: 'Curitiba', uf: 'PR' },
+    location: { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' },
     contact: { name: 'Cliente Teste', whatsapp: '41999999999', email: '' },
   });
   const text = buildClientSummary(payload);

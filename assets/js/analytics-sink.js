@@ -19,7 +19,7 @@
   const ROUTES = ['build', 'regularize', 'problem', 'known', 'support'];
   const SERVICES = [
     'estrutural', 'hidrossanitario', 'incendio', 'gas_glp', 'arquitetura', 'regularizacao',
-    'orcamento', 'terraplenagem', 'compatibilizacao', 'consultoria_tecnica', 'mentoria_tecnica',
+    'orcamento', 'terraplenagem', 'compatibilizacao', 'consultoria_tecnica', 'mentoria_tecnica', 'eletrica',
     'multiple', 'none',
   ];
   const PAGE_RE = /^\/(?:[a-z0-9-]{1,40}\/){0,3}(?:[a-z0-9-]{1,60}\.html)?$/;
@@ -31,7 +31,7 @@
     route: (v) => ROUTES.includes(v),
     entry: (v) => ['deeplink', 'manual', 'redirect'].includes(v),
     service: (v) => SERVICES.includes(v),
-    service_count: (v) => Number.isInteger(v) && v >= 0 && v <= 11,
+    service_count: (v) => Number.isInteger(v) && v >= 0 && v <= 12,
     step: (v) => typeof v === 'string' && /^[A-Z][A-Z0-9_-]{0,15}$/.test(v),
     result_status: (v) => ['calculated', 'needs_review', 'safety_hold'].includes(v),
     request_intent: (v) => ['proposal', 'scope_question', 'evaluation_only'].includes(v),
@@ -41,7 +41,7 @@
     lot_area_band: (v) => ['na', 'lt_200', '200_360', '360_600', '600_1000', 'gt_1000'].includes(v),
     program_size_band: (v) => ['na', 'lt_80', '80_140', '140_220', 'gt_220'].includes(v),
     estimation_version: (v) => typeof v === 'string' && /^ARQ_EST_V\d{1,3}$/.test(v),
-    placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'body'].includes(v),
+    placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'floating', 'body'].includes(v),
   });
 
   const EVENTS = Object.freeze({

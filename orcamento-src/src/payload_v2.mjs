@@ -6,8 +6,9 @@
 // prototype:false, pricing_preview determinístico. Nenhum proposal_value, nenhum
 // MA_ACOES / gate / APPROVED / CONTACT / SEND. Nada é enviado: o payload só é
 // serializado para download local.
-import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf, REFORMA } from './journey.mjs';
+import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf, REFORMA, resultFor, registerResultAuthority } from './journey.mjs';
 import { architectureFields, referenceAreaForPricing } from './architecture.mjs';
+import { parsePhone } from './phone.mjs';
 import { buildPricingPreview } from './pricing/engine.mjs';
 import { dec, add, toStr } from './pricing/decimal.mjs';
 
@@ -24,11 +25,11 @@ const SERVICE_LABEL_TO_CODE = {
   Arquitetura: 'ARQUITETURA', // Q_NOVA
   'Orçamento técnico': 'ORCAMENTO', // Q_ESCOPO
   Terraplenagem: 'TERRAPLENAGEM', // Q_TERRENO
+  Elétrica: 'ELETRICA', // Q_NOVA, como o hidrossanitário. Preço só na tipologia CASA (base documentada); demais => NEEDS_HUMAN_REVIEW
   'Consultoria Técnica': 'CONSULTORIA_TECNICA', // Q_HORAS
   'Mentoria Técnica': 'MENTORIA_TECNICA', // Q_HORAS
 };
 const FOUNDATION_LABEL = 'Fundações';
-const SERVICES_NOT_OFFERED = new Set(['Elétrica']); // fora do catálogo DEMELLO — nunca precificado
 const TYPOLOGY_LABEL_TO_CODE = {
   'Casa/sobrado': 'CASA',
   'Residencial multifamiliar': 'PREDIO',
@@ -37,8 +38,11 @@ const TYPOLOGY_LABEL_TO_CODE = {
   Comercial: 'COMERCIAL',
 };
 
+// Mesmo formato que a jornada aceita (journey/flow.area): número, até duas casas, sem separador de milhar.
+// Texto fora desse formato nunca vira quantidade de cálculo (antes, "1.000" virava 1 m² no motor).
+const AREA_FORMAT = /^[0-9]+(?:[.,][0-9]{1,2})?$/;
 const areaValue = (raw) =>
-  raw && typeof raw === 'object' && !raw.unknown && typeof raw.value === 'string' && raw.value.trim()
+  raw && typeof raw === 'object' && !raw.unknown && typeof raw.value === 'string' && AREA_FORMAT.test(raw.value.trim())
     ? raw.value.trim()
     : null;
 
@@ -83,7 +87,6 @@ export function derivePricingInputs(a) {
         }
         continue;
       }
-      if (SERVICES_NOT_OFFERED.has(label)) continue;
       const code = SERVICE_LABEL_TO_CODE[label];
       if (code && !seen.has(code)) {
         services.push(code);
@@ -165,6 +168,11 @@ export function derivePricingInputs(a) {
   };
 }
 
+function whatsappE164(contact) {
+  const p = typeof contact.whatsapp === 'string' && contact.whatsapp.trim() ? parsePhone(contact.whatsapp) : null;
+  return p && p.ok ? { whatsapp_e164: p.e164 } : {};
+}
+
 export function packageForCRMv2(a, mode) {
   const { photos, contact, ...data } = a;
   const pricing_inputs = derivePricingInputs(a);
@@ -180,11 +188,15 @@ export function packageForCRMv2(a, mode) {
     summary: summary(a),
     answers: arch ? { ...data, ...arch } : data,
     pricing_inputs,
-    contact: contact ?? { name: '', whatsapp: '', email: '' },
+    // whatsapp_e164 é ADITIVO: o campo `whatsapp` segue como o visitante digitou (rastreabilidade) e o normalizado vai ao lado.
+    contact: contact ? { ...contact, ...whatsappE164(contact) } : { name: '', whatsapp: '', email: '' },
     attachments: (photos ?? []).map(({ name, size, type }) => ({ name, size, type, uploaded: false })),
     safety_review_required: safetyHold(a),
-    // result reflete a realidade do motor: X3A só quando há previsão calculável.
-    result: pricing_preview.status === 'CALCULATED' ? 'X3A' : 'X3B',
+    // result = a MESMA autoridade da navegação (journey.resultFor): X3A só com previsão calculada e caso sem revisão.
+    result: resultFor(a, 'preview'),
     pricing_preview,
   };
 }
+
+// Autoridade do resultado da jornada: o status do motor, sobre os mesmos pricing_inputs do payload.
+registerResultAuthority((answers) => buildPricingPreview(derivePricingInputs(answers)).status);

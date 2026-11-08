@@ -18,7 +18,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -147,7 +148,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -278,7 +280,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -421,7 +424,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -550,7 +554,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -672,7 +677,7 @@
     },
     "hidro_scope_includes_existing": null
    },
-   "advance_x1": "X3A"
+   "advance_x1": "X3B"
   },
   {
    "name": "build|Ampliar um imóvel existente|Hidrossanitário+Incêndio",
@@ -691,7 +696,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -828,7 +834,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -977,7 +984,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -1118,7 +1126,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -1228,7 +1237,7 @@
     },
     "hidro_scope_includes_existing": null
    },
-   "advance_x1": "X3A"
+   "advance_x1": "X3B"
   },
   {
    "name": "build|Ainda estou definindo|Hidrossanitário+Incêndio",
@@ -1247,7 +1256,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -1353,7 +1363,7 @@
     },
     "hidro_scope_includes_existing": null
    },
-   "advance_x1": "X3A"
+   "advance_x1": "X3B"
   },
   {
    "name": "build|Ainda estou definindo|Gás+Compatibilização BIM",
@@ -1372,7 +1382,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -1509,7 +1520,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "phase": "Arquitetura pronta",
     "CA5": {
@@ -1634,7 +1646,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -1735,7 +1748,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -1831,7 +1845,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -1933,7 +1948,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -2034,7 +2050,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -2076,11 +2093,11 @@
     {
      "id": "S1",
      "label": "Serviços selecionados",
-     "value": "Orçamento técnico"
+     "value": "Orçamento e cronograma"
     },
     {
      "id": "Q_ORC",
-     "label": "Área do orçamento técnico",
+     "label": "Área do orçamento e cronograma",
      "value": "300 m²"
     },
     {
@@ -2135,7 +2152,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -2177,7 +2195,7 @@
     {
      "id": "S1",
      "label": "Serviços selecionados",
-     "value": "Terraplenagem"
+     "value": "Terraplanagem"
     },
     {
      "id": "Q_TERR",
@@ -2236,7 +2254,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -2335,7 +2354,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -2435,7 +2455,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -2526,7 +2547,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "Só uma ideia / estudo",
     "S6": "Ainda sem prazo",
@@ -2570,7 +2592,7 @@
     {
      "id": "S1",
      "label": "Serviços selecionados",
-     "value": "Estrutural · Terraplenagem · Orçamento técnico"
+     "value": "Estrutural · Terraplanagem · Orçamento e cronograma"
     },
     {
      "id": "Q_FUND",
@@ -2579,7 +2601,7 @@
     },
     {
      "id": "Q_ORC",
-     "label": "Área do orçamento técnico",
+     "label": "Área do orçamento e cronograma",
      "value": "300 m²"
     },
     {
@@ -2642,7 +2664,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S5": "x",
     "S6": "y"
@@ -2704,7 +2727,7 @@
     },
     "hidro_scope_includes_existing": null
    },
-   "advance_x1": "X3A"
+   "advance_x1": "X3B"
   },
   {
    "name": "problem",
@@ -2715,7 +2738,8 @@
     "property": "Casa/sobrado",
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "P5": "Entender o que está acontecendo"
    },
@@ -2782,7 +2806,7 @@
     },
     "hidro_scope_includes_existing": null
    },
-   "advance_x1": "X3A"
+   "advance_x1": "X3B"
   },
   {
    "name": "regularize|A",
@@ -2798,7 +2822,8 @@
     "REG_C1": "Venda",
     "REG_C2": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "REG_C3": "Casa / sobrado",
     "REG_C4": [
@@ -2891,7 +2916,8 @@
     },
     "location": {
      "city": "Curitiba",
-     "uf": "PR"
+     "uf": "PR",
+     "ibge_id": "4106902"
     },
     "S6": "Ainda sem prazo"
    },

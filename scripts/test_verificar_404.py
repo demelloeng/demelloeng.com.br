@@ -18,7 +18,8 @@ NOTAS = ['Uma prévia verificada confirma apenas que este registro foi emitido p
          'e as informações abaixo, na data indicada.',
          'Não significa proposta aceita, contrato, escopo confirmado, conferência documental nem preço atual garantido. '
          'As informações do caso foram fornecidas pelo usuário.']
-SCRIPTS = ['{b}assets/js/nav.js', '{b}assets/js/analytics-sink.js', '{b}assets/js/meta-pixel.js', '{b}assets/js/site-analytics.mjs']
+SCRIPTS = ['{b}assets/js/nav.js', '{b}assets/js/analytics-sink.js', '{b}assets/js/contato-flutuante.js', '{b}assets/js/meta-pixel.js',
+           '{b}assets/js/site-analytics.mjs']
 
 
 class Page(HTMLParser):
@@ -156,21 +157,42 @@ class VerificarE404Tests(unittest.TestCase):
             parser, _ = visivel(page)
             sources = [attrs.get('src') for tag, attrs in parser.tags if tag == 'script']
             esperado = [s.format(b=base) for s in SCRIPTS]
-            self.assertEqual(sources[:4], esperado)
-            self.assertEqual(sources[4:], [None] if folder else [])
-            self.assertEqual([a.get('type') for t, a in parser.tags if t == 'script'][3], 'module')
+            self.assertEqual(sources[:5], esperado)
+            self.assertEqual(sources[5:], [None] if folder else [])
+            self.assertEqual([a.get('type') for t, a in parser.tags if t == 'script'][4], 'module')
             if folder:
                 for tag, attrs in parser.tags:
                     for key in ('href', 'src'):
                         url = urlsplit(attrs.get(key, ''))
                         if url.scheme or url.netloc or not url.path:
                             continue
-                        path = ROOT / folder / url.path
+                        path = ROOT / url.path.lstrip('/') if url.path.startswith('/') else ROOT / folder / url.path
                         if path.is_dir():
                             path /= 'index.html'
                         self.assertTrue(path.is_file(), f'{tag}: destino local ausente {attrs.get(key)}')
             self.assertNotIn('unpkg', page.lower())
             self.assertNotIn('<form', page)
+
+    def _componentes_globais(self, page, base):
+        # WhatsApp: exatamente um script, no caminho da página, depois do coletor e antes do pixel.
+        fab = base + 'assets/js/contato-flutuante.js'
+        self.assertEqual(page.count('contato-flutuante.js'), 1, 'WhatsApp ausente ou duplicado')
+        self.assertEqual(page.count('<script src="' + fab + '" defer></script>'), 1, 'caminho do WhatsApp incorreto')
+        self.assertLess(page.index('analytics-sink.js'), page.index('contato-flutuante.js'))
+        self.assertLess(page.index('contato-flutuante.js'), page.index('meta-pixel.js'))
+        self.assertTrue((ROOT / 'assets/js/contato-flutuante.js').is_file())
+        # Badge oficial do Simple Analytics: uma vez, no rodape, com a imagem local, o link e o alt vigentes.
+        badge = '<a class="sa-badge" href="https://www.simpleanalytics.com?utm_source=demelloeng.com.br&amp;utm_content=badge" referrerpolicy="origin" target="_blank"><img src="/assets/images/simple-analytics-badge.svg" width="126" height="30" alt="Simple Analytics" loading="lazy"></a>'
+        self.assertEqual(page.count('simple-analytics-badge.svg'), 1, 'badge ausente ou duplicada')
+        self.assertEqual(page.count(badge), 1, 'marcacao da badge divergente')
+        self.assertLess(page.index('<footer'), page.index(badge))
+        self.assertLess(page.index(badge), page.index('</footer>'))
+        self.assertTrue((ROOT / 'assets/images/simple-analytics-badge.svg').is_file())
+
+    def test_componentes_globais_v04_whatsapp_e_badge_uma_unica_vez(self):
+        _, vf, nf = self.pages()
+        self._componentes_globais(vf, '../')
+        self._componentes_globais(nf, '/')
 
     def test_cabecalho_menu_e_rodape_v02_reutilizados(self):
         _, vf, nf = self.pages()

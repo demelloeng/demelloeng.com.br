@@ -2,8 +2,13 @@ import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,ArrowRight,Check,CaretDown,PencilSimple,X,DownloadSimple,ClipboardText,Plus} from '@phosphor-icons/react';
 import {REFORMA,nodes,routes,starts,keyOf,titleOf,isProject,valid,toggle,updateAnswer,switchRoute,advance,routeNodes,summary,suggestedServices,safetyHold,missingData,ufs,areaZeroValid,HOURLY} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
+import {REASON_ABOVE_AUTOMATIC_LIMIT} from './pricing/engine.mjs';
 import {initialState,deeplinkInfo} from './deeplink.mjs';
-import {allowedIntents,isIntentAllowed,estimateState,canSend,INTENT_LABEL,LEAD_STAGE,SCOPE_QUESTION_MAX,scopeQuestionError,SCOPE_QUESTION_MESSAGE} from './funnel.mjs';
+import {allowedIntents,isIntentAllowed,estimateState,canSend,advanceJourney,INTENT_LABEL,LEAD_STAGE,SCOPE_QUESTION_MAX,scopeQuestionError,SCOPE_QUESTION_MESSAGE} from './funnel.mjs';
+import {snapshot,readSnapshot,navKey,backMode,staleOffset,newSession} from './nav_history.mjs';
+import {LocationPicker,ContactFields} from './pickers.jsx';
+import {LivePlan,LiveChip} from './LivePlan.jsx';
+import {contactCheck} from './phone.mjs';
 import {architectureReturn} from './architecture_return.mjs';
 import {PADROES} from './architecture_estimator.mjs';
 import {tracking} from './tracking.mjs';
@@ -32,6 +37,8 @@ function ArchitectureReturn({ret,combined}){
   <p className="arch-next">{ret.next}</p>
  </section>;
 }
+// Dica do botão desabilitado no contato: diz o que falta, na ordem em que a pessoa preenche.
+function contactHint(contact){const c=contactCheck(contact);if(c.errors.name)return c.errors.name;if(c.errors.whatsapp)return c.errors.whatsapp;if(c.errors.email)return c.errors.email;return c.needsChannel?'Informe seu WhatsApp ou seu e-mail.':'Informe nome e um contato válido.';}
 const NUMS=(max,min=0)=>Array.from({length:max-min+1},(_,i)=>String(min+i));
 const PADRAO_LABEL={compacto:'Compacto',confortavel:'Confortável',amplo:'Amplo'};
 // Programa de necessidades (só quando a área do projeto de Arquitetura é desconhecida). Só escolhas estruturadas — nenhum texto livre.
@@ -50,6 +57,8 @@ function ProgramForm({value,onChange}){
 function Summary({rows,onEdit}){return <dl className="summary-list">{rows.map((row,i)=><div className={`summary-row ${row.id?'':'derived'}`} key={`${row.id}-${i}`}><dt>{row.label}</dt><dd>{row.value}</dd>{row.id&&<button type="button" className="edit-button" aria-label={`Editar ${row.label}`} onClick={()=>onEdit(row.id)}><PencilSimple size={17}/></button>}</div>)}</dl>;}
 const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida',Q_TERRENO:'área do terreno',Q_ESCOPO:'área do escopo',Q_REGULARIZACAO:'diferença de área',Q_SUPERESTRUTURA:'área estrutural total',Q_FUNDACAO:'área de projeção',Q_HORAS:'horas técnicas'};
 const qUnit=s=>s.q_basis==='Q_HORAS'?'h':'m²';
+// Porte acima do limite da estimativa automática: informação preservada, sem preço automático, avaliação humana, contato liberado.
+const aboveLimit=pv=>pv.services.some(s=>s.reason===REASON_ABOVE_AUTOMATIC_LIMIT);
 const pricingText=pv=>pv.presented_to_customer.text.replace(/Entraremos em contato para confirmar as particularidades e o escopo\./,NEXT_STEP).replace(/nossa previsão inicial/g,'nossa estimativa inicial');
 function Result({answers,isPreview}){
  const held=safetyHold(answers),missing=missingData(answers);
@@ -95,6 +104,7 @@ function Result({answers,isPreview}){
  }
  return <div className={`result-card ${held?'needs-review':''}`}>
   {held?<><h2>Esse caso precisa de avaliação antes de uma estimativa.</h2><p>Procure a equipe DEMELLO para avaliar o caso. Esta interface não confirma a segurança do imóvel.</p></>
+   :aboveLimit(pv)?<><h2>Esse porte pede avaliação da equipe.</h2><p>Suas informações estão guardadas. Primeiro, a equipe avalia o caso. Depois, ela volta com escopo e valor.</p>{notes}<p>{NEXT_STEP}</p></>
    :isPreview?<><h2>Ainda não dá para calcular uma estimativa automática.</h2>{notes}<p>{NEXT_STEP}</p></>
    :<><h2>{missing.length?'Falta confirmar:':'O escopo precisa ser confirmado antes da estimativa.'}</h2>{missing.length>0&&<ul>{missing.map(x=><li key={x}>{x}</li>)}</ul>}{notes}</>}
  </div>;}
@@ -103,12 +113,40 @@ export function App(){
  const [init]=useState(()=>initialState(typeof window!=='undefined'?window.location.search:''));
  const [deeplink]=useState(()=>deeplinkInfo(typeof window!=='undefined'?window.location.search:''));
  const entries=useRef({first:true,byRoute:{}});
+ // Histórico do navegador (P01): cada pergunta nova vira uma entrada; Voltar/Avançar trocam só a pergunta, sem apagar respostas.
+ const nav=useRef({last:null,popping:false,replace:false,key:'',session:newSession()});
  const [id,setId]=useState(init.id),[answers,setAnswers]=useState(init.answers),[history,setHistory]=useState(init.history),[modal,setModal]=useState(null),[expanded,setExpanded]=useState(false),[aux,setAux]=useState(false),[submitted,setSubmitted]=useState(false),[error,setError]=useState(''),[copied,setCopied]=useState(false);
  const [sendState,setSendState]=useState('idle'),[sendResult,setSendResult]=useState(null),[hp,setHp]=useState('');
  const mode='preview';
  const heading=useRef(null),fileInput=useRef(null),photoRef=useRef([]),sentPayload=useRef(null);
  function sendCase(payload){setSendState('sending');submitToCRM(payload,hp).then(r=>{setSendResult(r);setSendState(r.ok?'sent':'error');if(r.ok)tracking.submissionAccepted({answers:payload.answers,sendResult:r,contactValid:valid('X4',{contact:payload.contact}),mode});});}
  const node=nodes[id],sqError=answers.request_intent==='scope_question'?scopeQuestionError(answers.scope_question):null,key=keyOf(id),value=answers[key],rows=summary(answers),home=id==='HOME',canContinue=valid(id,answers)&&(id!=='X4'||canSend(answers,mode))&&!id.startsWith('X3'),resultStep=id==='X3A'||id==='X3B',project=isProject(answers),suggesting=id==='CA7'&&answers.services?.includes('Não sei quais preciso');
+ nav.current.key=navKey(id,history);
+ useEffect(()=>{
+  const n=nav.current,{session}=n;
+  const onPop=e=>{
+   const snap=readSnapshot(e.state,nodes);
+   if(!snap)return;
+   const off=staleOffset(snap,session);
+   if(off!==0){window.history.go(off);return;}
+   n.last=snap;
+   if(navKey(snap.id,snap.history)===n.key)return;
+   n.popping=true;
+   setId(snap.id);setHistory(snap.history);setSubmitted(false);setExpanded(false);
+  };
+  window.addEventListener('popstate',onPop);
+  return()=>window.removeEventListener('popstate',onPop);
+ },[]);
+ useEffect(()=>{
+  const n=nav.current;
+  if(n.popping){n.popping=false;return;}
+  const base={id,history,session:n.session};
+  if(n.last===null){n.last=snapshot({...base,depth:0,prevId:null});window.history.replaceState(n.last,'');return;}
+  if(n.replace){n.replace=false;n.last=snapshot({...base,depth:n.last.depth,prevId:n.last.prevId});window.history.replaceState(n.last,'');return;}
+  const prevId=n.last.id;
+  n.last=snapshot({...base,depth:n.last.depth+1,prevId});
+  window.history.pushState(n.last,'');
+ },[navKey(id,history)]);
  useEffect(()=>{photoRef.current=answers.photos??[];},[answers.photos]);
  useEffect(()=>()=>photoRef.current.forEach(p=>URL.revokeObjectURL(p.url)),[]);
  useEffect(()=>{heading.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});setError('');setCopied(false);},[id]);
@@ -120,8 +158,14 @@ export function App(){
  function change(value){if(id==='HOME'&&value!==answers.route)release(answers.photos);setAnswers(a=>updateAnswer(a,id,value));if(id!=='X4')setHistory(h=>h.filter(x=>!x.startsWith('X')));setSubmitted(false);setSendState('idle');setError('');}
  function patch(values){setAnswers(a=>({...a,...values}));setSubmitted(false);setSendState('idle');setError('');}
  function chooseIntent(intent){if(!resultStep||!isIntentAllowed(answers,intent,mode))return;const a={...answers,request_intent:intent,estimate_state:estimateState(answers,mode),lead_stage:LEAD_STAGE[intent]};if(answers.request_intent!==intent)delete a.scope_question;const result=advance(id,a,mode);setAnswers(result.answers);setHistory(h=>[...h,id]);setId(result.id);setExpanded(false);}
- function next(e){e.preventDefault();if(!canContinue)return;if(id==='X4'){if(sendState==='sending')return;const snapshot=packageForCRMv2(answers);sentPayload.current=snapshot;setSubmitted(true);sendCase(snapshot);return;}const result=advance(id,answers,mode);setAnswers(result.answers);setHistory(h=>result.answers.route!==answers.route?['HOME']:[...h,id]);setId(result.id);setExpanded(false);}
- function back(){if(!history.length)return;setId(history.at(-1));setHistory(h=>h.slice(0,-1));setSubmitted(false);setExpanded(false);}
+ function next(e){e.preventDefault();if(!canContinue)return;if(id==='X4'){if(sendState==='sending')return;const snapshot=packageForCRMv2(answers);sentPayload.current=snapshot;setSubmitted(true);sendCase(snapshot);return;}const result=advanceJourney(id,answers,mode);setAnswers(result.answers);setHistory(h=>result.answers.route!==answers.route?['HOME']:[...h,id]);setId(result.id);setExpanded(false);}
+ function back(){
+  if(!history.length)return;
+  const n=nav.current;
+  // Entrada anterior do navegador = pergunta anterior: usa o próprio histórico (a pilha do navegador fica alinhada).
+  if(backMode({last:n.last,history})==='browser'){window.history.back();return;}
+  n.replace=true;setId(history.at(-1));setHistory(h=>h.slice(0,-1));setSubmitted(false);setExpanded(false);
+ }
  function edit(target){const path=routeNodes(answers),index=path.indexOf(target);setHistory(target==='HOME'?[]:['HOME',...path.slice(0,Math.max(0,index))]);setId(target);setSubmitted(false);setExpanded(false);}
  function reset(){release(answers.photos);setAnswers({});setId('HOME');setHistory([]);setSubmitted(false);setSendState('idle');setSendResult(null);setHp('');sentPayload.current=null;setExpanded(false);setAux(false);setModal(null);}
  function redirect(route){release(answers.photos);setAnswers(a=>switchRoute(a,route,{redirect:id==='S1'}));setHistory(['HOME']);setId(starts[route]);setAux(false);setSubmitted(false);}
@@ -151,7 +195,7 @@ export function App(){
  {id==='Q_TERR_ARQ'&&<p className="helper">O terreno ajuda a estimar uma faixa de referência para o orçamento. Não é potencial construtivo, e a construção normalmente não ocupa o terreno todo. Não sabe? Marque “Ainda não sei”.</p>}
  
  {id==='Q_TERR'&&<p className="helper">Informe somente a área do terreno. Não usamos área construída, área nova nem volume no lugar dela.</p>}
- {id==='Q_ORC'&&<p className="helper">É a área que o orçamento técnico vai abranger. Orçamento técnico é um serviço contratado: não é esta estimativa nem o orçamento final da obra.</p>}
+ {id==='Q_ORC'&&<p className="helper">É a área que o orçamento e o cronograma vão abranger. Orçamento e cronograma é um serviço contratado: não é esta estimativa nem o orçamento final da obra.</p>}
  {id==='Q_FUND'&&<p className="helper">É a área que a construção ocupa no chão. Em um térreo, é igual à área construída; com mais de um pavimento, informe só a área do pavimento que toca o solo.</p>}
  {id==='X1'&&<p className="helper">Confira as informações. Você pode editar qualquer resposta.</p>}
  <form id="question-form" onSubmit={next} noValidate>
@@ -159,7 +203,7 @@ export function App(){
  {id==='S1'&&value?.includes('Outro')&&<label className="text-field contextual-field">Qual serviço?<input maxLength={180} placeholder="Nome do serviço que você procura" value={answers.otherService??''} onChange={e=>patch({otherService:e.target.value})}/><span className="small-note">Regularização e avaliação técnica seguem para suas rotas, com os dados compatíveis preservados.</span></label>}
  {id==='S1'&&<div className="route-shortcuts"><span>É outro tipo de atendimento?</span><button type="button" className="text-button" onClick={()=>redirect('regularize')}>Regularização</button><button type="button" className="text-button" onClick={()=>redirect('problem')}>Avaliação técnica</button></div>}
  {suggesting&&<section className="suggestions" aria-labelledby="suggestions-title"><h2 id="suggestions-title">Projetos que fazem sentido avaliar</h2><p>Sugestão ilustrativa com base no tipo de empreendimento e nos pavimentos informados. Ajuste e confirme; não é uma definição técnica do escopo.</p><fieldset className="choices"><legend className="sr-only">Ajustar projetos sugeridos</legend>{nodes.CA7.options.filter(o=>o.value!=='Não sei quais preciso').map(o=><label className={`choice ${(answers.confirmedSuggestions??suggestedServices(answers)).includes(o.value)?'selected':''}`} key={o.value}><span>{o.label}</span><input type="checkbox" checked={(answers.confirmedSuggestions??suggestedServices(answers)).includes(o.value)} onChange={()=>patch({confirmedSuggestions:toggle(answers.confirmedSuggestions??suggestedServices(answers),o.value),suggestionConfirmed:false})}/></label>)}</fieldset><button type="button" className="secondary-button" disabled={!(answers.confirmedSuggestions??suggestedServices(answers)).length} onClick={()=>patch({confirmedSuggestions:answers.confirmedSuggestions??suggestedServices(answers),suggestionConfirmed:true})}>{answers.suggestionConfirmed?<><Check size={18}/>Seleção confirmada</>:'Confirmar projetos para avaliação'}</button><button type="button" className="text-button" onClick={()=>change([])}>Voltar à seleção de projetos</button></section>}
- {node.type==='location'&&<div className="location-fields"><label>Cidade<input autoComplete="address-level2" maxLength={90} value={value?.city??''} onChange={e=>change({...value,city:e.target.value})}/></label><label>UF<select autoComplete="address-level1" value={value?.uf??''} onChange={e=>change({...value,uf:e.target.value})}><option value="">Selecione</option>{ufs.map(uf=><option key={uf}>{uf}</option>)}</select></label></div>}
+ {node.type==='location'&&<LocationPicker value={value} onChange={change}/>}
  {node.type==='program'&&<ProgramForm value={value} onChange={change}/>}
  {['area','integer','hours'].includes(node.type)&&<div className="area-fields"><label htmlFor="measure">{node.type==='integer'?'Número de pavimentos':(node.label??'Área informada')}</label><div className="measure"><input id="measure" inputMode={node.type==='integer'?'numeric':'decimal'} maxLength={node.type==='integer'?3:14} placeholder={node.type==='integer'?'Ex.: 2':node.type==='hours'?'Ex.: 5':'0,00'} disabled={value?.unknown??false} value={value?.value??''} onChange={e=>change({value:e.target.value,unknown:false})}/>{node.type==='area'&&<span>m²</span>}{node.type==='hours'&&<span>h</span>}</div>{node.type!=='hours'&&<label className="unknown"><input type="checkbox" checked={value?.unknown??false} onChange={e=>change({value:'',unknown:e.target.checked})}/>{id.startsWith('REG_')?'Não sei':'Ainda não sei'}</label>}{value?.value&&!canContinue&&<p className="field-error">{node.type==='integer'?'Informe um número inteiro entre 1 e 200.':areaZeroValid(id)?'Use um número igual ou maior que zero, sem separador de milhar e com até duas casas decimais.':'Use um valor maior que zero, sem separador de milhar, com até duas casas decimais.'}</p>}</div>}
  {['text','story'].includes(node.type)&&<><label className="text-field" htmlFor="story">{node.type==='story'?'Seu relato':id==='HRS_CTX'?'O que você precisa?':'O que está acontecendo?'}</label><textarea id="story" rows={3} maxLength={node.type==='story'?600:280} placeholder={node.type==='story'?'Conte em poucas palavras...':'Uma frase é suficiente.'} value={value??''} onChange={e=>change(e.target.value)}/><div className="character-count">{value?.length??0}/{node.type==='story'?600:280}</div></>}
@@ -167,7 +211,7 @@ export function App(){
  {id==='X1'&&<div className="review-summary"><Summary rows={rows} onEdit={edit}/></div>}
  {(id==='X3A'||id==='X3B')&&<Result answers={answers} isPreview={id==='X3A'}/>}
  {id==='X4'&&!submitted&&answers.request_intent==='scope_question'&&<div className="scope-question"><label className="text-field" htmlFor="scope-question">Qual é a sua dúvida?</label><textarea id="scope-question" rows={3} maxLength={SCOPE_QUESTION_MAX} placeholder="Uma ou duas frases bastam." aria-describedby="scope-question-count scope-question-error" aria-invalid={!!(sqError&&answers.scope_question)} value={answers.scope_question??''} onChange={e=>patch({scope_question:e.target.value})}/><div id="scope-question-count" className="character-count">{(answers.scope_question??'').length}/{SCOPE_QUESTION_MAX} · limite de {SCOPE_QUESTION_MAX} caracteres</div><p id="scope-question-error" className="field-error" role="alert">{sqError&&answers.scope_question?SCOPE_QUESTION_MESSAGE[sqError]:''}</p></div>}
- {id==='X4'&&!submitted&&<><p className="helper">Seu nome e pelo menos um meio de contato.</p><div className="contact-fields">{[['name','Nome','text'],['whatsapp','WhatsApp','tel'],['email','E-mail','email']].map(([field,label,type])=><label key={field}>{label}<input type={type} autoComplete={field==='whatsapp'?'tel':field} maxLength={field==='whatsapp'?24:160} value={value?.[field]??''} onChange={e=>change({...value,[field]:e.target.value})}/></label>)}</div><div aria-hidden="true" style={{position:'absolute',width:1,height:1,overflow:'hidden',clip:'rect(0 0 0 0)',whiteSpace:'nowrap'}}><label>Não preencha este campo<input type="text" tabIndex={-1} autoComplete="off" value={hp} onChange={e=>setHp(e.target.value)}/></label></div><p className="small-note">Ao concluir, você envia estes dados e as respostas do seu caso para a DEMELLO Engenharia, que poderá usá-los para analisar seu caso e entrar em contato pelos meios informados. As fotos não são enviadas. {answers.request_intent==='scope_question'?'A sua dúvida segue junto com o caso. ':''}Veja Privacidade.</p></>}
+ {id==='X4'&&!submitted&&<><p className="helper">Seu nome e pelo menos um meio de contato.</p><ContactFields value={value} onChange={change}/><div aria-hidden="true" style={{position:'absolute',width:1,height:1,overflow:'hidden',clip:'rect(0 0 0 0)',whiteSpace:'nowrap'}}><label>Não preencha este campo<input type="text" tabIndex={-1} autoComplete="off" value={hp} onChange={e=>setHp(e.target.value)}/></label></div><p className="small-note">Ao concluir, você envia estes dados e as respostas do seu caso para a DEMELLO Engenharia, que poderá usá-los para analisar seu caso e entrar em contato pelos meios informados. As fotos não são enviadas. {answers.request_intent==='scope_question'?'A sua dúvida segue junto com o caso. ':''}Veja Privacidade.</p></>}
  {id==='X4'&&submitted&&sendState==='sending'&&<div className="result-card" role="status" aria-live="polite"><p>Enviando as informações do seu caso…</p></div>}
  {id==='X4'&&submitted&&sendState==='sent'&&<div className="result-card success" role="status"><Check size={36}/><h2>{SENT_TITLE[answers.request_intent]??'Recebemos as informações do seu caso.'}</h2><p>{SENT_TEXT[answers.request_intent]??SENT_TEXT.evaluation_only}</p><button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar resumo do seu caso</button></div>}
  {id==='X4'&&submitted&&sendState==='error'&&<div className="result-card needs-review" role="alert"><h2>Não foi possível enviar agora.</h2><p>Sua estimativa e o resumo continuam disponíveis. Tente enviar novamente ou fale com a DEMELLO pelos canais do site.</p><div className="actions"><button type="button" className="secondary-button" onClick={()=>sendCase(sentPayload.current)}>Tentar enviar novamente</button><button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar resumo do seu caso</button></div></div>}
@@ -177,11 +221,11 @@ export function App(){
  {error&&<p className="field-error" role="alert">{error}</p>}
  {(id==='X1'||id.startsWith('X3'))&&<button type="button" className="text-button copy-button" onClick={copy}>{copied?'Resumo copiado':'Copiar resumo'}</button>}
  <div className="actions">{!home&&!submitted&&<button className="back-button" onClick={back}><ArrowLeft size={19}/>Voltar</button>}{submitted?(sendState==='sending'?<button className="primary-button" disabled>Enviando…</button>:<button className="primary-button" onClick={reset}>Recomeçar<ArrowRight size={22}/></button>):resultStep?<div className="intent-actions" role="group" aria-label="Como você quer continuar">{allowedIntents(answers,mode).map((intent,i)=><button key={intent} type="button" className={i===0?'primary-button':'secondary-button'} onClick={()=>chooseIntent(intent)}>{INTENT_LABEL[intent]}{i===0&&<ArrowRight size={22}/>}</button>)}</div>:<button className="primary-button" type="submit" form="question-form" disabled={!canContinue}>{id==='X4'?SUBMIT_LABEL[answers.request_intent]??'Enviar meu caso':'Continuar'}<ArrowRight size={22}/></button>}</div>
- {!canContinue&&!resultStep&&<p className="continue-hint">{home||node.type==='single'?'Selecione uma opção para continuar.':suggesting?'Confirme os projetos para avaliação.':node.type==='story'?'Escreva um relato curto ou adicione uma foto.':node.type==='program'?'Preencha quartos, suítes, banheiros, garagem, pavimentos e padrão — ou marque “Ainda não sei os ambientes”.':node.type==='contact'?(sqError?SCOPE_QUESTION_MESSAGE[sqError]:'Informe nome e um contato válido.'):node.type==='location'?'Informe cidade e UF.':['area','integer'].includes(node.type)?'Informe o valor ou marque que ainda não sabe.':'Preencha a informação indicada para continuar.'}</p>}
+ {!canContinue&&!resultStep&&<p className="continue-hint">{home||node.type==='single'?'Selecione uma opção para continuar.':suggesting?'Confirme os projetos para avaliação.':node.type==='story'?'Escreva um relato curto ou adicione uma foto.':node.type==='program'?'Preencha quartos, suítes, banheiros, garagem, pavimentos e padrão — ou marque “Ainda não sei os ambientes”.':node.type==='contact'?(sqError?SCOPE_QUESTION_MESSAGE[sqError]:contactHint(value)):node.type==='location'?'Escolha a UF e, na lista, o município.':['area','integer'].includes(node.type)?'Informe o valor ou marque que ainda não sabe.':'Preencha a informação indicada para continuar.'}</p>}
  </main>
- <aside className={`case-panel ${expanded?'expanded':''}`} aria-label="Resumo"><div className="case-heading"><h2>{home?'Seu caso, organizado.':project?'Seu projeto':'Seu caso'}</h2>{!home&&<button className="mobile-summary-toggle" onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded} aria-controls="case-body">{expanded?'Recolher':'Expandir'}<CaretDown size={18}/></button>}</div>{home?<><p className="entry-summary-intro">Suas escolhas vão formar o escopo da sua estimativa.</p><div className="entry-promise"><ClipboardText size={38}/><div><strong>Primeiro, a estimativa.<br/>Depois, seu contato.</strong><p>Alguns casos precisam de avaliação técnica antes do valor.</p></div></div></>:<><p className="case-subtitle">{routes[answers.route]}</p><div className="case-body" id="case-body"><Summary rows={rows} onEdit={edit}/></div></>}</aside>
+ <aside className={`case-panel ${expanded?'expanded':''}`} aria-label="Resumo"><div className="case-heading"><h2>{home?'Seu caso, organizado.':project?'Seu projeto':'Seu caso'}</h2>{!home&&<button className="mobile-summary-toggle" onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded} aria-controls="case-body">{expanded?'Recolher':'Expandir'}<CaretDown size={18}/></button>}</div>{home?<><p className="entry-summary-intro">Suas escolhas vão formar o escopo da sua estimativa.</p><div className="entry-promise"><ClipboardText size={38}/><div><strong>Primeiro, a estimativa.<br/>Depois, seu contato.</strong><p>Alguns casos precisam de avaliação técnica antes do valor.</p></div></div></>:<><p className="case-subtitle">{routes[answers.route]}</p>{!expanded&&<LiveChip answers={answers}/>}<div className="case-body" id="case-body"><LivePlan answers={answers} expanded={expanded}/><details className="case-answers"><summary>Suas respostas</summary><Summary rows={rows} onEdit={edit}/></details></div></>}</aside>
  </div>
- <footer className="site-footer"><ol className="progress" aria-label="Etapas">{['Seu caso','Escopo','Estimativa',...(home?[]:['Contato'])].map((label,i)=><li key={label} className={`${i===stage?'active':''} ${i<stage?'done':''}`} aria-current={i===stage?'step':undefined}><span className="step-number">{i<stage?<Check size={12}/>:i+1}</span><span>{label}</span></li>)}</ol><nav aria-label="Informações"><button onClick={()=>setModal('how')}>Como funciona</button><button onClick={()=>setModal('privacy')}>Privacidade</button></nav></footer>
+ <footer className="site-footer"><ol className="progress" aria-label="Etapas">{['Seu caso','Escopo','Estimativa',...(home?[]:['Contato'])].map((label,i)=><li key={label} className={`${i===stage?'active':''} ${i<stage?'done':''}`} aria-current={i===stage?'step':undefined}><span className="step-number">{i<stage?<Check size={12}/>:i+1}</span><span>{label}</span></li>)}</ol><nav aria-label="Informações"><button onClick={()=>setModal('how')}>Como funciona</button><button onClick={()=>setModal('privacy')}>Privacidade</button><a className="sa-badge" href="https://www.simpleanalytics.com?utm_source=demelloeng.com.br&utm_content=badge" referrerPolicy="origin" target="_blank"><img src="/assets/images/simple-analytics-badge.svg" width="100" height="24" alt="Simple Analytics" loading="lazy"/></a></nav></footer>
  <div className="demo-bar">Estimativa inicial DEMELLO · Cálculo nesta página pela {TABLE_LABEL} · Envio só ao concluir</div>
  {modal&&<Dialog title={modal==='privacy'?'Privacidade':'Como funciona'} onClose={()=>setModal(null)}>{modal==='privacy'?<><p>As respostas e a estimativa ficam nesta página enquanto você a usa. Quando você conclui e confirma o envio, os dados do seu caso e o contato informado são enviados à DEMELLO Engenharia para análise e eventual retorno. As fotos não são enviadas. A estimativa é um valor inicial calculado nesta página — não é proposta, contrato nem garantia de preço.</p><p>Recomeçar ou atualizar a página apaga o conteúdo. O arquivo baixado é um resumo humano do caso e não inclui fotos nem dados técnicos internos.</p></>:<><p>Escolha uma das {ENTRY_COUNT_WORD} entradas e responda apenas às perguntas do seu percurso. Todas chegam ao mesmo resumo e ao mesmo resultado, e o seu contato só é pedido depois dele.</p><p>O lápis permite revisar respostas. Informações compatíveis podem ser reaproveitadas; áreas e escopos não são transferidos automaticamente entre rotas.</p><p>A estimativa é calculada nesta página pela {TABLE_LABEL}, por serviço, com um motor determinístico — nunca a IA. É uma estimativa inicial, não uma proposta; o escopo final é confirmado pela equipe.</p><p>Depois do resultado, você escolhe entre receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos seu contato.</p></>}</Dialog>}
  </div>;

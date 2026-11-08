@@ -2,6 +2,7 @@
 // reforma sem aumento de área, parâmetros duplicados, R1 vigente e disciplina preservada no funil.
 // Os registros/regras municipais abaixo são FIXTURES DE TESTE (nunca embarcados): servem só para provar o encanamento.
 import assert from 'node:assert/strict';
+import './support/catalogo.mjs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
@@ -17,7 +18,7 @@ import { buildClientSummary } from '../src/client_summary.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
-const LOC = { city: 'Curitiba', uf: 'PR' };
+const LOC = { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' };
 const known = (svc, extra = {}) => ({ route: 'known', services: svc, S2: 'Casa/sobrado', S3: { value: '200' }, location: LOC, S5: 'Só uma ideia / estudo', S6: 'Ainda sem prazo', ...extra });
 const unknownArea = { value: '', unknown: true };
 const svcOf = (p, code) => p.pricing_preview.services.find((s) => s.service === code);
@@ -57,14 +58,14 @@ test('bases do motor: Q_NOVA, Q_ESCOPO e Q_TERRENO com os preços da Tabela V2 (
 test('perguntas condicionais dos serviços nativos: Orçamento técnico -> área abrangida; Terraplenagem -> área do terreno', () => {
   assert.deepEqual(routeNodes(known(['Orçamento técnico'])), ['S1', 'Q_ORC', 'S2', 'S3', 'S4', 'S5', 'S6']);
   assert.deepEqual(routeNodes(known(['Terraplenagem'])), ['S1', 'Q_TERR', 'S2', 'S3', 'S4', 'S5', 'S6']);
-  assert.equal(nodes.Q_ORC.title, 'Qual a área abrangida pelo orçamento técnico?');
+  assert.equal(nodes.Q_ORC.title, 'Qual a área abrangida pelo orçamento e cronograma?');
   assert.equal(nodes.Q_TERR.title, 'Qual a área do terreno?');
   assert.equal(advance('S1', known(['Orçamento técnico']), 'preview').id, 'Q_ORC');
   assert.equal(advance('S1', known(['Terraplenagem']), 'preview').id, 'Q_TERR');
   assert.equal(advance('Q_ORC', known(['Orçamento técnico'], { area_orcamento: { value: '300' } }), 'preview').id, 'S2');
   // resumo e rótulos
   const rows = summary(known(['Orçamento técnico', 'Terraplenagem'], { area_orcamento: { value: '300' }, area_terreno: { value: '500' } }));
-  assert.ok(rows.some((r) => r.label === 'Área do orçamento técnico' && r.value === '300 m²'));
+  assert.ok(rows.some((r) => r.label === 'Área do orçamento e cronograma' && r.value === '300 m²'));
   assert.ok(rows.some((r) => r.label === 'Área do terreno' && r.value === '500 m²'));
   // desmarcar o serviço apaga a resposta da pergunta condicional
   const cleared = updateAnswer(known(['Orçamento técnico', 'Terraplenagem'], { area_orcamento: { value: '300' }, area_terreno: { value: '500' } }), 'S1', ['Estrutural']);
@@ -217,7 +218,10 @@ test('dúvida: editar respostas anteriores a limpa; preencher o contato não; tr
   const app = await readFile(path.join(appRoot, 'src/GlobalApp.jsx'), 'utf8');
   assert.match(app, /if\(answers\.request_intent!==intent\)delete a\.scope_question;/, 'trocar a intenção limpa');
   // voltar: back() só muda o nó/histórico; as respostas (inclusive scope_question) permanecem em `answers`
-  assert.match(app, /function back\(\)\{if\(!history\.length\)return;setId\(history\.at\(-1\)\);setHistory\(h=>h\.slice\(0,-1\)\);setSubmitted\(false\);setExpanded\(false\);\}/);
+  // P01: back() ganhou o histórico do navegador, mas continua só mudando nó/histórico — nunca toca nas respostas.
+  const backBody = app.match(/function back\(\)\{[\s\S]*?\n \}/)[0];
+  assert.match(backBody, /setId\(history\.at\(-1\)\);setHistory\(h=>h\.slice\(0,-1\)\);setSubmitted\(false\);setExpanded\(false\);/);
+  assert.ok(!/setAnswers/.test(backBody), 'back() não pode alterar as respostas');
   // acessibilidade e limite explícito
   assert.match(app, /<label className="text-field" htmlFor="scope-question">Qual é a sua dúvida\?<\/label>/);
   assert.match(app, /maxLength=\{SCOPE_QUESTION_MAX\}/);
@@ -338,7 +342,7 @@ test('bundle publicado reflete o código-fonte: serviços nativos, dúvida, refo
   const { readdir } = await import('node:fs/promises');
   const files = await readdir(dir);
   const js = await readFile(path.join(dir, files.find((n) => /^index-.*\.js$/.test(n))), 'utf8');
-  for (const marker of ['Qual é a sua dúvida?', 'Reformar sem aumentar a área', 'Qual a área do imóvel a reformar?', 'Qual a área abrangida pelo orçamento técnico?',
+  for (const marker of ['Qual é a sua dúvida?', 'Reformar sem aumentar a área', 'Qual a área do imóvel a reformar?', 'Qual a área abrangida pelo orçamento e cronograma?',
     'ARQ_EST_V1', 'LOT_ONLY_ESTIMATE', 'PROGRAM_AND_LOT_ESTIMATE', 'Seu ponto de partida', 'scope_question', 'ARQUITETURA', 'TERRAPLENAGEM', 'ORCAMENTO']) {
     assert.ok(js.includes(marker), `bundle sem "${marker}" — reconstruir o orcamento-src`);
   }

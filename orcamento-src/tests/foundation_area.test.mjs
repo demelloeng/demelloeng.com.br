@@ -1,5 +1,6 @@
 // Q_FUNDACAO no fluxo real: a MENOR mudança de UX (uma pergunta condicional) e nenhuma inferência silenciosa.
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { nodes, routeNodes, updateAnswer, advance, valid, summary, missingData, terreoDeclared, needsFoundationArea } from '../src/journey.mjs';
 import { packageForCRMv2 } from '../src/payload_v2.mjs';
@@ -9,7 +10,7 @@ import { buildClientSummary } from '../src/client_summary.mjs';
 const area = (v) => ({ value: v, unknown: false });
 const contact = { name: 'Fulano Fictício', whatsapp: '41999990000', email: 'x@exemplo.invalid' };
 const build = (over = {}) => ({
-  route: 'build', CA1: 'Construir do zero', CA_AREA: area('200'), property: 'Comercial', location: { city: 'Curitiba', uf: 'PR' },
+  route: 'build', CA1: 'Construir do zero', CA_AREA: area('200'), property: 'Comercial', location: { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' },
   phase: 'Arquitetura pronta', CA5: area('3'), CA6: 'Médio', services: ['Estrutural'], deadline: '3–6 meses', contact, ...over,
 });
 

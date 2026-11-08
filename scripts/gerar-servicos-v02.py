@@ -60,7 +60,7 @@ def relative_destination(match):
     if url.fragment: path += '#'+url.fragment
     return match[1]+'href="'+esc(path)+'"'
 page = re.sub(r'(<a\b[^>]*?\s)href="(https://demelloeng\.com\.br[^\"]*)"', relative_destination, page)
-scripts = '<script src="../assets/js/nav.js" defer></script>\n<script src="../assets/js/analytics-sink.js" defer></script>\n<script src="../assets/js/meta-pixel.js" defer></script>\n<script type="module" src="../assets/js/site-analytics.mjs"></script>'
+scripts = '<script src="../assets/js/nav.js" defer></script>\n<script src="../assets/js/analytics-sink.js" defer></script>\n<script src="../assets/js/contato-flutuante.js" defer></script>\n<script src="../assets/js/meta-pixel.js" defer></script>\n<script type="module" src="../assets/js/site-analytics.mjs"></script>'
 page = page.replace('</body>', scripts+'\n</body>')
 (dest / 'index.html').write_bytes(page.encode('utf-8'))
 print('index.html regenerado a partir de conteudo.json; CSS e recursos preservados.')

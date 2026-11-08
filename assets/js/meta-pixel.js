@@ -23,7 +23,7 @@
   }
   if (!trackingAllowed()) return;
 
-  var SAFE = { route: /^(build|regularize|problem|known|support)$/, service: /^(estrutural|hidrossanitario|incendio|gas_glp|arquitetura|regularizacao|orcamento|terraplenagem|compatibilizacao|consultoria_tecnica|mentoria_tecnica|multiple|none)$/ };
+  var SAFE = { route: /^(build|regularize|problem|known|support)$/, service: /^(estrutural|hidrossanitario|incendio|gas_glp|arquitetura|regularizacao|orcamento|terraplenagem|compatibilizacao|consultoria_tecnica|mentoria_tecnica|eletrica|multiple|none)$/ };
   function safeParams(p) {
     var out = {};
     p = p || {};

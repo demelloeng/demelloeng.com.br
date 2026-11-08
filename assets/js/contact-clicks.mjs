@@ -78,6 +78,9 @@ export function handleClick(e, win = typeof window !== 'undefined' ? window : nu
 
 export function installContactClicks(win = typeof window !== 'undefined' ? window : null, doc = typeof document !== 'undefined' ? document : null) {
   if (!win || !doc || typeof doc.addEventListener !== 'function') return false;
+  // Um único ouvinte por documento: a calculadora e as páginas estáticas compartilham este módulo sem contar o clique duas vezes.
+  if (doc.__dmContactClicks === true) return false;
+  doc.__dmContactClicks = true;
   const onClick = (e) => { handleClick(e, win); };
   // click cobre mouse, toque e teclado (Enter); auxclick cobre o botão do meio (abrir em nova aba).
   doc.addEventListener('click', onClick, true);

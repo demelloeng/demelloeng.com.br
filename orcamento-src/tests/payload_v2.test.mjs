@@ -1,4 +1,5 @@
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { packageForCRMv2, derivePricingInputs, V2_SOURCE } from '../src/payload_v2.mjs';
 import { buildPricingPreview } from '../src/pricing/engine.mjs';
@@ -8,12 +9,12 @@ const contact = { name: 'Fulano Fictício', whatsapp: '41999990000', email: 'x@e
 
 const BUILD = {
   route: 'build', CA1: 'Construir do zero', CA_AREA: area('320'), property: 'Comercial',
-  location: { city: 'Curitiba', uf: 'PR' }, services: ['Estrutural', 'Hidrossanitário'],
+  location: { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' }, services: ['Estrutural', 'Hidrossanitário'],
   phase: 'Arquitetura pronta', CA5: area('3'), CA6: 'Médio', deadline: '3–6 meses', contact,
 };
 const GAS_NO_AREA = {
   route: 'known', services: ['Gás'], property: 'Casa/sobrado',
-  location: { city: 'Curitiba', uf: 'PR' }, S3: area('120'), contact,
+  location: { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' }, S3: area('120'), contact,
 };
 
 test('packageForCRMv2: envelope V2 explícito, sem V1, sem proposta', () => {
@@ -116,7 +117,7 @@ test('derivePricingInputs: campos indeterminados nunca inventados', () => {
 test('packageForCRMv2: rota "known" com S3 -> area_total, previsão calculável', () => {
   const p = packageForCRMv2({
     route: 'known', services: ['Estrutural'], property: 'Comercial',
-    location: { city: 'Curitiba', uf: 'PR' }, S3: area('1500'), area_fundacao: area('1500'),
+    location: { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' }, S3: area('1500'), area_fundacao: area('1500'),
     phase: 'Arquitetura pronta', deadline: '1–3 meses', contact,
   });
   assert.equal(p.pricing_inputs.area_total, '1500');
@@ -136,7 +137,7 @@ test('derivePricingInputs: rota problem -> sem serviços; texto livre não vira 
 
 test('REG_A2 = 0 -> regularizacao.area_matricula = "0"; diferença IPTU-matrícula preservada', () => {
   const a = { route: 'regularize', REG_R1: 'A', REG_A1: area('100'), REG_A2: area('0'), REG_C1: 'Venda',
-    REG_C2: { city: 'Curitiba', uf: 'PR' }, contact };
+    REG_C2: { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' }, contact };
   const pi = derivePricingInputs(a);
   assert.equal(pi.regularizacao.area_matricula, '0');       // areaValue já preserva "0"
   assert.equal(pi.regularizacao.area_iptu, '100');

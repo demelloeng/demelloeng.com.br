@@ -55,8 +55,8 @@ Todo parâmetro tem **validador fechado** (enum ou padrão estrito). Valor fora 
 | `origin_page` | caminho interno de onde o visitante veio | `document.referrer` do mesmo domínio | `page_view` (quando `origin=internal`) |
 | `route` | `build` · `regularize` · `problem` · `known` · `support` | `answers.route` | eventos da jornada |
 | `entry` | `deeplink` · `manual` · `redirect` | como a rota foi aberta | `estimate_started`, `situation_selected` |
-| `service` (Arquitetura, Orçamento técnico e Terraplenagem são serviços nativos: `arquitetura`, `orcamento`, `terraplenagem`) | `estrutural` · `hidrossanitario` · `incendio` · `gas_glp` · `arquitetura` · `regularizacao` · `orcamento` · `terraplenagem` · `compatibilizacao` · `consultoria_tecnica` · `mentoria_tecnica` · `multiple` · `none` | códigos do motor (`derivePricingInputs`) ou da tabela de deep links | jornada |
-| `service_count` | inteiro 0–11 | idem | jornada |
+| `service` (Arquitetura, Orçamento técnico e Terraplenagem são serviços nativos: `arquitetura`, `orcamento`, `terraplenagem`) | `estrutural` · `hidrossanitario` · `incendio` · `gas_glp` · `arquitetura` · `regularizacao` · `orcamento` · `terraplenagem` · `compatibilizacao` · `consultoria_tecnica` · `mentoria_tecnica` · `eletrica` · `multiple` · `none` | códigos do motor (`derivePricingInputs`) ou da tabela de deep links | jornada |
+| `service_count` | inteiro 0–12 | idem | jornada |
 | `step` | id de nó da jornada (`CA1`, `S1`, `X3A`, `X4`, …) | `id` do nó atual | jornada |
 | `result_status` | `calculated` · `needs_review` · `safety_hold` | `resultKind()` | `estimate_completed`, `framing_delivered` |
 | `request_intent` | `proposal` · `scope_question` · `evaluation_only` | escolha pós-resultado | pedidos |
@@ -146,7 +146,7 @@ Antes, quem clicava em um `wa.me`, `tel:` ou `mailto:` saía do funil medido sem
 | `phone_contact_started` | clique em qualquer link `tel:` | idem |
 | `email_contact_started` | clique em qualquer link `mailto:` | idem |
 
-- `placement` é lista fechada: `topbar` (faixa superior), `menu` (menu no celular), `cta_band` (faixa de chamada final), `contact_page` (página Contato), `footer`, `body`. Um atributo `data-contact-placement` no link ou em um contêiner sobrescreve a posição.
+- `placement` é lista fechada: `topbar` (faixa superior), `menu` (menu no celular), `cta_band` (faixa de chamada final), `contact_page` (página Contato), `footer`, `floating` (botão flutuante de WhatsApp, `assets/js/contato-flutuante.js`), `body`. Um atributo `data-contact-placement` no link ou em um contêiner sobrescreve a posição.
 - `route` e `service` saem da página (tabela fechada em `contact-clicks.mjs`): por exemplo, `/servicos/projeto-estrutural/` gera `route=known`, `service=estrutural`.
 - **Nunca** entram número, e-mail, link, nome ou texto: o href não é lido para dentro do evento e os validadores são enums.
 - O mesmo botão conta **uma vez por visita**; cabeçalho e menu contam separado.

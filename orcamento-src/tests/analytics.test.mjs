@@ -1,6 +1,7 @@
 // Camada de mensuração do funil: adaptador neutro, contrato fechado, privacidade, deduplicação e emissores.
 // Nenhum fornecedor externo: os testes usam "sinks" em memória.
 import assert from 'node:assert/strict';
+import './support/catalogo.mjs';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
@@ -12,7 +13,7 @@ import { createTracking, serviceParams, fingerprint } from '../src/tracking.mjs'
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
-const LOC = { city: 'Curitiba', uf: 'PR' };
+const LOC = { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' };
 
 // Dados que NUNCA podem aparecer em um evento.
 const PII = ['maria.silva@example.com', '41999990000', '(41) 98512-4056', 'Maria da Silva', 'Rua das Flores, 123', 'IMG_2031.jpg', 'foto-rachadura.png',
@@ -81,7 +82,7 @@ test('privacidade: dado pessoal dentro de parâmetro PERMITIDO também é barrad
     assert.equal(JSON.stringify(out).includes('@'), false);
   }
   // inteiros fora de faixa / tipos errados
-  for (const bad of [-1, 12, 1.5, '3', null, NaN, Infinity]) assert.equal(PARAMS.service_count(bad), false, String(bad));
+  for (const bad of [-1, 13, 1.5, '3', null, NaN, Infinity]) assert.equal(PARAMS.service_count(bad), false, String(bad));
   assert.equal(seen.length, 0);
 });
 
@@ -392,7 +393,7 @@ for(const file of ['analytics-sink.js','meta-pixel.js']){
 
 
 test('adapters preserve every closed service code and reject arbitrary strings in allowed fields', async () => {
- const services=['estrutural','hidrossanitario','incendio','gas_glp','arquitetura','regularizacao','orcamento','terraplenagem','compatibilizacao','consultoria_tecnica','mentoria_tecnica','multiple','none'];
+ const services=['estrutural','hidrossanitario','incendio','gas_glp','arquitetura','regularizacao','orcamento','terraplenagem','compatibilizacao','consultoria_tecnica','mentoria_tecnica','eletrica','multiple','none'];
  for(const file of ['analytics-sink.js','meta-pixel.js']){
   const a=await adapter(file);
   for(const service of services){

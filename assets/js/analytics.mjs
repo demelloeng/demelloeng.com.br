@@ -20,7 +20,7 @@ export const SCHEMA = 'demello-analytics/1';
 const ROUTES = ['build', 'regularize', 'problem', 'known', 'support'];
 const SERVICES = [
   'estrutural', 'hidrossanitario', 'incendio', 'gas_glp', 'arquitetura', 'regularizacao',
-  'orcamento', 'terraplenagem', 'compatibilizacao', 'consultoria_tecnica', 'mentoria_tecnica',
+  'orcamento', 'terraplenagem', 'compatibilizacao', 'consultoria_tecnica', 'mentoria_tecnica', 'eletrica',
   'multiple', 'none',
 ];
 const PAGE_RE = /^\/(?:[a-z0-9-]{1,40}\/){0,3}(?:[a-z0-9-]{1,60}\.html)?$/;
@@ -33,7 +33,7 @@ export const PARAMS = Object.freeze({
   route: (v) => ROUTES.includes(v),
   entry: (v) => ['deeplink', 'manual', 'redirect'].includes(v),
   service: (v) => SERVICES.includes(v),
-  service_count: (v) => Number.isInteger(v) && v >= 0 && v <= 11,
+  service_count: (v) => Number.isInteger(v) && v >= 0 && v <= 12,
   step: (v) => typeof v === 'string' && /^[A-Z][A-Z0-9_-]{0,15}$/.test(v),
   result_status: (v) => ['calculated', 'needs_review', 'safety_hold'].includes(v),
   request_intent: (v) => ['proposal', 'scope_question', 'evaluation_only'].includes(v),
@@ -45,7 +45,7 @@ export const PARAMS = Object.freeze({
   program_size_band: (v) => ['na', 'lt_80', '80_140', '140_220', 'gt_220'].includes(v),
   estimation_version: (v) => typeof v === 'string' && /^ARQ_EST_V\d{1,3}$/.test(v),
   // Contato direto (WhatsApp, telefone, e-mail): só a POSIÇÃO do botão, em lista fechada. Nunca número, nome, texto ou endereço.
-  placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'body'].includes(v),
+  placement: (v) => ['topbar', 'menu', 'cta_band', 'contact_page', 'footer', 'floating', 'body'].includes(v),
 });
 
 // emitters: quem tem autoridade para emitir. 'site' = navegador do visitante; 'crm' = back-office.

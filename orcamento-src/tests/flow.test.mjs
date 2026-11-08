@@ -1,9 +1,10 @@
 import test from 'node:test';
+import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {map} from '../src/map.js';
 import {nodes,options,area,difference,valid,setAnswer,toggleDocument,classify,advance,summary,localPackage,unknownDocuments} from '../src/flow.mjs';
-const trunk={R1:'A',C1:'Inventário/partilha',C2:{city:'Curitiba',uf:'PR'},C3:'Casa/sobrado',C4:[unknownDocuments]};
+const trunk={R1:'A',C1:'Inventário/partilha',C2:{city:'Curitiba',uf:'PR',ibge_id:'4106902'},C3:'Casa/sobrado',C4:[unknownDocuments]};
 const branches={A:['A1','A2','A3'],B:['B1','B2','B3'],C:['C-R1','C-R2'],D:['D1','D2','D3'],E:['E1','E2','E3'],F:['F1','F2','F3'],G:['G1']};
 const example=id=>['A1','A2','B2','E2'].includes(id)?{value:'238',unknown:false}:id==='G1'?'Uma situação ainda sem descrição técnica.':options(id)[0].value;
 test('Mapa preservado: 30 estados e 43 transições, sem novas perguntas',()=>{

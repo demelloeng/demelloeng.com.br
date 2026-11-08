@@ -19,6 +19,8 @@ export const REFERENCE_LABEL = {
   cim_amunesc: 'CIM-AMUNESC',
   ibape_pr: 'IBAPE-PR',
   ibape: 'IBAPE-PR',
+  // Projeto elétrico residencial: valor comercial DEMELLO documentado (base derivada; não é publicação AltoQi).
+  demello_eletrica_documentada: 'Base DEMELLO documentada',
 };
 
 export const REFERENCE_ORDER = Object.keys(REFERENCE_LABEL);

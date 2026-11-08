@@ -142,6 +142,7 @@ def cabeca(meta: dict[str, str], canonical: str, base: str, estilo: str, extra: 
 def scripts(base: str) -> str:
     return (f'<script src="{base}assets/js/nav.js" defer></script>\n'
             f'<script src="{base}assets/js/analytics-sink.js" defer></script>\n'
+            f'<script src="{base}assets/js/contato-flutuante.js" defer></script>\n'
             f'<script src="{base}assets/js/meta-pixel.js" defer></script>\n'
             f'<script type="module" src="{base}assets/js/site-analytics.mjs"></script>\n')
 
