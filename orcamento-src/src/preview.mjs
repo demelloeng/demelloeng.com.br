@@ -10,6 +10,8 @@
 // Estrutura espelha submit.mjs: uma retentativa em 5xx/rede, nunca lança para a
 // UI, retorna { ok, status, record?, error? }.
 
+import { buildPricingPreview } from './pricing/engine.mjs';
+
 const ENV_ENDPOINT =
   (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_PREVIEW_ENDPOINT) || '';
 const TIMEOUT_MS = 10000;
@@ -83,13 +85,32 @@ async function postOnce(endpoint, body, fetchImpl) {
   }
 }
 
-// opts é só para teste: { endpoint, fetchImpl }.
+// Expectativa do navegador (R2): o que foi APRESENTADO ao cliente — regime, total e valor DEMELLO por serviço. Não é
+// autoridade de preço: o Worker recalcula e só emite com concordância integral (senão 409 PRICING_VERSION_MISMATCH).
+export function expectationFromPreview(pv) {
+  if (!pv || pv.status !== 'CALCULATED' || typeof pv.total_demello !== 'string') return null;
+  return {
+    table_version: pv.table_version,
+    pricing_rule: pv.pricing_rule,
+    total_demello: pv.total_demello,
+    services: pv.services.filter((s) => s.status === 'CALCULATED').map((s) => ({ service: s.service, total_demello: s.demello.total })),
+  };
+}
+
+export const OUTDATED_ERROR = 'PRICING_VERSION_MISMATCH';
+export const OUTDATED_MESSAGE = 'A calculadora foi atualizada. Recarregue a página e confira sua estimativa antes de gerar a prévia.';
+
+// opts é só para teste (e para passar a prévia apresentada): { endpoint, fetchImpl, presented }.
 export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
   const endpoint = opts.endpoint || ENV_ENDPOINT;
   const fetchImpl = opts.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
   if (!endpoint || !fetchImpl) return { ok: false, status: 0, error: 'no-endpoint' };
 
   const body = { pricing_inputs: pricingInputs, case_summary: pickCaseSummary(caseSummary) };
+  let presented = opts.presented;
+  if (!presented) { try { presented = buildPricingPreview(pricingInputs); } catch { presented = null; } }
+  const expectation = expectationFromPreview(presented);
+  if (expectation) body.expectation = expectation;
 
   let attempt = { status: 0, payload: null, error: 'unsent' };
   for (let i = 0; i < 2; i += 1) {
@@ -105,7 +126,7 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
   if (attempt.status === 201 && p.schema === 'PUBLIC_PREVIEW_V1' && p.verification_code && p.preview) {
     return { ok: true, status: 201, record: p };
   }
-  return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed' };
+  return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed', outdated: attempt.status === 409 && p.error === OUTDATED_ERROR };
 }
 
 export const VERIFY_BASE = 'https://demelloeng.com.br/verificar/';

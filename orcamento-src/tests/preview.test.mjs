@@ -10,8 +10,8 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { issuePreview, pickCaseSummary, caseSummaryFromRows, verifyUrl } from '../src/preview.mjs';
-import { buildPreviewLayout, renderPreviewPng } from '../src/preview_png.mjs';
+import { issuePreview, pickCaseSummary, caseSummaryFromRows, verifyUrl, expectationFromPreview, OUTDATED_MESSAGE } from '../src/preview.mjs';
+import { buildPreviewLayout, renderPreviewPng, planLayout } from '../src/preview_png.mjs';
 import { encodeQr } from '../src/qr.mjs';
 import { buildPricingPreview } from '../src/pricing/engine.mjs';
 
@@ -22,13 +22,13 @@ const FIXTURE_INPUTS = { services: ['REGULARIZACAO'], typology: 'CASA',
   regularizacao: { area_iptu: '150', area_matricula: '0', levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' } };
 const FIXTURE_PREVIEW = buildPricingPreview(FIXTURE_INPUTS);
 
-// projeta os serviços do motor para a forma pública {service,status,references{total}}
+// projeta os serviços do motor para a forma pública {service,status,references{total},total_demello}
 function publicServices(preview) {
   return preview.services.filter((s) => s.status === 'CALCULATED').map((s) => {
     const references = {};
     if (s.references && s.references.secid_pr) references.secid_pr = { total: s.references.secid_pr.total };
     if (s.references && s.references.altoqi) references.altoqi = { total: s.references.altoqi.total };
-    return { service: s.service, status: 'CALCULATED', references };
+    return { service: s.service, status: 'CALCULATED', references, total_demello: s.demello.total };
   });
 }
 
@@ -90,9 +90,45 @@ test('issuePreview: 201 PUBLIC_PREVIEW_V1 -> {ok, record}; envia só pricing_inp
   assert.equal(r.ok, true);
   assert.equal(r.record.schema, 'PUBLIC_PREVIEW_V1');
   assert.equal(r.record.verification_code, 'k3m7q9r2t5w8x4z6');
-  assert.deepEqual(Object.keys(sent).sort(), ['case_summary', 'pricing_inputs']);
+  assert.deepEqual(Object.keys(sent).sort(), ['case_summary', 'expectation', 'pricing_inputs']);
+  // expectativa = o que o navegador apresentou (regime, total e valor por serviço); o Worker é a autoridade
+  assert.deepEqual(sent.expectation, {
+    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2', total_demello: FIXTURE_PREVIEW.total_demello,
+    services: [{ service: 'REGULARIZACAO', total_demello: FIXTURE_PREVIEW.services[0].demello.total }],
+  });
   assert.equal(sent.case_summary.necessidade, 'x');
   for (const k of ['nome', 'email', 'contact']) assert.equal(sent.case_summary[k], undefined);
+});
+
+test('expectationFromPreview: só pacote calculado; uma entrada por serviço calculado, em ordem; valores como texto decimal', () => {
+  const pv = buildPricingPreview({ services: ['ESTRUTURAL', 'ELETRICA'], typology: 'CASA', structural_system: 'CONCRETO_ARMADO',
+    area_new: '250', area_total: '250', area_fundacao: '150' });
+  assert.deepEqual(expectationFromPreview(pv), {
+    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2', total_demello: '5520.00',
+    services: [{ service: 'ESTRUTURAL', total_demello: '4272.00' }, { service: 'ELETRICA', total_demello: '1248.00' }],
+  });
+  assert.equal(expectationFromPreview(buildPricingPreview({ services: ['ESTRUTURAL'] })), null);
+  assert.equal(expectationFromPreview(null), null);
+});
+
+test('issuePreview usa a prévia APRESENTADA quando informada (não recalcula no lugar do que o cliente viu)', async () => {
+  let sent = null;
+  const fetchImpl = async (url, opts) => { sent = JSON.parse(opts.body); return { status: 201, json: async () => fixtureRecord() }; };
+  const presented = { ...FIXTURE_PREVIEW, total_demello: '1.00' };
+  await issuePreview(FIXTURE_INPUTS, {}, { endpoint: 'https://w/api', fetchImpl, presented });
+  assert.equal(sent.expectation.total_demello, '1.00');
+});
+
+test('issuePreview: 409 PRICING_VERSION_MISMATCH -> {ok:false, outdated:true}, sem retentativa e sem lançar', async () => {
+  let calls = 0;
+  const fetchImpl = async () => { calls += 1; return { status: 409, json: async () => ({ error: 'PRICING_VERSION_MISMATCH', reason: 'TOTAL_MISMATCH' }) }; };
+  const r = await issuePreview(FIXTURE_INPUTS, {}, { endpoint: 'https://w/api', fetchImpl });
+  assert.deepEqual([r.ok, r.status, r.error, r.outdated], [false, 409, 'PRICING_VERSION_MISMATCH', true]);
+  assert.equal(calls, 1, '409 é final: não retenta');
+  assert.equal(OUTDATED_MESSAGE, 'A calculadora foi atualizada. Recarregue a página e confira sua estimativa antes de gerar a prévia.');
+  // outro 409 (sem o erro de versão) não é tratado como "página desatualizada"
+  const other = await issuePreview(FIXTURE_INPUTS, {}, { endpoint: 'https://w/api', fetchImpl: async () => ({ status: 409, json: async () => ({ error: 'INTEGRITY_MISMATCH' }) }) });
+  assert.equal(other.outdated, false);
 });
 
 test('issuePreview: resposta sem schema PUBLIC_PREVIEW_V1 -> {ok:false}', async () => {
@@ -158,8 +194,12 @@ test('buildPreviewLayout: valores vêm SÓ do registro; sem PII; sem regra inter
   assert.equal(L.forecast_value, 'R$ 4.699,20');            // = preview.pricing.total_demello
   assert.equal(L.verification_code, 'k3m7q9r2t5w8x4z6');
   assert.equal(L.verify_url, 'https://demelloeng.com.br/verificar/?codigo=k3m7q9r2t5w8x4z6');
-  assert.ok(L.references.some((r) => r === 'SECID/PR — Regularização: R$ 5.874,00'),
-    'referência com nome de serviço legível (não o código)');
+  assert.deepEqual(L.services, [{
+    name: 'Regularização',                                   // nome legível, não o código
+    price: 'R$ 4.699,20',                                    // preço DEMELLO do serviço, vindo do registro
+    references: [{ label: 'SECID/PR', total: 'R$ 5.874,00' }],   // referências DAQUELE serviço
+  }]);
+  assert.equal(L.references, undefined, 'sem lista solta de referências desassociadas do serviço');
   assert.ok(L.criterion.includes('conforme metodologia DEMELLO'), 'critério sem fator/fórmula');
   assert.ok(!/0[.,]80|80%|fator DEMELLO/i.test(L.criterion), 'critério não expõe a regra interna');
   assert.ok(L.disclaimers[0].includes('Não constitui proposta comercial, contrato'));
@@ -204,14 +244,15 @@ test('renderPreviewPng: desenha o valor do registro, sem regra interna, e devolv
   });
   assert.equal(blob.type, 'image/png');
   assert.equal(fakeCanvas.width, 1080);
-  assert.equal(fakeCanvas.height, 1350);
+  assert.ok(fakeCanvas.height >= 1350, 'altura mínima 1350; cresce quando o conteúdo exige');
   const text = drawn.join('\n');
-  assert.ok(text.includes('R$ 4.699,20'));                       // valor do registro
+  assert.equal(drawn.filter((t) => t === 'R$ 4.699,20').length, 2, 'valor do registro: total e preço do serviço');
   assert.ok(text.includes('k3m7q9r2t5w8x4z6'));                  // código
   assert.ok(text.includes('PRÉVIA INICIAL DEMELLO'));
-  assert.ok(text.includes('PREVISÃO DEMELLO'));
+  assert.ok(text.includes('ESTIMATIVA INICIAL DEMELLO'));
+  assert.ok(text.includes('SERVIÇOS') && text.includes('Regularização'));
+  assert.ok(text.includes('SECID/PR R$ 5.874,00'));              // referência do serviço, na linha do serviço
   assert.ok(text.includes('SEU CASO'));
-  assert.ok(text.includes('SECID/PR — Regularização: R$ 5.874,00'));
   assert.ok(text.includes('conforme metodologia DEMELLO'));
   assert.ok(!/0[.,]80|80%|fator DEMELLO/i.test(text), 'PNG não expõe fator/regra interna');
   for (const cell of ['ÁREA IPTU', 'ÁREA MATRÍCULA', 'DIFERENÇA', '150 m²', '0 m²']) {
@@ -242,7 +283,7 @@ test('/verificar/index.html: estática, consome PUBLIC_PREVIEW_V1, sem hash-no-b
   assert.match(html, /Tabela DEMELLO " \+ m\[1\]/); // versão da tabela GRAVADA no registro (V1 histórico ou V2 corrente)
   assert.doesNotMatch(html, /Tabela DEMELLO V1<\/dd>/); // não fixa mais a versão
   assert.doesNotMatch(html, /altoqi_composta|composta/); // a composição nunca chega à página pública
-  assert.match(html, /mercado: "Referência de mercado"/);
+  assert.match(html, /mercado: "AltoQi \+ SECID\/PR"/);
   // estados
   assert.match(html, /Prévia DEMELLO verificada/);
   assert.match(html, /Código não encontrado/);
@@ -259,13 +300,14 @@ test('/verificar/index.html: estática, consome PUBLIC_PREVIEW_V1, sem hash-no-b
 
 test('GlobalApp: emissão só no ramo X3A/CALCULATED; PNG só do registro confirmado; sem "fator 0,80" público', async () => {
   const src = await readFile(path.join(siteRoot, 'orcamento-src', 'src', 'GlobalApp.jsx'), 'utf8');
-  assert.match(src, /import \{issuePreview,caseSummaryFromRows\} from '\.\/preview\.mjs'/);
+  assert.match(src, /import \{issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE\} from '\.\/preview\.mjs'/);
   assert.match(src, /import \{renderPreviewPng\} from '\.\/preview_png\.mjs'/);
   assert.equal((src.match(/issuePreview\(/g) || []).length, 1);
   assert.equal((src.match(/renderPreviewPng\(r\.record\)/g) || []).length, 1);
   assert.equal((src.match(/Gerar prévia DEMELLO/g) || []).length, 1);
-  assert.match(src, /const r=await issuePreview\(payload\.pricing_inputs,cs\);\s*\n\s*if\(!r\.ok\)\{setPState\('error'\);return;\}/,
-    'sem PNG quando o Worker falha');
+  assert.match(src, /const r=await issuePreview\(payload\.pricing_inputs,cs,\{presented:pv\}\);\s*\n\s*if\(!r\.ok\)\{setPState\(r\.outdated\?'outdated':'error'\);return;\}/,
+    'sem PNG quando o Worker falha; versão desatualizada pede recarregar');
+  assert.match(src, /pState==='outdated'&&[\s\S]*OUTDATED_MESSAGE[\s\S]*window\.location\.reload\(\)/, 'mensagem e ação de recarregar');
   // a regra interna não é publicada no texto da página
   assert.doesNotMatch(src, /fator\s*0[.,]80/i);
   assert.doesNotMatch(src, /menor referência pública aplicável[^.]*fator/i);
@@ -277,4 +319,118 @@ test('GlobalApp: emissão só no ramo X3A/CALCULATED; PNG só do registro confir
   assert.ok(calcReturn.includes('onClick={gerarPrevia}') && calcReturn.includes('Gerar prévia DEMELLO'));
   assert.ok(!fallbackReturn.includes('gerarPrevia') && !fallbackReturn.includes('Gerar prévia'),
     'X3B não oferece emissão com valor');
+});
+
+// --- capacidade da peça: 2, 7 e 12 serviços (altura dinâmica, sem corte nem sobreposição) -------------------------------
+const ALL_SERVICES = ['ESTRUTURAL', 'ELETRICA', 'HIDROSSANITARIO', 'INCENDIO', 'GAS_GLP', 'ARQUITETURA', 'COMPATIBILIZACAO', 'ORCAMENTO',
+  'REGULARIZACAO', 'TERRAPLENAGEM', 'CONSULTORIA_TECNICA', 'MENTORIA_TECNICA'];
+const NAMES = { ESTRUTURAL: 'Estrutural', ELETRICA: 'Projeto Elétrico', HIDROSSANITARIO: 'Hidrossanitário', INCENDIO: 'Incêndio', GAS_GLP: 'Gás',
+  ARQUITETURA: 'Arquitetura', COMPATIBILIZACAO: 'Compatibilização BIM', ORCAMENTO: 'Orçamento e cronograma', REGULARIZACAO: 'Regularização',
+  TERRAPLENAGEM: 'Terraplanagem', CONSULTORIA_TECNICA: 'Consultoria técnica', MENTORIA_TECNICA: 'Mentoria técnica' };
+
+function recordWith(n) {
+  const codes = ALL_SERVICES.slice(0, n);
+  const services = codes.map((code, i) => ({
+    service: code, status: 'CALCULATED',
+    references: { secid_pr: { total: `${1000 + i}.00` }, altoqi: { total: `${900 + i}.00` }, fundepar: { total: `${800 + i}.00` }, mercado: { total: `${950 + i}.00` } },
+    total_demello: `${(640 + i).toFixed(2)}`,
+  }));
+  const total = services.reduce((acc, s) => acc + Math.round(Number(s.total_demello) * 100), 0) / 100;
+  return fixtureRecord({ pricing: { total_demello: total.toFixed(2), services } });
+}
+const fakeMeasure = { measureText: (t) => ({ width: String(t).length * 8.5 }), font: '' };
+
+for (const n of [1, 2, 7, 12]) {
+  test(`peça com ${n} serviço(s): altura dinâmica, módulos em ordem sem sobreposição, nada omitido`, async () => {
+    const rec = recordWith(n);
+    const L = buildPreviewLayout(rec);
+    assert.equal(L.services.length, n, 'nenhum serviço calculado é omitido');
+    assert.deepEqual(L.services.map((s) => s.name), ALL_SERVICES.slice(0, n).map((c) => NAMES[c]));
+    const plan = planLayout({ ...fakeMeasure }, L);
+    // ordem vertical estrita: total < serviços < critério < caso < ressalvas < verificação < fim
+    const marks = [146 + 130, plan.servicesTop, plan.servicesBottom, plan.criterionY, plan.caseTop, plan.caseBottom, plan.disclaimerTop,
+      plan.disclaimerBottom, plan.verifyTop, plan.verifyBottom, plan.height];
+    for (let i = 1; i < marks.length; i += 1) assert.ok(marks[i] > marks[i - 1] || (i === 1 && marks[i] >= marks[i - 1]), `módulo ${i}: ${marks.join(' < ')}`);
+    assert.ok(plan.height >= 1350 && plan.verifyBottom <= plan.height - 40);
+    const rowsHeight = plan.rows.reduce((acc, r) => acc + r.height, 0);
+    assert.equal(plan.servicesBottom - plan.servicesTop - 40, rowsHeight, 'a soma das linhas fecha a altura do bloco');
+    // o desenho usa o plano: cada nome, cada preço e cada linha de referência aparecem
+    const drawn = [];
+    const ctx = { ...fakeMeasure, fillStyle: '', strokeStyle: '', textBaseline: '', lineWidth: 1, fillRect() {}, strokeRect() {}, beginPath() {}, moveTo() {},
+      lineTo() {}, stroke() {}, arc() {}, ellipse() {}, drawImage() {}, fillText(t) { drawn.push(String(t)); } };
+    const canvas = { width: 0, height: 0, getContext: () => ctx, toBlob: (cb) => cb({ type: 'image/png' }) };
+    await renderPreviewPng(rec, { canvasFactory: () => canvas, loadImage: async () => { throw new Error('sem imagem'); } });
+    assert.equal(canvas.height, plan.height);
+    for (const name of L.services.map((x) => x.name)) assert.ok(drawn.includes(name), `nome ${name}`);
+    for (const svc of L.services) assert.ok(drawn.includes(svc.price), `preço de ${svc.name}`);
+    assert.ok(drawn.includes(L.forecast_value));
+    assert.ok(drawn.some((t) => t.includes('SECID/PR R$ 1000,00') || t.includes('SECID/PR R$ 1.000,00')), 'referências por serviço');
+    if (n >= 7) assert.ok(plan.height > 1350, `${n} serviços exigem altura maior que 1350 (${plan.height})`);
+  });
+}
+
+test('a soma dos preços por serviço da peça fecha com o total do registro', () => {
+  for (const n of [2, 7, 12]) {
+    const L = buildPreviewLayout(recordWith(n));
+    const cents = (t) => Math.round(Number(t.replace(/[^\d,]/g, '').replace(',', '.')) * 100);
+    const sum = L.services.reduce((acc, s) => acc + cents(s.price), 0);
+    assert.equal(sum, cents(L.forecast_value), `${n} serviços`);
+  }
+});
+
+test('peça sem preço por serviço no registro (legado): linhas sem valor, total e referências preservados', () => {
+  const rec = recordWith(2);
+  for (const sv of rec.preview.pricing.services) delete sv.total_demello;
+  const L = buildPreviewLayout(rec);
+  assert.deepEqual(L.services.map((x) => x.price), [null, null]);
+  assert.ok(L.forecast_value.startsWith('R$'));
+  assert.ok(L.services[0].references.length > 0);
+});
+
+test('caso-base R2: Estrutural R$ 4.272,00 + Elétrico R$ 1.248,00 = R$ 5.520,00, cada referência na linha do seu serviço', () => {
+  const pv = buildPricingPreview({ services: ['ESTRUTURAL', 'ELETRICA'], typology: 'CASA', structural_system: 'CONCRETO_ARMADO',
+    area_new: '250', area_total: '250', area_fundacao: '150' });
+  const pub = pv.services.map((s) => ({
+    service: s.service, status: 'CALCULATED', total_demello: s.demello.total,
+    references: Object.fromEntries(Object.entries(s.references).map(([k, v]) => [({ altoqi_composta: 'mercado', fundepar_001_2025_esportiva: 'fundepar', fundepar_001_2025_administrativa: 'x', fundepar_001_2025_educacional: 'x' }[k] || k), { total: v.total }]).filter(([k]) => k !== 'x')),
+  }));
+  const L = buildPreviewLayout(fixtureRecord({ pricing: { total_demello: pv.total_demello, services: pub } }));
+  assert.equal(L.forecast_value, 'R$ 5.520,00');
+  assert.deepEqual(L.services.map((x) => [x.name, x.price]), [['Estrutural', 'R$ 4.272,00'], ['Projeto Elétrico', 'R$ 1.248,00']]);
+  // o total do pacote não aparece associado à referência de um único serviço
+  for (const svc of L.services) assert.ok(!svc.references.some((r) => r.total === L.forecast_value));
+});
+
+test('bloco SEU CASO: sem o campo Serviços (repetido e cortável) e cada campo cabe na sua altura, sem passar da linha divisória', () => {
+  for (const n of [2, 12]) {
+    const L = buildPreviewLayout(recordWith(n));
+    assert.ok(!L.case_rows.some((r) => r.key === 'servicos'));
+    const plan = planLayout({ ...fakeMeasure }, L);
+    for (const it of plan.caseNarrative) assert.ok(it.height >= 31 + it.lines.length * 22 + 14);
+    const total = 48 + plan.caseNarrative.reduce((a, r) => a + r.height, 0) + plan.caseContext.reduce((a, r) => a + r.height, 0) + plan.metricHeight;
+    assert.equal(plan.caseBottom - plan.caseTop, total);
+  }
+});
+
+test('bloco SEU CASO: a área de projeção é métrica, como as outras áreas (mesma faixa e mesmo tamanho)', () => {
+  const rec = recordWith(2);
+  rec.preview.case_summary = { necessidade: 'Projetar', localizacao: 'Curitiba / PR', area_nova: '250 m²', area_total: '250 m²', area_projecao: '150 m²' };
+  const L = buildPreviewLayout(rec);
+  const plan = planLayout({ ...fakeMeasure }, L);
+  assert.deepEqual(plan.caseMetrics.map((r) => r.key), ['area_nova', 'area_total', 'area_projecao']);
+  assert.ok(!plan.caseContext.some((line) => line.pair.some((it) => it.row.key === 'area_projecao')), 'não sobra como campo de texto');
+});
+
+test('bloco SEU CASO: campo de contexto sozinho na linha desenha a divisória na largura toda', async () => {
+  const rec = recordWith(2);
+  rec.preview.case_summary = { necessidade: 'Projetar', localizacao: 'Curitiba / PR', area_nova: '250 m²' };   // 1 campo de contexto (ímpar)
+  const lines = [];
+  const ctx = { ...fakeMeasure, fillStyle: '', strokeStyle: '', textBaseline: '', lineWidth: 1, fillRect() {}, strokeRect() {}, beginPath() {},
+    moveTo(x, y) { this._p = [x, y]; }, lineTo(x, y) { lines.push({ from: this._p, to: [x, y] }); }, stroke() {}, arc() {}, ellipse() {}, drawImage() {}, fillText() {} };
+  const canvas = { width: 0, height: 0, getContext: () => ctx, toBlob: (cb) => cb({ type: 'image/png' }) };
+  await renderPreviewPng(rec, { canvasFactory: () => canvas, loadImage: async () => { throw new Error('sem imagem'); } });
+  const plan = planLayout({ ...fakeMeasure }, buildPreviewLayout(rec));
+  assert.equal(plan.caseContext[0].pair.length, 1);
+  const y = plan.caseTop + 48 + plan.caseNarrative.reduce((a, r) => a + r.height, 0) + plan.caseContext[0].height;
+  assert.ok(lines.some((l) => l.from[1] === y && l.to[1] === y && l.from[0] === 48 && l.to[0] === 1032), 'divisória de ponta a ponta');
 });

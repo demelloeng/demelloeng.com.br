@@ -3,14 +3,15 @@
 // As chaves INTERNAS do preview (browser) e as chaves PÚBLICAS do registro verificável
 // (PUBLIC_PREVIEW_V1) entram aqui. A referência composta (superestrutura AltoQi + fundação SECID/PR)
 // nunca é apresentada como preço AltoQi: chega como `altoqi_composta` (interno) / `mercado` (público)
-// e sai como "Referência de mercado".
+// e sai como "AltoQi + SECID/PR": o rótulo descreve a ORIGEM dos componentes (superestrutura AltoQi, fundação SECID/PR),
+// sem dizer qual referência venceu o cálculo.
 export const REFERENCE_LABEL = {
   secid_pr: 'SECID/PR',
   fundepar_001_2025: 'FUNDEPAR',
   fundepar: 'FUNDEPAR',
   altoqi: 'AltoQi',
-  altoqi_composta: 'Referência de mercado',
-  mercado: 'Referência de mercado',
+  altoqi_composta: 'AltoQi + SECID/PR',
+  mercado: 'AltoQi + SECID/PR',
   maxicad_bim: 'MaxiCAD',
   maxicad: 'MaxiCAD',
   rfb_bim: 'Receita Federal',

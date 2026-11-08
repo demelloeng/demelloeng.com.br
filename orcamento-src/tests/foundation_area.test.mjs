@@ -79,16 +79,17 @@ test('o resumo mostra a área de projeção informada; a referência composta nu
   const est = payload.pricing_preview.services.find((s) => s.service === 'ESTRUTURAL');
   assert.equal(est.base_reference, 'ALTOQI_COMPOSTA');
   const human = buildClientSummary(payload);
-  assert.match(human, /Referência de mercado — Estrutural: R\$/);
-  assert.doesNotMatch(human, /AltoQi/);
+  assert.match(human, /AltoQi \+ SECID\/PR — Estrutural: R\$/);
+  // a composição nunca é atribuída só à AltoQi: o único rótulo possível é "AltoQi + SECID/PR" (origem dos componentes)
+  assert.doesNotMatch(human, /AltoQi(?! \+ SECID\/PR)/);
   assert.doesNotMatch(human, /composta|composição|superestrutura|fator|MIN\(|pricing_rule|STRUCT_/i);
 });
 
 test('rótulos públicos: chaves internas e públicas -> rótulo comercial, sem composição', () => {
-  assert.equal(REFERENCE_LABEL.altoqi_composta, 'Referência de mercado');
-  assert.equal(REFERENCE_LABEL.mercado, 'Referência de mercado');
+  assert.equal(REFERENCE_LABEL.altoqi_composta, 'AltoQi + SECID/PR');
+  assert.equal(REFERENCE_LABEL.mercado, 'AltoQi + SECID/PR');
   assert.equal(REFERENCE_LABEL.altoqi, 'AltoQi');
   const entries = referenceEntries({ mercado: { total: '10.00' }, secid_pr: { total: '20.00' }, fundepar: { total: '5.00' }, desconhecida: { total: '1' } });
-  assert.deepEqual(entries.map((e) => e.label), ['SECID/PR', 'FUNDEPAR', 'Referência de mercado']);
+  assert.deepEqual(entries.map((e) => e.label), ['SECID/PR', 'FUNDEPAR', 'AltoQi + SECID/PR']);
   assert.deepEqual(referenceEntries(undefined), []);
 });

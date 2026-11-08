@@ -1,7 +1,7 @@
 // Maquete 3D da calculadora — cena paramétrica leve com o Three.js já hospedado pelo site (mesmos bytes das maquetes DEMELLO).
 // O Three entra por import() dinâmico: nada disso pesa na primeira tela e o formulário nunca espera pela cena.
 // A cena só DESENHA o escopo informado (sceneSpec). Não calcula preço e não afirma quantidades técnicas.
-import { FLOOR_H, LAYER_COLOR } from './maquete_model.mjs';
+import { FLOOR_H, LAYER_COLOR, VIEW_CAM, CONTROLS_BAND, fitDistance } from './maquete_model.mjs';
 
 const THREE_URL = '/assets/vendor/three/build/three.module.js';
 let threePromise = null;
@@ -19,14 +19,6 @@ export function webglAvailable() {
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const clamp01 = (t) => Math.max(0, Math.min(1, t));
 const deg = (a) => (a * Math.PI) / 180;
-
-// Câmera de cada vista: azimute e elevação em graus; k = abertura vertical dos pavimentos.
-const VIEW_CAM = {
-  conjunto: { az: 38, el: 27, k: 1, cut: false },
-  camadas: { az: 38, el: 22, k: 1.9, cut: false },
-  corte: { az: 22, el: 20, k: 1, cut: true },
-  planta: { az: 0, el: 86, k: 1, cut: false },
-};
 
 export async function createMaquete(host, { reduced = false, mobile = false } = {}) {
   const THREE = await loadThree();
@@ -91,6 +83,7 @@ export async function createMaquete(host, { reduced = false, mobile = false } = 
     el: 27, elT: 27,
     dist: 40, distT: 40,
     ty: 4, tyT: 4,
+    band: CONTROLS_BAND,
     cut: 0, cutT: 0,
     appear: new Map(),     // chave -> progresso 0..1
     appearT: new Map(),
@@ -361,25 +354,27 @@ export async function createMaquete(host, { reduced = false, mobile = false } = 
     renderer.clippingPlanes = state.cut > 0.02 ? [cutPlane] : [];
     // câmera
     const H = spec.floors * FLOOR_H * k;
-    const ty = H * 0.45;
+    const ty = H * 0.5;                    // o alvo é o centro do modelo: o enquadramento (fitDistance) conta com isso
     state.ty = ty;
     const az = deg(state.az);
     const el = deg(state.el);
-    camera.position.set(Math.sin(az) * Math.cos(el) * state.dist, ty + Math.sin(el) * state.dist, Math.cos(az) * Math.cos(el) * state.dist);
-    camera.lookAt(0, ty - state.dist * 0.05, 0);
+    const tz = -(spec.d / 4) * clamp01(state.cut);   // com o corte, o alvo vai para o centro da metade que sobra
+    camera.position.set(Math.sin(az) * Math.cos(el) * state.dist, ty + Math.sin(el) * state.dist, tz + Math.cos(az) * Math.cos(el) * state.dist);
+    camera.lookAt(0, ty, tz);
     renderer.render(scene, camera);
   }
 
+  // Enquadramento pela caixa real do modelo, na vista pedida, com a faixa dos botões reservada (ver maquete_model.fitDistance).
   function targetDistance(spec, view) {
-    const k = VIEW_CAM[view].k;
-    const H = spec.floors * FLOOR_H * k;
-    const r = 0.5 * Math.hypot(spec.w, spec.d, H) * 1.06;
-    const aspect = camera.aspect || 1.6;
-    const fovV = deg(camera.fov);
-    const fovH = 2 * Math.atan(Math.tan(fovV / 2) * aspect);
-    const f = Math.min(fovV, fovH);
-    const planta = view === 'planta';
-    return (planta ? Math.max(spec.w, spec.d * aspect * 0.7) * 0.78 : r / Math.sin(f / 2)) * 0.92;
+    return fitDistance(spec, view, { aspect: camera.aspect || 1.6, fovDeg: camera.fov, band: state.band });
+  }
+
+  // Fração do quadro tomada pelos botões de vista (medida de verdade: em tela estreita eles podem quebrar de linha).
+  // Sem botões (painel compacto) só sobra uma pequena folga. O desenho nunca passa por baixo dos controles.
+  function controlsBand(h) {
+    const tabs = host.parentElement?.querySelector('.mq-tabs');
+    if (!tabs || !h) return 0.05;
+    return Math.min(0.55, Math.max(0.12, (tabs.offsetHeight + 16) / h));
   }
 
   // ---- laço sob demanda: roda só enquanto algo se move ----
@@ -437,6 +432,9 @@ export async function createMaquete(host, { reduced = false, mobile = false } = 
     const h = host.clientHeight || 200;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
+    // o desenho sobe meia faixa de controles: fica centrado na área livre, acima dos botões sobrepostos
+    state.band = controlsBand(h);
+    camera.setViewOffset(w, h, 0, Math.round((state.band * h) / 2), w, h);
     camera.updateProjectionMatrix();
     if (state.spec) { state.distT = targetDistance(state.spec, state.view); if (!state.running) state.dist = state.distT; }
     kick();
