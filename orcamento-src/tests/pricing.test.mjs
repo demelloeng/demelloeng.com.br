@@ -10,18 +10,18 @@ const svc = (pv, name) => pv.services.find((s) => s.service === name);
 
 // --- casos canônicos já provados no Python (paridade JS <-> Python) ---
 
-test('BUILD 320 comercial -> total 9958.40', () => {
+test('BUILD 320 comercial -> total 7920.64 (R2)', () => {
   const pv = preview({
     route: 'build', CA1: 'Construir do zero', CA_AREA: area('320'), CA5: area('1'), // térreo declarado: projeção = 320
     property: 'Comercial', services: ['Estrutural', 'Hidrossanitário'],
   });
   assert.equal(pv.status, 'CALCULATED');
-  assert.equal(pv.total_demello, '9958.40');
-  assert.equal(svc(pv, 'ESTRUTURAL').demello.total, '6868.48');
-  assert.equal(svc(pv, 'HIDROSSANITARIO').demello.total, '3089.92');
+  assert.equal(pv.total_demello, '7920.64');
+  assert.equal(svc(pv, 'ESTRUTURAL').demello.total, '6425.60'); // FUNDEPAR (15,75 + 9,35) x 320 x 0,80
+  assert.equal(svc(pv, 'HIDROSSANITARIO').demello.total, '1495.04'); // FUNDEPAR esportiva 5,84 x 320 x 0,80
 });
 
-test('REGULARIZAÇÃO 80/110 -> total 849.84', () => {
+test('REGULARIZAÇÃO 80/110 -> total 939.84 (R2)', () => {
   const pv = preview({
     route: 'regularize', REG_R1: 'A', property: 'Casa/sobrado',
     REG_A1: area('110'), REG_A2: area('80'),
@@ -30,8 +30,8 @@ test('REGULARIZAÇÃO 80/110 -> total 849.84', () => {
   const reg = svc(pv, 'REGULARIZACAO');
   assert.equal(reg.q, 30);
   assert.equal(reg.q_basis, 'Q_REGULARIZACAO');
-  assert.equal(reg.demello.total, '849.84');
-  assert.equal(pv.total_demello, '849.84');
+  assert.equal(reg.demello.total, '939.84'); // 30 m2 x 39,16 (SECID/PR 094/2026) x 0,80
+  assert.equal(pv.total_demello, '939.84');
 });
 
 test('AMPLIAÇÃO 200 + 90, Estrutural + Incêndio -> Q_SUPERESTRUTURA 90 / Q_TOTAL 290', () => {
@@ -65,10 +65,10 @@ test('FUNDAÇÕES isoladas -> ESTRUTURAL FOUNDATION_ONLY, SECID fundação (10,7
   assert.equal(est.status, 'CALCULATED');
   assert.equal(est.q_basis, 'Q_FUNDACAO');
   assert.equal(est.q, 1500);
-  assert.equal(est.references.secid_pr.components.fundacao.unit_value, '10.73');
+  assert.equal(est.references.secid_pr.components.fundacao.unit_value, '11.87');
   assert.equal(est.references.altoqi, undefined);
   assert.equal(est.references.altoqi_composta, undefined);
-  assert.equal(est.demello.total, '12876.00'); // 1500 * 10.73 * 0.80
+  assert.equal(est.demello.total, '11220.00'); // R2: FUNDEPAR 1500 * 9,35 * 0,80 (menor que SECID 1500 * 11,87)
   assert.equal(est.pricing_context.structural_scope, 'FOUNDATION_ONLY');
   // sem a área de projeção a fundação isolada NUNCA é aproximada pela área total (S3)
   const noFoot = buildPricingPreview(derivePricingInputs({ route: 'known', services: ['Fundações'], property: 'Comercial', S3: area('1500') }));
@@ -124,13 +124,14 @@ test('Apartamento e Condomínio / edifício -> PREDIO', () => {
   assert.equal(derivePricingInputs({ route: 'known', services: ['Estrutural'], property: 'Industrial' }).typology, null);
 });
 
-test('T04 precisão: só o total monetário final é arredondado (COMPATIBILIZACAO 5.3115)', () => {
+test('T04 precisão: só o total monetário final é arredondado (COMPATIBILIZACAO 4.8975)', () => {
   const pv = buildPricingPreview(extractPricingInputs({ services: ['COMPATIBILIZACAO'], typology: 'PREDIO', area_escopo: '100' }));
   const comp = svc(pv, 'COMPATIBILIZACAO');
-  assert.equal(comp.references.secid_pr.unit_value, '5.3115');
-  assert.equal(comp.demello.total, '424.92'); // 100 * 5.3115 * 0.80 = 424.920000 -> arredonda só o total
-  assert.equal(comp.demello.unrounded_total, '424.920000'); // expoente preservado como str(Decimal) do Python
-  assert.equal(Number(comp.demello.unrounded_total), 424.92);
+  assert.equal(comp.references.secid_pr.unit_value, '5.874');
+  assert.equal(comp.references.fundepar_001_2025_demais_edificacoes.unit_value, '4.8975'); // 0,15 x 32,65
+  assert.equal(comp.demello.total, '391.80'); // 100 * 4.8975 * 0.80 = 391.800000 -> arredonda só o total
+  assert.equal(comp.demello.unrounded_total, '391.800000'); // expoente preservado como str(Decimal) do Python
+  assert.equal(Number(comp.demello.unrounded_total), 391.8);
 });
 
 test('menor referência aplicável (T01/T02) na ampliação comercial', () => {
@@ -138,8 +139,8 @@ test('menor referência aplicável (T01/T02) na ampliação comercial', () => {
     route: 'build', CA1: 'Ampliar um imóvel existente', CA_EXISTING: area('200'), CA_NEW: area('90'), area_fundacao: area('90'),
     property: 'Comercial', services: ['Estrutural', 'Incêndio'],
   }));
-  assert.equal(svc(pv, 'ESTRUTURAL').base_reference, 'SECID_PR'); // total SECID 26,83 < composta AltoQi 34,50 + 10,73
-  assert.equal(svc(pv, 'INCENDIO').base_reference, 'SECID_PR'); // 3.35 < 10.50
+  assert.equal(svc(pv, 'ESTRUTURAL').base_reference, 'FUNDEPAR_001_2025'); // total FUNDEPAR 25,10 < SECID 29,67 < composta AltoQi 34,50 + 11,87
+  assert.equal(svc(pv, 'INCENDIO').base_reference, 'FUNDEPAR_001_2025_ESPORTIVA'); // 1,77 < SECID 3,70 < AltoQi 10,50
 });
 
 // --- helper decimal ---

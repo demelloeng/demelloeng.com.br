@@ -43,7 +43,7 @@ test('1. área CONHECIDA: usada diretamente (USER_DECLARED), nada é estimado e 
   assert.equal(needsArchitectureProgram(a), false);
   const p = packageForCRMv2(a);
   assert.equal(p.pricing_preview.status, 'CALCULATED');
-  assert.equal(p.pricing_preview.total_demello, '5665.60'); // 200 × 35,41 × 0,80
+  assert.equal(p.pricing_preview.total_demello, '5224.00'); // R2: 200 × 32,65 (FUNDEPAR 4.1.b) × 0,80
   assert.deepEqual([p.pricing_inputs.area_total, p.pricing_inputs.area_new], ['200', null]);
   assert.equal(p.answers.architecture_area_source, 'USER_DECLARED');
   assert.deepEqual([p.answers.architecture_area_min, p.answers.architecture_area_max, p.answers.architecture_area_reference], [200, 200, 200]);
@@ -59,7 +59,7 @@ test('2. sem área, estimada pelo PROGRAMA: faixa 105–125 m², referência 115
   const p = packageForCRMv2(a);
   assert.equal(p.pricing_preview.status, 'CALCULATED');
   assert.equal(arqSvc(p).q, 115);
-  assert.equal(p.pricing_preview.total_demello, '3257.72'); // 115 × 35,41 × 0,80
+  assert.equal(p.pricing_preview.total_demello, '3003.80'); // R2: 115 × 32,65 × 0,80
   assert.equal(p.pricing_inputs.area_new, '115');
   assert.equal(p.pricing_inputs.area_total, null, 'a estimada nunca é gravada como área total informada');
   assert.deepEqual(p.answers.S3, unk, 'o que o cliente respondeu continua "não sei"');
@@ -73,11 +73,11 @@ test('3. sem área, estimada SÓ pelo TERRENO: 350 m² -> faixa 230–240 m², r
   const est = architectureEstimate(a);
   assert.deepEqual([est.source, est.min, est.max, est.reference], [SOURCE.LOT_ONLY_ESTIMATE, 230, 240, 235]);
   const p = packageForCRMv2(a);
-  assert.equal(p.pricing_preview.total_demello, '6657.08'); // 235 × 35,41 × 0,80
+  assert.equal(p.pricing_preview.total_demello, '6138.20'); // R2: 235 × 32,65 × 0,80
   assert.equal(p.answers.architecture_estimation_inputs.terreno_m2, 350);
   assert.equal(p.answers.architecture_estimation_inputs.programa, null);
   const ret = architectureReturn(a);
-  assert.deepEqual(ret.rows, [['Terreno informado', '350 m²'], ['Área construída estimada', '230 m² a 240 m²'], ['Referência usada no orçamento', '235 m²'], ['Estimativa inicial de Arquitetura', 'R$ 6.657,08']]);
+  assert.deepEqual(ret.rows, [['Terreno informado', '350 m²'], ['Área construída estimada', '230 m² a 240 m²'], ['Referência usada no orçamento', '235 m²'], ['Estimativa inicial de Arquitetura', 'R$ 6.138,20']]);
 });
 
 test('4. PROGRAMA + TERRENO coerentes: interseção das faixas, origem PROGRAM_AND_LOT_ESTIMATE', () => {
@@ -136,8 +136,8 @@ test('7/8. ISOLAMENTO: a área inferida alimenta só a Arquitetura; com Estrutur
     assert.equal(p.answers.architecture_estimation_inputs.referencia_alimenta_precificacao, false);
     // a devolutiva ainda entrega o preço inicial SÓ da Arquitetura
     const ret = architectureReturn(a);
-    assert.equal(ret.price, 'R$ 6.657,08');
-    assert.equal(architecturePrice(a, 235), 'R$ 6.657,08');
+    assert.equal(ret.price, 'R$ 6.138,20');
+    assert.equal(architecturePrice(a, 235), 'R$ 6.138,20');
   }
   // serviços que NÃO leem a área do projeto convivem com a Arquitetura estimada
   for (const outro of ['Gás', 'Compatibilização BIM', 'Orçamento técnico', 'Terraplenagem', 'Consultoria Técnica']) {
@@ -233,7 +233,7 @@ test('13. preço calculado pela área de referência, pelo mesmo motor e pela Ta
     const a = semArea(['Arquitetura'], { area_terreno: { value: lot } });
     const p = packageForCRMv2(a);
     assert.equal(arqSvc(p).q, ref);
-    const esperado = (ref * 35.41 * 0.8).toFixed(2);
+    const esperado = (ref * 32.65 * 0.8).toFixed(2);   // R2: FUNDEPAR 4.1.b, a menor referência
     assert.equal(p.pricing_preview.total_demello, esperado, `terreno ${lot}`);
     assert.equal(architecturePrice(a, ref), `R$ ${Number(esperado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
   }
@@ -380,8 +380,8 @@ test('ramificação: navegação S3 -> terreno -> programa -> S4, validação do
 
 test('19. regressão: serviços existentes inalterados (preços, tabela, motor, envio por hash) e 20. CRM não homologado = falha segura', async () => {
   const sha = async (f) => createHash('sha256').update((await readFile(path.join(appRoot, f), 'utf8')).replace(/\r\n/g, '\n')).digest('hex');
-  assert.equal(await sha('src/pricing/pricing-table.v2.json'), '3bfb19190ab4512264e386c3f727d64e650687c9f7f6a4ad1017440b41cee425', 'Tabela V2: só ganhou automatic_estimate_limits e ELETRICA; preços das demais disciplinas idênticos');
-  assert.equal(await sha('src/pricing/engine.mjs'), '91ad9b28c5ca3320feef7834e7c44f89a39115b6d8d56a130f56be88ce9e4104', 'motor: só a proteção por limite; fórmulas intocadas');
+  assert.equal(await sha('src/pricing/pricing-table.v2.json'), '8fd32ba07134ca8f6490020eb831bdcd53df9cdd6e6ad802a5ccf2aa1d671c9d', 'Tabela V2 (revisão R2, 08/11/2026): SECID/PR 094/2026, FUNDEPAR por categoria, AltoQi elétrica; a r1 congelada fica no canônico. Antes só ganhou automatic_estimate_limits e ELETRICA; preços das demais disciplinas idênticos');
+  assert.equal(await sha('src/pricing/engine.mjs'), 'f7fb7103d64a4d02d1f68b0a400c534076965f397f1d63cbf7bf1ca27b720f3c', 'motor R2: menor referência entre todas as fontes (FUNDEPAR sem filtro de tipologia), detalhamento package/source_typology e rótulo R2; fórmulas e arredondamento intocados');
   assert.equal(await sha('src/pricing/decimal.mjs'), 'de8ff4f5bdba6d159d24d0ef44daa1febef6d01e29be9b86132d054dd87c1a48');
   assert.equal(await sha('src/submit.mjs'), 'c47ec9c376aab58b14dd90d6896c304373ef596ea5a26d28c15c02d48ec31f7d', 'envio ao CRM: só acrescentou transport.meta (dados do anúncio para a CAPI; ver collectMeta)');
   // CRM não homologado: o payload novo segue no mesmo envelope; recusa do Worker (422) e queda de rede não lançam e não repetem indevidamente

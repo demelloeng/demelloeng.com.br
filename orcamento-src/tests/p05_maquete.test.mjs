@@ -132,7 +132,7 @@ test('maquete: o painel conserva os dados reais — com preço e sem preço o mo
   const spec = sceneSpec(m);
   assert.equal(spec.floors, 3);
   assert.deepEqual(spec.layers, ['eletrica']);
-  assert.equal(m.rows[0].total, '436.88');
+  assert.equal(m.rows[0].total, '316.99');   // R2: 63,5 x 6,24 x 0,80
 });
 
 test('refino V04: valor monetário indivisível no painel e botão do WhatsApp com área de toque de 44 px', async () => {

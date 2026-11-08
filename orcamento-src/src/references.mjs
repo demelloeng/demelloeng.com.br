@@ -25,10 +25,25 @@ export const REFERENCE_LABEL = {
 
 export const REFERENCE_ORDER = Object.keys(REFERENCE_LABEL);
 
+// R2: a FUNDEPAR publica várias categorias por serviço (chaves fundepar_001_2025_<categoria>); a exibição mostra UMA entrada
+// FUNDEPAR, a de MENOR total, para o preço DEMELLO nunca ficar abaixo de todas as referências exibidas.
+// Previews R1 (chave única) saem iguais. Espelho: publicService() do preview-worker.
+const FUNDEPAR_KEY = 'fundepar_001_2025';
+function withLowestFundepar(references) {
+  const cents = (t) => Math.round(Number(t) * 100);
+  const candidates = Object.keys(references)
+    .filter((k) => (k === FUNDEPAR_KEY || k.startsWith(`${FUNDEPAR_KEY}_`)) && references[k] && references[k].total != null)
+    .map((k) => references[k].total);
+  if (candidates.length === 0) return references;
+  const lowest = candidates.reduce((a, b) => (cents(b) < cents(a) ? b : a));
+  return { ...references, [FUNDEPAR_KEY]: { total: lowest } };
+}
+
 // references de UM serviço -> [{ key, label, total }] em ordem estável; ignora chaves desconhecidas e sem total.
 export function referenceEntries(references) {
   if (!references || typeof references !== 'object') return [];
+  const refs = withLowestFundepar(references);
   return REFERENCE_ORDER
-    .filter((key) => references[key] && references[key].total != null)
-    .map((key) => ({ key, label: REFERENCE_LABEL[key], total: references[key].total }));
+    .filter((key) => refs[key] && refs[key].total != null)
+    .map((key) => ({ key, label: REFERENCE_LABEL[key], total: refs[key].total }));
 }

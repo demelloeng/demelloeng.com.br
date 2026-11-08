@@ -155,10 +155,10 @@ test('buildPreviewLayout rejeita registro não confirmado', () => {
 
 test('buildPreviewLayout: valores vêm SÓ do registro; sem PII; sem regra interna; ressalvas presentes', () => {
   const L = buildPreviewLayout(fixtureRecord());
-  assert.equal(L.forecast_value, 'R$ 4.249,20');            // = preview.pricing.total_demello
+  assert.equal(L.forecast_value, 'R$ 4.699,20');            // = preview.pricing.total_demello
   assert.equal(L.verification_code, 'k3m7q9r2t5w8x4z6');
   assert.equal(L.verify_url, 'https://demelloeng.com.br/verificar/?codigo=k3m7q9r2t5w8x4z6');
-  assert.ok(L.references.some((r) => r === 'SECID/PR — Regularização: R$ 5.311,50'),
+  assert.ok(L.references.some((r) => r === 'SECID/PR — Regularização: R$ 5.874,00'),
     'referência com nome de serviço legível (não o código)');
   assert.ok(L.criterion.includes('conforme metodologia DEMELLO'), 'critério sem fator/fórmula');
   assert.ok(!/0[.,]80|80%|fator DEMELLO/i.test(L.criterion), 'critério não expõe a regra interna');
@@ -206,12 +206,12 @@ test('renderPreviewPng: desenha o valor do registro, sem regra interna, e devolv
   assert.equal(fakeCanvas.width, 1080);
   assert.equal(fakeCanvas.height, 1350);
   const text = drawn.join('\n');
-  assert.ok(text.includes('R$ 4.249,20'));                       // valor do registro
+  assert.ok(text.includes('R$ 4.699,20'));                       // valor do registro
   assert.ok(text.includes('k3m7q9r2t5w8x4z6'));                  // código
   assert.ok(text.includes('PRÉVIA INICIAL DEMELLO'));
   assert.ok(text.includes('PREVISÃO DEMELLO'));
   assert.ok(text.includes('SEU CASO'));
-  assert.ok(text.includes('SECID/PR — Regularização: R$ 5.311,50'));
+  assert.ok(text.includes('SECID/PR — Regularização: R$ 5.874,00'));
   assert.ok(text.includes('conforme metodologia DEMELLO'));
   assert.ok(!/0[.,]80|80%|fator DEMELLO/i.test(text), 'PNG não expõe fator/regra interna');
   for (const cell of ['ÁREA IPTU', 'ÁREA MATRÍCULA', 'DIFERENÇA', '150 m²', '0 m²']) {

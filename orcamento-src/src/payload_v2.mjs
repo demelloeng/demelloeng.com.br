@@ -1,5 +1,5 @@
 // PAYLOAD V2 REAL da experiência ativa — jornada -> pricing_inputs -> site-intake/payload/2
-// com pricing_preview DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R1) calculado offline no browser.
+// com pricing_preview DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R2) calculado offline no browser.
 //
 // Separação explícita: journey.packageForCRM() (source IT083, prototype:true, faixa
 // fictícia) é LEGADO de regressão. Esta emissão é a real: source DEMELLO_SITE,
@@ -25,7 +25,7 @@ const SERVICE_LABEL_TO_CODE = {
   Arquitetura: 'ARQUITETURA', // Q_NOVA
   'Orçamento técnico': 'ORCAMENTO', // Q_ESCOPO
   Terraplenagem: 'TERRAPLENAGEM', // Q_TERRENO
-  Elétrica: 'ELETRICA', // Q_NOVA, como o hidrossanitário. Preço só na tipologia CASA (base documentada); demais => NEEDS_HUMAN_REVIEW
+  Elétrica: 'ELETRICA', // Q_NOVA, como o hidrossanitário. Preço pela menor referência documentada (SECID/PR, FUNDEPAR, AltoQi casa); sem referência => NEEDS_HUMAN_REVIEW
   'Consultoria Técnica': 'CONSULTORIA_TECNICA', // Q_HORAS
   'Mentoria Técnica': 'MENTORIA_TECNICA', // Q_HORAS
 };

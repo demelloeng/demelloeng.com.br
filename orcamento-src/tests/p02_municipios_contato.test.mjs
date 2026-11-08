@@ -118,7 +118,7 @@ test('município: o payload leva o código IBGE junto, aditivo, sem tirar nenhum
   const p = packageForCRMv2(a);
   assert.deepEqual(p.answers.location, { city: 'Curitiba', uf: 'PR', ibge_id: '4106902' });
   assert.match(p.summary.find((r) => r.id === 'CA3').value, /^Curitiba \/ PR$/);
-  assert.equal(p.pricing_preview.total_demello, '2575.68', 'preço intocado');
+  assert.equal(p.pricing_preview.total_demello, '2409.60', 'preço pelo motor R2 (FUNDEPAR 25,10 x 120 x 0,80); município não altera o preço');
 });
 
 test('o catálogo é arquivo do próprio site (nenhuma chamada ao IBGE na visita) e está na área publicada', async () => {

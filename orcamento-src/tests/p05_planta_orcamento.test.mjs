@@ -24,14 +24,14 @@ test('P05: sem preço — serviço escolhido, área ainda não informada (nada d
   assert.equal(m.notice, ILLUSTRATIVE_NOTICE);
 });
 
-test('P05: com preço — os valores do painel são EXATAMENTE os do payload (elétrica 63,5 m² = R$ 436,88)', () => {
+test('P05: com preço — os valores do painel são EXATAMENTE os do payload (elétrica 63,5 m² = R$ 316,99)', () => {
   const a = { ...base, services: ['Elétrica', 'Hidrossanitário'], CA_AREA: { value: '63.5' } };
   const m = livePlanModel(a);
   const pv = packageForCRMv2(a).pricing_preview;
   assert.equal(m.mode, 'with_price');
   assert.equal(m.total, pv.total_demello);
-  assert.equal(m.total, '878.84');
-  assert.equal(m.rows.find((r) => r.key === 'ELETRICA').total, '436.88');
+  assert.equal(m.total, '613.66');   // R2: hidro 296,67 + elétrica 316,99
+  assert.equal(m.rows.find((r) => r.key === 'ELETRICA').total, '316.99');
   for (const r of m.rows) assert.equal(r.total, pv.services.find((s) => s.service === r.key).demello.total);
   assert.equal(m.area.value, '63.5');
   assert.equal(m.floors, 2);

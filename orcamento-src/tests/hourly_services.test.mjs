@@ -221,7 +221,7 @@ test('regressão: Estrutural + Fundações + Hidro continua como antes (sem hour
     services: ['Estrutural', 'Hidrossanitário'], phase: 'Arquitetura pronta', CA5: area('1'), CA6: 'Médio', deadline: '3–6 meses', contact,
   });
   assert.equal(p.pricing_inputs.hours, null);
-  assert.equal(p.pricing_preview.total_demello, '9958.40');
+  assert.equal(p.pricing_preview.total_demello, '7920.64'); // R2: estrutural FUNDEPAR 6.425,60 + hidro FUNDEPAR 1.495,04
 });
 
 test('superfície pública: a jornada nova não expõe regime, fator, MIN nem composição interna', () => {

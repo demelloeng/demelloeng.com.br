@@ -83,8 +83,9 @@ test('human summary contains only friendly case, price and applicable reference 
 
   assert.match(text, /DEMELLO ENGENHARIA\nRESUMO DO SEU CASO/);
   assert.match(text, /SERVIÇOS\nFundações/);
-  assert.match(text, /ESTIMATIVA INICIAL DEMELLO\nR\$ 12\.876,00/);
-  assert.match(text, /REFERÊNCIAS\nSECID\/PR — Fundações: R\$ 16\.095,00/);
+  assert.match(text, /ESTIMATIVA INICIAL DEMELLO\nR\$ 11\.220,00/);
+  assert.match(text, /REFERÊNCIAS\nSECID\/PR — Fundações: R\$ 17\.805,00/);
+  assert.match(text, /FUNDEPAR — Fundações: R\$ 14\.025,00/);   // R2: a menor referência (1500 x 9,35) sustenta o valor DEMELLO
   assert.doesNotMatch(text, /AltoQi/);
   assert.match(text, /Nome: Cliente Teste/);
   assert.match(text, new RegExp(NEXT_STEP.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));

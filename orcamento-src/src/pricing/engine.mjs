@@ -1,13 +1,13 @@
-// Motor de previsão DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R1) no browser — porte fiel de scripts/site_intake_pricing.py.
+// Motor de previsão DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R2) no browser — porte fiel de scripts/site_intake_pricing.py.
 // Determinístico, sem rede. Mesmo pricing_inputs => mesmo pricing_preview do Python.
 import TABLE from './pricing-table.v2.json' with { type: 'json' };
 import { dec, num, add, sub, mul, absD, cmp, toStr, money, brl, numberOut } from './decimal.mjs';
 
-// Regime CORRENTE (única EMISSÃO): table_version DEMELLO_V2 + pricing_rule STRUCT_COMPOSITE_REFS_R1.
-// Regimes históricos (DEMELLO_V1 legado e STRUCT_INCL_FOUNDATIONS_V2) são só REPRODUZIDOS pelo motor Python
-// canônico (validate_payload_v2); este motor JAMAIS os emite.
+// Regime CORRENTE (única EMISSÃO): table_version DEMELLO_V2 + pricing_rule STRUCT_COMPOSITE_REFS_R2 (revisão R2 da tabela).
+// Regimes históricos (DEMELLO_V1 legado, STRUCT_INCL_FOUNDATIONS_V2 e STRUCT_COMPOSITE_REFS_R1) são só REPRODUZIDOS pelo
+// motor Python canônico (validate_payload_v2, tabela congelada r1); este motor JAMAIS os emite.
 const TABLE_VERSION = 'DEMELLO_V2';
-const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R1';
+const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R2';
 const STRUCTURAL_SYSTEMS = ['CONCRETO_ARMADO', 'METALICA', 'MADEIRA'];
 const STRUCTURAL_SCOPES = ['FULL', 'FOUNDATION_ONLY'];
 const COMPONENT_STATES = ['DETERMINED', 'NOT_REQUIRED', 'UNDETERMINED'];
@@ -337,6 +337,14 @@ function referenceUnit(service, ref, ctx) {
   return ctx.typology && Object.prototype.hasOwnProperty.call(byTyp, ctx.typology) ? dec(byTyp[ctx.typology]) : null;
 }
 
+// Motivo objetivo de uma referência não aplicável (detalhamento R2; nunca infere aplicabilidade). Espelho: _exclusion_reason_v2.
+function exclusionReason(ref, ctx) {
+  const gate = typologyGate(ref, ctx.typology);
+  if (gate) return gate;
+  if ('by_typology' in ref) return REASON_NO_REFERENCE_FOR_TYPOLOGY;
+  return 'NOT_APPLICABLE';
+}
+
 // `hours` é um ÚNICO escalar: só vale com exatamente UM serviço horário (Q_HORAS); nunca é dividido nem replicado.
 // `hours_by_service` (opcional) discrimina as horas por serviço: com 2+ serviços horários só calcula se cobrir TODOS
 // com valores > 0; incompleto => NEEDS_HUMAN_REVIEW. Com 1 serviço horário tem precedência sobre `hours`.
@@ -391,9 +399,11 @@ export function priceService(service, inp, hourly = null) {
       reason: REASON_ABOVE_AUTOMATIC_LIMIT };
   }
   const applicable = [];
+  const excludedRefs = [];
   for (const [sourceId, ref] of Object.entries(svcTbl.references)) {
     const unit = referenceUnit(service, ref, ctx);
     if (unit !== null) applicable.push([sourceId, unit]);
+    else excludedRefs.push({ source: sourceId, reason: exclusionReason(ref, ctx) });
   }
   if (applicable.length === 0) {
     return { service, status: REVIEW, q: numberOut(q), q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
@@ -403,11 +413,16 @@ export function priceService(service, inp, hourly = null) {
   for (const [name, unit] of applicable.slice(1)) if (cmp(unit, baseUnit) < 0) { baseRef = name; baseUnit = unit; }
   const demelloUnrounded = mul(mul(q, baseUnit), FACTOR);
   const references = {};
-  for (const [sid, unit] of applicable) references[sid.toLowerCase()] = { unit_value: toStr(unit), total: money(mul(q, unit)) };
+  for (const [sid, unit] of applicable) {
+    const refOut = { unit_value: toStr(unit), total: money(mul(q, unit)) };
+    if (svcTbl.references[sid].source_typology) refOut.source_typology = svcTbl.references[sid].source_typology;
+    references[sid.toLowerCase()] = refOut;
+  }
   return {
     service, status: CALC, q: numberOut(q), q_basis: basis, q_inputs: qInputs, pricing_context: ctx,
     references, base_reference: baseRef,
     demello: { unrounded_total: toStr(demelloUnrounded), total: money(demelloUnrounded) },
+    package: { scope: 'SERVICO_COMPLETO', references_compared: applicable.map(([sid]) => sid), excluded_references: excludedRefs },
   };
 }
 
@@ -418,11 +433,19 @@ export function buildCustomerPricingText(preview) {
   const calculated = preview.services.filter((s) => s.status === CALC);
   if (preview.status !== CALC || calculated.length === 0) return CUSTOMER_FALLBACK_TEXT;
   // Soma da referência (primeira chave presente) só se cobrir TODOS os serviços calculados.
-  const coveredTotal = (keys) => {
+  // `prefix`: uma fonte com várias categorias publicadas contribui, por serviço, com a de MENOR total (espelho do Python).
+  const coveredTotal = (keys, prefix = null) => {
     let total = dec('0');
     const used = [];
     for (const svc of calculated) {
       const refs = svc.references || {};
+      if (prefix !== null) {
+        const cands = Object.entries(refs).filter(([k]) => k === prefix || k.startsWith(`${prefix}_`)).map(([, v]) => dec(v.total));
+        if (cands.length === 0) return [null, []];
+        total = add(total, cands.reduce((a, b) => (cmp(b, a) < 0 ? b : a)));
+        used.push(prefix);
+        continue;
+      }
       const key = keys.find((k) => refs[k]);
       if (key === undefined) return [null, []];
       total = add(total, dec(refs[key].total));
@@ -435,7 +458,7 @@ export function buildCustomerPricingText(preview) {
   if (secid !== null) {
     parts.push(`Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente ${brl(secid)}.`);
   }
-  const [fundepar] = coveredTotal(['fundepar_001_2025']);
+  const [fundepar] = coveredTotal(['fundepar_001_2025'], 'fundepar_001_2025');
   if (fundepar !== null) parts.push(`A referência institucional FUNDEPAR resulta em aproximadamente ${brl(fundepar)}.`);
   const [market, used] = coveredTotal(['altoqi', 'altoqi_composta']);
   if (market !== null) {
