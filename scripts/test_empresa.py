@@ -173,7 +173,7 @@ class EmpresaTests(unittest.TestCase):
                     if url.fragment:
                         self.assertIn(url.fragment, ids)
                     continue
-                path = ROOT / 'empresa' / url.path
+                path = ROOT / url.path.lstrip('/') if url.path.startswith('/') else ROOT / 'empresa' / url.path
                 if path.is_dir():
                     path /= 'index.html'
                 self.assertTrue(path.is_file(), f'{tag}: destino local ausente {target}')
@@ -192,10 +192,31 @@ class EmpresaTests(unittest.TestCase):
         self.assertIn(f'<script type="application/ld+json">{JSONLD}</script>', page)
         scripts = [attrs for tag, attrs in parser.tags if tag == 'script']
         self.assertEqual([attrs.get('src') for attrs in scripts], [None, '../assets/js/nav.js',
-                         '../assets/js/analytics-sink.js', '../assets/js/meta-pixel.js', '../assets/js/site-analytics.mjs'])
+                         '../assets/js/analytics-sink.js', '../assets/js/contato-flutuante.js', '../assets/js/meta-pixel.js',
+                         '../assets/js/site-analytics.mjs'])
         self.assertEqual(scripts[0].get('type'), 'application/ld+json')
-        self.assertEqual(scripts[4].get('type'), 'module')
+        self.assertEqual(scripts[5].get('type'), 'module')
         self.assertNotIn('unpkg', page.lower())
+
+    def _componentes_globais(self, page, base):
+        # WhatsApp: exatamente um script, no caminho da página, depois do coletor e antes do pixel.
+        fab = base + 'assets/js/contato-flutuante.js'
+        self.assertEqual(page.count('contato-flutuante.js'), 1, 'WhatsApp ausente ou duplicado')
+        self.assertEqual(page.count('<script src="' + fab + '" defer></script>'), 1, 'caminho do WhatsApp incorreto')
+        self.assertLess(page.index('analytics-sink.js'), page.index('contato-flutuante.js'))
+        self.assertLess(page.index('contato-flutuante.js'), page.index('meta-pixel.js'))
+        self.assertTrue((ROOT / 'assets/js/contato-flutuante.js').is_file())
+        # Badge oficial do Simple Analytics: uma vez, no rodape, com a imagem local, o link e o alt vigentes.
+        badge = '<a class="sa-badge" href="https://www.simpleanalytics.com?utm_source=demelloeng.com.br&amp;utm_content=badge" referrerpolicy="origin" target="_blank"><img src="/assets/images/simple-analytics-badge.svg" width="126" height="30" alt="Simple Analytics" loading="lazy"></a>'
+        self.assertEqual(page.count('simple-analytics-badge.svg'), 1, 'badge ausente ou duplicada')
+        self.assertEqual(page.count(badge), 1, 'marcacao da badge divergente')
+        self.assertLess(page.index('<footer'), page.index(badge))
+        self.assertLess(page.index(badge), page.index('</footer>'))
+        self.assertTrue((ROOT / 'assets/images/simple-analytics-badge.svg').is_file())
+
+    def test_componentes_globais_v04_whatsapp_e_badge_uma_unica_vez(self):
+        _, page, _ = self.page()
+        self._componentes_globais(page, '../')
 
     def test_cabecalho_menu_e_rodape_v02_reutilizados(self):
         _, page, _ = self.page()
