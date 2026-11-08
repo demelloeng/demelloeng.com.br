@@ -19,13 +19,13 @@ REPO = Path(__file__).resolve().parent.parent
 DIR = REPO / 'docs/arquivo/verificar-404-v02-20261107'
 COPY_VF = DIR / 'COPY_VERIFICAR_20261107.md'
 COPY_404 = DIR / 'COPY_404_20261107.md'
-LOGICA = DIR / 'LOGICA_VERIFICAR_20261107.js'
+LOGICA = DIR / 'LOGICA_VERIFICAR_20261108.js'
 SAIDA_VF = REPO / 'verificar/index.html'
 SAIDA_404 = REPO / '404.html'
 SHA = {
     COPY_VF: 'e379ff19174bf4f4eb3b561664963510a3e5dd9ffb6a783f7aa16b7179cd413a',
     COPY_404: '7b1ecbecb4432ebf51fdc942ff47cbb50831cc4c0c3e94ef4e26aef363c7c33a',
-    LOGICA: '6be590a991789895eb1bbe2bf27ca8e7a620a01eb6416a5404ec05f47a4d0a5f',
+    LOGICA: '59c95abb5c9185833c84a5b104f6a9e3b2570be7f3073a256ce8c488f3b59089',
 }
 URL_VF = 'https://demelloeng.com.br/verificar/'
 BOTOES_404 = {'/': 'Voltar ao início', '/orcamento/': 'Calcular estimativa'}
@@ -56,6 +56,13 @@ STYLE_VF = COMUM + '''
 .verificar-v02 .vf-dl dd{margin:0;font-size:19px;line-height:1.4;color:var(--ink);overflow-wrap:anywhere}
 .verificar-v02 .vf-code{font-family:ui-monospace,Consolas,"Courier New",monospace}
 .verificar-v02 .vf-total{margin:8px 0 0;font-size:clamp(32px,4vw,48px);line-height:1.1;font-weight:800;color:var(--blue)}
+.verificar-v02 .vf-svcs{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid var(--line)}
+.verificar-v02 .vf-svc{padding:16px 0;border-bottom:1px solid var(--line)}
+.verificar-v02 .vf-svc-line{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.verificar-v02 .vf-svc-name{font-size:20px;line-height:1.3;font-weight:700;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.verificar-v02 .vf-svc-price{font-size:22px;line-height:1.2;font-weight:800;color:var(--blue);white-space:nowrap;flex:0 0 auto}
+.verificar-v02 .vf-svc-refs{margin:6px 0 0;font-size:16px;line-height:1.5;color:var(--muted)}
+.verificar-v02 .dm-fab__link,.verificar-v02 .dm-fab__link:hover,.verificar-v02 .dm-fab__link:visited{color:#fff}
 .verificar-v02 .vf-note{border-left:3px solid var(--line);padding-left:24px;margin-top:28px}
 .verificar-v02 .vf-note p{margin:0 0 10px;font-size:17px;line-height:1.55;color:var(--muted)}
 .verificar-v02 .vf-note strong{color:var(--ink)}
