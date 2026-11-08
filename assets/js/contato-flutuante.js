@@ -39,7 +39,8 @@
     '.dm-fab--docked .dm-fab__link{min-height:44px;min-width:44px;padding:0 14px;border-radius:22px;font-size:14px}',
     '.dm-fab--docked .dm-fab__link svg{width:24px;height:24px}',
     '@media (max-width:900px){.dm-fab--docked .dm-fab__rotulo{display:none}.dm-fab--docked .dm-fab__link{padding:0;justify-content:center}}',
-    '@media (max-width:900px){.case-panel .dm-fab--docked{position:absolute;right:116px;top:12px;width:40px;height:40px;margin:0;z-index:6}.case-panel .dm-fab--docked .dm-fab__link{min-height:40px;min-width:40px;width:40px;height:40px}}',
+    /* Painel "Seu projeto" no celular: área de toque de 44 px, círculo visível de 32 px (proporcional ao título e ao botão Expandir). */
+    '@media (max-width:900px){.case-panel .dm-fab--docked{position:absolute;right:128px;top:12px;width:44px;height:44px;margin:0;z-index:6}.case-panel .dm-fab--docked .dm-fab__link{position:relative;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;background:transparent;box-shadow:none;border-radius:50%}.case-panel .dm-fab--docked .dm-fab__link:before{content:"";position:absolute;inset:6px;border-radius:50%;background:#0f7a3c;box-shadow:0 0 0 2px #fff,0 2px 8px rgba(0,0,0,.25)}.case-panel .dm-fab--docked .dm-fab__link:hover:before{background:#0b6631}.case-panel .dm-fab--docked .dm-fab__link:focus-visible{outline:0;box-shadow:none}.case-panel .dm-fab--docked .dm-fab__link:focus-visible:before{box-shadow:0 0 0 2px #fff,0 0 0 5px #0643a7}.case-panel .dm-fab--docked .dm-fab__link svg{position:relative;width:18px;height:18px}}',
     '@keyframes dm-fab-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}',
     '@media (max-width:520px){.dm-fab{right:12px}}',
     '@media (prefers-reduced-motion:reduce){.dm-fab{animation:none}.dm-fab__rotulo{transition:none}}',

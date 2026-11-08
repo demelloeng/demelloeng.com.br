@@ -9,7 +9,7 @@ Documento de trabalho (não publicado; fora da allowlist do Pages). Estado: impl
 | Retângulo com linhas e círculos em SVG, minúsculo no painel | Maquete 3D paramétrica (Three.js), que cresce com a área, ganha pavimentos e as camadas das disciplinas escolhidas |
 | Uma vista | Quatro vistas: Conjunto, Camadas, Corte e Planta; arrastar na horizontal gira |
 | Botão do WhatsApp flutuante, que esconde ou deixa translúcido o que passa por baixo | Botão acoplado a uma barra fixa: rodapé no computador, painel "Seu projeto" no celular. Não existe mais cálculo de sobreposição |
-| Aviso "Desenho ilustrativo: … não o seu projeto." | "Maquete do seu escopo. Ela cresce com a sua área. O projeto de verdade vem depois." (Voz DEMELLO V07) |
+| Aviso "Desenho ilustrativo: … não o seu projeto." | "Visualização ilustrativa. A maquete acompanha suas escolhas de área, pavimentos e disciplinas." (Voz DEMELLO V07; refino de 07/11, evidências em `evidencias/refino-f01-f03/`) |
 
 Comparações lado a lado: `evidencias/comparacao-antes-depois-1440.jpg` e `evidencias/comparacao-antes-depois-390.jpg`.
 
@@ -59,4 +59,4 @@ Testado: Chromium (painel embutido e Chrome DevTools) nas cinco larguras. **Não
 
 ## Revisão editorial (Voz V07)
 
-Ver o relatório de entrega. Locais alterados: `src/live_plan.mjs` (aviso), `src/LivePlan.jsx` (rótulos de estado), `src/phone.mjs` (`PHONE_MESSAGE`), `src/pickers.jsx` (aviso do DF e erro da lista), `src/GlobalApp.jsx` (porte acima do limite).
+Ver o relatório de entrega. Locais alterados: `src/live_plan.mjs` (legenda: `ILLUSTRATIVE_LABEL` e `ILLUSTRATIVE_NOTICE`), `src/LivePlan.jsx` (rótulos de estado), `src/phone.mjs` (`PHONE_MESSAGE`), `src/pickers.jsx` (aviso do DF e erro da lista), `src/GlobalApp.jsx` (porte acima do limite).

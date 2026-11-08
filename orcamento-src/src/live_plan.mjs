@@ -26,7 +26,8 @@ export const LAYER_LABEL = {
   terreno: 'Terraplanagem',
 };
 
-export const ILLUSTRATIVE_NOTICE = 'Maquete do seu escopo. Ela cresce com a sua área. O projeto de verdade vem depois.';
+export const ILLUSTRATIVE_LABEL = 'Visualização ilustrativa';
+export const ILLUSTRATIVE_NOTICE = 'A maquete acompanha suas escolhas de área, pavimentos e disciplinas.';
 
 const MAX_FLOORS_DRAWN = 8;
 
@@ -85,6 +86,7 @@ export function livePlanModel(answers) {
     // Total só quando o motor calculou TODOS os serviços; senão o painel diz o que falta, sem somar parcial.
     total: allPriced ? pv.total_demello : null,
     mode: allPriced ? 'with_price' : rows.some((r) => r.state === 'over_limit') ? 'over_limit' : 'without_price',
+    label: ILLUSTRATIVE_LABEL,
     notice: ILLUSTRATIVE_NOTICE,
   };
 }

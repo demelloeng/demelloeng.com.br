@@ -104,7 +104,7 @@ function LivePlanInner({answers,expanded}){
  return <section className={`live-plan lp-${m.mode}`} aria-label="Maquete e estimativa">
   <figure className="lp-figure">
    <Stage spec={spec} view={view} setView={setPicked} want3d={!compact} mobile={mobile} label={label} compact={compact}/>
-   <figcaption>{m.floors?`${m.floors} ${m.floors===1?'pavimento':'pavimentos'}. `:''}{m.notice}</figcaption>
+   <figcaption><span className="lp-tag">{m.label}</span> {m.notice}</figcaption>
   </figure>
   {layerNames.length>0&&<ul className="lp-legend" aria-label="Disciplinas escolhidas">{m.layers.map(l=><li key={l} className="lp-key"><span className="lp-swatch" style={{background:LAYER_COLOR[l]}} aria-hidden="true"/>{LAYER_LABEL[l]}</li>)}</ul>}
   {m.rows.length>0&&<div className="lp-budget">

@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { sceneSpec, describeScene, isoShapes, isoViewBox, VIEWS, MAX_FLOORS, LAYER_COLOR } from '../src/maquete_model.mjs';
-import { livePlanModel, LAYER_LABEL, ILLUSTRATIVE_NOTICE } from '../src/live_plan.mjs';
+import { livePlanModel, LAYER_LABEL, ILLUSTRATIVE_NOTICE, ILLUSTRATIVE_LABEL } from '../src/live_plan.mjs';
 
 const read = (rel) => readFile(new URL(`../${rel}`, import.meta.url), 'utf8');
 const model = (over = {}) => ({ area: { kind: 'building', value: '63.5', footprint: { w: 150, h: 100 } }, floorsDrawn: 2, layers: ['estrutura', 'hidrossanitario', 'eletrica'], ...over });
@@ -109,10 +109,11 @@ test('maquete: o motor de preço não é tocado pela cena (a cena não importa m
 });
 
 test('Voz DEMELLO V07: o aviso da maquete é afirmativo e curto; a frase reprovada não volta', async () => {
-  assert.equal(ILLUSTRATIVE_NOTICE, 'Maquete do seu escopo. Ela cresce com a sua área. O projeto de verdade vem depois.');
+  assert.equal(ILLUSTRATIVE_LABEL, 'Visualização ilustrativa');
+  assert.equal(ILLUSTRATIVE_NOTICE, 'A maquete acompanha suas escolhas de área, pavimentos e disciplinas.');
   for (const f of ['src/live_plan.mjs', 'src/LivePlan.jsx', 'src/GlobalApp.jsx', 'src/maquete_model.mjs']) {
     const s = await read(f);
-    assert.ok(!/Desenho ilustrativo|não o seu projeto/.test(s), `${f}: texto reprovado`);
+    assert.ok(!/Desenho ilustrativo|não o seu projeto|projeto de verdade|Não é seu projeto|Não representa/.test(s), `${f}: texto reprovado`);
   }
   assert.ok(!/terrapl[e]nagem/i.test(ILLUSTRATIVE_NOTICE + JSON.stringify(LAYER_LABEL)), 'grafia: terraplanagem');
   assert.equal(LAYER_LABEL.terreno, 'Terraplanagem');
@@ -132,4 +133,16 @@ test('maquete: o painel conserva os dados reais — com preço e sem preço o mo
   assert.equal(spec.floors, 3);
   assert.deepEqual(spec.layers, ['eletrica']);
   assert.equal(m.rows[0].total, '436.88');
+});
+
+test('refino V04: valor monetário indivisível no painel e botão do WhatsApp com área de toque de 44 px', async () => {
+  const css = await read('src/styles.css');
+  assert.match(css, /\.lp-chip strong\{[^}]*white-space:nowrap/, 'estimativa do painel compacto não quebra');
+  assert.match(css, /\.lp-total strong\{[^}]*white-space:nowrap/, 'total do painel expandido não quebra');
+  assert.match(css, /\.lp-row strong\{white-space:nowrap\}/, 'valores das linhas não quebram');
+  const fab = await readFile(new URL('../../assets/js/contato-flutuante.js', import.meta.url), 'utf8');
+  assert.match(fab, /\.case-panel \.dm-fab--docked\{[^}]*width:44px;height:44px/, 'área de toque de 44 x 44');
+  assert.match(fab, /inset:6px/, 'círculo visível menor que a área de toque');
+  const lp = await read('src/LivePlan.jsx');
+  assert.match(lp, /className="lp-tag">\{m\.label\}/, 'legenda com identificação discreta');
 });
