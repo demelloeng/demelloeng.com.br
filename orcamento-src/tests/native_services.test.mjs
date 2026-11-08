@@ -48,11 +48,11 @@ test('Arquitetura, Orçamento técnico e Terraplenagem são opções NATIVAS de 
 test('bases do motor: Q_NOVA, Q_ESCOPO e Q_TERRENO com os preços da Tabela V2 (fator DEMELLO intocado)', () => {
   const arq = svcOf(packageForCRMv2(known(['Arquitetura'])), 'ARQUITETURA');
   assert.deepEqual([arq.status, arq.q_basis, arq.q], ['CALCULATED', 'Q_NOVA', 200]);
-  assert.equal(packageForCRMv2(known(['Arquitetura'])).pricing_preview.total_demello, '5665.60'); // 200 × 35,41 × 0,80
+  assert.equal(packageForCRMv2(known(['Arquitetura'])).pricing_preview.total_demello, '5224.00'); // R2: 200 × 32,65 × 0,80
   const orc = packageForCRMv2(known(['Orçamento técnico'], { area_orcamento: { value: '300' } }));
-  assert.deepEqual([svcOf(orc, 'ORCAMENTO').q_basis, svcOf(orc, 'ORCAMENTO').q, orc.pricing_preview.total_demello], ['Q_ESCOPO', 300, '1610.40']); // 300 × 6,71 × 0,80
+  assert.deepEqual([svcOf(orc, 'ORCAMENTO').q_basis, svcOf(orc, 'ORCAMENTO').q, orc.pricing_preview.total_demello], ['Q_ESCOPO', 300, '1228.80']); // R2: FUNDEPAR esportiva 300 × 5,12 × 0,80 (item 12.1.f); SECID/PR 094 = 7,42
   const ter = packageForCRMv2(known(['Terraplenagem'], { area_terreno: { value: '500' } }));
-  assert.deepEqual([svcOf(ter, 'TERRAPLENAGEM').q_basis, svcOf(ter, 'TERRAPLENAGEM').q, ter.pricing_preview.total_demello], ['Q_TERRENO', 500, '144.00']); // 500 × 0,36 × 0,80
+  assert.deepEqual([svcOf(ter, 'TERRAPLENAGEM').q_basis, svcOf(ter, 'TERRAPLENAGEM').q, ter.pricing_preview.total_demello], ['Q_TERRENO', 500, '160.00']); // R2: SECID/PR 094/2026 item 6.1: 500 × 0,40 × 0,80
 });
 
 test('perguntas condicionais dos serviços nativos: Orçamento técnico -> área abrangida; Terraplenagem -> área do terreno', () => {

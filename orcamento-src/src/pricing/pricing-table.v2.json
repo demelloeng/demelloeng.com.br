@@ -14,29 +14,33 @@
     "Q_TERRENO": "100000",
     "Q_HORAS": "200"
   },
-  "note": "TABELA DEMELLO V2. Valores unitarios em R$/m2 ou R$/h como string para calculo Decimal exato. valor_demello = MIN(totais de referencias de ESCOPO EQUIVALENTE aplicaveis) x factor_demello, arredondado somente no total monetario final. Nao usar media. Nao inventar fonte faltante. Fonte nao aplicavel nao participa do MIN. Origem: pacote V2 recuperado (MA_DEMELLO_TABELA_PRECIFICACAO_V02_PACOTE_MINIMO_IMPLEMENTAVEL_V01_20260916) e especificacao consolidada 20260919; o bloco ESTRUTURAL foi reescrito (componentes, cobertura, fonte por componente, aplicabilidade, Q_SUPERESTRUTURA/Q_FUNDACAO, referencia composta AltoQi).",
+  "note": "TABELA DEMELLO V2, revisao R2 (08/11/2026). valor_demello = MIN(totais de TODAS as referencias documentadas aplicaveis ao servico e a base de quantidade) x factor_demello, arredondado somente no total monetario final de cada servico; o total do pacote soma os totais dos servicos. Nao usar media. Nao inventar fonte faltante. Politica de tipologia (Opcao A, aprovada pelo proprietario em 08/11/2026): a tipologia de ORIGEM da fonte (source_typology) fica registrada e NAO exclui a referencia quando o servico tecnico completo e a base de quantidade forem equivalentes; a tipologia do CLIENTE so filtra referencias que a fonte publica POR tipologia (ex.: AltoQi). Uma fonte nova nao substitui as de outros orgaos. A revisao R1 (SECID/PR 009/2026, FUNDEPAR restrito a EDUCACIONAL) esta congelada em pricing-table.v2.r1.json e continua reproduzindo as previas ja emitidas.",
   "documentation": {
     "ESTRUTURAL": {
       "q_definitions": {
-        "Q_SUPERESTRUTURA": "area estrutural total aplicavel (soma das areas de pavimentos). SECID/PR Res. 009/2026 item 9.2; FUNDEPAR (Res. SECID 028/2024, Anexo XII do Edital 001/2025) item 6.2: soma das areas que exigem formas, por piso.",
-        "Q_FUNDACAO": "area de projecao (footprint) da edificacao. SECID/PR Res. 009/2026 item 9.1.a: 'pela area de projecao da edificacao'; FUNDEPAR (Res. SECID 028/2024) item 6.1: 'pela area de projecao da edificacao'."
+        "Q_SUPERESTRUTURA": "area estrutural total aplicavel (soma das areas de pavimentos). SECID/PR Res. 094/2026 item 9.2; FUNDEPAR (Res. SECID 028/2024, Anexo XII do Edital 001/2025) item 6.2: soma das areas que exigem formas, por piso.",
+        "Q_FUNDACAO": "area de projecao (footprint) da edificacao. SECID/PR Res. 094/2026 item 9.1.1: 'pela area de projecao das edificacoes'; FUNDEPAR (Res. SECID 028/2024) item 6.1: 'pela area de projecao da edificacao'."
       },
       "altoqi": {
         "role": "SUPERSTRUCTURE_ONLY",
         "coverage_basis": "DELIBERACAO_HUMANA: a referencia AltoQi e de SUPERESTRUTURA somente e NAO inclui fundacao; no escopo completo entra como referencia composta (superestrutura AltoQi + fundacao SECID/PR aplicavel)."
       },
-      "fundepar": "Aplicavel a EDUCACIONAL (Edital FUNDEPAR 001/2025, Anexo XII, Res. SECID 028/2024 itens 6.1-6.3). COMERCIAL: nao confirmado (fora do MIN ate confirmacao). CASA/PREDIO: nao aplicavel. MADEIRA nao incorporada a V2 consolidada."
+      "fundepar": "FUNDEPAR (Edital 001/2025, Anexo XII, Res. SECID 028/2024 itens 6.1-6.3) participa da comparacao de qualquer tipologia do cliente (Opcao A); os itens 6.x nao distinguem categoria de edificacao. MADEIRA nao incorporada a V2."
+    },
+    "politica_tipologia": {
+      "opcao": "A",
+      "aprovada_em": "2026-11-08",
+      "regra": "source_typology e informativa; elegibilidade = mesmo servico tecnico completo e mesma base de quantidade."
     }
   },
   "sources": {
-    "SECID_PR": "SECID/PR — Resolucao 009/2026",
+    "SECID_PR": "SECID/PR - Resolucao 094/2026 (revoga a 009/2026)",
     "FUNDEPAR_001_2025": "FUNDEPAR — Credenciamento 001/2025 / referencia SECID 028/2024",
-    "ALTOQI": "AltoQi — Pesquisa de Precificacao de Projetos 2026",
+    "ALTOQI": "AltoQi - Pesquisa de Precificacao de Projetos 2026 (blog.altoqi.com.br/quanto-cobrar-por-projeto-de-engenharia)",
     "MAXICAD_BIM": "MaxiCAD — suporte tecnico BIM/Revit",
     "RFB_BIM": "Receita Federal — capacitacao/consultoria BIM",
     "CIM_AMUNESC_2026": "CIM-AMUNESC — treinamento Revit sincrono 2026",
-    "IBAPE_PR": "IBAPE-PR — hora tecnica",
-    "DEMELLO_ELETRICA_DOCUMENTADA": "DEMELLO - valor comercial documentado de projeto eletrico residencial (Doc03, decisao 27; casos Ricardo e Carina). Base derivada do valor ja com fator; NAO e transcricao da publicacao AltoQi"
+    "IBAPE_PR": "IBAPE-PR — hora tecnica"
   },
   "q_bases": [
     "Q_NOVA",
@@ -74,10 +78,11 @@
         "SUPERESTRUTURA": {
           "SECID_PR": {
             "by_structural_system": {
-              "CONCRETO_ARMADO": "16.10",
-              "METALICA": "14.75",
-              "MADEIRA": "14.75"
-            }
+              "CONCRETO_ARMADO": "17.80",
+              "METALICA": "16.32",
+              "MADEIRA": "16.32"
+            },
+            "item": "9.2.1 / 9.3.1 / 9.4.1"
           },
           "ALTOQI": {
             "applicable_structural_systems": [
@@ -90,12 +95,6 @@
             }
           },
           "FUNDEPAR_001_2025": {
-            "applicable_typologies": [
-              "EDUCACIONAL"
-            ],
-            "not_confirmed_typologies": [
-              "COMERCIAL"
-            ],
             "by_structural_system": {
               "CONCRETO_ARMADO": "15.75"
             },
@@ -119,21 +118,18 @@
                 "unit_value": "7.33"
               }
             ],
-            "madeira_not_incorporated": true
+            "madeira_not_incorporated": true,
+            "item": "6.2.a / 6.3 / 6.4"
           }
         },
         "FUNDACAO": {
           "SECID_PR": {
-            "unit_value": "10.73"
+            "unit_value": "11.87",
+            "item": "9.1.1"
           },
           "FUNDEPAR_001_2025": {
-            "applicable_typologies": [
-              "EDUCACIONAL"
-            ],
-            "not_confirmed_typologies": [
-              "COMERCIAL"
-            ],
-            "unit_value": "9.35"
+            "unit_value": "9.35",
+            "item": "6.1.a"
           }
         }
       },
@@ -172,9 +168,9 @@
       ],
       "published_totals_check": {
         "SECID_PR": {
-          "CONCRETO_ARMADO": "26.83",
-          "METALICA": "25.48",
-          "MADEIRA": "25.48"
+          "CONCRETO_ARMADO": "29.67",
+          "METALICA": "28.19",
+          "MADEIRA": "28.19"
         },
         "FUNDEPAR_001_2025": {
           "CONCRETO_ARMADO": "25.10",
@@ -184,7 +180,8 @@
             "19.20",
             "16.68"
           ]
-        }
+        },
+        "_nota_SECID_PR": "Res. SECID/PR 094/2026 nao publica o total: soma dos itens 9.1.1 + 9.2.1/9.3.1/9.4.1."
       }
     },
     "HIDROSSANITARIO": {
@@ -193,7 +190,8 @@
       "unit": "M2",
       "references": {
         "SECID_PR": {
-          "unit_value": "12.07"
+          "unit_value": "13.35",
+          "item": "10.1.1"
         },
         "ALTOQI": {
           "by_typology": {
@@ -202,11 +200,17 @@
             "COMERCIAL": "15.60"
           }
         },
-        "FUNDEPAR_001_2025": {
-          "applicable_typologies": [
-            "EDUCACIONAL"
-          ],
+        "FUNDEPAR_001_2025_ADMINISTRATIVA_EDUCACIONAL": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ADMINISTRATIVA_EDUCACIONAL",
+          "item": "7.1.a",
           "unit_value": "10.81"
+        },
+        "FUNDEPAR_001_2025_ESPORTIVA": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ESPORTIVA",
+          "item": "7.1.d",
+          "unit_value": "5.84"
         }
       }
     },
@@ -215,7 +219,8 @@
       "unit": "M2",
       "references": {
         "SECID_PR": {
-          "unit_value": "3.35"
+          "unit_value": "3.70",
+          "item": "13.1.1"
         },
         "ALTOQI": {
           "by_typology": {
@@ -223,11 +228,23 @@
             "COMERCIAL": "10.50"
           }
         },
-        "FUNDEPAR_001_2025": {
-          "applicable_typologies": [
-            "EDUCACIONAL"
-          ],
+        "FUNDEPAR_001_2025_ADMINISTRATIVA": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ADMINISTRATIVA",
+          "item": "9.1.a",
+          "unit_value": "2.97"
+        },
+        "FUNDEPAR_001_2025_EDUCACIONAL": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "EDUCACIONAL",
+          "item": "9.1.b",
           "unit_value": "3.37"
+        },
+        "FUNDEPAR_001_2025_ESPORTIVA": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ESPORTIVA",
+          "item": "9.1.e",
+          "unit_value": "1.77"
         }
       }
     },
@@ -236,7 +253,8 @@
       "unit": "M2",
       "references": {
         "SECID_PR": {
-          "unit_value": "1.07"
+          "unit_value": "1.19",
+          "item": "11.1.1"
         },
         "ALTOQI": {
           "by_typology": {
@@ -252,12 +270,13 @@
       "unit": "M2",
       "references": {
         "SECID_PR": {
-          "unit_value": "35.41"
+          "unit_value": "39.16",
+          "item": "7.1.1"
         },
-        "FUNDEPAR_001_2025": {
-          "applicable_typologies": [
-            "EDUCACIONAL"
-          ],
+        "FUNDEPAR_001_2025_DEMAIS_EDIFICACOES": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "DEMAIS_EDIFICACOES",
+          "item": "4.1.b",
           "unit_value": "32.65"
         }
       }
@@ -270,18 +289,18 @@
         "SECID_PR": {
           "components": {
             "ARQUITETONICO": {
-              "unit_value": "35.41",
+              "unit_value": "39.16",
               "always_applicable_when_q_present": true
             },
             "LEVANTAMENTO": {
-              "unit_value": "3.541",
+              "unit_value": "3.916",
               "coefficient": "0.10",
-              "base": "35.41"
+              "base": "39.16"
             },
             "PROJETO_LEGAL": {
-              "unit_value": "3.541",
+              "unit_value": "3.916",
               "coefficient": "0.10",
-              "base": "35.41"
+              "base": "39.16"
             }
           }
         }
@@ -292,13 +311,20 @@
       "unit": "M2",
       "references": {
         "SECID_PR": {
-          "unit_value": "6.71"
+          "unit_value": "7.42",
+          "item": "16.1.1"
         },
-        "FUNDEPAR_001_2025": {
-          "applicable_typologies": [
-            "EDUCACIONAL"
-          ],
+        "FUNDEPAR_001_2025_ADMINISTRATIVA_EDUCACIONAL": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ADMINISTRATIVA_EDUCACIONAL",
+          "item": "12.1.e",
           "unit_value": "5.93"
+        },
+        "FUNDEPAR_001_2025_ESPORTIVA": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ESPORTIVA",
+          "item": "12.1.f",
+          "unit_value": "5.12"
         }
       }
     },
@@ -307,7 +333,8 @@
       "unit": "M2",
       "references": {
         "SECID_PR": {
-          "unit_value": "0.36"
+          "unit_value": "0.40",
+          "item": "6.1"
         }
       }
     },
@@ -316,9 +343,20 @@
       "unit": "M2",
       "references": {
         "SECID_PR": {
-          "unit_value": "5.3115",
+          "unit_value": "5.874",
+          "item": "7.3.1",
           "derivation": {
-            "architecture_secid": "35.41",
+            "architecture_secid": "39.16",
+            "coefficient": "0.15"
+          }
+        },
+        "FUNDEPAR_001_2025_DEMAIS_EDIFICACOES": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "DEMAIS_EDIFICACOES",
+          "item": "4.5 (15% sobre 4.1.b; etapas 4.2 somam 100%)",
+          "unit_value": "4.8975",
+          "derivation": {
+            "architecture_fundepar": "32.65",
             "coefficient": "0.15"
           }
         }
@@ -372,23 +410,37 @@
       "q_basis": "Q_NOVA",
       "unit": "M2",
       "references": {
-        "DEMELLO_ELETRICA_DOCUMENTADA": {
+        "SECID_PR": {
+          "unit_value": "14.83",
+          "item": "12.1.1"
+        },
+        "ALTOQI": {
           "by_typology": {
             "CASA": "8.60"
           },
-          "provenance": {
-            "tipo": "DERIVADA_DE_DECISAO_COMERCIAL_DOCUMENTADA",
-            "preco_demello_documentado_por_m2": "6.88",
-            "fator_demello": "0.80",
-            "base_implicita_por_m2": "8.60",
-            "casos_documentados": [
-              "Ricardo: 63,5 m2 = R$ 436,88",
-              "Carina: 220 m2 = R$ 1.513,60"
-            ],
-            "observacao": "O fator 0,80 e aplicado UMA vez, sobre a base 8,60 (8,60 x 0,80 = 6,88). Nao ha comprovacao documental de que a tabela AltoQi publique 8,60; por isso a fonte nao se chama AltoQi. Tipologias sem base aprovada seguem para avaliacao humana."
-          }
+          "item": "tabela \"Quanto cobrar por projeto eletrico?\" - casa residencial",
+          "nota": "AltoQi tambem publica PREDIO 6.30 e COMERCIAL 15.10; nao incorporados nesta carga (fora da matriz aprovada)."
+        },
+        "FUNDEPAR_001_2025_ADMINISTRATIVA": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ADMINISTRATIVA",
+          "item": "8.1.a",
+          "unit_value": "10.38"
+        },
+        "FUNDEPAR_001_2025_EDUCACIONAL": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "EDUCACIONAL",
+          "item": "8.1.b",
+          "unit_value": "9.20"
+        },
+        "FUNDEPAR_001_2025_ESPORTIVA": {
+          "source": "FUNDEPAR_001_2025",
+          "source_typology": "ESPORTIVA",
+          "item": "8.1.d",
+          "unit_value": "6.24"
         }
       }
     }
-  }
+  },
+  "table_revision": "R2"
 }

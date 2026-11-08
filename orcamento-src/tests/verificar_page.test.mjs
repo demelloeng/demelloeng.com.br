@@ -42,7 +42,10 @@ const record = (over = {}) => ({
     pricing: {
       status: 'CALCULATED',
       total_demello: '12345.5',
-      services: [{ status: 'CALCULATED', service: 'Projeto <b>x</b>', references: { secid_pr: { total: '1000' }, mercado: { total: '2000.5' } } }],
+      services: [
+        { status: 'CALCULATED', service: 'Projeto <b>x</b>', references: { secid_pr: { total: '1000' }, mercado: { total: '2000.5' } }, total_demello: '800' },
+        { status: 'CALCULATED', service: 'ELETRICA', references: { secid_pr: { total: '3707.50' }, fundepar: { total: '1560.00' }, altoqi: { total: '2150.00' } }, total_demello: '1248.00' },
+      ],
     },
     case_summary: { necessidade: 'Casa <script>alert(1)</script>', servicos: ['Estrutural', 'Hidro'], area_total: '120 m²' },
     disclaimers: ['Aviso <i>importante</i>'],
@@ -91,10 +94,16 @@ test('verificar: resposta verificada mostra só dados públicos e escapa todo co
   assert.match(out, /Este registro foi emitido pela DEMELLO Engenharia e não foi alterado desde a emissão\./);
   assert.match(out, new RegExp(`<dd class="vf-code">${CODE}</dd>`));
   assert.match(out, /<dd>07\/11\/2026 12:34 UTC<\/dd>/);
-  assert.match(out, /<dd>ISSUED<\/dd>/);
+  assert.match(out, /<dd>Emitida<\/dd>/);
+  assert.doesNotMatch(out, /ISSUED/, 'a situação aparece em português');
   assert.match(out, /<dd>Tabela DEMELLO V2<\/dd>/);
   assert.match(out, /<p class="vf-total">R\$ 12\.345,50<\/p>/);
-  assert.match(out, /SECID\/PR — Projeto &lt;b&gt;x&lt;\/b&gt;: R\$ 1\.000,00<br>Referência de mercado — Projeto &lt;b&gt;x&lt;\/b&gt;: R\$ 2\.000,50/);
+  // um item por serviço: nome, preço DEMELLO do serviço e as referências DAQUELE serviço
+  assert.match(out, /<span class="vf-svc-name">Projeto &lt;b&gt;x&lt;\/b&gt;<\/span><strong class="vf-svc-price">R\$ 800,00<\/strong>/);
+  assert.match(out, /Referências públicas consultadas: SECID\/PR R\$ 1\.000,00 · AltoQi \+ SECID\/PR R\$ 2\.000,50/);
+  assert.match(out, /<span class="vf-svc-name">Projeto Elétrico<\/span><strong class="vf-svc-price">R\$ 1\.248,00<\/strong>/);
+  assert.match(out, /SECID\/PR R\$ 3\.707,50 · FUNDEPAR R\$ 1\.560,00 · AltoQi R\$ 2\.150,00/);
+  assert.doesNotMatch(out, /ELETRICA|Referência de mercado/, 'sem código interno nem rótulo genérico');
   assert.match(out, /<dt>Serviços<\/dt><dd>Estrutural, Hidro<\/dd>/);
   assert.match(out, /<dt>Área total<\/dt><dd>120 m²<\/dd>/);
   assert.match(out, /Informações do caso \(fornecidas pelo usuário\)/);
@@ -114,4 +123,13 @@ test('verificar: sem total calculado, a página pede avaliação humana e a vers
   assert.match(out, /<dd>Tabela DEMELLO V1<\/dd>/);
   rec.preview.methodology = {};
   assert.match((await run(`?codigo=${CODE}`, async () => response(200, rec))).out, /<dd>Tabela DEMELLO<\/dd>/);
+});
+
+test('verificar: registro legado sem preço por serviço mostra o serviço e as referências, sem inventar valor', async () => {
+  const rec = record();
+  rec.preview.pricing.services = [{ status: 'CALCULATED', service: 'ESTRUTURAL', references: { secid_pr: { total: '1000' } } }];
+  const { out } = await run(`?codigo=${CODE}`, async () => response(200, rec));
+  assert.match(out, /<span class="vf-svc-name">Estrutural<\/span><\/div>/);
+  assert.doesNotMatch(out, /vf-svc-price/);
+  assert.match(out, /<p class="vf-total">R\$ 12\.345,50<\/p>/);
 });

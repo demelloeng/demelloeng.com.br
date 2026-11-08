@@ -14,7 +14,7 @@ import {PADROES} from './architecture_estimator.mjs';
 import {tracking} from './tracking.mjs';
 import {TABLE_LABEL,ENTRY_COUNT_WORD} from './labels.mjs';
 import {submitToCRM} from './submit.mjs';
-import {issuePreview,caseSummaryFromRows} from './preview.mjs';
+import {issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE} from './preview.mjs';
 import {renderPreviewPng} from './preview_png.mjs';
 import {brlStr} from './pricing/decimal.mjs';
 import {referenceEntries} from './references.mjs';
@@ -59,7 +59,6 @@ const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida
 const qUnit=s=>s.q_basis==='Q_HORAS'?'h':'m²';
 // Porte acima do limite da estimativa automática: informação preservada, sem preço automático, avaliação humana, contato liberado.
 const aboveLimit=pv=>pv.services.some(s=>s.reason===REASON_ABOVE_AUTOMATIC_LIMIT);
-const pricingText=pv=>pv.presented_to_customer.text.replace(/Entraremos em contato para confirmar as particularidades e o escopo\./,NEXT_STEP).replace(/nossa previsão inicial/g,'nossa estimativa inicial');
 function Result({answers,isPreview}){
  const held=safetyHold(answers),missing=missingData(answers);
  const payload=packageForCRMv2(answers);
@@ -75,8 +74,8 @@ function Result({answers,isPreview}){
   if(pState==='issuing')return;
   setPState('issuing');
   const cs=caseSummaryFromRows(payload.summary,pv.services.map(serviceName));
-  const r=await issuePreview(payload.pricing_inputs,cs);
-  if(!r.ok){setPState('error');return;}
+  const r=await issuePreview(payload.pricing_inputs,cs,{presented:pv});
+  if(!r.ok){setPState(r.outdated?'outdated':'error');return;}
   setPRecord(r.record);
   try{const blob=await renderPreviewPng(r.record);setPngUrl(URL.createObjectURL(blob));setPState('ready');}
   catch{setPState('error');}
@@ -85,15 +84,21 @@ function Result({answers,isPreview}){
   return <div className="result-card">
    <span className="eyebrow">ESTIMATIVA INICIAL DEMELLO</span>
    <p className="investment">{brlStr(pv.total_demello)}</p>
-   <p>{pricingText(pv)}</p>
+   <ul className="result-services" aria-label="Valor DEMELLO por serviço">{calc.map(s=>{const refs=referenceEntries(s.references);return <li key={s.service}>
+    <div className="rs-line"><span className="rs-name">{serviceName(s)}</span><strong className="rs-price">{brlStr(s.demello.total)}</strong></div>
+    {refs.length>0&&<p className="rs-refs">Referências públicas consultadas: {refs.map(r=>`${r.label} ${brlStr(r.total)}`).join(' · ')}</p>}
+   </li>;})}</ul>
+   {calc.some(s=>s.pricing_context?.foundations_included)&&<p className="small-note">O projeto estrutural contempla estrutura e fundações.</p>}
+   <p>{NEXT_STEP}</p>
    <details className="pricing-breakdown"><summary>Como chegamos a esse valor</summary>
-    <ul>{calc.map(s=><li key={s.service}><strong>{serviceName(s)}</strong> · {Q_PT[s.q_basis]??s.q_basis} {s.q} {qUnit(s)}{s.q_fundacao!=null?` · área de projeção ${s.q_fundacao} m²`:''}{referenceEntries(s.references).map(r=>` · ${r.label} ${brlStr(r.total)}`).join('')} · DEMELLO {brlStr(s.demello.total)}</li>)}</ul>
+    <ul>{calc.map(s=><li key={s.service}><strong>{serviceName(s)}</strong> · {Q_PT[s.q_basis]??s.q_basis} {s.q} {qUnit(s)}{s.q_fundacao!=null?` · área de projeção ${s.q_fundacao} m²`:''}</li>)}</ul>
     {notes}
     <p className="small-note">Estimativa calculada a partir da referência pública aplicável e da metodologia DEMELLO. Não é proposta, contrato nem garantia de preço; o escopo final é confirmado pela equipe.</p>
    </details>
    <div className="preview-issue">
     {pState!=='ready'&&<button type="button" className="secondary-button" disabled={pState==='issuing'} onClick={gerarPrevia}>{pState==='issuing'?'Gerando prévia…':'Gerar prévia DEMELLO'}</button>}
     {pState==='error'&&<p className="field-error" role="alert">Não foi possível gerar a prévia agora. A estimativa acima continua disponível.</p>}
+    {pState==='outdated'&&<div className="field-error" role="alert"><p>{OUTDATED_MESSAGE}</p><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Recarregar a página</button></div>}
     {pState==='ready'&&pRecord&&<div className="preview-ready" role="status">
      <p>Prévia emitida · código <strong>{pRecord.verification_code}</strong></p>
      <p className="small-note">Registro verificável em demelloeng.com.br/verificar. A imagem é uma representação da prévia registrada — não é proposta, contrato nem orçamento de obra.</p>

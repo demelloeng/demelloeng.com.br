@@ -34,11 +34,11 @@ test('packageForCRMv2: pricing_preview == recomputo determinístico do motor (re
   const p = packageForCRMv2({ ...BUILD, area_fundacao: area('120') }); // 3 pavimentos: Q_SUPERESTRUTURA 320 > Q_FUNDACAO 120
   assert.deepEqual(p.pricing_preview, buildPricingPreview(p.pricing_inputs));
   assert.equal(p.pricing_preview.table_version, 'DEMELLO_V2');
-  assert.equal(p.pricing_preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R1');
+  assert.equal(p.pricing_preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2');
   assert.equal(p.pricing_inputs.area_fundacao, '120');
   assert.equal(p.pricing_preview.status, 'CALCULATED');
-  // ESTRUTURAL: SECID (16,10 x 320 + 10,73 x 120) x 0,80 = 5151.68 ; HIDRO 320 x 12,07 x 0,80 = 3089.92
-  assert.equal(p.pricing_preview.total_demello, '8241.60');
+  // R2: ESTRUTURAL FUNDEPAR (15,75 x 320 + 9,35 x 120) x 0,80 = 4929.60 ; HIDRO FUNDEPAR esportiva 320 x 5,84 x 0,80 = 1495.04
+  assert.equal(p.pricing_preview.total_demello, '6424.64');
   assert.equal(p.result, 'X3A');
 });
 
@@ -56,7 +56,7 @@ test('packageForCRMv2: térreo DECLARADO (1 pavimento) -> Q_FUNDACAO = área inf
   const terreo = packageForCRMv2({ ...BUILD, CA5: area('1') });
   assert.equal(terreo.pricing_inputs.area_fundacao, '320');
   assert.equal(terreo.pricing_preview.status, 'CALCULATED');
-  assert.equal(terreo.pricing_preview.total_demello, '9958.40');
+  assert.equal(terreo.pricing_preview.total_demello, '7920.64'); // R2: 6.425,60 + 1.495,04
   const casa = packageForCRMv2({ ...BUILD, property: 'Casa/sobrado', CA5: area('2') });
   assert.equal(casa.pricing_inputs.area_fundacao, null);
   const semPavimentos = packageForCRMv2({ ...BUILD, property: 'Casa/sobrado', CA5: undefined });

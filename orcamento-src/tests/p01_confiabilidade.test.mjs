@@ -26,7 +26,7 @@ test('178: caso calculado continua em X3A, com proposta e dúvida; o motor não 
   const calc = { ...base, CA_AREA: { value: '120' } };
   const pv = packageForCRMv2(calc).pricing_preview;
   assert.equal(pv.status, 'CALCULATED');
-  assert.equal(pv.total_demello, '2575.68');
+  assert.equal(pv.total_demello, '2409.60'); // R2: FUNDEPAR (15,75 + 9,35) x 120 x 0,80
   assert.equal(advanceJourney('X1', calc, 'preview').id, 'X3A');
   assert.deepEqual(allowedIntents(calc), ['proposal', 'scope_question']);
 });

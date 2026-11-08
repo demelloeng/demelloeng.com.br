@@ -2,7 +2,7 @@
 
 Espelho **client-side** e determinístico do motor canônico
 `scripts/site_intake_pricing.py` (checkout `mentes-afiadas-demello-engineering`).
-Reproduz a TABELA DEMELLO V2, o regime **corrente** `STRUCT_COMPOSITE_REFS_R1`
+Reproduz a TABELA DEMELLO V2, o regime **corrente** `STRUCT_COMPOSITE_REFS_R2` (revisão R2 da tabela; o R1 só é reproduzido pelo motor Python canônico)
 (`table_version = DEMELLO_V2`), `factor_demello = 0,80` (interno, nunca exposto), o MIN entre
 **totais de referências de escopo equivalente**, o arredondamento (só no total monetário final,
 `ROUND_HALF_UP`) e o texto ao cliente.

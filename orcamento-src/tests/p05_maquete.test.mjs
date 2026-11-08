@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { sceneSpec, describeScene, isoShapes, isoViewBox, VIEWS, MAX_FLOORS, LAYER_COLOR } from '../src/maquete_model.mjs';
+import { sceneSpec, describeScene, isoShapes, isoViewBox, VIEWS, MAX_FLOORS, LAYER_COLOR, VIEW_CAM, FIT_MARGIN, CONTROLS_BAND, fitDistance, projectCorner, modelHeight, cutTargetZ } from '../src/maquete_model.mjs';
 import { livePlanModel, LAYER_LABEL, ILLUSTRATIVE_NOTICE, ILLUSTRATIVE_LABEL } from '../src/live_plan.mjs';
 
 const read = (rel) => readFile(new URL(`../${rel}`, import.meta.url), 'utf8');
@@ -132,7 +132,7 @@ test('maquete: o painel conserva os dados reais — com preço e sem preço o mo
   const spec = sceneSpec(m);
   assert.equal(spec.floors, 3);
   assert.deepEqual(spec.layers, ['eletrica']);
-  assert.equal(m.rows[0].total, '436.88');
+  assert.equal(m.rows[0].total, '316.99');   // R2: 63,5 x 6,24 x 0,80
 });
 
 test('refino V04: valor monetário indivisível no painel e botão do WhatsApp com área de toque de 44 px', async () => {
@@ -145,4 +145,100 @@ test('refino V04: valor monetário indivisível no painel e botão do WhatsApp c
   assert.match(fab, /inset:6px/, 'círculo visível menor que a área de toque');
   const lp = await read('src/LivePlan.jsx');
   assert.match(lp, /className="lp-tag">\{m\.label\}/, 'legenda com identificação discreta');
+});
+
+// --- enquadramento (C): a edificação inteira cabe no quadro, acima da faixa dos botões, em toda vista e proporção ------------
+const EPS = 1e-9;
+function cornersOf(spec, view) {
+  const H = modelHeight(spec, view);
+  const dz = VIEW_CAM[view].cut ? spec.d / 4 : spec.d / 2;
+  const out = [];
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) out.push([sx * spec.w / 2, sy * H / 2, sz * dz]);
+  return out;
+}
+
+test('enquadramento: todos os cantos ficam dentro da margem horizontal e da área livre acima dos botões (4 vistas x proporções x 1..8 pavimentos)', () => {
+  const limitX = FIT_MARGIN + 1e-6;
+  const limitY = FIT_MARGIN * (1 - CONTROLS_BAND) + 1e-6;
+  let checked = 0;
+  for (const view of Object.keys(VIEW_CAM)) {
+    for (const aspect of [0.7, 1.0, 1.35, 1.6, 2.1]) {
+      for (const floors of [1, 2, 3, 5, 8]) {
+        for (const w of [14, 22, 30]) {
+          const spec = { w, d: Math.round(w * 0.66 * 10) / 10, floors };
+          const dist = fitDistance(spec, view, { aspect, fovDeg: 30 });
+          assert.ok(Number.isFinite(dist) && dist > 0, `${view} ${aspect}`);
+          for (const c of cornersOf(spec, view)) {
+            const [x, y] = projectCorner(spec, view, dist, c, { aspect, fovDeg: 30 });
+            assert.ok(Math.abs(x) <= limitX, `${view} aspect ${aspect} ${floors}p w${w}: x=${x.toFixed(3)}`);
+            assert.ok(Math.abs(y) <= limitY, `${view} aspect ${aspect} ${floors}p w${w}: y=${y.toFixed(3)}`);
+            checked += 1;
+          }
+        }
+      }
+    }
+  }
+  assert.equal(checked, 4 * 5 * 5 * 3 * 8);
+});
+
+test('enquadramento: com botões que quebram de linha (faixa maior), o desenho continua inteiro e acima deles', () => {
+  for (const band of [0.12, 0.2, 0.35, 0.5]) {
+    for (const view of Object.keys(VIEW_CAM)) {
+      const spec = { w: 22, d: 14.5, floors: 3 };
+      const dist = fitDistance(spec, view, { aspect: 1.1, fovDeg: 30, band });
+      for (const c of cornersOf(spec, view)) {
+        const [x, y] = projectCorner(spec, view, dist, c, { aspect: 1.1, fovDeg: 30 });
+        assert.ok(Math.abs(x) <= FIT_MARGIN + 1e-6 && Math.abs(y) <= FIT_MARGIN * (1 - band) + 1e-6, `${view} faixa ${band}`);
+      }
+    }
+  }
+  // quanto maior a faixa reservada, mais longe a câmera (o desenho encolhe em vez de passar por baixo dos botões)
+  const spec = { w: 22, d: 14.5, floors: 3 };
+  assert.ok(fitDistance(spec, 'conjunto', { band: 0.5 }) > fitDistance(spec, 'conjunto', { band: 0.12 }));
+});
+
+test('enquadramento: a faixa dos botões é medida no navegador e o CSS estreito mantém as quatro vistas em uma linha', async () => {
+  const src = await readFile(new URL('../src/maquete3d.mjs', import.meta.url), 'utf8');
+  assert.match(src, /querySelector\('\.mq-tabs'\)/);
+  assert.match(src, /band: state\.band/);
+  const css = await readFile(new URL('../src/styles.css', import.meta.url), 'utf8');
+  assert.match(css, /@media\(max-width:380px\)\{\.mq-tabs\{[^}]*\}\.mq-tab\{padding:8px 6px;font-size:11\.5px\}\}/);
+});
+
+test('enquadramento: a distância é a MÍNIMA que cabe (o modelo ocupa de fato a área, não fica minúsculo)', () => {
+  for (const view of Object.keys(VIEW_CAM)) {
+    for (const aspect of [1.0, 1.6, 2.1]) {
+      const spec = { w: 22, d: 14.5, floors: 3 };
+      const dist = fitDistance(spec, view, { aspect, fovDeg: 30 });
+      const extents = cornersOf(spec, view).map((c) => projectCorner(spec, view, dist, c, { aspect, fovDeg: 30 }));
+      const fillX = Math.max(...extents.map(([x]) => Math.abs(x))) / FIT_MARGIN;
+      const fillY = Math.max(...extents.map(([, y]) => Math.abs(y))) / (FIT_MARGIN * (1 - CONTROLS_BAND));
+      assert.ok(Math.max(fillX, fillY) > 0.995, `${view} ${aspect}: folga desnecessária (${Math.max(fillX, fillY).toFixed(3)})`);
+    }
+  }
+});
+
+test('enquadramento: a vista Planta mostra a edificação inteira (regressão do corte nas quatro bordas)', () => {
+  // antes: distância = max(w, d*aspect*0.7)*0.78*0.92 deixava a planta maior que o quadro
+  const spec = { w: 22, d: 14.5, floors: 2 };
+  const old = Math.max(spec.w, spec.d * 1.6 * 0.7) * 0.78 * 0.92;
+  const fitted = fitDistance(spec, 'planta', { aspect: 1.6, fovDeg: 30 });
+  const half = (dist) => Math.max(...cornersOf(spec, 'planta').map((c) => Math.abs(projectCorner(spec, 'planta', dist, c, { aspect: 1.6, fovDeg: 30 })[0])));
+  assert.ok(half(old) > 1, 'a heurística antiga projetava fora do quadro');
+  assert.ok(half(fitted) <= FIT_MARGIN + 1e-6, 'o enquadramento novo cabe');
+});
+
+test('enquadramento: com o corte, o alvo da câmera vai para o centro da metade que sobra; sem corte fica no centro', () => {
+  const spec = { w: 22, d: 14.5, floors: 2 };
+  assert.equal(cutTargetZ(spec, 'corte'), -14.5 / 4);
+  for (const v of ['conjunto', 'camadas', 'planta']) assert.equal(cutTargetZ(spec, v), 0);
+});
+
+test('maquete 3D: câmera usa fitDistance, alvo no centro do modelo, faixa dos controles reservada e nada de heurística por esfera', async () => {
+  const src = await readFile(new URL('../src/maquete3d.mjs', import.meta.url), 'utf8');
+  assert.match(src, /fitDistance\(spec, view,/);
+  assert.match(src, /camera\.setViewOffset\(/);
+  assert.match(src, /camera\.lookAt\(0, ty, tz\)/);
+  assert.doesNotMatch(src, /Math\.hypot\(spec\.w, spec\.d, H\)/, 'a heurística por raio de esfera saiu');
+  assert.doesNotMatch(src, /const VIEW_CAM = \{/, 'as vistas moram no modelo puro (testável)');
 });

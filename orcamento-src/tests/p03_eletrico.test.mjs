@@ -1,9 +1,9 @@
-// P03 — Projeto Elétrico (baixa tensão predial) na calculadora, com preço residencial automático.
+// P03 — Projeto Elétrico (baixa tensão predial) na calculadora. Revisão R2 da Tabela DEMELLO V2 (08/11/2026, Opção A).
 //
-// Decisão comercial: R$ 6,88/m² na tipologia residencial (CASA), documentado nos casos Ricardo (63,5 m² = R$ 436,88) e Carina
-// (220 m² = R$ 1.513,60). O 6,88 já inclui o fator 0,80: a tabela guarda a base DERIVADA 8,60 (8,60 x 0,80 = 6,88), sem chamá-la
-// de AltoQi (não há comprovação de que a publicação AltoQi traga 8,60). O fator é aplicado uma vez.
-// Tipologias sem base aprovada seguem para avaliação humana. ESCOPO: só a calculadora.
+// Preço = 0,80 x a MENOR referência documentada: SECID/PR 094/2026 (14,83), AltoQi casa residencial (8,60, publicada em
+// "Quanto cobrar por projeto elétrico?") e FUNDEPAR 001/2025 item 8.1 por categoria (administrativa 10,38, educacional 9,20,
+// esportiva 6,24). A categoria de origem é registrada e não exclui a referência. O fator é aplicado uma vez, depois da vencedora.
+// Os casos já emitidos no R1 (Ricardo 436,88; Carina 1.513,60) continuam reproduzidos pelo Python canônico. ESCOPO: só a calculadora.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import './support/catalogo.mjs';
@@ -39,8 +39,8 @@ test('opção: "Projeto Elétrico" aparece em "Já sei o serviço" e em "Constru
   assert.deepEqual(labels.slice(0, 5), ['Estrutural', 'Fundações', 'Hidrossanitário', 'Drenagem', 'Incêndio'], 'ordem anterior preservada');
 });
 
-test('PREÇO: os dois casos documentados reproduzem exatamente (63,5 m² = R$ 436,88; 220 m² = R$ 1.513,60)', () => {
-  for (const [area, total] of [['63,5', '436.88'], ['220', '1513.60']]) {
+test('PREÇO R2: 63,5 m² = R$ 316,99 e 220 m² = R$ 1.098,24 (menor referência FUNDEPAR 6,24 x 0,80)', () => {
+  for (const [area, total] of [['63,5', '316.99'], ['220', '1098.24']]) {
     const p = packageForCRMv2(casa(area));
     assert.equal(p.pricing_preview.status, 'CALCULATED', area);
     assert.equal(p.pricing_preview.total_demello, total, area);
@@ -52,47 +52,58 @@ test('PREÇO: os dois casos documentados reproduzem exatamente (63,5 m² = R$ 43
   }
 });
 
-test('PREÇO: o fator 0,80 é aplicado UMA vez, sobre a base derivada 8,60 (nunca sobre 6,88)', () => {
+test('PREÇO R2: o fator 0,80 é aplicado UMA vez, sobre a menor referência (6,24), sem pré-arredondar 4,992', () => {
   const pv = packageForCRMv2(casa('100')).pricing_preview;
   const s = pv.services[0];
-  assert.equal(s.references.demello_eletrica_documentada.unit_value, '8.60');
-  assert.equal(s.references.demello_eletrica_documentada.total, '860.00');
-  assert.equal(s.demello.total, '688.00');
-  assert.notEqual(s.demello.total, '550.40');
-  assert.equal(s.base_reference, 'DEMELLO_ELETRICA_DOCUMENTADA');
+  assert.equal(s.references.altoqi.unit_value, '8.60');
+  assert.equal(s.references.altoqi.total, '860.00');
+  assert.equal(s.references.fundepar_001_2025_esportiva.unit_value, '6.24');
+  assert.equal(s.references.fundepar_001_2025_esportiva.source_typology, 'ESPORTIVA');
+  assert.equal(s.demello.total, '499.20');
+  assert.notEqual(s.demello.total, '399.36', 'o fator nunca é aplicado duas vezes');
+  assert.equal(s.base_reference, 'FUNDEPAR_001_2025_ESPORTIVA');
+  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2');
   assert.equal(TABLE.factor_demello, '0.80');
   assert.equal(TABLE.table_version, 'DEMELLO_V2');
 });
 
-test('PROVENIÊNCIA: a referência é a decisão comercial documentada, nunca apresentada como publicação AltoQi', () => {
+test('PROVENIÊNCIA R2: cada referência elétrica traz fonte, item e categoria de origem; nenhuma fonte inventada', () => {
   const ref = TABLE.services.ELETRICA.references;
-  assert.ok(!('ALTOQI' in ref));
-  assert.deepEqual(ref.DEMELLO_ELETRICA_DOCUMENTADA.by_typology, { CASA: '8.60' });
-  assert.equal(ref.DEMELLO_ELETRICA_DOCUMENTADA.provenance.tipo, 'DERIVADA_DE_DECISAO_COMERCIAL_DOCUMENTADA');
-  assert.equal(ref.DEMELLO_ELETRICA_DOCUMENTADA.provenance.preco_demello_documentado_por_m2, '6.88');
-  assert.match(TABLE.sources.DEMELLO_ELETRICA_DOCUMENTADA, /NAO e transcricao/);
+  assert.deepEqual(Object.keys(ref), ['SECID_PR', 'ALTOQI', 'FUNDEPAR_001_2025_ADMINISTRATIVA', 'FUNDEPAR_001_2025_EDUCACIONAL', 'FUNDEPAR_001_2025_ESPORTIVA']);
+  assert.equal(ref.SECID_PR.unit_value, '14.83');
+  assert.equal(ref.SECID_PR.item, '12.1.1');
+  assert.deepEqual(ref.ALTOQI.by_typology, { CASA: '8.60' }, 'AltoQi só casa (PREDIO 6,30 e COMERCIAL 15,10 fora da matriz aprovada)');
+  const fundepar = { ADMINISTRATIVA: ['10.38', '8.1.a'], EDUCACIONAL: ['9.20', '8.1.b'], ESPORTIVA: ['6.24', '8.1.d'] };
+  for (const [cat, [value, item]] of Object.entries(fundepar)) {
+    const r = ref[`FUNDEPAR_001_2025_${cat}`];
+    assert.deepEqual([r.source, r.source_typology, r.unit_value, r.item], ['FUNDEPAR_001_2025', cat, value, item]);
+    assert.equal('applicable_typologies' in r, false, 'a categoria de origem não exclui a referência (Opção A)');
+  }
+  assert.ok(!('DEMELLO_ELETRICA_DOCUMENTADA' in TABLE.sources), 'a fonte derivada foi substituída pela publicação AltoQi');
+  assert.match(TABLE.sources.SECID_PR, /094\/2026/);
   const texto = buildClientSummary(packageForCRMv2(casa('63,5')));
   assert.match(texto, /Projeto Elétrico/);
-  assert.match(texto, /R\$\s*436,88/);
-  assert.ok(!/AltoQi/.test(texto), 'o texto ao cliente não atribui o valor à AltoQi');
+  assert.match(texto, /R\$\s*316,99/);
 });
 
-test('TIPOLOGIAS: sem base aprovada (prédio, comercial, outras), a elétrica vai para avaliação humana', () => {
+test('TIPOLOGIAS R2: SECID e FUNDEPAR valem para qualquer tipologia (a AltoQi elétrica só para casa)', () => {
   for (const property of ['Residencial multifamiliar', 'Comercial', 'Industrial', 'Outro']) {
     const p = packageForCRMv2(casa('100', ['Elétrica'], { property }));
-    assert.equal(p.pricing_preview.status, 'NEEDS_HUMAN_REVIEW', property);
-    assert.equal(p.pricing_preview.total_demello, null, property);
-    assert.equal(p.result, 'X3B');
-    assert.deepEqual(allowedIntents(casa('100', ['Elétrica'], { property })), ['evaluation_only']);
+    assert.equal(p.pricing_preview.status, 'CALCULATED', property);
+    assert.equal(p.pricing_preview.total_demello, '499.20', property);
+    assert.equal('altoqi' in p.pricing_preview.services[0].references, false, property);
+    assert.equal(p.result, 'X3A');
+    assert.deepEqual(allowedIntents(casa('100', ['Elétrica'], { property })), ['proposal', 'scope_question']);
   }
+  assert.equal(packageForCRMv2(casa('100')).pricing_preview.services[0].references.altoqi.total, '860.00', 'casa mantém a AltoQi');
 });
 
 test('COMBINADA: soma sem cobrança dupla; serviço sem cálculo impede o total completo', () => {
   const hidro = packageForCRMv2(casa('100', ['Hidrossanitário'])).pricing_preview;
   const junto = packageForCRMv2(casa('100', ['Hidrossanitário', 'Elétrica'])).pricing_preview;
-  assert.equal(hidro.total_demello, '696.00', 'preço anterior preservado');
+  assert.equal(hidro.total_demello, '467.20', 'R2: 5,84 x 100 x 0,80 (FUNDEPAR esportiva); o R1, 696,00, segue reproduzido pelo Python');
   assert.equal(junto.status, 'CALCULATED');
-  assert.equal(junto.total_demello, '1384.00');
+  assert.equal(junto.total_demello, '966.40');   // 467,20 + 499,20
   assert.equal(junto.services.find((s) => s.service === 'HIDROSSANITARIO').demello.total, hidro.total_demello);
   const estrutural = packageForCRMv2(build(['Estrutural', 'Elétrica'], { CA5: { value: '3' } })).pricing_preview; // 3 pavimentos sem área de projeção: estrutural em avaliação
   assert.equal(estrutural.services.find((s) => s.service === 'ELETRICA').status, 'CALCULATED');
@@ -109,7 +120,7 @@ test('"Construir ou ampliar": selecionável isolado e combinado; sugestão confi
     assert.match(summary(a).find((r) => r.id === 'CA7').value, /Projeto Elétrico/);
   }
   const p = packageForCRMv2(build(['Elétrica']));
-  assert.equal(p.pricing_preview.total_demello, '825.60', '120 m² x 6,88');
+  assert.equal(p.pricing_preview.total_demello, '599.04', '120 m² x 6,24 x 0,80');
   const sugerido = build(['Não sei quais preciso'], { suggestionConfirmed: true, confirmedSuggestions: ['Estrutural', 'Elétrica'] });
   assert.deepEqual(derivePricingInputs(sugerido).services, ['ESTRUTURAL', 'ELETRICA']);
 });
@@ -126,10 +137,10 @@ test('seleção isolada: fluxo de projeto por área, resumo com o nome público 
 test('PARIDADE com o Python: o motor JS dá o mesmo resultado dos vetores calculados pelo espelho do canônico', () => {
   const base = { typology: 'CASA', area_new: '63.5', area_total: '63.5', area_existing: null, structural_system: null, structural_scope: null, foundations_selected: false, area_atendida: null, area_terreno: null, area_escopo: null, area_fundacao: null, hours: null, regularizacao: { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' }, hidro_scope_includes_existing: null };
   const vetores = [
-    [{ services: ['ELETRICA'], area_new: '63.5' }, 'CALCULATED', '436.88'],
-    [{ services: ['ELETRICA'], area_new: '220', area_total: '220' }, 'CALCULATED', '1513.60'],
-    [{ services: ['ELETRICA'], typology: 'PREDIO' }, 'NEEDS_HUMAN_REVIEW', null],
-    [{ services: ['ELETRICA'], area_new: '10000', area_total: '10000' }, 'CALCULATED', '68800.00'],
+    [{ services: ['ELETRICA'], area_new: '63.5' }, 'CALCULATED', '316.99'],
+    [{ services: ['ELETRICA'], area_new: '220', area_total: '220' }, 'CALCULATED', '1098.24'],
+    [{ services: ['ELETRICA'], typology: 'PREDIO' }, 'CALCULATED', '316.99'],
+    [{ services: ['ELETRICA'], area_new: '10000', area_total: '10000' }, 'CALCULATED', '49920.00'],
     [{ services: ['ELETRICA'], area_new: '10000.01', area_total: '10000.01' }, 'NEEDS_HUMAN_REVIEW', null],
   ];
   for (const [over, status, total] of vetores) {
@@ -141,10 +152,10 @@ test('PARIDADE com o Python: o motor JS dá o mesmo resultado dos vetores calcul
 
 test('metodologia preservada: tabela byte a byte igual à do canônico, fórmulas e motor só ganharam a proteção por limite', async () => {
   const sha = createHash('sha256').update((await read('src/pricing/pricing-table.v2.json')).replace(/\r\n/g, '\n')).digest('hex');
-  assert.equal(sha, '3bfb19190ab4512264e386c3f727d64e650687c9f7f6a4ad1017440b41cee425');
+  assert.equal(sha, '8fd32ba07134ca8f6490020eb831bdcd53df9cdd6e6ad802a5ccf2aa1d671c9d');   // revisão R2 (a r1 congelada, 3bfb1919..., fica no repositório canônico)
   assert.deepEqual(Object.keys(TABLE.services).sort(), ['ARQUITETURA', 'COMPATIBILIZACAO', 'CONSULTORIA_TECNICA', 'ELETRICA', 'ESTRUTURAL', 'GAS_GLP', 'HIDROSSANITARIO', 'INCENDIO', 'MENTORIA_TECNICA', 'ORCAMENTO', 'REGULARIZACAO', 'TERRAPLENAGEM']);
   // preços das outras disciplinas, iguais aos de antes
-  assert.equal(buildPricingPreview({ services: ['HIDROSSANITARIO'], typology: 'CASA', area_new: '100', area_total: '100', area_existing: null, structural_system: null, structural_scope: null, foundations_selected: false, area_atendida: null, area_terreno: null, area_escopo: null, area_fundacao: null, hours: null, regularizacao: { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' }, hidro_scope_includes_existing: null }).total_demello, '696.00');
+  assert.equal(buildPricingPreview({ services: ['HIDROSSANITARIO'], typology: 'CASA', area_new: '100', area_total: '100', area_existing: null, structural_system: null, structural_scope: null, foundations_selected: false, area_atendida: null, area_terreno: null, area_escopo: null, area_fundacao: null, hours: null, regularizacao: { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' }, hidro_scope_includes_existing: null }).total_demello, '467.20');
   assert.ok(!/SERVICES_NOT_OFFERED/.test(await read('src/payload_v2.mjs')), 'a trava histórica foi removida');
 });
 

@@ -1,5 +1,5 @@
 {
- "origem": "código aprovado da baseline V2 aprovado, antes da ramificação de estimativa da Arquitetura",
+ "origem": "código aprovado da baseline V2 aprovado, antes da ramificação de estimativa da Arquitetura | totais regenerados em 08/11/2026 para a revisão R2 da Tabela DEMELLO V2 (cada total conferido contra o motor Python canônico); rota, resumo e pricing_inputs permanecem os da baseline aprovada",
  "cases": [
   {
    "name": "build|Construir do zero|Estrutural",
@@ -104,7 +104,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "2146.48",
+   "total": "2035.60",
    "pricing_inputs": {
     "services": [
      "ESTRUTURAL"
@@ -235,7 +235,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "1156.80",
+   "total": "730.56",
    "pricing_inputs": {
     "services": [
      "HIDROSSANITARIO",
@@ -379,7 +379,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "1351.80",
+   "total": "1261.08",
    "pricing_inputs": {
     "services": [
      "GAS_GLP",
@@ -510,7 +510,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "600.88",
+   "total": "523.60",
    "pricing_inputs": {
     "services": [
      "ESTRUTURAL"
@@ -789,7 +789,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "600.00",
+   "total": "356.80",
    "pricing_inputs": {
     "services": [
      "HIDROSSANITARIO",
@@ -939,7 +939,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "1351.80",
+   "total": "1261.08",
    "pricing_inputs": {
     "services": [
      "GAS_GLP",
@@ -1082,7 +1082,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "600.88",
+   "total": "523.60",
    "pricing_inputs": {
     "services": [
      "ESTRUTURAL"
@@ -1475,7 +1475,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "1351.80",
+   "total": "1261.08",
    "pricing_inputs": {
     "services": [
      "GAS_GLP",
@@ -1606,7 +1606,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "600.88",
+   "total": "523.60",
    "pricing_inputs": {
     "services": [
      "ESTRUTURAL"
@@ -1708,7 +1708,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "3176.88",
+   "total": "3043.60",
    "pricing_inputs": {
     "services": [
      "ESTRUTURAL"
@@ -1804,7 +1804,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "1931.20",
+   "total": "934.40",
    "pricing_inputs": {
     "services": [
      "HIDROSSANITARIO"
@@ -1907,7 +1907,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "613.04",
+   "total": "368.88",
    "pricing_inputs": {
     "services": [
      "INCENDIO",
@@ -2010,7 +2010,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "1274.76",
+   "total": "1175.40",
    "pricing_inputs": {
     "services": [
      "COMPATIBILIZACAO"
@@ -2112,7 +2112,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "1610.40",
+   "total": "1228.80",
    "pricing_inputs": {
     "services": [
      "ORCAMENTO"
@@ -2214,7 +2214,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "144.00",
+   "total": "160.00",
    "pricing_inputs": {
     "services": [
      "TERRAPLENAGEM"
@@ -2621,7 +2621,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "4931.28",
+   "total": "4432.40",
    "pricing_inputs": {
     "services": [
      "ESTRUTURAL",
@@ -2878,7 +2878,7 @@
     }
    ],
    "pricing_status": "CALCULATED",
-   "total": "566.56",
+   "total": "626.56",
    "pricing_inputs": {
     "services": [
      "REGULARIZACAO"

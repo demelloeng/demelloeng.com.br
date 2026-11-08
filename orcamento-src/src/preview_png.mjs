@@ -1,4 +1,5 @@
-// renderPreviewPng - desenha a peça 1080x1350 da PRÉVIA DEMELLO VERIFICÁVEL V1.
+// renderPreviewPng - desenha a peça 1080 de largura da PRÉVIA DEMELLO VERIFICÁVEL V1 (altura 1350, ou maior quando há
+// muitos serviços: nada é cortado nem a fonte encolhe de forma abusiva).
 //
 // Recebe SOMENTE o PUBLIC_PREVIEW_V1 confirmado pelo Worker (já sanitizado:
 // sem o fator, sem a regra interna, sem inputs, sem a assinatura interna).
@@ -15,7 +16,22 @@ import { verifyUrl } from './preview.mjs';
 import { referenceEntries } from './references.mjs';
 
 const W = 1080;
-const H = 1350;
+const H_MIN = 1350;
+const PAD = 48;
+const CASE_HEAD = 48;       // faixa azul do título "SEU CASO"
+const METRIC_H = 82;        // faixa das métricas (áreas) no rodapé do bloco
+const NARRATIVE_KEYS = new Set(['necessidade', 'situacao', 'finalidade']);
+const METRIC_KEYS = new Set(['area_iptu', 'area_matricula', 'diferenca', 'area_nova', 'area_existente', 'area_total', 'area_projecao', 'area_atendida', 'area_terreno', 'area_escopo']);
+// altura de um campo: rótulo + n linhas de valor + respiro (o valor nunca encosta na linha divisória)
+const fieldHeight = (lines) => 31 + lines * 22 + 14;
+const VERIFY_H = 226;       // código + QR
+const TOTAL_TOP = 146;
+const TOTAL_H = 130;
+const SERVICES_TOP = 292;
+const SERVICES_BAND = 40;
+const SERVICE_ROW_BASE = 46;
+const REF_LINE = 22;
+const REF_FONT = 17;
 
 function assertConfirmed(record) {
   if (!record || typeof record !== 'object' ||
@@ -68,30 +84,31 @@ export function buildPreviewLayout(record) {
 
   const caseRows = [];
   for (const key of CASE_ORDER) {
+    if (key === 'servicos') continue;   // já listados, com o valor de cada um, no módulo SERVIÇOS (e a lista longa seria cortada)
     const v = view.case_summary ? view.case_summary[key] : undefined;
     if (v === undefined || v === null || v === '') continue;
     caseRows.push({ key, label: CASE_LABELS[key] || key, value: Array.isArray(v) ? v.join(', ') : String(v) });
   }
 
-  const references = [];
-  for (const s of calc) {
-    const name = friendlyServiceName(s);
-    for (const { label, total } of referenceEntries(s.references)) {
-      references.push(`${label} — ${name}: ${brlStr(total)}`);
-    }
-  }
+  // Um serviço por linha: nome, preço DEMELLO do serviço (quando o registro o traz) e as referências DAQUELE serviço.
+  // Nunca se compara o total do pacote com a referência de um único serviço.
+  const services = calc.map((s) => ({
+    name: friendlyServiceName(s),
+    price: typeof s.total_demello === 'string' ? brlStr(s.total_demello) : null,
+    references: referenceEntries(s.references).map(({ label, total }) => ({ label, total: brlStr(total) })),
+  }));
 
   return {
     width: W,
-    height: H,
     wordmark: 'DEMELLO ENGENHARIA',
     title: 'PRÉVIA INICIAL DEMELLO',
     case_rows: caseRows,
-    forecast_label: 'PREVISÃO DEMELLO',
+    forecast_label: 'ESTIMATIVA INICIAL DEMELLO',
     forecast_value: pricing.status === 'CALCULATED' && pricing.total_demello
       ? brlStr(pricing.total_demello)
       : 'Avaliação humana necessária',
-    references,
+    services_label: 'SERVIÇOS',
+    services,
     criterion: 'Critério: previsão calculada a partir da referência pública aplicável, conforme metodologia DEMELLO.',
     disclaimers: Array.isArray(view.disclaimers) ? view.disclaimers : [],
     issued_at_label: `Emitida em ${fmtIssuedAt(record.issued_at)}`,
@@ -114,6 +131,55 @@ function wrap(ctx, text, maxWidth) {
   return lines;
 }
 
+const FONT_FAMILY = "'Source Sans 3', system-ui, sans-serif";
+
+function refsText(refs) {
+  return refs.map((r) => `${r.label} ${r.total}`).join('   ·   ');
+}
+
+// Mede (sem desenhar) e devolve as posições verticais de cada módulo. Determinístico para o mesmo registro.
+export function planLayout(ctx, L) {
+  const innerW = W - PAD * 2;
+  const priceReserve = 230;                      // coluna do preço à direita
+  ctx.font = `400 ${REF_FONT}px ${FONT_FAMILY}`;
+  const rows = L.services.map((svc) => {
+    const refLines = svc.references.length ? wrap(ctx, refsText(svc.references), innerW - 48) : [];
+    return { svc, refLines, height: SERVICE_ROW_BASE + refLines.length * REF_LINE + (refLines.length ? 16 : 8) };
+  });
+  const servicesTop = SERVICES_TOP;
+  const servicesBottom = servicesTop + SERVICES_BAND + rows.reduce((acc, r) => acc + r.height, 0);
+  const criterionY = servicesBottom + 16;
+  const caseTop = criterionY + 44;
+  // Bloco "SEU CASO": a altura vem do conteúdo medido (nada de altura fixa que faça o valor passar por cima da linha).
+  const fieldLines = (row, width, size) => { ctx.font = `400 ${size}px ${FONT_FAMILY}`; return wrap(ctx, row.value, width - 44).slice(0, 2); };
+  const caseNarrative = L.case_rows.filter((r) => NARRATIVE_KEYS.has(r.key)).map((row) => {
+    const lines = fieldLines(row, innerW, 21);
+    return { row, lines, height: fieldHeight(lines.length) };
+  });
+  const colW = innerW / 2;
+  const ctxItems = L.case_rows.filter((r) => !NARRATIVE_KEYS.has(r.key) && !METRIC_KEYS.has(r.key))
+    .map((row) => ({ row, lines: fieldLines(row, colW, 20) }));
+  const caseContext = [];
+  for (let i = 0; i < ctxItems.length; i += 2) {
+    const pair = ctxItems.slice(i, i + 2);
+    caseContext.push({ pair, height: Math.max(...pair.map((it) => fieldHeight(it.lines.length))) });
+  }
+  const caseMetrics = L.case_rows.filter((r) => METRIC_KEYS.has(r.key));
+  const metricHeight = caseMetrics.length ? METRIC_H : 0;
+  const caseHeight = CASE_HEAD + caseNarrative.reduce((a, r) => a + r.height, 0) + caseContext.reduce((a, r) => a + r.height, 0) + metricHeight;
+  const caseBottom = caseTop + Math.max(caseHeight, CASE_HEAD + 60);
+  ctx.font = `400 20px ${FONT_FAMILY}`;
+  const disclaimerLines = L.disclaimers.map((d) => wrap(ctx, d, innerW - 48));
+  const disclaimerHeight = Math.max(150, 20 + disclaimerLines.reduce((acc, ls) => acc + ls.length * 25 + 9, 0) + 12);
+  const disclaimerTop = caseBottom + 20;
+  const disclaimerBottom = disclaimerTop + disclaimerHeight;
+  const verifyTopMin = disclaimerBottom + 20;
+  const height = Math.max(H_MIN, verifyTopMin + VERIFY_H + 42);
+  const verifyTop = height - 42 - VERIFY_H;      // ancorado ao rodapé; a folga fica entre as ressalvas e a verificação
+  return { rows, servicesTop, servicesBottom, criterionY, caseTop, caseBottom, caseNarrative, caseContext, caseMetrics, metricHeight, disclaimerLines, disclaimerTop, disclaimerBottom,
+    verifyTop, verifyBottom: verifyTop + VERIFY_H, height, priceReserve };
+}
+
 async function loadLogo(loadImage) {
   if (!loadImage) return null;
   try { return await loadImage('/assets/images/logo.png'); } catch { return null; }
@@ -129,11 +195,14 @@ export async function renderPreviewPng(record, opts = {}) {
   const canvas = canvasFactory();
   if (!canvas) throw new Error('renderPreviewPng: canvas indisponível');
   canvas.width = W;
-  canvas.height = H;
+  canvas.height = H_MIN;
   const ctx = canvas.getContext('2d');
-  const FONT = "'Source Sans 3', system-ui, sans-serif";
+  const FONT = FONT_FAMILY;
   const MONO = "'JetBrains Mono', ui-monospace, monospace";
-  const PAD = 48;
+  const plan = planLayout(ctx, L);
+  canvas.width = W;
+  canvas.height = plan.height;       // redimensionar limpa o estado do canvas: tudo é desenhado depois do plano
+  const H = plan.height;
   const INK = '#10161d';
   const NAVY = '#2b3844';
   const BLUE = '#235480';
@@ -164,31 +233,39 @@ export async function renderPreviewPng(record, opts = {}) {
 
   ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(PAD, 126); ctx.lineTo(W - PAD, 126); ctx.stroke();
 
-  // previsão: primeiro bloco de conteúdo, com referência e critério no mesmo módulo.
-  ctx.fillStyle = ICE; ctx.fillRect(PAD, 146, W - PAD * 2, 210);
+  // estimativa total: primeiro bloco de conteúdo.
+  ctx.fillStyle = ICE; ctx.fillRect(PAD, TOTAL_TOP, W - PAD * 2, TOTAL_H);
   ctx.fillStyle = BLUE; ctx.font = `700 22px ${FONT}`;
-  ctx.fillText(L.forecast_label, PAD + 28, 170);
+  ctx.fillText(L.forecast_label, PAD + 28, TOTAL_TOP + 22);
   ctx.fillStyle = NAVY; ctx.font = `800 62px ${FONT}`;
-  ctx.fillText(L.forecast_value, PAD + 28, 202);
+  ctx.fillText(L.forecast_value, PAD + 28, TOTAL_TOP + 54);
 
-  const refY = 280;
-  const refCols = L.references.length > 2 ? 2 : 1;
-  const refWidth = refCols === 2 ? (W - PAD * 2 - 72) / 2 : W - PAD * 2 - 56;
-  const refFont = L.references.length > 4 ? 14 : 17;
-  ctx.fillStyle = INK; ctx.font = `600 ${refFont}px ${FONT}`;
-  L.references.forEach((reference, index) => {
-    const col = refCols === 2 ? index % 2 : 0;
-    const row = refCols === 2 ? Math.floor(index / 2) : index;
-    const rx = PAD + 28 + col * (refWidth + 16);
-    const ry = refY + row * 21;
-    ctx.fillText(reference, rx, ry);
+  // serviços: um por linha, com o preço DEMELLO do serviço e as referências DAQUELE serviço.
+  const svTop = plan.servicesTop;
+  ctx.strokeStyle = LINE; ctx.strokeRect(PAD, svTop, W - PAD * 2, plan.servicesBottom - svTop);
+  ctx.fillStyle = BLUE; ctx.fillRect(PAD, svTop, W - PAD * 2, SERVICES_BAND);
+  ctx.fillStyle = '#ffffff'; ctx.font = `700 21px ${FONT}`;
+  ctx.fillText(L.services_label, PAD + 24, svTop + 10);
+  let ry = svTop + SERVICES_BAND;
+  plan.rows.forEach((row, index) => {
+    if (index) { ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(PAD, ry); ctx.lineTo(W - PAD, ry); ctx.stroke(); }
+    ctx.fillStyle = INK; ctx.font = `700 25px ${FONT}`;
+    ctx.fillText(row.svc.name, PAD + 24, ry + 10);
+    if (row.svc.price) {
+      ctx.fillStyle = NAVY; ctx.font = `800 27px ${FONT}`;
+      const pw = ctx.measureText(row.svc.price).width;
+      ctx.fillText(row.svc.price, W - PAD - 24 - pw, ry + 9);
+    }
+    ctx.fillStyle = MUTED; ctx.font = `400 ${REF_FONT}px ${FONT}`;
+    row.refLines.forEach((line, i) => ctx.fillText(line, PAD + 24, ry + SERVICE_ROW_BASE - 2 + i * REF_LINE));
+    ry += row.height;
   });
   ctx.fillStyle = MUTED; ctx.font = `400 17px ${FONT}`;
-  ctx.fillText(L.criterion, PAD + 28, 326);
+  ctx.fillText(L.criterion, PAD, plan.criterionY);
 
   // caso: narrativa em largura total, contexto em duas colunas e medidas em células.
-  const caseTop = 376;
-  const caseBottom = 854;
+  const caseTop = plan.caseTop;
+  const caseBottom = plan.caseBottom;
   ctx.strokeStyle = LINE; ctx.strokeRect(PAD, caseTop, W - PAD * 2, caseBottom - caseTop);
   ctx.fillStyle = BLUE; ctx.fillRect(PAD, caseTop, W - PAD * 2, 48);
   // glifo "pessoa" (cabeça + ombros) à esquerda do título
@@ -199,43 +276,34 @@ export async function renderPreviewPng(record, opts = {}) {
   ctx.fillStyle = '#ffffff'; ctx.font = `700 23px ${FONT}`;
   ctx.fillText('SEU CASO', PAD + 48, caseTop + 12);
 
-  const narrativeKeys = new Set(['necessidade', 'situacao', 'finalidade']);
-  const metricKeys = new Set(['area_iptu', 'area_matricula', 'diferenca', 'area_nova', 'area_existente', 'area_total', 'area_atendida', 'area_terreno', 'area_escopo']);
-  const narrative = L.case_rows.filter((row) => narrativeKeys.has(row.key));
-  const metrics = L.case_rows.filter((row) => metricKeys.has(row.key));
-  const context = L.case_rows.filter((row) => !narrativeKeys.has(row.key) && !metricKeys.has(row.key));
-  const bodyTop = caseTop + 48;
-  const metricHeight = metrics.length ? 82 : 0;
-  const bodyHeight = caseBottom - bodyTop - metricHeight;
-  const narrativeHeight = narrative.length ? Math.min(58, Math.floor(bodyHeight * 0.46 / narrative.length)) : 0;
-  const contextRows = Math.ceil(context.length / 2);
-  const contextHeight = contextRows ? Math.floor((bodyHeight - narrativeHeight * narrative.length) / contextRows) : 0;
+  const bodyTop = caseTop + CASE_HEAD;
   let cy = bodyTop;
 
-  const drawField = (row, x, top, width, height, valueSize = 21) => {
+  const drawField = (item, x, top, width, height, valueSize = 21) => {
     ctx.fillStyle = BLUE; ctx.font = `700 15px ${FONT}`;
-    ctx.fillText(row.label.toUpperCase(), x + 22, top + 10);
+    ctx.fillText(item.row.label.toUpperCase(), x + 22, top + 10);
     ctx.fillStyle = INK; ctx.font = `400 ${valueSize}px ${FONT}`;
-    const lines = wrap(ctx, row.value, width - 44).slice(0, 2);
-    lines.forEach((line, i) => ctx.fillText(line, x + 22, top + 31 + i * 22));
+    item.lines.forEach((line, i) => ctx.fillText(line, x + 22, top + 31 + i * 22));
     ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(x, top + height); ctx.lineTo(x + width, top + height); ctx.stroke();
   };
 
-  for (const row of narrative) {
-    drawField(row, PAD, cy, W - PAD * 2, narrativeHeight, 21);
-    cy += narrativeHeight;
+  for (const item of plan.caseNarrative) {
+    drawField(item, PAD, cy, W - PAD * 2, item.height, 21);
+    cy += item.height;
   }
   const colWidth = (W - PAD * 2) / 2;
-  context.forEach((row, index) => {
-    const col = index % 2;
-    const rowIndex = Math.floor(index / 2);
-    const top = cy + rowIndex * contextHeight;
-    drawField(row, PAD + col * colWidth, top, colWidth, contextHeight, 20);
-    if (col === 0) {
-      ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(PAD + colWidth, top); ctx.lineTo(PAD + colWidth, top + contextHeight); ctx.stroke();
+  for (const line of plan.caseContext) {
+    // campo sozinho na linha ocupa a largura toda (a divisória não pode parar na metade)
+    const fieldW = line.pair.length === 1 ? W - PAD * 2 : colWidth;
+    line.pair.forEach((item, col) => drawField(item, PAD + col * colWidth, cy, fieldW, line.height, 20));
+    if (line.pair.length > 1) {
+      ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(PAD + colWidth, cy); ctx.lineTo(PAD + colWidth, cy + line.height); ctx.stroke();
     }
-  });
+    cy += line.height;
+  }
 
+  const metrics = plan.caseMetrics;
+  const metricHeight = plan.metricHeight;
   if (metrics.length) {
     const metricTop = caseBottom - metricHeight;
     const metricWidth = (W - PAD * 2) / metrics.length;
@@ -250,20 +318,20 @@ export async function renderPreviewPng(record, opts = {}) {
   }
 
   // Ressalvas vêm literalmente do PREVIEW_RECORD e têm módulo próprio.
-  const disclaimerTop = 874;
-  const disclaimerBottom = 1062;
+  const disclaimerTop = plan.disclaimerTop;
+  const disclaimerBottom = plan.disclaimerBottom;
   ctx.fillStyle = ICE; ctx.fillRect(PAD, disclaimerTop, W - PAD * 2, disclaimerBottom - disclaimerTop);
   ctx.strokeStyle = LINE; ctx.strokeRect(PAD, disclaimerTop, W - PAD * 2, disclaimerBottom - disclaimerTop);
   let dy = disclaimerTop + 20;
   ctx.fillStyle = INK; ctx.font = `400 20px ${FONT}`;
-  for (const d of L.disclaimers) {
-    for (const ln of wrap(ctx, d, W - PAD * 2 - 48)) { ctx.fillText(ln, PAD + 24, dy); dy += 25; }
+  for (const lines of plan.disclaimerLines) {
+    for (const ln of lines) { ctx.fillText(ln, PAD + 24, dy); dy += 25; }
     dy += 9;
   }
 
   // Verificação: código, emissão, URL e QR real em um único módulo.
-  const verifyTop = 1082;
-  const verifyBottom = 1308;
+  const verifyTop = plan.verifyTop;
+  const verifyBottom = plan.verifyBottom;
   ctx.strokeStyle = BLUE; ctx.strokeRect(PAD, verifyTop, W - PAD * 2, verifyBottom - verifyTop);
   const qr = L.qr;
   const qn = qr.length;

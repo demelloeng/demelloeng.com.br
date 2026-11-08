@@ -6,6 +6,69 @@
 export const FLOOR_H = 3;           // altura de um pavimento na cena (unidades da cena, sem escala real)
 export const MAX_FLOORS = 8;
 
+// Câmera de cada vista: azimute e elevação em graus; k = abertura vertical dos pavimentos; cut = plano de corte.
+export const VIEW_CAM = {
+  conjunto: { az: 38, el: 27, k: 1, cut: false },
+  camadas: { az: 38, el: 22, k: 1.9, cut: false },
+  corte: { az: 16, el: 34, k: 1.5, cut: true },   // quase frontal e mais alto: a face cortada e o interior ficam à vista
+  planta: { az: 0, el: 86, k: 1, cut: false },
+};
+
+// Enquadramento: a edificação INTEIRA cabe no quadro, em qualquer vista, proporção e número de pavimentos.
+//   FIT_MARGIN     fração da largura/altura úteis que o desenho pode ocupar (o resto é respiro);
+//   CONTROLS_BAND  faixa inferior do quadro reservada aos botões de vista sobrepostos (o desenho não passa por baixo deles).
+export const FIT_MARGIN = 0.9;
+export const CONTROLS_BAND = 0.2;
+
+const rad = (a) => (a * Math.PI) / 180;
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const unit = (v) => { const n = Math.hypot(...v); return n < 1e-9 ? [1, 0, 0] : v.map((x) => x / n); };
+
+// Base da câmera de uma vista: direção do olhar f (da câmera ao centro do modelo), direita r e cima u.
+export function cameraBasis(az, el) {
+  const a = rad(az);
+  const e = rad(el);
+  const f = [-Math.sin(a) * Math.cos(e), -Math.sin(e), -Math.cos(a) * Math.cos(e)];
+  const r = unit(cross(f, [0, 1, 0]));
+  return { f, r, u: cross(r, f) };
+}
+
+// Centro vertical do modelo na vista (altura total = pavimentos x FLOOR_H x k).
+export const modelHeight = (spec, view) => spec.floors * FLOOR_H * VIEW_CAM[view].k;
+
+// Vista com corte: o plano remove a metade da frente; o que sobra (a metade de trás) é o que precisa caber e ficar centrado.
+// O alvo da câmera acompanha: z = -d/4 (cut = 1) em vez do centro da caixa inteira.
+export const cutTargetZ = (spec, view) => (VIEW_CAM[view].cut ? -spec.d / 4 : 0);
+
+// Menor distância câmera-centro para os 8 cantos da caixa do modelo caberem no quadro (perspectiva real). Puro e testável.
+export function fitDistance(spec, view, { aspect = 1.6, fovDeg = 30, band = CONTROLS_BAND } = {}) {
+  const cfg = VIEW_CAM[view];
+  const { f, r, u } = cameraBasis(cfg.az, cfg.el);
+  const H = modelHeight(spec, view);
+  const tanV = Math.tan(rad(fovDeg) / 2);
+  const tanH = tanV * aspect;
+  const mH = FIT_MARGIN;
+  const mV = FIT_MARGIN * (1 - band);     // `band`: fração do quadro ocupada pelos botões (medida no navegador; padrão = CONTROLS_BAND)
+  let dist = 0;
+  for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) {
+    const c = [sx * spec.w / 2, sy * H / 2, sz * (cfg.cut ? spec.d / 4 : spec.d / 2)];
+    const x = Math.abs(dot(c, r));
+    const y = Math.abs(dot(c, u));
+    const zf = dot(c, f);                 // >0: o canto está mais longe da câmera que o centro
+    dist = Math.max(dist, x / (mH * tanH) - zf, y / (mV * tanV) - zf);
+  }
+  return dist;
+}
+
+// Projeta um canto no quadro (NDC, -1..1) para a câmera à distância `dist` do centro. Usado só nos testes de enquadramento.
+export function projectCorner(spec, view, dist, c, { aspect = 1.6, fovDeg = 30 } = {}) {   // c relativo ao alvo da vista
+  const { f, r, u } = cameraBasis(VIEW_CAM[view].az, VIEW_CAM[view].el);
+  const tanV = Math.tan(rad(fovDeg) / 2);
+  const depth = dist + dot(c, f);
+  return [dot(c, r) / (depth * tanV * aspect), dot(c, u) / (depth * tanV)];
+}
+
 // Vistas da maquete: o rótulo é o que a pessoa lê.
 export const VIEWS = [
   { id: 'conjunto', label: 'Conjunto' },

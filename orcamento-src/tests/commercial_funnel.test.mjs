@@ -274,7 +274,9 @@ test('terminologia: a interface chama o resultado de ESTIMATIVA; "prévia" só n
   assert.match(app, /ESTIMATIVA INICIAL DEMELLO/);
   assert.match(app, /<span>CALCULAR ESTIMATIVA<\/span>/);
   assert.doesNotMatch(app, /FAÇA SEU ORÇAMENTO|PREVISÃO DEMELLO/);
-  assert.match(app, /replace\(\/nossa previsão inicial\/g,'nossa estimativa inicial'\)/);
+  // o resultado mostra a lista por serviço; a frase do motor ("nossa previsão inicial") não é impressa na interface
+  assert.doesNotMatch(app, /presented_to_customer|nossa previsão inicial/);
+  assert.match(app, /className="result-services"/);
   assert.doesNotMatch(app, /Primeiro, a prévia|escopo da sua prévia/);
   const summary = await readSrc('client_summary.mjs');
   assert.match(summary, /'ESTIMATIVA INICIAL DEMELLO'/);
