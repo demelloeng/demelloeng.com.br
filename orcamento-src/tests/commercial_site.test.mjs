@@ -16,6 +16,14 @@ const ORIGIN = 'https://demelloeng.com.br';
 const read = (p) => readFile(path.join(siteRoot, p), 'utf8');
 const exists = (p) => access(path.join(siteRoot, p)).then(() => true, () => false);
 
+test('Contato: CTA inicial abre WhatsApp institucional e telefone da empresa mantém o número exibido', async () => {
+  const html = await read('contato/index.html');
+  const hero = html.match(/<section class="hero[\s\S]*?<\/section>/)?.[0];
+  assert.match(hero, /href="https:\/\/wa\.me\/554498202552"[^>]*>Falar no WhatsApp<\/a>/);
+  assert.match(html, /<dt>Telefone da empresa<\/dt><dd><a href="tel:\+5544998202552">\(44\) 99820-2552<\/a>/);
+  assert.match(html, /class="canal-acao canal-acao-wa" href="https:\/\/wa\.me\/5541985124056"/);
+});
+
 const SERVICE_SLUGS = [
   'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-arquitetura',
   'regularizacao', 'orcamento-tecnico', 'projeto-terraplenagem', 'compatibilizacao-bim',
@@ -47,7 +55,7 @@ const visibleText = (html) => html
 const mainOf = (html) => html.match(/<main[\s\S]*?<\/main>/)?.[0] ?? '';
 
 const EXTERNAL_ALLOWED = [
-  /^https:\/\/wa\.me\/5541985124056$/, /^mailto:marcos@demelloeng\.com\.br$/, /^tel:\+55\d{10,11}$/,
+  /^https:\/\/wa\.me\/(?:5541985124056|554498202552)$/, /^mailto:marcos@demelloeng\.com\.br$/, /^tel:\+55\d{10,11}$/,
   /^https:\/\/www\.instagram\.com\/demelloeng\/$/, /^https:\/\/www\.linkedin\.com\/company\/demello-engenharia\/$/,
   /^https:\/\/www\.facebook\.com\/demelloeng\/$/,   // Contato V02 (IT039): Facebook oficial, URL personalizada confirmada pelo proprietário
   // P04: badge oficial do Simple Analytics (plano gratuito). O link é o do gerador oficial; a imagem é cópia local inalterada.
