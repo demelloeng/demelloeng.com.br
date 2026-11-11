@@ -4,9 +4,10 @@ import assert from 'node:assert/strict';
 import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
+import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
-import { createTracker, EVENTS, PARAMS } from '../../assets/js/analytics.mjs';
+import { createTracker, subscribe, EVENTS, PARAMS } from '../../assets/js/analytics.mjs';
 import { buildEvent, channelOf, handleClick, installContactClicks, placementOf, CHANNELS } from '../../assets/js/contact-clicks.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -188,7 +189,7 @@ test('privacidade: o evento entregue não contém número, e-mail, link, nome ne
   }
 });
 
-test('barramento: o clique usa o mesmo adaptador (assinantes recebem o evento), uma vez por posição, sem lead qualificado', () => {
+test('barramento: cada clique WhatsApp conta uma vez, mesmo no mesmo botão, sem lead qualificado', () => {
   const tracker = createTracker({ emitter: 'site' });
   const seen = [];
   tracker.subscribe((e) => seen.push(e));
@@ -200,8 +201,12 @@ test('barramento: o clique usa o mesmo adaptador (assinantes recebem o evento), 
   const r1 = handleClick(ev, win, tracker.track);
   const r2 = handleClick(ev, win, tracker.track);
   assert.equal(r1.ok, true);
-  assert.equal(r2.ok, false); assert.equal(r2.reason, 'duplicate', 'mesmo botão na mesma visita conta uma vez');
+  assert.equal(r2.ok, false); assert.equal(r2.reason, 'duplicate', 'o mesmo evento não pode ser processado duas vezes');
   assert.equal(seen.length, 1);
+  assert.equal(handleClick({ target: link }, win, tracker.track).ok, true, 'outro clique no mesmo botão deve contar');
+  link.attrs.href = 'https://wa.me/554498202552';
+  assert.equal(handleClick({ target: link }, win, tracker.track).ok, true, 'destino institucional também conta');
+  assert.equal(seen.length, 3);
   assert.equal(seen[0].schema, 'demello-analytics/1');
   assert.equal(seen[0].name, 'whatsapp_contact_started');
   assert.deepEqual({ ...seen[0].params }, { page: '/servicos/projeto-gas-glp/', placement: 'topbar', route: 'known', service: 'gas_glp' });
@@ -224,6 +229,58 @@ test('robustez: erro na medição nunca atrapalha o clique; nenhum preventDefaul
   assert.equal(installContactClicks({ location: { pathname: '/' } }, doc), true);
   assert.deepEqual(listeners.map(([t, , c]) => [t, c]), [['click', true], ['auxclick', true]], 'captura em click e auxclick');
   assert.equal(installContactClicks(null, null), false);
+});
+
+test('integração: cliques distintos chegam uma vez ao sa_event, sem destino ou chave interna', async () => {
+  const win = new EventTarget();
+  win.navigator = {};
+  const document = { head: { appendChild() {} }, createElement: () => ({}) };
+  vm.runInNewContext(await read('assets/js/analytics-sink.js'), { window: win, document, navigator: win.navigator });
+  const sent = [];
+  win.sa_event = (...args) => sent.push(args);
+  const tracker = createTracker({ emitter: 'site' });
+  tracker.subscribe((detail) => win.dispatchEvent(new CustomEvent('demello:analytics', { detail })));
+  const link = nodesOf('<a href="https://wa.me/5541985124056?text=privado">WhatsApp</a>')[0];
+  const page = { location: { pathname: '/contato/' } };
+  const first = { target: link };
+  handleClick(first, page, tracker.track);
+  handleClick(first, page, tracker.track);
+  handleClick({ target: link }, page, tracker.track);
+  link.attrs.href = 'https://wa.me/554498202552';
+  handleClick({ target: link }, page, tracker.track);
+  assert.deepEqual(JSON.parse(JSON.stringify(sent)), Array.from({ length: 3 }, () => [
+    'whatsapp_contact_started', { page: '/contato/', placement: 'contact_page' },
+  ]));
+  tracker.setEnabled(false);
+  const blocked = { target: link, preventDefault() { assert.fail('não pode bloquear o link'); } };
+  assert.equal(handleClick(blocked, page, tracker.track).reason, 'disabled');
+  assert.equal(sent.length, 3);
+});
+
+test('delegação: mouse, ativação por toque/teclado e botão do meio; links dinâmicos e instalação repetida', () => {
+  const listeners = {};
+  const doc = { addEventListener(type, fn) { assert.ok(!listeners[type]); listeners[type] = fn; } };
+  const win = { location: { pathname: '/contato/' } };
+  const seen = [];
+  const unsubscribe = subscribe((event) => seen.push(event));
+  try {
+    assert.equal(installContactClicks(win, doc), true);
+    assert.equal(installContactClicks(win, doc), false);
+    // O link só aparece depois da instalação; clique num filho também deve ser reconhecido.
+    const link = nodesOf('<a href="https://wa.me/554498202552"><span>WhatsApp</span></a>')[0];
+    const target = link.children[0];
+    for (const activation of [
+      { type: 'click', button: 0, detail: 1 },
+      { type: 'click', button: 0, detail: 1, pointerType: 'touch' },
+      { type: 'click', button: 0, detail: 0 },
+      { type: 'auxclick', button: 1, detail: 1 },
+    ]) {
+      listeners[activation.type]({ ...activation, target, preventDefault() { assert.fail('navegação bloqueada'); } });
+    }
+    listeners.auxclick({ target, button: 2 });
+    assert.equal(seen.length, 4);
+    assert.ok(seen.every((event) => event.name === 'whatsapp_contact_started'));
+  } finally { unsubscribe(); }
 });
 
 test('o módulo não usa cookie, armazenamento, rede nem nome de fornecedor; é carregado pelas páginas estáticas e está na allowlist', async () => {
