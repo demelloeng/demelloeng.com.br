@@ -115,8 +115,8 @@ test('mensuração: a calculadora liga o ouvinte uma vez no ponto de entrada', a
 test('botão: link institucional, nome acessível, sem simular atendimento e sem guardar nada no navegador', async () => {
   const src = await read('assets/js/contato-flutuante.js');
   const code = src.replace(/\/\*[\s\S]*?\*\//g, '');
-  assert.match(code, /NUMBER = '5541985124056'/);
-  assert.ok((await read('contato/index.html')).includes('https://wa.me/5541985124056'), 'o mesmo número do Contato');
+  assert.match(code, /NUMBER = '554498202552'/);
+  assert.ok((await read('contato/index.html')).includes('https://wa.me/5541985124056'), 'o contato pessoal permanece preservado');
   assert.match(code, /aria-label', 'WhatsApp DEMELLO/);
   assert.match(code, /data-contact-placement', 'floating'/);
   assert.match(code, /target = '_blank'/);
@@ -174,7 +174,7 @@ test('botão (execução): nasce uma vez por página, com texto no desktop que s
   const fabs = t.els.filter((e) => e.className.startsWith('dm-fab') && !e.className.includes('__'));
   assert.equal(fabs.length, 1, 'um único botão');
   const link = t.els.find((e) => e.className === 'dm-fab__link');
-  assert.equal(link.href, 'https://wa.me/5541985124056?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20DEMELLO%20Engenharia.');
+  assert.equal(link.href, 'https://wa.me/554498202552?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20DEMELLO%20Engenharia.');
   assert.equal(link.attrs['data-contact-placement'], 'floating');
   assert.ok(!fabs[0].className.includes('recolhido'), 'no desktop começa com o texto');
   const recolher = t.timers.find((x) => x.ms === 6000);

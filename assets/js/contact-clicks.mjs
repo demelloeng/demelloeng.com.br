@@ -67,11 +67,19 @@ export function buildEvent(target, win) {
   return { event, params };
 }
 
+// A identidade fica só em memória: cliques distintos contam, o mesmo evento repetido não.
+const whatsappClickKeys = new WeakMap();
+let whatsappClickSequence = 0;
+
 export function handleClick(e, win = typeof window !== 'undefined' ? window : null, trackFn = track) {
   try {
     if (!win) return null;
     const built = buildEvent(e?.target, win);
     if (!built) return null;
+    if (built.event === 'whatsapp_contact_started') {
+      if (!whatsappClickKeys.has(e)) whatsappClickKeys.set(e, 'wa-click:' + (++whatsappClickSequence));
+      return trackFn(built.event, built.params, { dedupeKey: whatsappClickKeys.get(e) });
+    }
     return trackFn(built.event, built.params);
   } catch { return null; /* a medição nunca atrapalha o clique */ }
 }

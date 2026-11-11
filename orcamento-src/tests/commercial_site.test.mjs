@@ -541,7 +541,7 @@ test('/orcamento/: texto estático e indexável no HTML (decisão 89), nas duas 
     assert.doesNotMatch(html, /name="robots" content="noindex/, `${p}: indexável`);
   }
   const publicada = await read('orcamento/index.html');
-  assert.ok(publicada.includes('/orcamento/assets/index-FTNqd-68.js') && publicada.includes('/orcamento/assets/index-BKV1UQ1J.css'), 'a página publicada segue apontando para o bundle e o CSS ancorados (G5)');
+  assert.ok(publicada.includes('/orcamento/assets/index-CL3K-gIH.js') && publicada.includes('/orcamento/assets/index-BKV1UQ1J.css'), 'a página publicada segue apontando para o bundle e o CSS ancorados (G5)');
 });
 
 test('JSON-LD das nove páginas de serviço: atendimento em todo o Brasil (não só PR e SP)', () => {
