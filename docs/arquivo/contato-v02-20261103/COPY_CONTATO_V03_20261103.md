@@ -16,7 +16,7 @@ ACAO WHATSAPP: WhatsApp
 ACAO LIGAR: Ligar
 
 GRUPO OUTROS: Outros contatos
-ROTULO TELEFONE ADICIONAL: Telefone adicional
+ROTULO TELEFONE ADICIONAL: Telefone da empresa
 TELEFONE ADICIONAL: (44) 99820-2552
 ROTULO EMAIL: E-mail
 EMAIL: marcos@demelloeng.com.br

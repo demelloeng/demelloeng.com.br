@@ -43,7 +43,8 @@ REDES = (
     ("REDE FACEBOOK", "facebook", "https://www.facebook.com/demelloeng/"),
     ("REDE LINKEDIN", "linkedin", "https://www.linkedin.com/company/demello-engenharia/"),
 )
-WHATSAPP = "https://wa.me/5541985124056"  # mesmo destino do menu e do rodapé; o teste commercial_site só admite este
+WHATSAPP = "https://wa.me/5541985124056"  # contato pessoal preservado
+WHATSAPP_EMPRESA = "https://wa.me/554498202552"  # CTA inicial: WhatsApp Business DEMELLO
 
 # JSON-LD vigente da página, preservado byte a byte.
 JSONLD = ('{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,'
@@ -161,7 +162,7 @@ def montar(texto_copy: str) -> str:
 <header class="site-header"><div class="wrap header-inner"><a class="logo" href="../"><img src="../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="760" height="220"></a><button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav">Menu</button><nav class="nav" id="site-nav" aria-label="Principal">{MENU}</nav></div></header>
 <main id="conteudo">
 <section class="hero wrap" data-block="contact-hero"><div><p class="eyebrow">{esc(c["IDENTIFICACAO DA PAGINA"])}</p><h1>{esc(c["H1"])}</h1></div><div class="hero-copy"><p>{esc(c["TEXTO DE ABERTURA"])}</p>
-<p class="acoes"><a class="acao acao-principal" href="{WHATSAPP}" target="_blank" rel="noopener">{esc(c["ACAO PRINCIPAL"])}</a><a class="acao acao-secundaria" href="../orcamento/">{esc(c["ACAO SECUNDARIA"])}</a></p></div></section>
+<p class="acoes"><a class="acao acao-principal" href="{WHATSAPP_EMPRESA}" target="_blank" rel="noopener">{esc(c["ACAO PRINCIPAL"])}</a><a class="acao acao-secundaria" href="../orcamento/">{esc(c["ACAO SECUNDARIA"])}</a></p></div></section>
 <section class="canais wrap" data-block="contact-channels" aria-labelledby="canais-titulo"><div class="canais-resp"><h2 id="canais-titulo">{esc(c["H2 CANAIS"])}</h2><p class="resp-nome">{esc(c["RESPONSAVEL"])}</p><p class="resp-credencial">{esc(c["CREDENCIAL"])}</p></div>
 <div class="canais-lista">
 <div class="canal-grupo canal-principal"><h3>{esc(c["GRUPO PRINCIPAL"])}</h3><p class="fone-principal">{esc(principal)}</p>
