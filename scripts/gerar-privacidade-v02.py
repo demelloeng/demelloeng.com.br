@@ -15,9 +15,9 @@ import re
 import runpy
 
 REPO = Path(__file__).resolve().parent.parent
-COPY = REPO / 'docs/arquivo/privacidade-v02-20261107/COPY_PRIVACIDADE_V04_20261107.md'
+COPY = REPO / 'docs/arquivo/privacidade-v02-20261107/COPY_PRIVACIDADE_V05_20261111.md'
 SAIDA = REPO / 'privacidade/index.html'
-COPY_SHA256 = 'cc591c2ebb70d0733efd8afa60e1e8446f7ff4b9bf62d0fedf0acd791b4cf827'
+COPY_SHA256 = '7c45fc67565d04a009e3f139f455c3f99917e7afb24e60809280a53d43e659ab'
 BASE = runpy.run_path(str(REPO / 'scripts/gerar-construir-ou-ampliar-v02.py'))
 MENU = BASE['MENU'].replace(' aria-current="page"', '')
 RODAPE = BASE['RODAPE']
@@ -53,7 +53,7 @@ STYLE = '''.privacidade-v02 .privacy-hero{padding-block:64px 48px}
 def ler_copy(texto: str) -> tuple[dict[str, str], list[str], list[tuple[str, list[str]]]]:
     """Recusa reescrita silenciosa; toda revisão exige fonte versionada e novo hash."""
     if hashlib.sha256(texto.encode('utf-8')).hexdigest() != COPY_SHA256:
-        raise ValueError('Integridade da Copy V04 candidata divergente.')
+        raise ValueError('Integridade da Copy V05 divergente.')
     parts = re.split(r'\n\s*\n', texto.strip())
     metadata = {}
     for expected, value in zip(('TITULO SEO', 'DESCRICAO SEO'), parts[:2]):
@@ -98,7 +98,7 @@ def montar(texto_copy: str) -> str:
     return f'''<!doctype html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8">
-<!-- Gerado por scripts/gerar-privacidade-v02.py. Fonte: {COPY.relative_to(REPO).as_posix()} (SHA-256 {COPY_SHA256}). Copy V04 candidata local, sem aceite editorial ou jurídico. Não editar HTML à mão. -->
+<!-- Gerado por scripts/gerar-privacidade-v02.py. Fonte: {COPY.relative_to(REPO).as_posix()} (SHA-256 {COPY_SHA256}). Copy V05: adequação documental V04 autorizada em 11/11/2026; sem declaração de validação jurídica. Não editar HTML à mão. -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{description}">
