@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / 'scripts/gerar-privacidade-v02.py'
-COPY = ROOT / 'docs/arquivo/privacidade-v02-20261107/COPY_PRIVACIDADE_V04_20261107.md'
+COPY = ROOT / 'docs/arquivo/privacidade-v02-20261107/COPY_PRIVACIDADE_V05_20261111.md'
 
 
 class Page(HTMLParser):
