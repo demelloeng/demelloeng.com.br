@@ -12,7 +12,7 @@
 import { brlStr } from './pricing/decimal.mjs';
 import { friendlyServiceName } from './client_summary.mjs';
 import { encodeQr } from './qr.mjs';
-import { verifyUrl } from './preview.mjs';
+import { verifyUrl, VERIFY_DISPLAY } from './preview.mjs';
 import { referenceEntries } from './references.mjs';
 
 const W = 1080;
@@ -372,7 +372,7 @@ export async function renderPreviewPng(record, opts = {}) {
   ctx.fillText('Verifique em ', vx + 34, ly2);
   const prefW = ctx.measureText('Verifique em ').width;
   ctx.fillStyle = BLUE; ctx.font = `600 18px ${FONT}`;
-  ctx.fillText('demelloeng.com.br/verificar', vx + 34 + prefW, ly2);
+  ctx.fillText(VERIFY_DISPLAY, vx + 34 + prefW, ly2);
 
   const toBlob = () => new Promise((resolve, reject) => {
     if (canvas.toBlob) canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob nulo'))), 'image/png');

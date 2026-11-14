@@ -12,9 +12,9 @@ import {contactCheck} from './phone.mjs';
 import {architectureReturn} from './architecture_return.mjs';
 import {PADROES} from './architecture_estimator.mjs';
 import {tracking} from './tracking.mjs';
-import {TABLE_LABEL,ENTRY_COUNT_WORD} from './labels.mjs';
+import {TABLE_LABEL,ENTRY_COUNT_WORD,Q_PT} from './labels.mjs';
 import {submitToCRM} from './submit.mjs';
-import {issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT} from './preview.mjs';
+import {issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY} from './preview.mjs';
 import {refreshFactorConfig,onFactorConfig} from './pricing/active_config.mjs';
 import {renderPreviewPng} from './preview_png.mjs';
 import {brlStr} from './pricing/decimal.mjs';
@@ -56,7 +56,7 @@ function ProgramForm({value,onChange}){
  </div>;
 }
 function Summary({rows,onEdit}){return <dl className="summary-list">{rows.map((row,i)=><div className={`summary-row ${row.id?'':'derived'}`} key={`${row.id}-${i}`}><dt>{row.label}</dt><dd>{row.value}</dd>{row.id&&<button type="button" className="edit-button" aria-label={`Editar ${row.label}`} onClick={()=>onEdit(row.id)}><PencilSimple size={17}/></button>}</div>)}</dl>;}
-const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida',Q_TERRENO:'área do terreno',Q_ESCOPO:'área do escopo',Q_REGULARIZACAO:'diferença de área',Q_SUPERESTRUTURA:'área estrutural total',Q_FUNDACAO:'área de projeção',Q_HORAS:'horas técnicas'};
+// Q_PT (nomes das quantidades) vem de labels.mjs: o mesmo texto no detalhamento e no painel da maquete (R05).
 const qUnit=s=>s.q_basis==='Q_HORAS'?'h':'m²';
 // Porte acima do limite da estimativa automática: informação preservada, sem preço automático, avaliação humana, contato liberado.
 const aboveLimit=pv=>pv.services.some(s=>s.reason===REASON_ABOVE_AUTOMATIC_LIMIT);
@@ -105,7 +105,7 @@ function Result({answers,isPreview}){
     {pState==='outdated'&&<div className="field-error" role="alert"><p>{OUTDATED_MESSAGE}</p><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Recarregar a página</button></div>}
     {pState==='ready'&&pRecord&&<div className="preview-ready" role="status">
      <p>Prévia emitida · código <strong>{pRecord.verification_code}</strong></p>
-     <p className="small-note">Registro verificável em demelloeng.com.br/verificar. A imagem é uma representação da prévia registrada — não é proposta, contrato nem orçamento de obra.</p>
+     <p className="small-note">Registro verificável em {VERIFY_DISPLAY}. A imagem é uma representação da prévia registrada — não é proposta, contrato nem orçamento de obra.</p>
      <a className="secondary-button" href={pngUrl} download={`demello-previa-${pRecord.verification_code}.png`}><DownloadSimple size={20}/>Baixar prévia</a>
     </div>}
    </div>

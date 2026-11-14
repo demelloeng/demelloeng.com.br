@@ -301,7 +301,7 @@ test('/verificar/index.html: estática, consome PUBLIC_PREVIEW_V1, sem hash-no-b
 
 test('GlobalApp: emissão só no ramo X3A/CALCULATED; PNG só do registro confirmado; sem "fator 0,80" público', async () => {
   const src = await readFile(path.join(siteRoot, 'orcamento-src', 'src', 'GlobalApp.jsx'), 'utf8');
-  assert.match(src, /import \{issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT\} from '\.\/preview\.mjs'/);
+  assert.match(src, /import \{issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY\} from '\.\/preview\.mjs'/);
   assert.match(src, /import \{renderPreviewPng\} from '\.\/preview_png\.mjs'/);
   assert.equal((src.match(/issuePreview\(/g) || []).length, 1);
   assert.equal((src.match(/renderPreviewPng\(r\.record\)/g) || []).length, 1);

@@ -1,13 +1,14 @@
 import {Component,useEffect,useMemo,useRef,useState} from 'react';
-import {livePlanModel,LAYER_LABEL,areaPhrase} from './live_plan.mjs';
+import {livePlanModel,LAYER_LABEL,areaPhrase,rowLabel,legendLayers} from './live_plan.mjs';
 import {sceneSpec,describeScene,VIEWS,LAYER_COLOR,isoShapes,isoViewBox} from './maquete_model.mjs';
 import {friendlyServiceName as serviceName} from './client_summary.mjs';
 import {brlStr} from './pricing/decimal.mjs';
 import {maquete5Input} from './maquete5_input.mjs';
-import {buildingSpec,describe as describe5} from './maquete5_building.mjs';
+import {buildingSpec,describe as describe5,LAYER_LABEL as LAYER_LABEL5} from './maquete5_building.mjs';
 import {Stage5} from './Maquete5.jsx';
 
 // Maquete V05: liga por padrão no painel aberto. '?maquete=atual' volta para a maquete anterior sem recompilar.
+const ARQ_SWATCH='#f4f2ee';   // R05: mesma cor da camada de Arquitetura na V05
 const FORCE_OLD=typeof window!=='undefined'&&new URLSearchParams(window.location.search).get('maquete')==='atual';
 
 // Maquete que se forma enquanto a pessoa responde + estimativa. Só lê o modelo (dados reais do motor); não calcula preço.
@@ -109,7 +110,8 @@ function LivePlanInner({answers,expanded}){
  const useV5=!compact&&!!spec5&&!v5Failed&&!FORCE_OLD;   // se a V05 falhar, a maquete anterior assume
  const view=picked??(spec.layers.length?'camadas':'conjunto');
  const total=tween??m.total;
- const layerNames=[...m.layers].map(l=>LAYER_LABEL[l]);
+ const legend=legendLayers(m.layers,useV5?spec5.layers:null);   // R05: Arquitetura só quando a V05 a desenha
+ const layerNames=legend.map(l=>LAYER_LABEL5[l]??LAYER_LABEL[l]);
  const label=`${describeScene(spec,LAYER_LABEL)}${m.area?` ${areaPhrase(m.area)}`:''}`;   // R03: a área é nomeada pela origem
  return <section className={`live-plan lp-${m.mode}`} aria-label="Maquete e estimativa">
   <figure className="lp-figure">
@@ -118,9 +120,9 @@ function LivePlanInner({answers,expanded}){
     :<Stage spec={spec} view={view} setView={setPicked} want3d={!compact} mobile={mobile} label={label} compact={compact}/>}
    <figcaption><span className="lp-tag">{m.label}</span> {m.notice}</figcaption>
   </figure>
-  {layerNames.length>0&&<ul className="lp-legend" aria-label="Disciplinas escolhidas">{m.layers.map(l=><li key={l} className="lp-key"><span className="lp-swatch" style={{background:LAYER_COLOR[l]}} aria-hidden="true"/>{LAYER_LABEL[l]}</li>)}</ul>}
+  {layerNames.length>0&&<ul className="lp-legend" aria-label="Disciplinas escolhidas">{legend.map(l=><li key={l} className="lp-key"><span className="lp-swatch" style={{background:LAYER_COLOR[l]??ARQ_SWATCH}} aria-hidden="true"/>{LAYER_LABEL5[l]??LAYER_LABEL[l]}</li>)}</ul>}
   {m.rows.length>0&&<div className="lp-budget">
-   <ul>{m.rows.map(r=><li key={r.key} className={`lp-row lp-${r.state}`}><span>{serviceName(r.service)}</span><strong>{r.state==='priced'?brlStr(r.total):r.state==='over_limit'?'Avaliação da equipe':'Aguardando dados'}</strong></li>)}</ul>
+   <ul>{m.rows.map(r=><li key={r.key} className={`lp-row lp-${r.state}`}><span>{serviceName(r.service)}</span><strong>{r.state==='priced'?brlStr(r.total):rowLabel(r)}</strong></li>)}</ul>
    <p className="lp-total" role="status" aria-live="polite">{m.total!==null?<>Estimativa inicial <strong>{brlStr(total)}</strong></>:m.mode==='over_limit'?'Sem valor automático para esse porte.':'Faltam dados para somar o valor.'}</p>
   </div>}
  </section>;

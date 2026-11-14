@@ -3,7 +3,8 @@
 // O desenho é ILUSTRATIVO: a forma é sempre a mesma (retângulo), só a escala acompanha a ordem de grandeza da área informada.
 // Este módulo não calcula preço: lê o que o motor devolveu (status e total por serviço) e decide o que mostrar.
 import { maquetteFacts } from './maquete5_input.mjs';
-import { REASON_ABOVE_AUTOMATIC_LIMIT } from './pricing/engine.mjs';
+import { REASON_ABOVE_AUTOMATIC_LIMIT, REASON_HOURLY_NOT_DISCRIMINATED } from './pricing/engine.mjs';
+import { Q_PT } from './labels.mjs';
 import { pricePreview } from './pricing/active_config.mjs';
 
 // Camadas de disciplina: cada serviço do motor que tem desenho próprio. Os demais (orçamento, consultoria etc.) aparecem
@@ -94,4 +95,29 @@ export function livePlanModel(answers) {
     label: ILLUSTRATIVE_LABEL,
     notice: ILLUSTRATIVE_NOTICE,
   };
+}
+
+// R05 — frase de cada linha do painel a partir do motivo do motor. Limite, dado ambíguo, inconsistência, falta de
+// referência e falta de quantidade NÃO se fundem na mesma frase; a quantidade que falta usa o nome já exibido no
+// detalhamento (Q_PT). Motivo desconhecido mantém o texto genérico existente.
+const MISSING_RE = /^quantidade essencial \(([A-Z_, ]+)\) não informada$/;
+export function rowLabel(r) {
+  if (r.state === 'priced') return null;
+  if (r.state === 'over_limit') return 'Avaliação da equipe';
+  const reason = r.service?.reason ?? '';
+  const miss = MISSING_RE.exec(reason);
+  if (miss) {
+    const names = miss[1].split(',').map((s) => s.trim()).map((b) => `a ${Q_PT[b] ?? b}`);
+    return names.length > 1 ? `Faltam ${names.slice(0, -1).join(', ')} e ${names[names.length - 1]}` : `Falta ${names[0]}`;
+  }
+  if (reason === REASON_HOURLY_NOT_DISCRIMINATED) return 'Informe as horas de cada serviço';
+  if (/inconsistência/.test(reason)) return 'Áreas a conferir';
+  if (reason === 'nenhuma referência externa aplicável' || reason === 'serviço fora da TABELA DEMELLO V2') return 'Sem referência automática';
+  return 'Aguardando dados';
+}
+
+// R05 — legenda: as camadas do painel e, quando a vista ativa (V05) desenha a Arquitetura, ela também. O fallback e a
+// miniatura não desenham Arquitetura, então lá ela não aparece (`drawn` = camadas da cena ativa, ou null).
+export function legendLayers(modelLayers, drawn) {
+  return Array.isArray(drawn) && drawn.includes('arquitetura') ? ['arquitetura', ...modelLayers] : [...modelLayers];
 }

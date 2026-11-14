@@ -142,3 +142,5 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
 export const VERIFY_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_VERIFY_BASE) || 'https://demelloeng.com.br/verificar/';
 export const verifyUrl = (code) => `${VERIFY_BASE}?codigo=${encodeURIComponent(code)}`;
+// R05: endereço exibido (texto da página e do PNG) derivado do MESMO destino do QR, nunca um host fixo divergente.
+export const VERIFY_DISPLAY = VERIFY_BASE.replace(/^https?:\/\//, '').replace(/\/+$/, '');
