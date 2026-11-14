@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';

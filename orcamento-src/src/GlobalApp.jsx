@@ -14,7 +14,8 @@ import {PADROES} from './architecture_estimator.mjs';
 import {tracking} from './tracking.mjs';
 import {TABLE_LABEL,ENTRY_COUNT_WORD} from './labels.mjs';
 import {submitToCRM} from './submit.mjs';
-import {issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE} from './preview.mjs';
+import {issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT} from './preview.mjs';
+import {refreshFactorConfig,onFactorConfig} from './pricing/active_config.mjs';
 import {renderPreviewPng} from './preview_png.mjs';
 import {brlStr} from './pricing/decimal.mjs';
 import {referenceEntries} from './references.mjs';
@@ -75,6 +76,8 @@ function Result({answers,isPreview}){
   setPState('issuing');
   const cs=caseSummaryFromRows(payload.summary,pv.services.map(serviceName));
   const r=await issuePreview(payload.pricing_inputs,cs,{presented:pv});
+  // R4: configuração comercial mudou: busca a nova; a tela recalcula e o visitante confere antes de gerar de novo.
+  if(!r.ok&&r.factorChanged){await refreshFactorConfig({endpoint:PREVIEW_ENDPOINT});setPState('factor_changed');return;}
   if(!r.ok){setPState(r.outdated?'outdated':'error');return;}
   setPRecord(r.record);
   try{const blob=await renderPreviewPng(r.record);setPngUrl(URL.createObjectURL(blob));setPState('ready');}
@@ -98,6 +101,7 @@ function Result({answers,isPreview}){
    <div className="preview-issue">
     {pState!=='ready'&&<button type="button" className="secondary-button" disabled={pState==='issuing'} onClick={gerarPrevia}>{pState==='issuing'?'Gerando prévia…':'Gerar prévia DEMELLO'}</button>}
     {pState==='error'&&<p className="field-error" role="alert">Não foi possível gerar a prévia agora. A estimativa acima continua disponível.</p>}
+    {pState==='factor_changed'&&<p className="field-error" role="alert">{FACTOR_CHANGED_MESSAGE}</p>}
     {pState==='outdated'&&<div className="field-error" role="alert"><p>{OUTDATED_MESSAGE}</p><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Recarregar a página</button></div>}
     {pState==='ready'&&pRecord&&<div className="preview-ready" role="status">
      <p>Prévia emitida · código <strong>{pRecord.verification_code}</strong></p>
@@ -123,6 +127,9 @@ export function App(){
  const [id,setId]=useState(init.id),[answers,setAnswers]=useState(init.answers),[history,setHistory]=useState(init.history),[modal,setModal]=useState(null),[expanded,setExpanded]=useState(false),[aux,setAux]=useState(false),[submitted,setSubmitted]=useState(false),[error,setError]=useState(''),[copied,setCopied]=useState(false);
  const [sendState,setSendState]=useState('idle'),[sendResult,setSendResult]=useState(null),[hp,setHp]=useState('');
  const mode='preview';
+ // R4: configuração comercial ativa do fator. Na abertura consulta o Worker; se a revisão mudou, a tela recalcula.
+ const [,setFactorRev]=useState(0);
+ useEffect(()=>{const off=onFactorConfig(()=>setFactorRev(n=>n+1));refreshFactorConfig({endpoint:PREVIEW_ENDPOINT});return off;},[]);
  const heading=useRef(null),fileInput=useRef(null),photoRef=useRef([]),sentPayload=useRef(null);
  function sendCase(payload){setSendState('sending');submitToCRM(payload,hp).then(r=>{setSendResult(r);setSendState(r.ok?'sent':'error');if(r.ok)tracking.submissionAccepted({answers:payload.answers,sendResult:r,contactValid:valid('X4',{contact:payload.contact}),mode});});}
  const node=nodes[id],sqError=answers.request_intent==='scope_question'?scopeQuestionError(answers.scope_question):null,key=keyOf(id),value=answers[key],rows=summary(answers),home=id==='HOME',canContinue=valid(id,answers)&&(id!=='X4'||canSend(answers,mode))&&!id.startsWith('X3'),resultStep=id==='X3A'||id==='X3B',project=isProject(answers),suggesting=id==='CA7'&&answers.services?.includes('Não sei quais preciso');

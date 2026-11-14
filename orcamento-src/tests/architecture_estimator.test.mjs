@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Arquitetura como fluxo principal de valor: estimativa comercial de área (programa / terreno / ambos), hierarquia da origem,
 // isolamento da área inferida, devolutiva educativa, ausência de afirmação legal, mensuração estruturada e preservação do pipeline.
 // Nada aqui consulta município, legislação ou rede: o estimador é determinístico.
@@ -381,7 +382,7 @@ test('ramificação: navegação S3 -> terreno -> programa -> S4, validação do
 test('19. regressão: serviços existentes inalterados (preços, tabela, motor, envio por hash) e 20. CRM não homologado = falha segura', async () => {
   const sha = async (f) => createHash('sha256').update((await readFile(path.join(appRoot, f), 'utf8')).replace(/\r\n/g, '\n')).digest('hex');
   assert.equal(await sha('src/pricing/pricing-table.v2.json'), '8fd32ba07134ca8f6490020eb831bdcd53df9cdd6e6ad802a5ccf2aa1d671c9d', 'Tabela V2 (revisão R2, 08/11/2026): SECID/PR 094/2026, FUNDEPAR por categoria, AltoQi elétrica; a r1 congelada fica no canônico. Antes só ganhou automatic_estimate_limits e ELETRICA; preços das demais disciplinas idênticos');
-  assert.equal(await sha('src/pricing/engine.mjs'), 'f7fb7103d64a4d02d1f68b0a400c534076965f397f1d63cbf7bf1ca27b720f3c', 'motor R2: menor referência entre todas as fontes (FUNDEPAR sem filtro de tipologia), detalhamento package/source_typology e rótulo R2; fórmulas e arredondamento intocados');
+  assert.equal(await sha('src/pricing/engine.mjs'), '1cb13d037b85075bc02068a5cdc9c6b6b3d8cd49658d5785da97afa8f6a5df01', 'motor R4 (R2_FC: fator da configuração comercial, R02) sobre o motor R2: menor referência entre todas as fontes (FUNDEPAR sem filtro de tipologia), detalhamento package/source_typology e rótulo R2; fórmulas e arredondamento intocados');
   assert.equal(await sha('src/pricing/decimal.mjs'), 'de8ff4f5bdba6d159d24d0ef44daa1febef6d01e29be9b86132d054dd87c1a48');
   assert.equal(await sha('src/submit.mjs'), 'c47ec9c376aab58b14dd90d6896c304373ef596ea5a26d28c15c02d48ec31f7d', 'envio ao CRM: só acrescentou transport.meta (dados do anúncio para a CAPI; ver collectMeta)');
   // CRM não homologado: o payload novo segue no mesmo envelope; recusa do Worker (422) e queda de rede não lançam e não repetem indevidamente

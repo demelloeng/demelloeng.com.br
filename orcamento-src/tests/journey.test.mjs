@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 import test from 'node:test';
 import '../src/payload_v2.mjs'; // registra a autoridade do resultado (X3A só com valor calculado)
 import './support/catalogo.mjs';

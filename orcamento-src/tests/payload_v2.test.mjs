@@ -1,8 +1,9 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 import test from 'node:test';
 import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { packageForCRMv2, derivePricingInputs, V2_SOURCE } from '../src/payload_v2.mjs';
-import { buildPricingPreview } from '../src/pricing/engine.mjs';
 
 const area = (v) => ({ value: v, unknown: false });
 const contact = { name: 'Fulano Fictício', whatsapp: '41999990000', email: 'x@exemplo.invalid' };
@@ -32,9 +33,9 @@ test('packageForCRMv2: envelope V2 explícito, sem V1, sem proposta', () => {
 
 test('packageForCRMv2: pricing_preview == recomputo determinístico do motor (regime corrente)', () => {
   const p = packageForCRMv2({ ...BUILD, area_fundacao: area('120') }); // 3 pavimentos: Q_SUPERESTRUTURA 320 > Q_FUNDACAO 120
-  assert.deepEqual(p.pricing_preview, buildPricingPreview(p.pricing_inputs));
+  assert.deepEqual(p.pricing_preview, pricePreview(p.pricing_inputs));
   assert.equal(p.pricing_preview.table_version, 'DEMELLO_V2');
-  assert.equal(p.pricing_preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2');
+  assert.equal(p.pricing_preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
   assert.equal(p.pricing_inputs.area_fundacao, '120');
   assert.equal(p.pricing_preview.status, 'CALCULATED');
   // R2: ESTRUTURAL FUNDEPAR (15,75 x 320 + 9,35 x 120) x 0,80 = 4929.60 ; HIDRO FUNDEPAR esportiva 320 x 5,84 x 0,80 = 1495.04
@@ -141,7 +142,7 @@ test('REG_A2 = 0 -> regularizacao.area_matricula = "0"; diferença IPTU-matrícu
   const pi = derivePricingInputs(a);
   assert.equal(pi.regularizacao.area_matricula, '0');       // areaValue já preserva "0"
   assert.equal(pi.regularizacao.area_iptu, '100');
-  const preview = buildPricingPreview(pi);
+  const preview = pricePreview(pi);
   const reg = preview.services.find((s) => s.service === 'REGULARIZACAO');
   assert.ok(reg, 'serviço REGULARIZACAO presente');
   assert.equal(reg.q, 100);                                  // |100 - 0|

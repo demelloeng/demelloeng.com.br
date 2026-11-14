@@ -1,3 +1,5 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 // PRÉVIA DEMELLO VERIFICÁVEL V1 - frente (emissão + peça PNG + página de verificação).
 // node --test, sem dependências (builtins node: apenas).
 //
@@ -13,14 +15,13 @@ import { fileURLToPath } from 'node:url';
 import { issuePreview, pickCaseSummary, caseSummaryFromRows, verifyUrl, expectationFromPreview, OUTDATED_MESSAGE } from '../src/preview.mjs';
 import { buildPreviewLayout, renderPreviewPng, planLayout } from '../src/preview_png.mjs';
 import { encodeQr } from '../src/qr.mjs';
-import { buildPricingPreview } from '../src/pricing/engine.mjs';
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 // --- PUBLIC_PREVIEW_V1 de fixture (o que o Worker devolveria p/ 150/0) --------
 const FIXTURE_INPUTS = { services: ['REGULARIZACAO'], typology: 'CASA',
   regularizacao: { area_iptu: '150', area_matricula: '0', levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' } };
-const FIXTURE_PREVIEW = buildPricingPreview(FIXTURE_INPUTS);
+const FIXTURE_PREVIEW = pricePreview(FIXTURE_INPUTS);
 
 // projeta os serviços do motor para a forma pública {service,status,references{total},total_demello}
 function publicServices(preview) {
@@ -93,7 +94,7 @@ test('issuePreview: 201 PUBLIC_PREVIEW_V1 -> {ok, record}; envia só pricing_inp
   assert.deepEqual(Object.keys(sent).sort(), ['case_summary', 'expectation', 'pricing_inputs']);
   // expectativa = o que o navegador apresentou (regime, total e valor por serviço); o Worker é a autoridade
   assert.deepEqual(sent.expectation, {
-    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2', total_demello: FIXTURE_PREVIEW.total_demello,
+    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC', factor_config_revision: 1, total_demello: FIXTURE_PREVIEW.total_demello,
     services: [{ service: 'REGULARIZACAO', total_demello: FIXTURE_PREVIEW.services[0].demello.total }],
   });
   assert.equal(sent.case_summary.necessidade, 'x');
@@ -101,13 +102,13 @@ test('issuePreview: 201 PUBLIC_PREVIEW_V1 -> {ok, record}; envia só pricing_inp
 });
 
 test('expectationFromPreview: só pacote calculado; uma entrada por serviço calculado, em ordem; valores como texto decimal', () => {
-  const pv = buildPricingPreview({ services: ['ESTRUTURAL', 'ELETRICA'], typology: 'CASA', structural_system: 'CONCRETO_ARMADO',
+  const pv = pricePreview({ services: ['ESTRUTURAL', 'ELETRICA'], typology: 'CASA', structural_system: 'CONCRETO_ARMADO',
     area_new: '250', area_total: '250', area_fundacao: '150' });
   assert.deepEqual(expectationFromPreview(pv), {
-    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2', total_demello: '5520.00',
+    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC', factor_config_revision: 1, total_demello: '5520.00',
     services: [{ service: 'ESTRUTURAL', total_demello: '4272.00' }, { service: 'ELETRICA', total_demello: '1248.00' }],
   });
-  assert.equal(expectationFromPreview(buildPricingPreview({ services: ['ESTRUTURAL'] })), null);
+  assert.equal(expectationFromPreview(pricePreview({ services: ['ESTRUTURAL'] })), null);
   assert.equal(expectationFromPreview(null), null);
 });
 
@@ -300,13 +301,16 @@ test('/verificar/index.html: estática, consome PUBLIC_PREVIEW_V1, sem hash-no-b
 
 test('GlobalApp: emissão só no ramo X3A/CALCULATED; PNG só do registro confirmado; sem "fator 0,80" público', async () => {
   const src = await readFile(path.join(siteRoot, 'orcamento-src', 'src', 'GlobalApp.jsx'), 'utf8');
-  assert.match(src, /import \{issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE\} from '\.\/preview\.mjs'/);
+  assert.match(src, /import \{issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT\} from '\.\/preview\.mjs'/);
   assert.match(src, /import \{renderPreviewPng\} from '\.\/preview_png\.mjs'/);
   assert.equal((src.match(/issuePreview\(/g) || []).length, 1);
   assert.equal((src.match(/renderPreviewPng\(r\.record\)/g) || []).length, 1);
   assert.equal((src.match(/Gerar prévia DEMELLO/g) || []).length, 1);
-  assert.match(src, /const r=await issuePreview\(payload\.pricing_inputs,cs,\{presented:pv\}\);\s*\n\s*if\(!r\.ok\)\{setPState\(r\.outdated\?'outdated':'error'\);return;\}/,
-    'sem PNG quando o Worker falha; versão desatualizada pede recarregar');
+  // R4: entre a emissão e o tratamento de falha só cabe o ramo de revisão do fator, que busca a configuração nova e
+  // para (nunca reemite: issuePreview continua chamado uma única vez).
+  assert.match(src, /const r=await issuePreview\(payload\.pricing_inputs,cs,\{presented:pv\}\);\s*\n\s*\/\/ R4:[^\n]*\n\s*if\(!r\.ok&&r\.factorChanged\)\{await refreshFactorConfig\(\{endpoint:PREVIEW_ENDPOINT\}\);setPState\('factor_changed'\);return;\}\s*\n\s*if\(!r\.ok\)\{setPState\(r\.outdated\?'outdated':'error'\);return;\}/,
+    'sem PNG quando o Worker falha; versão desatualizada pede recarregar; revisão nova do fator busca a configuração');
+  assert.match(src, /pState==='factor_changed'&&[^\n]*FACTOR_CHANGED_MESSAGE/, 'aviso de estimativa atualizada');
   assert.match(src, /pState==='outdated'&&[\s\S]*OUTDATED_MESSAGE[\s\S]*window\.location\.reload\(\)/, 'mensagem e ação de recarregar');
   // a regra interna não é publicada no texto da página
   assert.doesNotMatch(src, /fator\s*0[.,]80/i);
@@ -388,7 +392,7 @@ test('peça sem preço por serviço no registro (legado): linhas sem valor, tota
 });
 
 test('caso-base R2: Estrutural R$ 4.272,00 + Elétrico R$ 1.248,00 = R$ 5.520,00, cada referência na linha do seu serviço', () => {
-  const pv = buildPricingPreview({ services: ['ESTRUTURAL', 'ELETRICA'], typology: 'CASA', structural_system: 'CONCRETO_ARMADO',
+  const pv = pricePreview({ services: ['ESTRUTURAL', 'ELETRICA'], typology: 'CASA', structural_system: 'CONCRETO_ARMADO',
     area_new: '250', area_total: '250', area_fundacao: '150' });
   const pub = pv.services.map((s) => ({
     service: s.service, status: 'CALCULATED', total_demello: s.demello.total,

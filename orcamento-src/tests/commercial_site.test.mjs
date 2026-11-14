@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Site estático — validações automatizadas da arquitetura comercial (sem navegador):
 // links internos, âncoras, deep links, sitemap, robots, canonical, metadados, semântica, texto sem JavaScript,
 // terminologia, números/atribuições (nada inventado), consistência do pipeline (allowlist, bundle, testes).

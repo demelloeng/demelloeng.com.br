@@ -3,7 +3,8 @@
 // O desenho é ILUSTRATIVO: a forma é sempre a mesma (retângulo), só a escala acompanha a ordem de grandeza da área informada.
 // Este módulo não calcula preço: lê o que o motor devolveu (status e total por serviço) e decide o que mostrar.
 import { derivePricingInputs } from './payload_v2.mjs';
-import { buildPricingPreview, REASON_ABOVE_AUTOMATIC_LIMIT } from './pricing/engine.mjs';
+import { REASON_ABOVE_AUTOMATIC_LIMIT } from './pricing/engine.mjs';
+import { pricePreview } from './pricing/active_config.mjs';
 
 // Camadas de disciplina: cada serviço do motor que tem desenho próprio. Os demais (orçamento, consultoria etc.) aparecem
 // só na lista do orçamento, sem camada na planta (nada de desenho que não corresponda ao serviço).
@@ -59,7 +60,7 @@ export function livePlanModel(answers) {
   let pv;
   try {
     pi = derivePricingInputs(answers || {});
-    pv = buildPricingPreview(pi);
+    pv = pricePreview(pi);
   } catch {
     return null;
   }

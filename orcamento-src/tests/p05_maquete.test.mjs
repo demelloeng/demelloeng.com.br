@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // P05 (V04) — maquete 3D e isométrica da calculadora: modelo puro, contrato da cena e texto da marca.
 import test from 'node:test';
 import assert from 'node:assert/strict';

@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // P04 — WhatsApp flutuante + badge do Simple Analytics, como componentes transversais do site V02.
 import test from 'node:test';
 import assert from 'node:assert/strict';

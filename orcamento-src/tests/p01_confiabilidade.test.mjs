@@ -1,3 +1,5 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 // P01 — confiabilidade da calculadora. Cada teste prende um defeito que a suíte anterior não via.
 import test from 'node:test';
 import './support/catalogo.mjs';
@@ -131,7 +133,7 @@ test('histórico do navegador: respostas válidas sobrevivem à navegação (o e
 
 // ---------------------------------------------------------------- autoridade única do resultado (3.1)
 import { resultFor, needsReview } from '../src/journey.mjs';
-import { REASON_ABOVE_AUTOMATIC_LIMIT, buildPricingPreview } from '../src/pricing/engine.mjs';
+import { REASON_ABOVE_AUTOMATIC_LIMIT, } from '../src/pricing/engine.mjs';
 import TABLE from '../src/pricing/pricing-table.v2.json' with { type: 'json' };
 import { readFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -200,9 +202,9 @@ test('limites: no limite calcula; um centésimo acima vai para avaliação human
     ['CONSULTORIA_TECNICA', { hours: '200', typology: null }, { hours: '200.01', typology: null }],
   ];
   for (const [svc, ok, over] of casos) {
-    const a = buildPricingPreview(pi({ services: [svc], ...ok }));
+    const a = pricePreview(pi({ services: [svc], ...ok }));
     assert.equal(a.services[0].status, 'CALCULATED', `${svc} no limite`);
-    const b = buildPricingPreview(pi({ services: [svc], ...over }));
+    const b = pricePreview(pi({ services: [svc], ...over }));
     assert.equal(b.status, 'NEEDS_HUMAN_REVIEW', `${svc} acima`);
     assert.equal(b.services[0].reason, REASON_ABOVE_AUTOMATIC_LIMIT);
     assert.equal(b.total_demello, null);
@@ -210,21 +212,21 @@ test('limites: no limite calcula; um centésimo acima vai para avaliação human
 });
 
 test('limites: cada base tem o seu limite (50.000 m² de terreno calcula; 50.000 m² de edificação não)', () => {
-  assert.equal(buildPricingPreview(pi({ services: ['TERRAPLENAGEM'], area_terreno: '50000', typology: null })).status, 'CALCULATED');
-  assert.equal(buildPricingPreview(pi({ services: ['HIDROSSANITARIO'], area_new: '50000' })).status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(pricePreview(pi({ services: ['TERRAPLENAGEM'], area_terreno: '50000', typology: null })).status, 'CALCULATED');
+  assert.equal(pricePreview(pi({ services: ['HIDROSSANITARIO'], area_new: '50000' })).status, 'NEEDS_HUMAN_REVIEW');
 });
 
 test('limites: estrutural — superestrutura acima do limite vai para revisão', () => {
-  const sup = buildPricingPreview(pi({ services: ['ESTRUTURAL'], area_total: '10000.01', area_fundacao: '5000' }));
+  const sup = pricePreview(pi({ services: ['ESTRUTURAL'], area_total: '10000.01', area_fundacao: '5000' }));
   assert.equal(sup.services[0].reason, REASON_ABOVE_AUTOMATIC_LIMIT);
 });
 
 test('limites: só o serviço afetado deixa o automático; o conjunto não mostra total; preços abaixo do limite iguais aos de antes', () => {
-  const pv = buildPricingPreview(pi({ services: ['HIDROSSANITARIO', 'GAS_GLP'], area_new: '100', area_atendida: '10000.01' }));
+  const pv = pricePreview(pi({ services: ['HIDROSSANITARIO', 'GAS_GLP'], area_new: '100', area_atendida: '10000.01' }));
   assert.equal(pv.services.find((s) => s.service === 'HIDROSSANITARIO').status, 'CALCULATED');
   assert.equal(pv.services.find((s) => s.service === 'GAS_GLP').status, 'NEEDS_HUMAN_REVIEW');
   assert.equal(pv.total_demello, null);
-  assert.equal(buildPricingPreview(pi({ services: ['CONSULTORIA_TECNICA'], hours: '5', typology: null })).total_demello, '860.39');
+  assert.equal(pricePreview(pi({ services: ['CONSULTORIA_TECNICA'], hours: '5', typology: null })).total_demello, '860.39');
 });
 
 test('limites: acima do limite o visitante conclui o contato (informação preservada, só avaliação humana)', () => {

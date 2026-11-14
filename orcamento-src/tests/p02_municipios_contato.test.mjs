@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // P02 — municípios oficiais do IBGE ligados à UF; WhatsApp e e-mail do contato.
 import test from 'node:test';
 import assert from 'node:assert/strict';

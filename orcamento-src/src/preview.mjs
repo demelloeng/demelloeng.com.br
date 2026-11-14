@@ -10,7 +10,7 @@
 // Estrutura espelha submit.mjs: uma retentativa em 5xx/rede, nunca lança para a
 // UI, retorna { ok, status, record?, error? }.
 
-import { buildPricingPreview } from './pricing/engine.mjs';
+import { pricePreview } from './pricing/active_config.mjs';
 
 const ENV_ENDPOINT =
   (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_PREVIEW_ENDPOINT) || '';
@@ -92,6 +92,8 @@ export function expectationFromPreview(pv) {
   return {
     table_version: pv.table_version,
     pricing_rule: pv.pricing_rule,
+    // R4: revisão da configuração com que o valor apresentado foi calculado (o Worker confere).
+    ...(Number.isInteger(pv.factor_config_revision) ? { factor_config_revision: pv.factor_config_revision } : {}),
     total_demello: pv.total_demello,
     services: pv.services.filter((s) => s.status === 'CALCULATED').map((s) => ({ service: s.service, total_demello: s.demello.total })),
   };
@@ -99,6 +101,9 @@ export function expectationFromPreview(pv) {
 
 export const OUTDATED_ERROR = 'PRICING_VERSION_MISMATCH';
 export const OUTDATED_MESSAGE = 'A calculadora foi atualizada. Recarregue a página e confira sua estimativa antes de gerar a prévia.';
+export const FACTOR_CHANGED_REASON = 'FACTOR_REVISION_MISMATCH';
+export const FACTOR_CHANGED_MESSAGE = 'A estimativa foi atualizada. Confira o novo valor acima antes de gerar a prévia.';
+export const PREVIEW_ENDPOINT = ENV_ENDPOINT;
 
 // opts é só para teste (e para passar a prévia apresentada): { endpoint, fetchImpl, presented }.
 export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
@@ -108,7 +113,7 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
 
   const body = { pricing_inputs: pricingInputs, case_summary: pickCaseSummary(caseSummary) };
   let presented = opts.presented;
-  if (!presented) { try { presented = buildPricingPreview(pricingInputs); } catch { presented = null; } }
+  if (!presented) { try { presented = pricePreview(pricingInputs); } catch { presented = null; } }
   const expectation = expectationFromPreview(presented);
   if (expectation) body.expectation = expectation;
 
@@ -126,7 +131,11 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
   if (attempt.status === 201 && p.schema === 'PUBLIC_PREVIEW_V1' && p.verification_code && p.preview) {
     return { ok: true, status: 201, record: p };
   }
-  return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed', outdated: attempt.status === 409 && p.error === OUTDATED_ERROR };
+  const outdated = attempt.status === 409 && p.error === OUTDATED_ERROR;
+  // R4: a configuração comercial mudou depois do cálculo. Nada é reemitido sozinho: o chamador busca a nova
+  // configuração, a tela recalcula e o visitante confere o novo valor antes de gerar a prévia de novo.
+  const factorChanged = outdated && p.reason === FACTOR_CHANGED_REASON;
+  return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed', outdated, factorChanged };
 }
 
 // A demonstração local (vite --mode demo) aponta a verificação para o próprio computador; o padrão é o site.
