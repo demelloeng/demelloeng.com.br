@@ -27,7 +27,7 @@ Local, sem push/PR/merge/deploy/publicação. Commits só nas branches `exp/` ab
 | ID | Estado | Arquivos / evidência |
 |---|---|---|
 | R01 | em andamento | Lista fechada R3: index.html (importmap), LivePlan.jsx, Maquete5.jsx, journey.mjs, maquete5_{building,input,scene,transicao}.mjs, preview.mjs, styles.css. Testes R3 portados: tests/maquete5_{building,b4,transicao}.test.mjs (espelho do protótipo removido: não existe na R4). 13 complementos three@0.160.0 em assets/vendor/three/examples/jsm + allowlist + ORIGEM.txt. Fora: .env.demo, app-demo, demo_*, testes antigos da R3. Suíte: 535/535. |
-| R02 | pendente | |
+| R02 | feito (local) | Regime novo `(DEMELLO_V2, STRUCT_COMPOSITE_REFS_R2_FC)`: metodologia R2 (decisão 146) + fator da configuração comercial; R2 (0,80) vira histórico, sem corte registrado. **eng** `ac20838` (motor Python, validador com `factor_revision_errors`, schemas, semente `pricing-config.seed.json` rev. 1 = 0,60; pytest 1327 ok) e `f2d4420` (Worker: D1 `pricing_config` só de inserção, leitura da revisão ativa a cada emissão com falha fechada 503, canonical grava fator + revisão, expectativa exige revisão → 409 `FACTOR_REVISION_MISMATCH`, `GET /api/previews/v1/pricing-config`; npm 129 ok). **site** `4d3d06f` (motor idêntico ao do Worker, `pricing/active_config.mjs`, instantâneo rev. 1 + consulta na abertura; 541 ok). Sentinela conferido nos três motores: sobrado 320/160, 4 serviços = R$ 12.509,76 (6.268,80 + 3.921,60 + 1.121,28 + 1.198,08); terraplanagem 500 m² = R$ 120,00; consultoria 2 h = R$ 258,12. Contratos de metodologia antigos fixam 0,80 só nos testes (`tests/_fator_pin.py`, `tests/support/fator_080.mjs`, D1 falso). O fator aparece na resposta da rota de configuração (não é segredo, R02.4) e nunca na tela. |
 | R03 | pendente | |
 | R04 | pendente | |
 | R05 | pendente | |
@@ -38,5 +38,11 @@ Local, sem push/PR/merge/deploy/publicação. Commits só nas branches `exp/` ab
 | R10 | pendente (condicional) | |
 | R11 | pendente (condicional) | |
 | R12–R14 | adiados (handoff) | |
-| R15 | pendente | |
+| R15 | pendente | Acrescenta cupom e valor-base ao canonical de registros novos (os antigos mantêm a integridade). |
 | R16 | pendente | |
+
+## Ordem de ativação (registro; nada disto foi executado)
+
+1. Aplicar `integrations/cloudflare/preview-worker/schema.sql` no D1 (cria `pricing_config` e semeia a revisão 1 = 0,60) **antes** do deploy do Worker R4. Sem a linha, o Worker recusa toda emissão (503 `CONFIG_UNAVAILABLE`, falha fechada).
+2. Worker da prévia e site sobem juntos: o site publicado envia `STRUCT_COMPOSITE_REFS_R2` e recebe 409 `REGIME_MISMATCH` assim que o Worker R4 entrar.
+3. Depois da ativação, registrar o corte de `STRUCT_COMPOSITE_REFS_R2` em `regime_cutover.json` (`scripts/register_regime_cutover.py`). Enquanto não for registrado, leads R2 continuam aceitos.
