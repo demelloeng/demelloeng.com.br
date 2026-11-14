@@ -280,7 +280,9 @@ export async function createMaqueteV5(host, { reduced = false, mobile = false, a
     g.add(grid);
     if (spec.terrain) {
       plate.visible = false; ring.visible = false; grid.visible = false;   // o terreno é a própria base
-      const seg = 96;
+      // R10: 48×48 (era 96×96). O relevo é suave e as curvas de nível vêm do shader: mesma leitura, ~75% menos
+      // triângulos por passe (sombra, oclusão e cor); o edifício com terreno volta para baixo de 150 mil.
+      const seg = 48;
       const size = R * 2;
       const tg = new THREE.PlaneGeometry(size, size, seg, seg);
       tg.rotateX(-Math.PI / 2);
