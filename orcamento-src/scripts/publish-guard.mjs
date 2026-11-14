@@ -55,30 +55,64 @@ function readEnv(text, key) {
   return m ? m[1].trim() : '';
 }
 
-async function main() {
-  const envText = await readFile(path.join(appRoot, '.env.production'), 'utf8').catch(() => '');
-  const intake = readEnv(envText, 'VITE_INTAKE_ENDPOINT');
-  const preview = readEnv(envText, 'VITE_PREVIEW_ENDPOINT');
+// R07: endereço de verificação de produção (o mesmo padrão de preview.mjs/VERIFY_BASE).
+export const PRODUCTION_VERIFY_BASE = 'https://demelloeng.com.br/verificar/';
+// R07: nada do perfil de teste pode chegar ao pacote publicado. `http://` só é aceito nos namespaces XML/SVG do W3C
+// (React e three os trazem); qualquer outro endereço sem TLS ou deste computador bloqueia a publicação.
+const LOCAL_HOST_RE = /\b(?:127\.0\.0\.1|0\.0\.0\.0|localhost)\b/;
+const PLAIN_HTTP_RE = /http:\/\/(?!www\.w3\.org\/)[a-z0-9.-]+/gi;
 
+export function bundleProblems(bundleText, { intake, preview, verifyBase = PRODUCTION_VERIFY_BASE } = {}) {
+  const problems = [];
+  if (!bundleText) return ['no built bundle found (orcamento/assets/*.js)'];
+  const local = bundleText.match(LOCAL_HOST_RE);
+  if (local) problems.push(`local address baked into the bundle: ${local[0]}`);
+  const plain = [...new Set(bundleText.match(PLAIN_HTTP_RE) || [])];
+  if (plain.length) problems.push(`non-https address baked into the bundle: ${plain.join(', ')}`);
+  for (const [name, value] of [['VITE_INTAKE_ENDPOINT', intake], ['VITE_PREVIEW_ENDPOINT', preview], ['VERIFY_BASE', verifyBase]]) {
+    if (value && !bundleText.includes(value)) problems.push(`${name} (${value}) is not baked into the built bundle`);
+  }
+  return problems;
+}
+
+export async function readBundle(dir) {
   let bundleText = '';
   try {
-    const dir = path.join(appRoot, '..', 'orcamento', 'assets');
-    for (const f of (await readdir(dir)).filter((n) => /^index-.*\.js$/.test(n))) {
+    for (const f of (await readdir(dir)).filter((n) => /\.js$/.test(n)).sort()) {
       bundleText += await readFile(path.join(dir, f), 'utf8');
     }
   } catch {
-    /* no build yet - endpoint check still applies */
+    /* no build yet */
   }
+  return bundleText;
+}
 
+export async function guard({ envText, assetsDir }) {
+  const intake = readEnv(envText, 'VITE_INTAKE_ENDPOINT');
+  const preview = readEnv(envText, 'VITE_PREVIEW_ENDPOINT');
+  const verify = readEnv(envText, 'VITE_VERIFY_BASE');
+  const bundleText = await readBundle(assetsDir);
   const problems = [
     ...checkEndpoint('VITE_INTAKE_ENDPOINT', intake, bundleText),
     ...checkEndpoint('VITE_PREVIEW_ENDPOINT', preview, bundleText),
   ];
+  // Produção não redefine o destino do QR: se alguém o definir, só o domínio do site é aceito.
+  if (verify && verify !== PRODUCTION_VERIFY_BASE) problems.push(`VITE_VERIFY_BASE must be ${PRODUCTION_VERIFY_BASE} in production (got ${verify})`);
+  problems.push(...bundleProblems(bundleText, { intake, preview, verifyBase: verify || PRODUCTION_VERIFY_BASE }));
+  return problems;
+}
+
+async function main() {
+  // --dir <pasta compilada> confere outra compilação (padrão: ../orcamento, a publicada pela allowlist do Pages).
+  const i = process.argv.indexOf('--dir');
+  const outDir = i > 0 && process.argv[i + 1] ? path.resolve(process.argv[i + 1]) : path.join(appRoot, '..', 'orcamento');
+  const envText = await readFile(path.join(appRoot, '.env.production'), 'utf8').catch(() => '');
+  const problems = await guard({ envText, assetsDir: path.join(outDir, 'assets') });
   if (problems.length) {
     console.error('PUBLISH BLOCKED:\n  - ' + problems.join('\n  - '));
     process.exit(1);
   }
-  console.log('publish-guard: OK (intake + preview endpoints configured, no placeholder in build)');
+  console.log('publish-guard: OK (production endpoints baked in; no placeholder, local or plain-http address in the build)');
 }
 
 if (process.argv[1] && process.argv[1].replace(/\\/g, '/').endsWith('publish-guard.mjs')) {
