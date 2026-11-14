@@ -218,4 +218,9 @@ test('R15 tela: campo de cupom só no ramo calculado; falha do cupom nunca escon
   assert.match(src, /const leadPayload=\(\)=>attachCommercialOffer\(packageForCRMv2\(answers\),emitted\.current\);/);
   assert.match(src, /const snapshot=leadPayload\(\);/);
   assert.match(src, /setPRecord\(r\.record\);onEmitted\(\{record:r\.record,coupon\}\);/);
+  // a chave só se repete com o MESMO corpo: a assinatura cobre o valor apresentado e a revisão do fator (senão, após
+  // falha técnica + atualização do fator, o Worker responderia EMISSION_KEY_REUSED)
+  assert.match(src, /const sig=JSON\.stringify\(\[payload\.pricing_inputs,cs,pv\.total_demello,pv\.factor_config_revision,coupon&&coupon\.code,coupon&&coupon\.revision\]\);/);
+  // cupom aplicado sem prévia: a tela avisa que o desconto só é registrado na prévia (o pedido segue o registro)
+  assert.match(src, /O desconto fica registrado quando você gera a prévia DEMELLO/);
 });

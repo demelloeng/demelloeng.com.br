@@ -72,12 +72,12 @@ function CouponBox({cupom,setCupom,onChanged}){
   setCupom(c=>r.ok?{input:r.coupon.code,data:r.coupon,state:'ok'}:{...c,data:null,state:r.error==='invalid-code'?'malformed':r.error==='not-found'?'invalid':'unavailable'});}
  function remover(){setCupom(COUPON_EMPTY);onChanged();}
  return <details className="coupon-box" open={cupom.state!=='idle'||undefined}><summary>Tenho um cupom</summary>
-  {applied?<p className="coupon-applied" role="status">Cupom <strong>{cupom.data.code}</strong> aplicado. <button type="button" className="link-button" onClick={remover}>Remover cupom</button></p>
+  {applied?<><p className="coupon-applied" role="status">Cupom <strong>{cupom.data.code}</strong> aplicado. <button type="button" className="link-button" onClick={remover}>Remover cupom</button></p><p className="small-note">O desconto fica registrado quando você gera a prévia DEMELLO; o pedido e o resumo seguem o valor da prévia gerada.</p></>
    :<form className="coupon-form" onSubmit={aplicar}><label htmlFor="coupon-code">Código do cupom</label><input id="coupon-code" autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={40} value={cupom.input} onChange={e=>setCupom({input:e.target.value,data:null,state:'editing'})}/><button type="submit" className="secondary-button" disabled={cupom.state==='checking'||!cupom.input.trim()}>{cupom.state==='checking'?'Conferindo…':'Aplicar cupom'}</button></form>}
   {COUPON_FEEDBACK[cupom.state]&&<p className="field-error" role="alert">{COUPON_FEEDBACK[cupom.state]}{cupom.state!=='unavailable'&&<> <button type="button" className="link-button" onClick={remover}>Remover cupom</button></>}</p>}
  </details>;
 }
-function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onEmitted=()=>{}}){
+export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onEmitted=()=>{}}){
  const held=safetyHold(answers),missing=missingData(answers);
  const payload=packageForCRMv2(answers);
  const pv=payload.pricing_preview;
@@ -100,7 +100,8 @@ function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onEmitted=
   const cs=caseSummaryFromRows(payload.summary,pv.services.map(serviceName));
   const coupon=cupom.state==='ok'?cupom.data:null;
   // R15: uma chave por emissão nova; a mesma só quando o visitante repete após falha técnica com o mesmo pedido.
-  const sig=JSON.stringify([payload.pricing_inputs,cs,coupon&&coupon.code,coupon&&coupon.revision]);
+  // A assinatura cobre tudo o que muda o corpo (inclusive o valor apresentado e a revisão do fator): corpo novo, chave nova.
+  const sig=JSON.stringify([payload.pricing_inputs,cs,pv.total_demello,pv.factor_config_revision,coupon&&coupon.code,coupon&&coupon.revision]);
   if(!emKey.current||emKey.current.sig!==sig)emKey.current={sig,key:newEmissionKey()};
   const r=await issuePreview(payload.pricing_inputs,cs,{presented:pv,couponCode:coupon?coupon.code:undefined,coupon,emissionKey:emKey.current.key});
   if(!(r.status===0||r.status>=500))emKey.current=null;
