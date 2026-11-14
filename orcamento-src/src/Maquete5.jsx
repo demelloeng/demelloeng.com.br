@@ -14,6 +14,19 @@ export function Stage5({spec,mobile,reduced,label,onFail,facts}){
  const scaleBox=useRef(null),scaleBar=useRef(null),scaleTxt=useRef(null),levels=useRef(null),scrub=useRef(null),stageName=useRef(null);
  const [ready,setReady]=useState(false);
  const [view,setView]=useState('conjunto');
+ // R11: ampliação voluntária do palco no MESMO nó (classe CSS): mesma cena, mesmo estado, nenhum segundo canvas.
+ const [full,setFull]=useState(false);
+ const back=useRef(null);
+ const openFull=()=>{back.current={y:window.scrollY};setFull(true);};
+ // o botão Ampliar é renderizado de novo ao fechar: o foco volta para ele (não para o nó antigo) e a rolagem é restaurada
+ const closeFull=()=>{setFull(false);const b=back.current;back.current=null;requestAnimationFrame(()=>{if(b)window.scrollTo(0,b.y);stage.current?.querySelector('[aria-label="Ampliar maquete"]')?.focus();});};
+ useEffect(()=>{
+  if(!full)return undefined;
+  const onKey=e=>{if(e.key==='Escape'){e.preventDefault();closeFull();}};
+  document.addEventListener('keydown',onKey);document.documentElement.classList.add('v5-full-open');
+  stage.current?.querySelector('.v5-close')?.focus();
+  return()=>{document.removeEventListener('keydown',onKey);document.documentElement.classList.remove('v5-full-open');};
+ },[full]);
  // R04: o vão da escada vem do mesmo gerador da cena (nada de regra paralela); a indicação depende da vista.
  const stairDims=useMemo(()=>{try{return generate(spec).dims;}catch{return null;}},[JSON.stringify(spec)]);
  const circ=circulationNote(spec,stairDims,view);
@@ -84,14 +97,15 @@ export function Stage5({spec,mobile,reduced,label,onFail,facts}){
  const pickFloor=i=>{setFloor(i);api.current?.setPlanFloor(i);};
 
  return <>
-  <div className="mq-stage mq-v5" ref={stage} data-3d={ready?'ready':'loading'}>
+  <div className={`mq-stage mq-v5${full?' is-full':''}`} ref={stage} data-3d={ready?'ready':'loading'} role={full?'dialog':undefined} aria-modal={full?'true':undefined} aria-label={full?'Maquete ampliada':undefined}>
    <div className="mq-host" ref={host} tabIndex={ready?0:-1} role={ready?'group':undefined} aria-label={ready?`${label} Arraste para girar; toque em uma peça para ver o nome.`:undefined}/>
    {!ready&&<p className="v5-loading" role="status">Carregando a maquete…</p>}
    <div className="v5-topleft">
     {(facts?.area||facts?.floors)&&<p className="v5-facts">{[facts.area,facts.floors].filter(Boolean).map(t=><span key={t}>{t}</span>)}</p>}
     <div className="v5-scale" ref={scaleBox} hidden><span ref={scaleBar}/><b ref={scaleTxt}/></div>
    </div>
-   <div className="v5-zoom"><button type="button" aria-label="Aproximar" onClick={()=>api.current?.zoomBy(0.87)}>+</button><button type="button" aria-label="Afastar" onClick={()=>api.current?.zoomBy(1.15)}>−</button></div>
+   {full&&<button type="button" className="v5-close" onClick={closeFull}>Fechar ✕</button>}
+   <div className="v5-zoom">{!full&&<button type="button" aria-label="Ampliar maquete" title="Ampliar maquete" onClick={openFull}>⤢</button>}<button type="button" aria-label="Aproximar" onClick={()=>api.current?.zoomBy(0.87)}>+</button><button type="button" aria-label="Afastar" onClick={()=>api.current?.zoomBy(1.15)}>−</button></div>
    <div className="v5-levels" ref={levels} aria-hidden="true"/>
    {pick&&<div className="v5-pick" role="status" aria-live="polite"><b>{pick.name} <i>· {pick.layerLabel}</i></b>{pick.note}</div>}
    <div className="v5-bottom">

@@ -208,6 +208,12 @@ input:not([type=radio]):not([type=checkbox]):focus,select:focus,textarea:focus{b
 .v5-inside:hover{background:#fff}.v5-inside:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .mq-v5 .mq-tab-sec{background:transparent;border-color:transparent;color:#a9c3dc;font-weight:500}
 .mq-v5 .mq-tab-sec:hover{border-color:#3b5875}
+/* R11: palco ampliado no mesmo nó (sem segundo canvas, sem rota nova); Esc ou Fechar devolvem foco e rolagem */
+.lp-figure .mq-stage.mq-v5.is-full,.mq-stage.mq-v5.is-full{position:fixed;inset:0;height:100svh;width:100vw;max-height:none;border-radius:0;z-index:1000}
+html.v5-full-open,html.v5-full-open body{overflow:hidden}
+html.v5-full-open :is(.site-footer,.demo-bar,.dm-fab){display:none}
+.v5-close{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:2;font:700 13px/1 var(--font);color:#16202a;background:#e8f1fb;border:1px solid #e8f1fb;border-radius:6px;padding:9px 14px;min-height:36px;cursor:pointer}
+.v5-close:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .mq-v5 .mq-tabs{overflow-x:auto;scrollbar-width:none;max-width:100%}.mq-v5 .mq-tabs::-webkit-scrollbar{display:none}   /* R06: no celular as vistas rolam, nenhuma fica cortada */
 .v5-scale{position:static;display:flex;align-items:center;gap:7px;color:#cfe6fa;font:600 12px/1 var(--font);pointer-events:none}
 .v5-scale span{display:block;height:6px;border:1.5px solid #cfe6fa;border-top:0}

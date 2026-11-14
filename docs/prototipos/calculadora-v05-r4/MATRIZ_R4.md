@@ -37,7 +37,7 @@ Local, sem push/PR/merge/deploy/publicação. Commits só nas branches `exp/` ab
 | R08 | feito (local) | `journey.mjs`: Arquitetura é a 1ª opção pública de CA7 (fim do portão `DEMO_ARQ`); S1 inalterado. Sentinela pela jornada Construir com a configuração publicada (0,60, rev. 1): R$ 12.509,76 (6.268,80 + 3.921,60 + 1.121,28 + 1.198,08), igual nos três padrões e no painel. Com isso o aviso de circulação do R04 passa a ter caso público (sobrado 150/75 Alto). `journey.test` escolhe Estrutural explicitamente no percurso automático (a ordem de CA7 mudou). Teste `tests/r08_arquitetura.test.mjs`; suíte 579/579. |
 | R09 | pendente (condicional) | |
 | R10 | pendente (condicional) | |
-| R11 | pendente (condicional) | |
+| R11 | feito (local) | Ampliação voluntária no MESMO nó do palco (`Maquete5.jsx`, classe `is-full`, `position:fixed`): mesma cena e estado (vista, corte, isolamento), um único canvas, sem rota nova; a cena se redimensiona pelo ResizeObserver do host. Botão "Ampliar maquete" junto ao zoom; "Fechar" ou Esc fecham, devolvem o foco ao botão e restauram a rolagem; rodapé, barra de demo e botão do WhatsApp ficam ocultos durante a ampliação. Conferido em 127.0.0.1 1366×768: ampliada 1366×768, Corte preservado ao fechar, rolagem 140 → 140, foco em "Ampliar maquete", 1 canvas. Evidência `evidencias/r11_1366_ampliada_corte.png`. Suíte 582/582. |
 | R12–R14 | adiados (handoff) | |
 | R15 | pendente | Acrescenta cupom e valor-base ao canonical de registros novos (os antigos mantêm a integridade). |
 | R16 | pendente | |
