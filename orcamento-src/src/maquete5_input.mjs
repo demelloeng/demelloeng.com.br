@@ -76,3 +76,17 @@ export function maquete5Input(answers) {
     services: Array.isArray(pi.services) ? pi.services : [],
   };
 }
+
+// R06 — o que aparece junto ao modelo: só dados de origem conhecida. Área = área da EDIFICAÇÃO declarada ou derivada
+// (escopo, área atendida, terreno e a referência do motor não entram); pavimentos = os INFORMADOS, com os representados
+// quando o desenho é limitado. Nenhum título é inventado a partir de tipologia ou padrão.
+export function stageFacts(answers, spec) {
+  const f = maquetteFacts(answers);
+  const area = f && f.area && f.area.kind === 'building'
+    ? `${Number(String(f.area.value).replace(',', '.')).toLocaleString('pt-BR', { maximumFractionDigits: 2 })} m²` : null;
+  const n = spec && spec.floorsKnown ? spec.floorsDeclared : null;
+  const floors = n === null || n === undefined ? null
+    : spec.floorsExtra ? `${n} pavimentos · ${spec.floors} representados`
+      : `${n} ${n === 1 ? 'pavimento' : 'pavimentos'}`;
+  return { area, floors };
+}

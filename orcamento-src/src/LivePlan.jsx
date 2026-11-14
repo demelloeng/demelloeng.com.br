@@ -3,7 +3,7 @@ import {livePlanModel,LAYER_LABEL,areaPhrase,rowLabel,legendLayers} from './live
 import {sceneSpec,describeScene,VIEWS,LAYER_COLOR,isoShapes,isoViewBox} from './maquete_model.mjs';
 import {friendlyServiceName as serviceName} from './client_summary.mjs';
 import {brlStr} from './pricing/decimal.mjs';
-import {maquete5Input} from './maquete5_input.mjs';
+import {maquete5Input,stageFacts} from './maquete5_input.mjs';
 import {buildingSpec,describe as describe5,LAYER_LABEL as LAYER_LABEL5} from './maquete5_building.mjs';
 import {Stage5} from './Maquete5.jsx';
 
@@ -116,7 +116,7 @@ function LivePlanInner({answers,expanded}){
  return <section className={`live-plan lp-${m.mode}`} aria-label="Maquete e estimativa">
   <figure className="lp-figure">
    {useV5
-    ?<Stage5 spec={spec5} mobile={mobile} reduced={reduced()} label={describe5(spec5)} onFail={()=>setV5Failed(true)}/>
+    ?<Stage5 spec={spec5} mobile={mobile} reduced={reduced()} label={describe5(spec5)} facts={stageFacts(answers,spec5)} onFail={()=>setV5Failed(true)}/>
     :<Stage spec={spec} view={view} setView={setPicked} want3d={!compact} mobile={mobile} label={label} compact={compact}/>}
    <figcaption><span className="lp-tag">{m.label}</span> {m.notice}</figcaption>
   </figure>

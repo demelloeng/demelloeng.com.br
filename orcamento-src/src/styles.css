@@ -199,7 +199,17 @@ input:not([type=radio]):not([type=checkbox]):focus,select:focus,textarea:focus{b
 .mq-v5 .mq-tabs{gap:3px;flex-wrap:nowrap}.mq-v5 .mq-tab{padding:8px 7px;font-size:11.5px;flex:0 1 auto;white-space:nowrap}
 .mq-v5 .mq-host{cursor:grab}.mq-v5 .mq-host:active{cursor:grabbing}
 .v5-loading{position:absolute;inset:0;margin:0;display:grid;place-content:center;color:#cfe6fa;font:600 13px/1 var(--font);pointer-events:none}
-.v5-scale{position:absolute;left:10px;top:10px;display:flex;align-items:center;gap:7px;color:#cfe6fa;font:600 12px/1 var(--font);pointer-events:none}
+/* R06: fatos de origem conhecida junto ao modelo, acima da escala gráfica */
+.v5-topleft{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;pointer-events:none;max-width:calc(100% - 64px)}
+.v5-facts{margin:0;display:flex;flex-wrap:wrap;gap:4px 10px;color:#fff;font:700 13px/1.2 var(--font);text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.v5-facts span+span{padding-left:10px;border-left:1px solid rgba(255,255,255,.45)}
+.v5-row{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap}
+.v5-inside{font:700 12.5px/1 var(--font);color:#16202a;background:#e8f1fb;border:1px solid #e8f1fb;border-radius:6px;padding:9px 12px;min-height:34px;cursor:pointer;white-space:nowrap}
+.v5-inside:hover{background:#fff}.v5-inside:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.mq-v5 .mq-tab-sec{background:transparent;border-color:transparent;color:#a9c3dc;font-weight:500}
+.mq-v5 .mq-tab-sec:hover{border-color:#3b5875}
+.mq-v5 .mq-tabs{overflow-x:auto;scrollbar-width:none;max-width:100%}.mq-v5 .mq-tabs::-webkit-scrollbar{display:none}   /* R06: no celular as vistas rolam, nenhuma fica cortada */
+.v5-scale{position:static;display:flex;align-items:center;gap:7px;color:#cfe6fa;font:600 12px/1 var(--font);pointer-events:none}
 .v5-scale span{display:block;height:6px;border:1.5px solid #cfe6fa;border-top:0}
 .v5-zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px}
 .v5-zoom button{width:32px;height:32px;border-radius:4px;border:1px solid #3b5875;background:rgba(20,27,34,.78);color:#cfe6fa;font:600 18px/1 var(--font);cursor:pointer}
@@ -211,7 +221,7 @@ input:not([type=radio]):not([type=checkbox]):focus,select:focus,textarea:focus{b
 .v5-tool{display:flex;gap:5px;flex-wrap:wrap;align-items:center;min-height:0}.v5-tool:empty{display:none}
 .v5-chip{font:600 12px/1 var(--font);color:#e7eef6;background:rgba(20,27,34,.82);border:1px solid #3b5875;border-radius:999px;padding:6px 10px 6px 8px;min-height:30px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .v5-chip i{width:10px;height:10px;border-radius:50%;display:inline-block}
-.v5-note{flex-basis:100%;margin:0;max-width:44ch;font:500 12px/1.35 var(--font);color:#e7eef6;background:rgba(20,27,34,.82);border:1px solid #3b5875;border-radius:6px;padding:6px 9px}
+.v5-note{margin:8px 0 0;font:500 13px/1.4 var(--font);color:var(--ink);background:#eef4fa;border-left:3px solid var(--blue);border-radius:4px;padding:7px 10px}
 .v5-chip[aria-pressed=true]{background:#f4f6f9;color:#16202a;border-color:#f4f6f9}.v5-chip:hover{border-color:#9cc2ec}
 .v5-tool label{color:#cfe6fa;font:600 12px/1 var(--font);display:flex;align-items:center;gap:8px;background:rgba(20,27,34,.82);border:1px solid #3b5875;border-radius:6px;padding:4px 10px;min-height:32px;flex:1 1 200px;max-width:420px}
 .v5-tool input[type=range]{flex:1;accent-color:#9cc2ec;min-width:80px}

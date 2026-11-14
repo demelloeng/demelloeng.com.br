@@ -4,10 +4,12 @@ import {LAYER_LABEL,generate,circulationNote} from './maquete5_building.mjs';
 // Palco da maquete V05 dentro da calculadora. A cena (Three.js) entra por import() dinâmico: o formulário nunca espera por ela.
 // Se a cena não carregar ou não houver WebGL, chama onFail e a calculadora volta para a maquete anterior.
 // As listas abaixo repetem as da cena de propósito: assim este componente não puxa o módulo pesado para a primeira tela.
-const VIEWS=[{id:'conjunto',label:'Conjunto'},{id:'disciplinas',label:'Disciplinas'},{id:'pavimentos',label:'Pavimentos'},{id:'corte',label:'Corte'},{id:'planta',label:'Planta'}];
+// R06: vistas principais (exterior, por dentro e planta) em destaque; Disciplinas e Pavimentos seguem a um toque, discretas.
+const VIEWS=[{id:'conjunto',label:'Conjunto'},{id:'corte',label:'Corte'},{id:'planta',label:'Planta'},{id:'disciplinas',label:'Disciplinas',sec:true},{id:'pavimentos',label:'Pavimentos',sec:true}];
+const INSIDE=['corte','planta'];
 const LAYER_COLOR={arquitetura:'#f4f2ee',estrutura:'#9aa7b4',hidrossanitario:'#35a8e8',eletrica:'#f2b134',incendio:'#e5484a',gas:'#a78bfa',terreno:'#59c08a'};
 
-export function Stage5({spec,mobile,reduced,label,onFail}){
+export function Stage5({spec,mobile,reduced,label,onFail,facts}){
  const stage=useRef(null),host=useRef(null),api=useRef(null);
  const scaleBox=useRef(null),scaleBar=useRef(null),scaleTxt=useRef(null),levels=useRef(null),scrub=useRef(null),stageName=useRef(null);
  const [ready,setReady]=useState(false);
@@ -85,7 +87,10 @@ export function Stage5({spec,mobile,reduced,label,onFail}){
   <div className="mq-stage mq-v5" ref={stage} data-3d={ready?'ready':'loading'}>
    <div className="mq-host" ref={host} tabIndex={ready?0:-1} role={ready?'group':undefined} aria-label={ready?`${label} Arraste para girar; toque em uma peça para ver o nome.`:undefined}/>
    {!ready&&<p className="v5-loading" role="status">Carregando a maquete…</p>}
-   <div className="v5-scale" ref={scaleBox} hidden><span ref={scaleBar}/><b ref={scaleTxt}/></div>
+   <div className="v5-topleft">
+    {(facts?.area||facts?.floors)&&<p className="v5-facts">{[facts.area,facts.floors].filter(Boolean).map(t=><span key={t}>{t}</span>)}</p>}
+    <div className="v5-scale" ref={scaleBox} hidden><span ref={scaleBar}/><b ref={scaleTxt}/></div>
+   </div>
    <div className="v5-zoom"><button type="button" aria-label="Aproximar" onClick={()=>api.current?.zoomBy(0.87)}>+</button><button type="button" aria-label="Afastar" onClick={()=>api.current?.zoomBy(1.15)}>−</button></div>
    <div className="v5-levels" ref={levels} aria-hidden="true"/>
    {pick&&<div className="v5-pick" role="status" aria-live="polite"><b>{pick.name} <i>· {pick.layerLabel}</i></b>{pick.note}</div>}
@@ -96,12 +101,17 @@ export function Stage5({spec,mobile,reduced,label,onFail}){
       {layers.map(l=><button key={l} type="button" className="v5-chip" aria-pressed={isolate===l} onClick={()=>pickIsolate(l)}><i style={{background:LAYER_COLOR[l]}}/>{LAYER_LABEL[l]}</button>)}
      </>}
      {view==='corte'&&<label>Posição do corte <input type="range" min="5" max="95" defaultValue="36" aria-label="Posição do corte" onInput={e=>api.current?.setCut(Number(e.target.value)/100)}/></label>}
-     {circ&&<p className="v5-note" role="note">{circ}</p>}
      {view==='planta'&&spec.floors>1&&Array.from({length:spec.floors},(_,i)=><button key={i} type="button" className="v5-chip" aria-pressed={floor===i} onClick={()=>pickFloor(i)}>{i===0?'Térreo':`${i+1}º pav.`}</button>)}
     </div>
-    <div className="mq-tabs" role="group" aria-label="Vista da maquete">{VIEWS.map(v=><button key={v.id} type="button" className="mq-tab" aria-pressed={view===v.id} onClick={()=>setView(v.id)}>{v.label}</button>)}</div>
+    <div className="v5-row">
+     {/* R06: atalho principal — Ver por dentro (Corte) / Voltar ao exterior (Conjunto) */}
+     <button type="button" className="v5-inside" onClick={()=>setView(INSIDE.includes(view)?'conjunto':'corte')}>{INSIDE.includes(view)?'Voltar ao exterior':'Ver por dentro'}</button>
+     <div className="mq-tabs" role="group" aria-label="Vista da maquete">{VIEWS.map(v=><button key={v.id} type="button" className={`mq-tab${v.sec?' mq-tab-sec':''}`} aria-pressed={view===v.id} onClick={()=>setView(v.id)}>{v.label}</button>)}</div>
+    </div>
    </div>
   </div>
+  {/* R04/R06: a indicação de circulação fica fora do palco, para não cobrir o modelo */}
+  {circ&&<p className="v5-note" role="note">{circ}</p>}
   <div className="v5-build">
    <button type="button" onClick={()=>api.current?.replay()}>Montar de novo</button>
    <input type="range" min="0" max="1000" defaultValue="1000" ref={scrub} aria-label="Etapa da montagem" onInput={e=>api.current?.scrub(Number(e.target.value)/1000)}/>
