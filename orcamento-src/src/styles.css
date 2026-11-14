@@ -245,3 +245,9 @@ html.v5-full-open :is(.site-footer,.demo-bar,.dm-fab){display:none}
 .v5-levels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .v5-levels span{position:absolute;translate:-100% -50%;font:600 11.5px/1 var(--font);color:#dbe8f5;background:rgba(20,27,34,.72);border:1px solid #3b5875;border-radius:3px;padding:3px 6px;white-space:nowrap}
 .v5-levels span::after{content:"";position:absolute;left:100%;top:50%;width:10px;border-top:1px solid #9cc2ec}
+/* R15: cupom de portador na estimativa calculada (discreto: fechado até o visitante pedir) */
+.coupon-offer{margin:4px 0 0;font-size:15px;color:var(--muted)}
+.coupon-box{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}.coupon-box>summary{cursor:pointer;font-weight:600;color:var(--blue);font-size:15px;width:max-content}
+.coupon-form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin-top:12px}.coupon-form label{flex-basis:100%;font-size:14px;font-weight:600}.coupon-form input{flex:1 1 200px;min-height:48px;padding:0 12px;border:1px solid #A8C6DF;border-radius:8px;font:inherit;text-transform:uppercase;letter-spacing:.04em}.coupon-form .secondary-button{margin-top:0}
+.coupon-applied{margin:12px 0 0}.coupon-box .field-error{margin:10px 0 0}
+.link-button{background:none;border:0;padding:0;color:var(--blue);font:inherit;font-weight:600;text-decoration:underline;cursor:pointer}

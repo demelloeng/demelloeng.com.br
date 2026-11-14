@@ -1,5 +1,6 @@
 import { brlStr } from './pricing/decimal.mjs';
 import { referenceEntries } from './references.mjs';
+import { commercialLines, publicFromOffer } from './commercial.mjs';
 
 export const NEXT_STEP =
   'Para avançar, entre em contato com a DEMELLO para confirmarmos as particularidades e o escopo do seu projeto.';
@@ -31,6 +32,13 @@ const filledContact = (contact = {}) =>
     ['E-mail', contact.email],
   ].filter(([, value]) => typeof value === 'string' && value.trim());
 
+function commercialSummary(payload) {
+  const c = commercialLines(publicFromOffer(payload?.commercial_offer));
+  if (!c) return [];
+  const code = typeof payload.preview_verification_code === 'string' ? ` (prévia ${payload.preview_verification_code})` : '';
+  return [`Valor-base: ${c.base}`, `Cupom ${c.code} (${c.benefit}): − ${c.discount}`, `Total com cupom${code}: ${c.final}`];
+}
+
 export function buildClientSummary(payload) {
   const rows = Array.isArray(payload?.summary) ? payload.summary : [];
   const preview = payload?.pricing_preview ?? {};
@@ -59,6 +67,8 @@ export function buildClientSummary(payload) {
     '',
     'ESTIMATIVA INICIAL DEMELLO',
     total,
+    // R15: só com a oferta amarrada à prévia emitida (attachCommercialOffer); sem ela, o resumo é o mesmo de antes.
+    ...commercialSummary(payload),
     '',
     'REFERÊNCIAS',
     ...(references.length ? references : ['A confirmar após avaliação do caso.']),

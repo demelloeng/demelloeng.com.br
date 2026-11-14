@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / 'scripts/gerar-verificar-404-v02.py'
 # Hash do bloco <script> do verificador na main 3788281, antes da migração visual.
-LOGICA_ORIGINAL_SHA256 = '559427957190ebf26e28fa4e6f23215258b59b99518186c6cb23301e7c5bfd41'
+LOGICA_ORIGINAL_SHA256 = 'ecd1174954116dc6fb1a6a7309960960be38adbf6acbc04199c565f5c857617d'  # R15: LOGICA_VERIFICAR_20261114 (bloco comercial do registro)
 NOTAS = ['Uma prévia verificada confirma apenas que este registro foi emitido pela DEMELLO Engenharia com os valores '
          'e as informações abaixo, na data indicada.',
          'Não significa proposta aceita, contrato, escopo confirmado, conferência documental nem preço atual garantido. '

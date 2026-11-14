@@ -91,7 +91,10 @@ test('issuePreview: 201 PUBLIC_PREVIEW_V1 -> {ok, record}; envia só pricing_inp
   assert.equal(r.ok, true);
   assert.equal(r.record.schema, 'PUBLIC_PREVIEW_V1');
   assert.equal(r.record.verification_code, 'k3m7q9r2t5w8x4z6');
-  assert.deepEqual(Object.keys(sent).sort(), ['case_summary', 'expectation', 'pricing_inputs']);
+  // R15: emission_key (uma por emissão; repetida só na retentativa técnica) é o único campo novo; sem cupom, nada de coupon_code.
+  assert.deepEqual(Object.keys(sent).sort(), ['case_summary', 'emission_key', 'expectation', 'pricing_inputs']);
+  assert.match(sent.emission_key, /^[a-z0-9-]{16,64}$/);
+  assert.equal(r.emissionKey, sent.emission_key);
   // expectativa = o que o navegador apresentou (regime, total e valor por serviço); o Worker é a autoridade
   assert.deepEqual(sent.expectation, {
     table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC', factor_config_revision: 1, total_demello: FIXTURE_PREVIEW.total_demello,
@@ -301,14 +304,19 @@ test('/verificar/index.html: estática, consome PUBLIC_PREVIEW_V1, sem hash-no-b
 
 test('GlobalApp: emissão só no ramo X3A/CALCULATED; PNG só do registro confirmado; sem "fator 0,80" público', async () => {
   const src = await readFile(path.join(siteRoot, 'orcamento-src', 'src', 'GlobalApp.jsx'), 'utf8');
-  assert.match(src, /import \{issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY\} from '\.\/preview\.mjs'/);
+  assert.match(src, /import \{issuePreview,fetchCoupon,newEmissionKey,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,COUPON_CHANGED_MESSAGE,COUPON_INVALID_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY\} from '\.\/preview\.mjs'/);
   assert.match(src, /import \{renderPreviewPng\} from '\.\/preview_png\.mjs'/);
   assert.equal((src.match(/issuePreview\(/g) || []).length, 1);
   assert.equal((src.match(/renderPreviewPng\(r\.record\)/g) || []).length, 1);
   assert.equal((src.match(/Gerar prévia DEMELLO/g) || []).length, 1);
-  // R4: entre a emissão e o tratamento de falha só cabe o ramo de revisão do fator, que busca a configuração nova e
-  // para (nunca reemite: issuePreview continua chamado uma única vez).
-  assert.match(src, /const r=await issuePreview\(payload\.pricing_inputs,cs,\{presented:pv\}\);\s*\n\s*\/\/ R4:[^\n]*\n\s*if\(!r\.ok&&r\.factorChanged\)\{await refreshFactorConfig\(\{endpoint:PREVIEW_ENDPOINT\}\);setPState\('factor_changed'\);return;\}\s*\n\s*if\(!r\.ok\)\{setPState\(r\.outdated\?'outdated':'error'\);return;\}/,
+  // R4/R15: entre a emissão e o tratamento de falha só cabem os ramos do cupom (antes, porque também são 409 de versão)
+  // e o da revisão do fator. Todos param: nada reemite sozinho (issuePreview continua chamado uma única vez).
+  assert.match(src, /const r=await issuePreview\(payload\.pricing_inputs,cs,\{presented:pv,couponCode:coupon\?coupon\.code:undefined,coupon,emissionKey:emKey\.current\.key\}\);/);
+  const afterIssue = src.slice(src.indexOf('const r=await issuePreview('), src.indexOf('setPRecord(r.record);'));
+  const order = ['r.couponInvalid', 'r.couponChanged', 'r.factorChanged', "if(!r.ok){setPState(r.outdated?'outdated':'error');return;}"].map((k) => afterIssue.indexOf(k));
+  assert.ok(order.every((i, n) => i > 0 && (n === 0 || i > order[n - 1])), 'cupom antes do fator, fator antes do genérico');
+  for (const line of afterIssue.split('\n').filter((l) => /if\(!r\.ok/.test(l))) assert.match(line, /return;\}$/, 'todo ramo de falha para antes do PNG');
+  assert.match(afterIssue, /if\(!r\.ok&&r\.factorChanged\)\{await refreshFactorConfig\(\{endpoint:PREVIEW_ENDPOINT\}\);setPState\('factor_changed'\);return;\}/,
     'sem PNG quando o Worker falha; versão desatualizada pede recarregar; revisão nova do fator busca a configuração');
   assert.match(src, /pState==='factor_changed'&&[^\n]*FACTOR_CHANGED_MESSAGE/, 'aviso de estimativa atualizada');
   assert.match(src, /pState==='outdated'&&[\s\S]*OUTDATED_MESSAGE[\s\S]*window\.location\.reload\(\)/, 'mensagem e ação de recarregar');

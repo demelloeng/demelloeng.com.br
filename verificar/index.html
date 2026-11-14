@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8">
-<!-- Gerado por scripts/gerar-verificar-404-v02.py. Fontes: docs/arquivo/verificar-404-v02-20261107/COPY_VERIFICAR_20261107.md (SHA-256 e379ff19174bf4f4eb3b561664963510a3e5dd9ffb6a783f7aa16b7179cd413a) e docs/arquivo/verificar-404-v02-20261107/LOGICA_VERIFICAR_20261108.js (SHA-256 59c95abb5c9185833c84a5b104f6a9e3b2570be7f3073a256ce8c488f3b59089). Não editar HTML à mão. -->
+<!-- Gerado por scripts/gerar-verificar-404-v02.py. Fontes: docs/arquivo/verificar-404-v02-20261107/COPY_VERIFICAR_20261107.md (SHA-256 e379ff19174bf4f4eb3b561664963510a3e5dd9ffb6a783f7aa16b7179cd413a) e docs/arquivo/verificar-404-v02-20261107/LOGICA_VERIFICAR_20261114.js (SHA-256 abdeb5c44c0d5a615350c66c6903b5e7dd6f89ce232eeb0d13f6a1221fac32c7). Não editar HTML à mão. -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Verificar prévia | DEMELLO Engenharia</title>
 <meta name="description" content="Verificação de uma prévia inicial DEMELLO emitida pela DEMELLO Engenharia.">
@@ -164,6 +164,14 @@
         (parts.length ? '<p class="vf-svc-refs">Referências públicas consultadas: ' + parts.join(" · ") + "</p>" : "") + "</li>";
     });
     var total = pv.status === "CALCULATED" && pv.total_demello ? brl(pv.total_demello) : "Avaliação humana necessária";
+    // R15: oferta comercial GRAVADA no registro. Sem ela (inclusive registros históricos) a página é a mesma de antes.
+    var cm = pv.status === "CALCULATED" && view.commercial && typeof view.commercial.final_total === "string" ? view.commercial : null;
+    var benefit = cm ? (cm.coupon_kind === "PERCENT" ? String(cm.coupon_value).replace(".", ",") + "%" : brl(cm.coupon_value)) : "";
+    var offer = cm ? '<dl class="vf-dl">' +
+        "<dt>Valor-base</dt><dd>" + esc(brl(cm.base_total)) + "</dd>" +
+        "<dt>Cupom</dt><dd>" + esc(cm.coupon_code) + " (" + esc(benefit) + ")</dd>" +
+        "<dt>Desconto</dt><dd>− " + esc(brl(cm.discount)) + "</dd>" +
+      "</dl>" : "";
 
     render(
       box("ok", "Prévia DEMELLO verificada",
@@ -174,8 +182,8 @@
         "<dt>Situação</dt><dd>" + esc(STATUS_LABEL[rec.status || "ISSUED"] || rec.status) + "</dd>" +
         "<dt>Metodologia</dt><dd>" + esc(tableLabel(view)) + "</dd>" +
       "</dl>" +
-      "<p class=\"eyebrow\" style=\"margin:24px 0 4px\">Previsão DEMELLO</p>" +
-      '<p class="vf-total">' + esc(total) + "</p>" +
+      "<p class=\"eyebrow\" style=\"margin:24px 0 4px\">" + (cm ? "Previsão DEMELLO com cupom" : "Previsão DEMELLO") + "</p>" +
+      '<p class="vf-total">' + esc(cm ? brl(cm.final_total) : total) + "</p>" + offer +
       (svcs ? '<p class="eyebrow" style="margin:24px 0 4px">Serviços</p><ul class="vf-svcs" aria-label="Valor DEMELLO por serviço">' + svcs + "</ul>" : "") +
       (rows ? "<p class=\"eyebrow\" style=\"margin:24px 0 4px\">Informações do caso (fornecidas pelo usuário)</p><dl class=\"vf-dl\">" + rows + "</dl>" : "") +
       (disclaimers.length ? '<div class="vf-note">' + disclaimers.map(function (d) { return "<p>" + esc(d) + "</p>"; }).join("") + "</div>" : "")

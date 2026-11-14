@@ -14,7 +14,8 @@ import {PADROES} from './architecture_estimator.mjs';
 import {tracking} from './tracking.mjs';
 import {TABLE_LABEL,ENTRY_COUNT_WORD,Q_PT} from './labels.mjs';
 import {submitToCRM} from './submit.mjs';
-import {issuePreview,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY} from './preview.mjs';
+import {issuePreview,fetchCoupon,newEmissionKey,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,COUPON_CHANGED_MESSAGE,COUPON_INVALID_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY} from './preview.mjs';
+import {commercialLines,publicFromOffer,safeOffer,attachCommercialOffer} from './commercial.mjs';
 import {refreshFactorConfig,onFactorConfig} from './pricing/active_config.mjs';
 import {renderPreviewPng} from './preview_png.mjs';
 import {brlStr} from './pricing/decimal.mjs';
@@ -60,7 +61,23 @@ function Summary({rows,onEdit}){return <dl className="summary-list">{rows.map((r
 const qUnit=s=>s.q_basis==='Q_HORAS'?'h':'m²';
 // Porte acima do limite da estimativa automática: informação preservada, sem preço automático, avaliação humana, contato liberado.
 const aboveLimit=pv=>pv.services.some(s=>s.reason===REASON_ABOVE_AUTOMATIC_LIMIT);
-function Result({answers,isPreview}){
+// R15: cupom de portador. O Worker confere o código (existência, estado, validade); o desconto é a regra de coupon.mjs.
+// Código inválido ou consulta indisponível nunca bloqueia a estimativa-base nem a prévia sem cupom.
+export const COUPON_EMPTY={input:'',data:null,state:'idle'};
+const COUPON_FEEDBACK={invalid:COUPON_INVALID_MESSAGE,malformed:'Use de 3 a 32 letras, números ou hífen no código do cupom.',unavailable:'Não foi possível conferir o cupom agora. Tente de novo; a estimativa acima continua disponível.'};
+function CouponBox({cupom,setCupom,onChanged}){
+ const applied=cupom.state==='ok'&&cupom.data;
+ async function aplicar(e){e.preventDefault();if(cupom.state==='checking'||!cupom.input.trim())return;setCupom(c=>({...c,state:'checking'}));
+  const r=await fetchCoupon(cupom.input);onChanged();
+  setCupom(c=>r.ok?{input:r.coupon.code,data:r.coupon,state:'ok'}:{...c,data:null,state:r.error==='invalid-code'?'malformed':r.error==='not-found'?'invalid':'unavailable'});}
+ function remover(){setCupom(COUPON_EMPTY);onChanged();}
+ return <details className="coupon-box" open={cupom.state!=='idle'||undefined}><summary>Tenho um cupom</summary>
+  {applied?<p className="coupon-applied" role="status">Cupom <strong>{cupom.data.code}</strong> aplicado. <button type="button" className="link-button" onClick={remover}>Remover cupom</button></p>
+   :<form className="coupon-form" onSubmit={aplicar}><label htmlFor="coupon-code">Código do cupom</label><input id="coupon-code" autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={40} value={cupom.input} onChange={e=>setCupom({input:e.target.value,data:null,state:'editing'})}/><button type="submit" className="secondary-button" disabled={cupom.state==='checking'||!cupom.input.trim()}>{cupom.state==='checking'?'Conferindo…':'Aplicar cupom'}</button></form>}
+  {COUPON_FEEDBACK[cupom.state]&&<p className="field-error" role="alert">{COUPON_FEEDBACK[cupom.state]}{cupom.state!=='unavailable'&&<> <button type="button" className="link-button" onClick={remover}>Remover cupom</button></>}</p>}
+ </details>;
+}
+function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onEmitted=()=>{}}){
  const held=safetyHold(answers),missing=missingData(answers);
  const payload=packageForCRMv2(answers);
  const pv=payload.pricing_preview;
@@ -71,22 +88,37 @@ function Result({answers,isPreview}){
  const [pRecord,setPRecord]=useState(null);
  const [pngUrl,setPngUrl]=useState('');
  useEffect(()=>()=>{if(pngUrl)URL.revokeObjectURL(pngUrl);},[pngUrl]);
+ const emKey=useRef(null);
+ // Antes da emissão: oferta do cupom consultado sobre a estimativa da tela. Depois: o que o registro emitido gravou.
+ const offer=cupom.state==='ok'?safeOffer(pv,cupom.data):null;
+ const shown=pState==='ready'&&pRecord?commercialLines(pRecord.preview&&pRecord.preview.commercial):commercialLines(publicFromOffer(offer));
+ // Trocar ou remover o cupom depois de uma prévia abre caminho para uma nova; a anterior deixa de seguir no pedido.
+ function couponChanged(){if(pState==='issuing')return;setPState('idle');setPRecord(null);onEmitted(null);}
  async function gerarPrevia(){
   if(pState==='issuing')return;
   setPState('issuing');
   const cs=caseSummaryFromRows(payload.summary,pv.services.map(serviceName));
-  const r=await issuePreview(payload.pricing_inputs,cs,{presented:pv});
+  const coupon=cupom.state==='ok'?cupom.data:null;
+  // R15: uma chave por emissão nova; a mesma só quando o visitante repete após falha técnica com o mesmo pedido.
+  const sig=JSON.stringify([payload.pricing_inputs,cs,coupon&&coupon.code,coupon&&coupon.revision]);
+  if(!emKey.current||emKey.current.sig!==sig)emKey.current={sig,key:newEmissionKey()};
+  const r=await issuePreview(payload.pricing_inputs,cs,{presented:pv,couponCode:coupon?coupon.code:undefined,coupon,emissionKey:emKey.current.key});
+  if(!(r.status===0||r.status>=500))emKey.current=null;
+  // R15: cupom deixou de valer ou mudou: nada é reemitido sozinho; o visitante confere o novo valor ou remove o código.
+  if(!r.ok&&r.couponInvalid){setCupom(c=>({...c,data:null,state:'invalid'}));setPState('idle');return;}
+  if(!r.ok&&r.couponChanged){const f=coupon?await fetchCoupon(coupon.code):{ok:false};setCupom(c=>f.ok?{input:f.coupon.code,data:f.coupon,state:'ok'}:{...c,data:null,state:'invalid'});setPState('coupon_changed');return;}
   // R4: configuração comercial mudou: busca a nova; a tela recalcula e o visitante confere antes de gerar de novo.
   if(!r.ok&&r.factorChanged){await refreshFactorConfig({endpoint:PREVIEW_ENDPOINT});setPState('factor_changed');return;}
   if(!r.ok){setPState(r.outdated?'outdated':'error');return;}
-  setPRecord(r.record);
+  setPRecord(r.record);onEmitted({record:r.record,coupon});
   try{const blob=await renderPreviewPng(r.record);setPngUrl(URL.createObjectURL(blob));setPState('ready');}
   catch{setPState('error');}
  }
  if(isPreview&&pv.status==='CALCULATED'){
   return <div className="result-card">
-   <span className="eyebrow">ESTIMATIVA INICIAL DEMELLO</span>
-   <p className="investment">{brlStr(pv.total_demello)}</p>
+   <span className="eyebrow">{shown?'ESTIMATIVA INICIAL DEMELLO COM CUPOM':'ESTIMATIVA INICIAL DEMELLO'}</span>
+   <p className="investment">{shown?shown.final:brlStr(pv.total_demello)}</p>
+   {shown&&<p className="coupon-offer">Valor-base {shown.base} · Cupom {shown.code} ({shown.benefit}): − {shown.discount}</p>}
    <ul className="result-services" aria-label="Valor DEMELLO por serviço">{calc.map(s=>{const refs=referenceEntries(s.references);return <li key={s.service}>
     <div className="rs-line"><span className="rs-name">{serviceName(s)}</span><strong className="rs-price">{brlStr(s.demello.total)}</strong></div>
     {refs.length>0&&<p className="rs-refs">Referências públicas consultadas: {refs.map(r=>`${r.label} ${brlStr(r.total)}`).join(' · ')}</p>}
@@ -98,13 +130,16 @@ function Result({answers,isPreview}){
     {notes}
     <p className="small-note">Estimativa calculada a partir da referência pública aplicável e da metodologia DEMELLO. Não é proposta, contrato nem garantia de preço; o escopo final é confirmado pela equipe.</p>
    </details>
+   <CouponBox cupom={cupom} setCupom={setCupom} onChanged={couponChanged}/>
    <div className="preview-issue">
     {pState!=='ready'&&<button type="button" className="secondary-button" disabled={pState==='issuing'} onClick={gerarPrevia}>{pState==='issuing'?'Gerando prévia…':'Gerar prévia DEMELLO'}</button>}
     {pState==='error'&&<p className="field-error" role="alert">Não foi possível gerar a prévia agora. A estimativa acima continua disponível.</p>}
     {pState==='factor_changed'&&<p className="field-error" role="alert">{FACTOR_CHANGED_MESSAGE}</p>}
+    {pState==='coupon_changed'&&<p className="field-error" role="alert">{COUPON_CHANGED_MESSAGE}</p>}
     {pState==='outdated'&&<div className="field-error" role="alert"><p>{OUTDATED_MESSAGE}</p><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Recarregar a página</button></div>}
     {pState==='ready'&&pRecord&&<div className="preview-ready" role="status">
      <p>Prévia emitida · código <strong>{pRecord.verification_code}</strong></p>
+     {shown&&<p className="small-note">Cupom {shown.code} registrado na prévia: valor-base {shown.base}, desconto − {shown.discount}, total {shown.final}.</p>}
      <p className="small-note">Registro verificável em {VERIFY_DISPLAY}. A imagem é uma representação da prévia registrada — não é proposta, contrato nem orçamento de obra.</p>
      <a className="secondary-button" href={pngUrl} download={`demello-previa-${pRecord.verification_code}.png`}><DownloadSimple size={20}/>Baixar prévia</a>
     </div>}
@@ -131,6 +166,9 @@ export function App(){
  const [,setFactorRev]=useState(0);
  useEffect(()=>{const off=onFactorConfig(()=>setFactorRev(n=>n+1));refreshFactorConfig({endpoint:PREVIEW_ENDPOINT});return off;},[]);
  const heading=useRef(null),fileInput=useRef(null),photoRef=useRef([]),sentPayload=useRef(null);
+ // R15: cupom digitado/consultado e a última prévia emitida (o pedido e o resumo levam a oferta DESSE registro).
+ const [cupom,setCupom]=useState(COUPON_EMPTY),emitted=useRef(null);
+ const leadPayload=()=>attachCommercialOffer(packageForCRMv2(answers),emitted.current);
  function sendCase(payload){setSendState('sending');submitToCRM(payload,hp).then(r=>{setSendResult(r);setSendState(r.ok?'sent':'error');if(r.ok)tracking.submissionAccepted({answers:payload.answers,sendResult:r,contactValid:valid('X4',{contact:payload.contact}),mode});});}
  const node=nodes[id],sqError=answers.request_intent==='scope_question'?scopeQuestionError(answers.scope_question):null,key=keyOf(id),value=answers[key],rows=summary(answers),home=id==='HOME',canContinue=valid(id,answers)&&(id!=='X4'||canSend(answers,mode))&&!id.startsWith('X3'),resultStep=id==='X3A'||id==='X3B',project=isProject(answers),suggesting=id==='CA7'&&answers.services?.includes('Não sei quais preciso');
  nav.current.key=navKey(id,history);
@@ -170,7 +208,7 @@ export function App(){
  function change(value){if(id==='HOME'&&value!==answers.route)release(answers.photos);setAnswers(a=>updateAnswer(a,id,value));if(id!=='X4')setHistory(h=>h.filter(x=>!x.startsWith('X')));setSubmitted(false);setSendState('idle');setError('');}
  function patch(values){setAnswers(a=>({...a,...values}));setSubmitted(false);setSendState('idle');setError('');}
  function chooseIntent(intent){if(!resultStep||!isIntentAllowed(answers,intent,mode))return;const a={...answers,request_intent:intent,estimate_state:estimateState(answers,mode),lead_stage:LEAD_STAGE[intent]};if(answers.request_intent!==intent)delete a.scope_question;const result=advance(id,a,mode);setAnswers(result.answers);setHistory(h=>[...h,id]);setId(result.id);setExpanded(false);}
- function next(e){e.preventDefault();if(!canContinue)return;if(id==='X4'){if(sendState==='sending')return;const snapshot=packageForCRMv2(answers);sentPayload.current=snapshot;setSubmitted(true);sendCase(snapshot);return;}const result=advanceJourney(id,answers,mode);setAnswers(result.answers);setHistory(h=>result.answers.route!==answers.route?['HOME']:[...h,id]);setId(result.id);setExpanded(false);}
+ function next(e){e.preventDefault();if(!canContinue)return;if(id==='X4'){if(sendState==='sending')return;const snapshot=leadPayload();sentPayload.current=snapshot;setSubmitted(true);sendCase(snapshot);return;}const result=advanceJourney(id,answers,mode);setAnswers(result.answers);setHistory(h=>result.answers.route!==answers.route?['HOME']:[...h,id]);setId(result.id);setExpanded(false);}
  function back(){
   if(!history.length)return;
   const n=nav.current;
@@ -179,7 +217,7 @@ export function App(){
   n.replace=true;setId(history.at(-1));setHistory(h=>h.slice(0,-1));setSubmitted(false);setExpanded(false);
  }
  function edit(target){const path=routeNodes(answers),index=path.indexOf(target);setHistory(target==='HOME'?[]:['HOME',...path.slice(0,Math.max(0,index))]);setId(target);setSubmitted(false);setExpanded(false);}
- function reset(){release(answers.photos);setAnswers({});setId('HOME');setHistory([]);setSubmitted(false);setSendState('idle');setSendResult(null);setHp('');sentPayload.current=null;setExpanded(false);setAux(false);setModal(null);}
+ function reset(){release(answers.photos);setAnswers({});setId('HOME');setHistory([]);setSubmitted(false);setSendState('idle');setSendResult(null);setHp('');sentPayload.current=null;setCupom(COUPON_EMPTY);emitted.current=null;setExpanded(false);setAux(false);setModal(null);}
  function redirect(route){release(answers.photos);setAnswers(a=>switchRoute(a,route,{redirect:id==='S1'}));setHistory(['HOME']);setId(starts[route]);setAux(false);setSubmitted(false);}
  async function addPhotos(e){
    const files=Array.from(e.target.files??[]);e.target.value='';const next=[...(answers.photos??[])];let issue='';
@@ -187,7 +225,7 @@ export function App(){
    patch({photos:next});setError(issue);
  }
  function removePhoto(index){const photos=answers.photos??[];URL.revokeObjectURL(photos[index].url);patch({photos:photos.filter((_,i)=>i!==index)});}
- function download(){const payload=sentPayload.current??packageForCRMv2(answers);const text=buildClientSummary(payload);const url=URL.createObjectURL(new Blob([`\uFEFF${text}`],{type:'text/plain;charset=utf-8'}));const anchor=document.createElement('a');anchor.href=url;anchor.download='demello-resumo-do-seu-caso.txt';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ function download(){const payload=sentPayload.current??leadPayload();const text=buildClientSummary(payload);const url=URL.createObjectURL(new Blob([`\uFEFF${text}`],{type:'text/plain;charset=utf-8'}));const anchor=document.createElement('a');anchor.href=url;anchor.download='demello-resumo-do-seu-caso.txt';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
  async function copy(){try{await navigator.clipboard.writeText(rows.map(r=>`${r.label}: ${r.value}`).join('\n'));setCopied(true);}catch{setError('Selecione o texto do resumo para copiar.');}}
  const selectCards=()=>{const multi=node.type==='multi';return <fieldset className={`choices ${home?'entry-grid':''} ${node.options.length>5&&!home?'compact':''} ${id==='S1'?'service-grid':''}`}><legend className="sr-only">{node.title}</legend>{node.options.map(option=><label className={`choice ${(multi?value?.includes(option.value):value===option.value)?'selected':''}`} key={option.value}><span>{home?<><strong>{option.label}</strong><small>{descriptions[option.value]}</small></>:option.label}</span><input type={multi?'checkbox':'radio'} name={id} checked={multi?!!value?.includes(option.value):value===option.value} onChange={()=>change(multi?toggle(value,option.value,id==='REG_C4'?'Não sei/não tenho agora':id==='CA7'?'Não sei quais preciso':undefined):option.value)}/></label>)}</fieldset>;};
  const stage=home?0:id==='X4'?3:id.startsWith('X3')?2:id==='X1'?1:1;
@@ -221,7 +259,7 @@ export function App(){
  {['text','story'].includes(node.type)&&<><label className="text-field" htmlFor="story">{node.type==='story'?'Seu relato':id==='HRS_CTX'?'O que você precisa?':'O que está acontecendo?'}</label><textarea id="story" rows={3} maxLength={node.type==='story'?600:280} placeholder={node.type==='story'?'Conte em poucas palavras...':'Uma frase é suficiente.'} value={value??''} onChange={e=>change(e.target.value)}/><div className="character-count">{value?.length??0}/{node.type==='story'?600:280}</div></>}
  {id==='P2'&&<div className="photos"><input className="sr-only" ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp" multiple aria-label="Selecionar fotos opcionais" onChange={addPhotos}/><button type="button" className="secondary-button" onClick={()=>fileInput.current?.click()}><Plus size={20}/>Adicionar fotos</button><p className="small-note">Opcional · Até 6 fotos JPG, PNG ou WebP, de até 8 MB cada. As imagens ficam apenas nesta página, sem envio ou análise automática.</p>{!!answers.photos?.length&&<ul className="photo-list">{answers.photos.map((p,i)=><li key={p.url}><img src={p.url} alt={`Foto anexada: ${p.name}`}/><span>{p.name}</span><button type="button" className="icon-button" aria-label={`Remover foto ${i+1}`} onClick={()=>removePhoto(i)}><X size={18}/></button></li>)}</ul>}<p className="examples">Exemplos: “Apareceu uma rachadura depois da reforma.” · “Quero tirar uma parede.” · “Tem água aparecendo no teto.” · “Quero avaliar o imóvel antes de comprar.”</p></div>}
  {id==='X1'&&<div className="review-summary"><Summary rows={rows} onEdit={edit}/></div>}
- {(id==='X3A'||id==='X3B')&&<Result answers={answers} isPreview={id==='X3A'}/>}
+ {(id==='X3A'||id==='X3B')&&<Result answers={answers} isPreview={id==='X3A'} cupom={cupom} setCupom={setCupom} onEmitted={e=>{emitted.current=e;}}/>}
  {id==='X4'&&!submitted&&answers.request_intent==='scope_question'&&<div className="scope-question"><label className="text-field" htmlFor="scope-question">Qual é a sua dúvida?</label><textarea id="scope-question" rows={3} maxLength={SCOPE_QUESTION_MAX} placeholder="Uma ou duas frases bastam." aria-describedby="scope-question-count scope-question-error" aria-invalid={!!(sqError&&answers.scope_question)} value={answers.scope_question??''} onChange={e=>patch({scope_question:e.target.value})}/><div id="scope-question-count" className="character-count">{(answers.scope_question??'').length}/{SCOPE_QUESTION_MAX} · limite de {SCOPE_QUESTION_MAX} caracteres</div><p id="scope-question-error" className="field-error" role="alert">{sqError&&answers.scope_question?SCOPE_QUESTION_MESSAGE[sqError]:''}</p></div>}
  {id==='X4'&&!submitted&&<><p className="helper">Seu nome e pelo menos um meio de contato.</p><ContactFields value={value} onChange={change}/><div aria-hidden="true" style={{position:'absolute',width:1,height:1,overflow:'hidden',clip:'rect(0 0 0 0)',whiteSpace:'nowrap'}}><label>Não preencha este campo<input type="text" tabIndex={-1} autoComplete="off" value={hp} onChange={e=>setHp(e.target.value)}/></label></div><p className="small-note">Ao concluir, você envia estes dados e as respostas do seu caso para a DEMELLO Engenharia, que poderá usá-los para analisar seu caso e entrar em contato pelos meios informados. As fotos não são enviadas. {answers.request_intent==='scope_question'?'A sua dúvida segue junto com o caso. ':''}Veja Privacidade.</p></>}
  {id==='X4'&&submitted&&sendState==='sending'&&<div className="result-card" role="status" aria-live="polite"><p>Enviando as informações do seu caso…</p></div>}

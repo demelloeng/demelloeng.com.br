@@ -11,6 +11,7 @@
 // UI, retorna { ok, status, record?, error? }.
 
 import { pricePreview } from './pricing/active_config.mjs';
+import { applyCoupon, normalizeCouponCode } from './pricing/coupon.mjs';
 
 const ENV_ENDPOINT =
   (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_PREVIEW_ENDPOINT) || '';
@@ -103,9 +104,46 @@ export const OUTDATED_ERROR = 'PRICING_VERSION_MISMATCH';
 export const OUTDATED_MESSAGE = 'A calculadora foi atualizada. Recarregue a página e confira sua estimativa antes de gerar a prévia.';
 export const FACTOR_CHANGED_REASON = 'FACTOR_REVISION_MISMATCH';
 export const FACTOR_CHANGED_MESSAGE = 'A estimativa foi atualizada. Confira o novo valor acima antes de gerar a prévia.';
+export const COUPON_CHANGED_REASON = 'COUPON_REVISION_MISMATCH';
+export const COUPON_CHANGED_MESSAGE = 'O cupom foi alterado. Verifique se ainda é válido antes de gerar a prévia.';
+export const COUPON_INVALID_REASON = 'COUPON_INVALID';
+export const COUPON_INVALID_MESSAGE = 'Cupom inválido ou expirado. Remova-o ou use outro código.';
+export const FINAL_TOTAL_REASON = 'FINAL_TOTAL_MISMATCH';
 export const PREVIEW_ENDPOINT = ENV_ENDPOINT;
 
-// opts é só para teste (e para passar a prévia apresentada): { endpoint, fetchImpl, presented }.
+// R15: chave de emissão (Worker: ^[a-z0-9-]{16,64}$). Uma por emissão nova; a mesma nas retentativas técnicas.
+export function newEmissionKey() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = new Uint8Array(32);
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) crypto.getRandomValues(bytes);
+  else for (let i = 0; i < 32; i++) bytes[i] = Math.floor(Math.random() * 256);
+  let key = '';
+  for (let i = 0; i < 32; i++) key += chars[bytes[i] % chars.length];
+  return key;
+}
+
+// R15: consulta cupom pelo código. Retorna { ok, coupon?, error? }.
+export async function fetchCoupon(code, opts = {}) {
+  const endpoint = opts.endpoint || ENV_ENDPOINT;
+  const fetchImpl = opts.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
+  if (!endpoint || !fetchImpl) return { ok: false, error: 'no-endpoint' };
+  let normalized;
+  try { normalized = normalizeCouponCode(code); } catch { return { ok: false, error: 'invalid-code' }; }
+  const url = `${endpoint.replace(/\/?$/, '/')}coupons/${encodeURIComponent(normalized)}`;
+  try {
+    const res = await fetchImpl(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
+    if (res.status === 200) {
+      const data = await res.json();
+      if (data.schema === 'COUPON_V1') return { ok: true, coupon: data };
+    }
+    if (res.status === 404) return { ok: false, error: 'not-found' };
+    return { ok: false, error: 'unavailable' };
+  } catch { return { ok: false, error: 'network' }; }
+}
+
+// opts: { endpoint, fetchImpl, presented, couponCode, coupon, emissionKey }.
+// coupon: dados do cupom validado (schema COUPON_V1) para calcular a expectativa comercial.
+// emissionKey: chave única por clique; gere com newEmissionKey() e reutilize nas retentativas.
 export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
   const endpoint = opts.endpoint || ENV_ENDPOINT;
   const fetchImpl = opts.fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
@@ -116,6 +154,21 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
   if (!presented) { try { presented = pricePreview(pricingInputs); } catch { presented = null; } }
   const expectation = expectationFromPreview(presented);
   if (expectation) body.expectation = expectation;
+
+  // R15: cupom (código e expectativa comercial). O Worker revalida; se divergir, 409 COUPON_*.
+  if (opts.couponCode && opts.coupon && expectation) {
+    body.coupon_code = opts.couponCode;
+    let offer = null;
+    try { offer = applyCoupon(presented, opts.coupon); } catch { offer = null; }
+    if (offer) {
+      expectation.coupon = { code: offer.coupon.code, revision: offer.coupon.revision };
+      expectation.final_total = offer.final_total;
+    }
+  }
+
+  // R15: chave de emissão idempotente. O mesmo clique gera uma chave; retentativas reutilizam.
+  const emissionKey = opts.emissionKey || newEmissionKey();
+  body.emission_key = emissionKey;
 
   let attempt = { status: 0, payload: null, error: 'unsent' };
   for (let i = 0; i < 2; i += 1) {
@@ -129,13 +182,16 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
 
   const p = attempt.payload || {};
   if (attempt.status === 201 && p.schema === 'PUBLIC_PREVIEW_V1' && p.verification_code && p.preview) {
-    return { ok: true, status: 201, record: p };
+    return { ok: true, status: 201, record: p, emissionKey };
   }
   const outdated = attempt.status === 409 && p.error === OUTDATED_ERROR;
   // R4: a configuração comercial mudou depois do cálculo. Nada é reemitido sozinho: o chamador busca a nova
   // configuração, a tela recalcula e o visitante confere o novo valor antes de gerar a prévia de novo.
   const factorChanged = outdated && p.reason === FACTOR_CHANGED_REASON;
-  return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed', outdated, factorChanged };
+  // R15: cupom inválido ou revisão mudou. Nunca reemite automaticamente: o visitante remove ou troca o código.
+  const couponChanged = outdated && (p.reason === COUPON_CHANGED_REASON || p.reason === FINAL_TOTAL_REASON);
+  const couponInvalid = outdated && p.reason === COUPON_INVALID_REASON;
+  return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed', outdated, factorChanged, couponChanged, couponInvalid, emissionKey };
 }
 
 // A demonstração local (vite --mode demo) aponta a verificação para o próprio computador; o padrão é o site.
