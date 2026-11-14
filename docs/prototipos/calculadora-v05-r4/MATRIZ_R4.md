@@ -34,7 +34,7 @@ Local, sem push/PR/merge/deploy/publicação. Commits só nas branches `exp/` ab
 | R05 | feito (local) | Painel da maquete: `rowLabel` traduz o motivo do motor sem fundir casos — falta de quantidade "Falta a área de projeção" (nomes de `Q_PT`, agora em `labels.mjs`, o mesmo do detalhamento), "Informe as horas de cada serviço", "Áreas a conferir", "Sem referência automática"; limite mantém "Avaliação da equipe"; motivo desconhecido mantém "Aguardando dados". Legenda: `legendLayers` inclui Arquitetura só quando a V05 a desenha (fallback/miniatura não a desenham). Endereço de verificação exibido na página e no PNG = `VERIFY_DISPLAY`, derivado do mesmo `VERIFY_BASE` do QR. Estimativa inicial, detalhamento e as duas intenções comerciais inalterados. Teste `tests/r05_painel.test.mjs`; suíte 574/574. Inspeção 127.0.0.1 (1366×768, Já sei, Estrutural+Arquitetura, 200 m², projeção desconhecida): "Estrutural — Falta a área de projeção", "Arquitetura — R$ 3.918,00", legenda Arquitetura + Estrutura. |
 | R06 | pendente | |
 | R07 | pendente | |
-| R08 | pendente | Trocar o portão DEMO_ARQ (MODE==='demo') pela opção pública real. |
+| R08 | feito (local) | `journey.mjs`: Arquitetura é a 1ª opção pública de CA7 (fim do portão `DEMO_ARQ`); S1 inalterado. Sentinela pela jornada Construir com a configuração publicada (0,60, rev. 1): R$ 12.509,76 (6.268,80 + 3.921,60 + 1.121,28 + 1.198,08), igual nos três padrões e no painel. Com isso o aviso de circulação do R04 passa a ter caso público (sobrado 150/75 Alto). `journey.test` escolhe Estrutural explicitamente no percurso automático (a ordem de CA7 mudou). Teste `tests/r08_arquitetura.test.mjs`; suíte 579/579. |
 | R09 | pendente (condicional) | |
 | R10 | pendente (condicional) | |
 | R11 | pendente (condicional) | |
