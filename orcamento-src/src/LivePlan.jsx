@@ -1,5 +1,5 @@
 import {Component,useEffect,useMemo,useRef,useState} from 'react';
-import {livePlanModel,LAYER_LABEL} from './live_plan.mjs';
+import {livePlanModel,LAYER_LABEL,areaPhrase} from './live_plan.mjs';
 import {sceneSpec,describeScene,VIEWS,LAYER_COLOR,isoShapes,isoViewBox} from './maquete_model.mjs';
 import {friendlyServiceName as serviceName} from './client_summary.mjs';
 import {brlStr} from './pricing/decimal.mjs';
@@ -110,7 +110,7 @@ function LivePlanInner({answers,expanded}){
  const view=picked??(spec.layers.length?'camadas':'conjunto');
  const total=tween??m.total;
  const layerNames=[...m.layers].map(l=>LAYER_LABEL[l]);
- const label=`${describeScene(spec,LAYER_LABEL)}${m.area?` Área informada: ${m.area.value.replace('.',',')} m².`:''}`;
+ const label=`${describeScene(spec,LAYER_LABEL)}${m.area?` ${areaPhrase(m.area)}`:''}`;   // R03: a área é nomeada pela origem
  return <section className={`live-plan lp-${m.mode}`} aria-label="Maquete e estimativa">
   <figure className="lp-figure">
    {useV5

@@ -99,6 +99,7 @@ export function sceneSpec(model) {
     d: Math.round(w * 0.66 * 10) / 10,
     floors,
     floorsKnown: model?.floorsDrawn != null,
+    floorsDeclared: Number.isInteger(model?.floors) ? model.floors : null,   // R03: informados (o desenho tem até MAX_FLOORS)
     layers: (model?.layers ?? []).filter((l) => l !== 'terreno'),
     terrain,
     hasArea: !!model?.area,
@@ -107,7 +108,10 @@ export function sceneSpec(model) {
 
 // Texto equivalente da maquete (leitor de tela e legenda): descreve o que está desenhado, sem número que não seja da pessoa.
 export function describeScene(spec, layerLabels) {
-  const parts = [spec.floorsKnown ? `${spec.floors} ${spec.floors === 1 ? 'pavimento' : 'pavimentos'}` : 'um volume genérico'];
+  const extra = spec.floorsKnown && spec.floorsDeclared > spec.floors;
+  const parts = [!spec.floorsKnown ? 'um volume genérico'
+    : extra ? `${spec.floorsDeclared} pavimentos informados, ${spec.floors} representados`
+      : `${spec.floors} ${spec.floors === 1 ? 'pavimento' : 'pavimentos'}`];
   const names = [...spec.layers, ...(spec.terrain ? ['terreno'] : [])].map((l) => layerLabels[l]).filter(Boolean);
   return `Maquete esquemática: ${parts[0]}${names.length ? `, com ${names.join(', ')}` : ''}.`;
 }

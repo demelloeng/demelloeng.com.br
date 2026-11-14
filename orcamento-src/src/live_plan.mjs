@@ -2,7 +2,7 @@
 // Tudo vem dos dados REAIS da calculadora (pricing_inputs / pricing_preview do motor): nenhum valor, área ou serviço é inventado aqui.
 // O desenho é ILUSTRATIVO: a forma é sempre a mesma (retângulo), só a escala acompanha a ordem de grandeza da área informada.
 // Este módulo não calcula preço: lê o que o motor devolveu (status e total por serviço) e decide o que mostrar.
-import { derivePricingInputs } from './payload_v2.mjs';
+import { maquetteFacts } from './maquete5_input.mjs';
 import { REASON_ABOVE_AUTOMATIC_LIMIT } from './pricing/engine.mjs';
 import { pricePreview } from './pricing/active_config.mjs';
 
@@ -41,30 +41,34 @@ export function footprintFor(area) {
   return { w, h: Math.round(w / 1.5) };
 }
 
-const areaOf = (pi) => {
-  for (const [key, kind] of [['area_total', 'building'], ['area_new', 'building'], ['area_escopo', 'building'], ['area_atendida', 'building'], ['area_terreno', 'terrain']]) {
-    if (pi[key] !== null && pi[key] !== undefined) return { value: pi[key], kind };
-  }
-  return null;
+// R03 complementar: área e pavimentos vêm do MESMO modelo de proveniência da V05 (maquetteFacts). Só a área da
+// edificação e a do terreno dão escala ao desenho; escopo e área atendida aparecem no texto, sem escala de edificação.
+const DRAWN_KINDS = ['building', 'terrain'];
+const AREA_LABEL = {
+  'building:declarada': 'Área informada',
+  'building:derivada': 'Área total (existente + nova)',
+  'terrain:declarada': 'Área do terreno informada',
+  'scope:declarada': 'Área do escopo informada',
+  'served:declarada': 'Área atendida informada',
 };
-
-const floorsOf = (answers) => {
-  const raw = answers?.CA5?.value;
-  const n = typeof raw === 'string' && /^[1-9][0-9]{0,2}$/.test(raw.trim()) ? Number(raw) : null;
-  return n;
-};
+// Texto acessível da área, pelo que ela é (nunca "informada" para o que não foi).
+export function areaPhrase(area) {
+  const label = area && AREA_LABEL[`${area.kind}:${area.source}`];
+  return label ? `${label}: ${String(area.value).replace('.', ',')} m².` : '';
+}
 
 // Retorna null quando ainda não há o que desenhar (nenhum serviço escolhido e nenhuma área).
 export function livePlanModel(answers) {
-  let pi;
+  let facts;
   let pv;
   try {
-    pi = derivePricingInputs(answers || {});
-    pv = pricePreview(pi);
+    facts = maquetteFacts(answers);
+    if (!facts) return null;
+    pv = pricePreview(facts.pi);
   } catch {
     return null;
   }
-  const area = areaOf(pi);
+  const { area } = facts;
   if (!pv.services.length && !area) return null;
 
   const rows = pv.services.map((s) => ({
@@ -75,10 +79,10 @@ export function livePlanModel(answers) {
     service: s,
   }));
   const layers = [...new Set(rows.map((r) => r.layer).filter(Boolean))];
-  const floors = floorsOf(answers);
+  const floors = facts.floors;
   const allPriced = pv.status === 'CALCULATED' && pv.total_demello !== null;
   return {
-    area: area ? { ...area, footprint: footprintFor(area.value) } : null,
+    area: area ? { ...area, footprint: DRAWN_KINDS.includes(area.kind) ? footprintFor(area.value) : null } : null,
     floors,
     floorsDrawn: floors === null ? null : Math.min(floors, MAX_FLOORS_DRAWN),
     floorsExtra: floors !== null && floors > MAX_FLOORS_DRAWN ? floors - MAX_FLOORS_DRAWN : 0,

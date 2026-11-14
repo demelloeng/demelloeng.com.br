@@ -13,6 +13,7 @@ export const PIL = 0.25;
 export const WALL = 0.15;
 export const BASE_Y = 0.15;     // soleira: topo do piso térreo acima do terreno
 export const MAX_FLOORS = 8;
+export const MAX_DECLARED_FLOORS = 200; // R03: mesmo limite da pergunta CA5; acima disso não é pavimento declarado
 export const RATIO = 1.5;       // largura : profundidade (ilustrativo)
 const SPAN = 4.5;               // vão de desenho entre eixos (ilustrativo)
 const MAX_BAYS = 8;
@@ -40,7 +41,7 @@ const lin = (a, b, n) => Array.from({ length: n + 1 }, (_, i) => a + ((b - a) * 
 // Projeção: a informada prevalece; sem ela, média ilustrativa = área total / pavimentos INFORMADOS (nunca os desenhados).
 export function buildingSpec(input = {}) {
   const num = (v) => (Number.isFinite(Number(v)) && Number(v) > 0 ? Number(v) : null);
-  const floorsIn = Number.isInteger(input.floors) && input.floors > 0 ? input.floors : null;
+  const floorsIn = Number.isInteger(input.floors) && input.floors > 0 && input.floors <= MAX_DECLARED_FLOORS ? input.floors : null;
   const floors = Math.min(MAX_FLOORS, floorsIn ?? 2);
   const areaTotal = num(input.areaTotal);
   const projIn = num(input.areaProj);
@@ -48,15 +49,23 @@ export function buildingSpec(input = {}) {
   const layers = [...new Set((input.services ?? []).map((s) => SERVICE_LAYER[s]).filter(Boolean))];
   const terrain = layers.includes('terreno');
   const hasBuilding = areaProj !== null || layers.some((l) => l !== 'terreno') || !terrain;
-  const A = areaProj ?? 96;                              // sem área: volume genérico (a escala gráfica não aparece)
-  const w = r2(Math.sqrt(A * RATIO));
-  const d = r2(A / w);
+  // Dimensões-base. Arredonda para o desenho só quando o arredondamento não zera a medida (áreas mínimas); se a projeção
+  // não tem representação finita e positiva, cai no volume genérico sem escala (o dado da pessoa fica em areaProj).
+  const base = (A) => {
+    const wr = Math.sqrt(A * RATIO);
+    const w = r2(wr) > 0 ? r2(wr) : wr;
+    const dr = A / w;
+    const d = r2(dr) > 0 ? r2(dr) : dr;
+    return [w, d].every((v) => Number.isFinite(v) && v > 0) ? { w, d } : null;
+  };
+  const drawn = areaProj !== null ? base(areaProj) : null;
+  const { w, d } = drawn ?? base(96);                    // sem área (ou sem representação): volume genérico
   return {
     w, d, floors,
     floorsDeclared: floorsIn,
     floorsKnown: floorsIn !== null,
     floorsExtra: floorsIn !== null && floorsIn > MAX_FLOORS ? floorsIn - MAX_FLOORS : 0,
-    hasArea: areaProj !== null,
+    hasArea: drawn !== null,
     areaProj, areaTotal, areaTerreno: num(input.areaTerreno),
     areaProjSource: projIn !== null ? 'informada' : areaProj !== null ? 'media' : null,
     typology: input.typology ?? null,
