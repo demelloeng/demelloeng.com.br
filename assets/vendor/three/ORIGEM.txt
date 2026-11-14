@@ -11,3 +11,18 @@ Arquivos copiados SEM alteração (bytes do pacote), na mesma estrutura de pasta
   852e0e8699169bf9f6fdc6bda3e682d078dcbc738b5d33e74df594721bff271d  LICENSE
 Importados pelas maquetes: "three", "three/addons/controls/OrbitControls.js", "three/addons/loaders/GLTFLoader.js"; o GLTFLoader importa ../utils/BufferGeometryUtils.js.
 O mapa de importação das páginas (scripts/gerar-paginas-servico-v02.py) aponta para estes arquivos; nenhum recurso é carregado de CDN.
+Complementos da maquete V05 da calculadora (R4, 14/11/2026), mesmo pacote three@0.160.0, bytes inalterados (sha256):
+  e21f41b7ef2016f2984a5d27850b42dffa797a6a194a138e288b06576d765a7b  examples/jsm/environments/RoomEnvironment.js
+  9b8d541b77b0ddc79afaa6a1de8941452c191b8b9006f04e7b8fc422e2b263f7  examples/jsm/math/SimplexNoise.js
+  d234e578618fa816955ebdc059c049c577e203e650e33cf22bde3f232c29e669  examples/jsm/postprocessing/EffectComposer.js
+  5140b7cc63800381ced45bef3a7a55c471f4be3cd9eb70b947e7ebfbe92658c2  examples/jsm/postprocessing/GTAOPass.js
+  328cf7db0da5d9be83ffe39d54b01d5ac1fddf108cc98182ddbb056f5c8b537f  examples/jsm/postprocessing/MaskPass.js
+  13817fc7a87f662d29d2c5e00f44d3a4588c9afac4a372de0cacb0e44e368ffd  examples/jsm/postprocessing/OutputPass.js
+  b3c6128340eaa37e40a6a2f1b738e894c855239417d50959759b34a2b5e89f92  examples/jsm/postprocessing/Pass.js
+  1c90c085312871c4bcdccfcf519499c6276dd503363fcf7cb7f703add45cf4a2  examples/jsm/postprocessing/RenderPass.js
+  3b28a1ee27e0eb96c0eab137a1f442ccf127a926904eced2d51e125ec44af781  examples/jsm/postprocessing/ShaderPass.js
+  4e3346db194db56a596cd074e9bdb39fb5eb52040c333e0d29dc4eb1324d3b1d  examples/jsm/shaders/CopyShader.js
+  94edb1040c7b5e859b17c2817782c8e895118a2d824ed162cab187aa32cc5a15  examples/jsm/shaders/GTAOShader.js
+  53a52e430c27bc36ceaab8ae90a2b4af7b02672d7ee4b29d6ba3c28e09c92c2a  examples/jsm/shaders/OutputShader.js
+  3dab419b23529f8fd59e2713458502f9f51d2dd3af3e1285dc671fcc451d49fb  examples/jsm/shaders/PoissonDenoiseShader.js
+Importados por orcamento-src/src/maquete5_scene.mjs por import() dinamico (ambiente de estudio e oclusao), com sua cadeia de imports relativos.

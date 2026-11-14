@@ -129,5 +129,7 @@ export async function issuePreview(pricingInputs, caseSummary = {}, opts = {}) {
   return { ok: false, status: attempt.status || 0, error: p.error || attempt.error || 'issue-failed', outdated: attempt.status === 409 && p.error === OUTDATED_ERROR };
 }
 
-export const VERIFY_BASE = 'https://demelloeng.com.br/verificar/';
+// A demonstração local (vite --mode demo) aponta a verificação para o próprio computador; o padrão é o site.
+export const VERIFY_BASE =
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_VERIFY_BASE) || 'https://demelloeng.com.br/verificar/';
 export const verifyUrl = (code) => `${VERIFY_BASE}?codigo=${encodeURIComponent(code)}`;
