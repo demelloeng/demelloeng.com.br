@@ -67,13 +67,15 @@ export const COUPON_EMPTY={input:'',data:null,state:'idle'};
 const COUPON_FEEDBACK={invalid:COUPON_INVALID_MESSAGE,malformed:'Use de 3 a 32 letras, números ou hífen no código do cupom.',unavailable:'Não foi possível conferir o cupom agora. Tente de novo; a estimativa acima continua disponível.'};
 function CouponBox({cupom,setCupom,onChanged}){
  const applied=cupom.state==='ok'&&cupom.data;
- async function aplicar(e){e.preventDefault();if(cupom.state==='checking'||!cupom.input.trim())return;setCupom(c=>({...c,state:'checking'}));
+ async function aplicar(e){if(e)e.preventDefault();if(cupom.state==='checking'||!cupom.input.trim())return;setCupom(c=>({...c,state:'checking'}));
   const r=await fetchCoupon(cupom.input);onChanged();
   setCupom(c=>r.ok?{input:r.coupon.code,data:r.coupon,state:'ok'}:{...c,data:null,state:r.error==='invalid-code'?'malformed':r.error==='not-found'?'invalid':'unavailable'});}
  function remover(){setCupom(COUPON_EMPTY);onChanged();}
  return <details className="coupon-box" open={cupom.state!=='idle'||undefined}><summary>Tenho um cupom</summary>
   {applied?<><p className="coupon-applied" role="status">Cupom <strong>{cupom.data.code}</strong> aplicado. <button type="button" className="link-button" onClick={remover}>Remover cupom</button></p><p className="small-note">O desconto fica registrado quando você gera a prévia DEMELLO; o pedido e o resumo seguem o valor da prévia gerada.</p></>
-   :<form className="coupon-form" onSubmit={aplicar}><label htmlFor="coupon-code">Código do cupom</label><input id="coupon-code" autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={40} value={cupom.input} onChange={e=>setCupom({input:e.target.value,data:null,state:'editing'})}/><button type="submit" className="secondary-button" disabled={cupom.state==='checking'||!cupom.input.trim()}>{cupom.state==='checking'?'Conferindo…':'Aplicar cupom'}</button></form>}
+   // Sem elemento form: o resultado já fica dentro do formulário da jornada (formulário aninhado faria o navegador enviar e
+   // recarregar a página, perdendo as respostas). Enter no campo aplica o cupom e não envia a pergunta.
+   :<div className="coupon-form" role="group" aria-label="Cupom"><label htmlFor="coupon-code">Código do cupom</label><input id="coupon-code" autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={40} value={cupom.input} onChange={e=>setCupom({input:e.target.value,data:null,state:'editing'})} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();aplicar();}}}/><button type="button" className="secondary-button" onClick={()=>aplicar()} disabled={cupom.state==='checking'||!cupom.input.trim()}>{cupom.state==='checking'?'Conferindo…':'Aplicar cupom'}</button></div>}
   {COUPON_FEEDBACK[cupom.state]&&<p className="field-error" role="alert">{COUPON_FEEDBACK[cupom.state]}{cupom.state!=='unavailable'&&<> <button type="button" className="link-button" onClick={remover}>Remover cupom</button></>}</p>}
  </details>;
 }

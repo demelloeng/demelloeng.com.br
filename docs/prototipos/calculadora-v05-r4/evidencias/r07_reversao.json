@@ -1,0 +1,106 @@
+{
+  "revisoes": {
+    "eng_base": "ea26c6ed4c2a5d11dd81c80815ee4ecd877db6d6",
+    "site_base": "598e8f007b61e007e1795fdd06552f5259916f1e",
+    "eng_r4": "98c72784672764ff2db7c6c8595e876705169cf6",
+    "site_r4": "65bd2f785a4251848998d2ec7c882c5b53cde59a"
+  },
+  "emissao": {
+    "site base -> Worker base": {
+      "ok": true,
+      "status": 201,
+      "error": null,
+      "total": "8321.28"
+    },
+    "site base -> Worker R4": {
+      "ok": false,
+      "status": 409,
+      "error": "PRICING_VERSION_MISMATCH",
+      "outdated": true
+    }
+  },
+  "matriz": [
+    {
+      "registro": "registro R4 com cupom (R$ 11.258,78)",
+      "Worker R4 + verificar R4": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": true,
+        "pagina": "R$ 11.258,78 (com cupom)"
+      },
+      "Worker R4 + verificar base": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": true,
+        "pagina": "R$ 12.509,76"
+      },
+      "Worker base + verificar R4": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 12.509,76"
+      },
+      "Worker base + verificar base": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 12.509,76"
+      }
+    },
+    {
+      "registro": "registro R4 sem cupom (R$ 12.509,76)",
+      "Worker R4 + verificar R4": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 12.509,76"
+      },
+      "Worker R4 + verificar base": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 12.509,76"
+      },
+      "Worker base + verificar R4": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 12.509,76"
+      },
+      "Worker base + verificar base": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 12.509,76"
+      }
+    },
+    {
+      "registro": "registro de base (site 598e8f0 + Worker ea26c6e)",
+      "Worker R4 + verificar R4": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 8.321,28"
+      },
+      "Worker R4 + verificar base": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 8.321,28"
+      },
+      "Worker base + verificar R4": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 8.321,28"
+      },
+      "Worker base + verificar base": {
+        "status": 200,
+        "integridade": "VERIFIED",
+        "commercial_na_resposta": false,
+        "pagina": "R$ 8.321,28"
+      }
+    }
+  ],
+  "nota": "Ensaio em processo sobre copia do SQLite de uma rodada local do gate_b; nada implantado. Codigos de verificacao omitidos."
+}

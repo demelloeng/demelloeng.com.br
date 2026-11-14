@@ -221,6 +221,13 @@ test('R15 tela: campo de cupom só no ramo calculado; falha do cupom nunca escon
   // a chave só se repete com o MESMO corpo: a assinatura cobre o valor apresentado e a revisão do fator (senão, após
   // falha técnica + atualização do fator, o Worker responderia EMISSION_KEY_REUSED)
   assert.match(src, /const sig=JSON\.stringify\(\[payload\.pricing_inputs,cs,pv\.total_demello,pv\.factor_config_revision,coupon&&coupon\.code,coupon&&coupon\.revision\]\);/);
+  // R07 (achado na revisão da interface real): o resultado é renderizado DENTRO do formulário da jornada. Formulário
+  // aninhado fazia "Aplicar cupom" enviar a página e recarregá-la, perdendo as respostas. Nenhum <form> e nenhum botão
+  // sem type="button" entre o cupom e o fim do Result.
+  const resultSrc = src.slice(src.indexOf('function CouponBox('), src.indexOf('export function App('));
+  assert.doesNotMatch(resultSrc, /<form\b/, 'sem formulário aninhado no resultado');
+  for (const b of resultSrc.match(/<button\b[^>]*>/g) || []) assert.match(b, /type="button"/, b);
+  assert.match(src, /<form id="question-form" onSubmit=\{next\}/, 'o resultado continua dentro do formulário da jornada');
   // cupom aplicado sem prévia: a tela avisa que o desconto só é registrado na prévia (o pedido segue o registro)
   assert.match(src, /O desconto fica registrado quando você gera a prévia DEMELLO/);
 });
