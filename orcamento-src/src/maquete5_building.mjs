@@ -32,6 +32,8 @@ export const HIGH_STANDARD = ['Alto', 'amplo'];
 export const LOW_STANDARD = ['Econômico', 'compacto'];
 export const MID_STANDARD = ['Médio', 'confortavel'];
 export const ILLUSTRATIVE_NOTE = 'Representação ilustrativa. O dimensionamento é feito no projeto.';
+// R04: quando o vão da escada não cabe no desenho, a circulação entre pavimentos não é representada (nunca uma escada fictícia).
+export const CIRCULATION_NOTE = 'Escada não representada nesta maquete: a circulação entre pavimentos é definida no projeto de arquitetura.';
 
 const r2 = (v) => Math.round(v * 100) / 100;
 const lin = (a, b, n) => Array.from({ length: n + 1 }, (_, i) => a + ((b - a) * i) / n);
@@ -475,6 +477,15 @@ export function fitBox(box, { az, el, fovDeg = 30, aspect = 1.6, band = 0.2, mar
 }
 
 // Texto equivalente (leitor de tela): só o que a pessoa informou e o que está desenhado.
+// R04: indicação contextual da circulação. Só em Corte e Planta, só com Arquitetura escolhida (sem ela a escada falta
+// por serviço desmarcado, não por geometria), só com pavimentos informados > 1 e só quando o gerador não abriu o vão.
+export function circulationNote(spec, dims, view) {
+  if (view !== 'corte' && view !== 'planta') return null;
+  if (!spec || !spec.hasBuilding || !spec.floorsKnown || spec.floors < 2) return null;
+  if (!(spec.layers || []).includes('arquitetura')) return null;
+  return dims && dims.hole ? null : CIRCULATION_NOTE;
+}
+
 export function describe(spec) {
   if (!spec.hasBuilding) return 'Maquete ilustrativa do terreno.';
   // R03: acima do limite de desenho, o texto diz quantos foram informados e quantos estão representados.

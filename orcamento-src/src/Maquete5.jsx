@@ -1,5 +1,5 @@
-import {useEffect,useRef,useState} from 'react';
-import {LAYER_LABEL} from './maquete5_building.mjs';
+import {useEffect,useMemo,useRef,useState} from 'react';
+import {LAYER_LABEL,generate,circulationNote} from './maquete5_building.mjs';
 
 // Palco da maquete V05 dentro da calculadora. A cena (Three.js) entra por import() dinâmico: o formulário nunca espera por ela.
 // Se a cena não carregar ou não houver WebGL, chama onFail e a calculadora volta para a maquete anterior.
@@ -12,6 +12,9 @@ export function Stage5({spec,mobile,reduced,label,onFail}){
  const scaleBox=useRef(null),scaleBar=useRef(null),scaleTxt=useRef(null),levels=useRef(null),scrub=useRef(null),stageName=useRef(null);
  const [ready,setReady]=useState(false);
  const [view,setView]=useState('conjunto');
+ // R04: o vão da escada vem do mesmo gerador da cena (nada de regra paralela); a indicação depende da vista.
+ const stairDims=useMemo(()=>{try{return generate(spec).dims;}catch{return null;}},[JSON.stringify(spec)]);
+ const circ=circulationNote(spec,stairDims,view);
  const [isolate,setIsolate]=useState(null);
  const [floor,setFloor]=useState(0);
  const [pick,setPick]=useState(null);
@@ -93,6 +96,7 @@ export function Stage5({spec,mobile,reduced,label,onFail}){
       {layers.map(l=><button key={l} type="button" className="v5-chip" aria-pressed={isolate===l} onClick={()=>pickIsolate(l)}><i style={{background:LAYER_COLOR[l]}}/>{LAYER_LABEL[l]}</button>)}
      </>}
      {view==='corte'&&<label>Posição do corte <input type="range" min="5" max="95" defaultValue="36" aria-label="Posição do corte" onInput={e=>api.current?.setCut(Number(e.target.value)/100)}/></label>}
+     {circ&&<p className="v5-note" role="note">{circ}</p>}
      {view==='planta'&&spec.floors>1&&Array.from({length:spec.floors},(_,i)=><button key={i} type="button" className="v5-chip" aria-pressed={floor===i} onClick={()=>pickFloor(i)}>{i===0?'Térreo':`${i+1}º pav.`}</button>)}
     </div>
     <div className="mq-tabs" role="group" aria-label="Vista da maquete">{VIEWS.map(v=><button key={v.id} type="button" className="mq-tab" aria-pressed={view===v.id} onClick={()=>setView(v.id)}>{v.label}</button>)}</div>

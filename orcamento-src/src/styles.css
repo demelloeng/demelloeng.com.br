@@ -211,6 +211,7 @@ input:not([type=radio]):not([type=checkbox]):focus,select:focus,textarea:focus{b
 .v5-tool{display:flex;gap:5px;flex-wrap:wrap;align-items:center;min-height:0}.v5-tool:empty{display:none}
 .v5-chip{font:600 12px/1 var(--font);color:#e7eef6;background:rgba(20,27,34,.82);border:1px solid #3b5875;border-radius:999px;padding:6px 10px 6px 8px;min-height:30px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .v5-chip i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.v5-note{flex-basis:100%;margin:0;max-width:44ch;font:500 12px/1.35 var(--font);color:#e7eef6;background:rgba(20,27,34,.82);border:1px solid #3b5875;border-radius:6px;padding:6px 9px}
 .v5-chip[aria-pressed=true]{background:#f4f6f9;color:#16202a;border-color:#f4f6f9}.v5-chip:hover{border-color:#9cc2ec}
 .v5-tool label{color:#cfe6fa;font:600 12px/1 var(--font);display:flex;align-items:center;gap:8px;background:rgba(20,27,34,.82);border:1px solid #3b5875;border-radius:6px;padding:4px 10px;min-height:32px;flex:1 1 200px;max-width:420px}
 .v5-tool input[type=range]{flex:1;accent-color:#9cc2ec;min-width:80px}
