@@ -24,7 +24,7 @@ export const services=['Estrutural','Fundações','Hidrossanitário','Drenagem',
 // DEMONSTRAÇÃO LOCAL (vite --mode demo): a rota Construir também oferece Arquitetura, para avaliação de Marcos.
 // Na compilação normal e nos testes a lista é a publicada; a decisão de produto ainda não foi tomada.
 // R08 (R4): Arquitetura é opção PÚBLICA em "Construir ou ampliar" (antes só no modo de demonstração). S1 inalterado.
-const buildServices=['Arquitetura',{value:'Estrutural',label:'Estruturas'},{value:'Hidrossanitário',label:'Água e esgoto'},'Drenagem','Incêndio','Gás','Elétrica','Compatibilização BIM','Não sei quais preciso'];
+const buildServices=['Arquitetura',{value:'Estrutural',label:'Estruturas'},{value:'Hidrossanitário',label:'Água e esgoto'},'Drenagem','Incêndio','Gás','Elétrica','Compatibilização BIM','Terraplenagem','Não sei quais preciso'];   // R09: Terraplanagem também em Construir (id interno TERRAPLENAGEM)
 // Reforma SEM aumento de área: não existe "área nova"; só a área existente é perguntada.
 export const REFORMA='Reformar sem aumentar a área';
 export const nodes={
