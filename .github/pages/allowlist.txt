@@ -145,6 +145,7 @@ assets/icons/servicos-v02/incendio.svg
 assets/icons/servicos-v02/orcamento.svg
 assets/icons/servicos-v02/regularizacao.svg
 assets/icons/servicos-v02/terraplanagem.svg
+assets/images/EDUCA_PARANA_logo.png
 assets/images/GERIBELLO_logo_branca.png
 assets/images/JHE_logo.png
 assets/images/ODARA_avatar_linktree.jpg
