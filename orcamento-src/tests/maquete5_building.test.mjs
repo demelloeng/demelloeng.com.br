@@ -62,7 +62,8 @@ test('honestidade: o texto equivalente nao traz contagem de peca nem medida que 
   for (const c of CASES) {
     const txt = describe(buildingSpec(c));
     const nums = txt.match(/\d+/g) ?? [];
-    for (const n of nums) assert.equal(Number(n), Math.min(MAX_FLOORS, c.floors), txt);
+    // R03: acima do limite, o texto cita os pavimentos INFORMADOS e os REPRESENTADOS; nenhum outro número.
+    for (const n of nums) assert.ok([c.floors, Math.min(MAX_FLOORS, c.floors)].includes(Number(n)), txt);
     assert.match(txt, /ilustrativa/);
   }
 });

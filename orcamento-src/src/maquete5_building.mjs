@@ -36,12 +36,15 @@ const r2 = (v) => Math.round(v * 100) / 100;
 const lin = (a, b, n) => Array.from({ length: n + 1 }, (_, i) => a + ((b - a) * i) / n);
 
 // Entrada normalizada. `input` = { areaProj, areaTotal, areaTerreno, floors, typology, services[] } (tudo opcional).
+// R03: `floorsDeclared` = pavimentos INFORMADOS (dado da pessoa); `floors` = pavimentos REPRESENTADOS (até MAX_FLOORS).
+// Projeção: a informada prevalece; sem ela, média ilustrativa = área total / pavimentos INFORMADOS (nunca os desenhados).
 export function buildingSpec(input = {}) {
   const num = (v) => (Number.isFinite(Number(v)) && Number(v) > 0 ? Number(v) : null);
   const floorsIn = Number.isInteger(input.floors) && input.floors > 0 ? input.floors : null;
   const floors = Math.min(MAX_FLOORS, floorsIn ?? 2);
   const areaTotal = num(input.areaTotal);
-  const areaProj = num(input.areaProj) ?? (areaTotal ? areaTotal / floors : null);
+  const projIn = num(input.areaProj);
+  const areaProj = projIn ?? (areaTotal ? areaTotal / (floorsIn ?? floors) : null);
   const layers = [...new Set((input.services ?? []).map((s) => SERVICE_LAYER[s]).filter(Boolean))];
   const terrain = layers.includes('terreno');
   const hasBuilding = areaProj !== null || layers.some((l) => l !== 'terreno') || !terrain;
@@ -50,10 +53,12 @@ export function buildingSpec(input = {}) {
   const d = r2(A / w);
   return {
     w, d, floors,
+    floorsDeclared: floorsIn,
     floorsKnown: floorsIn !== null,
     floorsExtra: floorsIn !== null && floorsIn > MAX_FLOORS ? floorsIn - MAX_FLOORS : 0,
     hasArea: areaProj !== null,
     areaProj, areaTotal, areaTerreno: num(input.areaTerreno),
+    areaProjSource: projIn !== null ? 'informada' : areaProj !== null ? 'media' : null,
     typology: input.typology ?? null,
     standard: input.standard ?? null,
     // faixa de desenho (só casa): 'eco', 'medio', 'alto' ou null quando a pessoa não declarou o padrão
@@ -75,7 +80,10 @@ export function generate(spec) {
   const xs = lin(-w / 2 + PIL / 2, w / 2 - PIL / 2, nx);
   const zs = lin(-d / 2 + PIL / 2, d / 2 - PIL / 2, nz);
   const top = BASE_Y + floors * FH;                         // topo da laje de cobertura
-  const add = (o) => { parts.push(o); return o; };
+  // R03: medidas fixas de desenho (pilar, parede, esquadria, porta) não cabem em áreas muito pequenas; a peça que
+  // resultaria com dimensão não positiva ou não finita é OMITIDA (nunca desenhada torta, nunca redimensionada).
+  const fits = (o) => o.s.every((v) => Number.isFinite(v) && v > 0) && o.p.every(Number.isFinite);
+  const add = (o) => { if (fits(o)) parts.push(o); return o; };
   const box = (mat, layer, floor, order, name, p, s, anim = 'grow') => add({ shape: 'box', mat, layer, floor, order, anim, name, p, s });
   const live = (o) => { o.keep = true; return o; };     // R2: a peça é a mesma com ou sem o serviço; só o material muda
   const cyl = (mat, layer, floor, order, name, p, r, len, axis = 'y', anim = 'grow') => add({ shape: 'cyl', mat, layer, floor, order, anim, name, p, s: [r, len, r], axis });
@@ -460,7 +468,10 @@ export function fitBox(box, { az, el, fovDeg = 30, aspect = 1.6, band = 0.2, mar
 // Texto equivalente (leitor de tela): só o que a pessoa informou e o que está desenhado.
 export function describe(spec) {
   if (!spec.hasBuilding) return 'Maquete ilustrativa do terreno.';
-  const pav = spec.floorsKnown ? `${spec.floors} ${spec.floors === 1 ? 'pavimento' : 'pavimentos'}` : 'volume genérico';
+  // R03: acima do limite de desenho, o texto diz quantos foram informados e quantos estão representados.
+  const pav = !spec.floorsKnown ? 'volume genérico'
+    : spec.floorsExtra ? `${spec.floorsDeclared} pavimentos informados, ${spec.floors} representados`
+      : `${spec.floors} ${spec.floors === 1 ? 'pavimento' : 'pavimentos'}`;
   const names = [...spec.layers, ...(spec.terrain ? ['terreno'] : [])].map((l) => LAYER_LABEL[l]);
   return `Maquete ilustrativa: ${pav}${names.length ? `, com ${names.join(', ')}` : ''}.`;
 }
