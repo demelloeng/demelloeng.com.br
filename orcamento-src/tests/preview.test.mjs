@@ -307,7 +307,7 @@ test('GlobalApp: emissão só no ramo X3A/CALCULATED; PNG só do registro confir
   assert.match(src, /import \{issuePreview,fetchCoupon,newEmissionKey,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,COUPON_CHANGED_MESSAGE,COUPON_INVALID_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY\} from '\.\/preview\.mjs'/);
   assert.match(src, /import \{renderPreviewPng\} from '\.\/preview_png\.mjs'/);
   assert.equal((src.match(/issuePreview\(/g) || []).length, 1);
-  assert.equal((src.match(/renderPreviewPng\(r\.record\)/g) || []).length, 1);
+  assert.equal((src.match(/renderPreviewPng[(]record[)]/g) || []).length, 1);
   assert.equal((src.match(/Gerar prévia DEMELLO/g) || []).length, 1);
   // R4/R15: entre a emissão e o tratamento de falha só cabem os ramos do cupom (antes, porque também são 409 de versão)
   // e o da revisão do fator. Todos param: nada reemite sozinho (issuePreview continua chamado uma única vez).
@@ -315,7 +315,7 @@ test('GlobalApp: emissão só no ramo X3A/CALCULATED; PNG só do registro confir
   const afterIssue = src.slice(src.indexOf('const r=await issuePreview('), src.indexOf('setPRecord(r.record);'));
   const order = ['r.couponInvalid', 'r.couponChanged', 'r.factorChanged', "if(!r.ok){setPState(r.outdated?'outdated':'error');return;}"].map((k) => afterIssue.indexOf(k));
   assert.ok(order.every((i, n) => i > 0 && (n === 0 || i > order[n - 1])), 'cupom antes do fator, fator antes do genérico');
-  for (const line of afterIssue.split('\n').filter((l) => /if\(!r\.ok/.test(l))) assert.match(line, /return;\}$/, 'todo ramo de falha para antes do PNG');
+  for (const line of afterIssue.split('\n').filter((l) => /if\(!r\.ok/.test(l))) assert.match(line.trimEnd(), /return;\}$/, 'todo ramo de falha para antes do PNG');
   assert.match(afterIssue, /if\(!r\.ok&&r\.factorChanged\)\{await refreshFactorConfig\(\{endpoint:PREVIEW_ENDPOINT\}\);setPState\('factor_changed'\);return;\}/,
     'sem PNG quando o Worker falha; versão desatualizada pede recarregar; revisão nova do fator busca a configuração');
   assert.match(src, /pState==='factor_changed'&&[^\n]*FACTOR_CHANGED_MESSAGE/, 'aviso de estimativa atualizada');

@@ -89,16 +89,31 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
  const [pState,setPState]=useState('idle');
  const [pRecord,setPRecord]=useState(null);
  const [pngUrl,setPngUrl]=useState('');
+ const [pngState,setPngState]=useState('idle');
  useEffect(()=>()=>{if(pngUrl)URL.revokeObjectURL(pngUrl);},[pngUrl]);
- const emKey=useRef(null);
+ const emKey=useRef(null),issuing=useRef(false),pngBusy=useRef(false),lifetime=useRef({active:true,generation:0});
+ useEffect(()=>{lifetime.current.active=true;return()=>{lifetime.current.active=false;lifetime.current.generation++;};},[]);
  // Antes da emissão: oferta do cupom consultado sobre a estimativa da tela. Depois: o que o registro emitido gravou.
  const offer=cupom.state==='ok'?safeOffer(pv,cupom.data):null;
- const shown=pState==='ready'&&pRecord?commercialLines(pRecord.preview&&pRecord.preview.commercial):commercialLines(publicFromOffer(offer));
+ const shown=pRecord?commercialLines(pRecord.preview&&pRecord.preview.commercial):commercialLines(publicFromOffer(offer));
  // Trocar ou remover o cupom depois de uma prévia abre caminho para uma nova; a anterior deixa de seguir no pedido.
- function couponChanged(){if(pState==='issuing')return;setPState('idle');setPRecord(null);onEmitted(null);}
+ function couponChanged(){if(issuing.current)return;lifetime.current.generation++;pngBusy.current=false;setPngUrl('');setPngState('idle');setPState('idle');setPRecord(null);onEmitted(null);}
+ // A emissão já confirmada é independente da imagem local. Retentar o PNG nunca consulta o Worker.
+ async function gerarPng(record=pRecord){
+  if(!record||pngBusy.current||!lifetime.current.active)return;
+  pngBusy.current=true;const generation=lifetime.current.generation;setPngState('generating');
+  try{
+   const blob=await renderPreviewPng(record);
+   if(!lifetime.current.active||generation!==lifetime.current.generation)return;
+   setPngUrl(URL.createObjectURL(blob));setPngState('ready');
+  }catch{if(lifetime.current.active&&generation===lifetime.current.generation)setPngState('error');}
+  finally{if(generation===lifetime.current.generation)pngBusy.current=false;}
+ }
  async function gerarPrevia(){
-  if(pState==='issuing')return;
+  if(issuing.current||pRecord)return;
+  issuing.current=true;const generation=lifetime.current.generation;
   setPState('issuing');
+  try{
   const cs=caseSummaryFromRows(payload.summary,pv.services.map(serviceName));
   const coupon=cupom.state==='ok'?cupom.data:null;
   // R15: uma chave por emissão nova; a mesma só quando o visitante repete após falha técnica com o mesmo pedido.
@@ -106,6 +121,7 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
   const sig=JSON.stringify([payload.pricing_inputs,cs,pv.total_demello,pv.factor_config_revision,coupon&&coupon.code,coupon&&coupon.revision]);
   if(!emKey.current||emKey.current.sig!==sig)emKey.current={sig,key:newEmissionKey()};
   const r=await issuePreview(payload.pricing_inputs,cs,{presented:pv,couponCode:coupon?coupon.code:undefined,coupon,emissionKey:emKey.current.key});
+  if(!lifetime.current.active||generation!==lifetime.current.generation)return;
   if(!(r.status===0||r.status>=500))emKey.current=null;
   // R15: cupom deixou de valer ou mudou: nada é reemitido sozinho; o visitante confere o novo valor ou remove o código.
   if(!r.ok&&r.couponInvalid){setCupom(c=>({...c,data:null,state:'invalid'}));setPState('idle');return;}
@@ -113,9 +129,9 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
   // R4: configuração comercial mudou: busca a nova; a tela recalcula e o visitante confere antes de gerar de novo.
   if(!r.ok&&r.factorChanged){await refreshFactorConfig({endpoint:PREVIEW_ENDPOINT});setPState('factor_changed');return;}
   if(!r.ok){setPState(r.outdated?'outdated':'error');return;}
-  setPRecord(r.record);onEmitted({record:r.record,coupon});
-  try{const blob=await renderPreviewPng(r.record);setPngUrl(URL.createObjectURL(blob));setPState('ready');}
-  catch{setPState('error');}
+  setPRecord(r.record);onEmitted({record:r.record,coupon});setPState('ready');issuing.current=false;
+  await gerarPng(r.record);
+  }finally{issuing.current=false;}
  }
  if(isPreview&&pv.status==='CALCULATED'){
   return <div className="result-card">
@@ -142,9 +158,11 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
     {pState==='outdated'&&<div className="field-error" role="alert"><p>{OUTDATED_MESSAGE}</p><button type="button" className="secondary-button" onClick={()=>window.location.reload()}>Recarregar a página</button></div>}
     {pState==='ready'&&pRecord&&<div className="preview-ready" role="status">
      <p>Prévia emitida · código <strong>{pRecord.verification_code}</strong></p>
-     {shown&&<p className="small-note">Cupom {shown.code} registrado na prévia: valor-base {shown.base}, desconto − {shown.discount}, total {shown.final}.</p>}
+     {shown?<p className="small-note">Cupom {shown.code} registrado na prévia: valor-base {shown.base}, desconto − {shown.discount}, total {shown.final}.</p>:<p className="small-note">Valor registrado na prévia: {brlStr(pRecord.preview.pricing.total_demello)}.</p>}
      <p className="small-note">Registro verificável em {VERIFY_DISPLAY}. A imagem é uma representação da prévia registrada — não é proposta, contrato nem orçamento de obra.</p>
-     <a className="secondary-button" href={pngUrl} download={`demello-previa-${pRecord.verification_code}.png`}><DownloadSimple size={20}/>Baixar prévia</a>
+     {pngState==='generating'&&<p className="small-note">Gerando imagem PNG…</p>}
+     {pngState==='error'&&<><p className="field-error" role="alert">A prévia foi emitida. Não foi possível gerar apenas a imagem PNG; o código e o valor registrado continuam disponíveis.</p><button type="button" className="secondary-button" onClick={()=>gerarPng()}>Tentar gerar PNG novamente</button></>}
+     {pngState==='ready'&&pngUrl&&<a className="secondary-button" href={pngUrl} download={`demello-previa-${pRecord.verification_code}.png`}><DownloadSimple size={20}/>Baixar prévia</a>}
     </div>}
    </div>
   </div>;
