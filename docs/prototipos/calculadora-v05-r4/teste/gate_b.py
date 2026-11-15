@@ -186,16 +186,28 @@ def roteiro(run: Path, eng: Path, portal: Portal, filhos: list, log) -> None:
     confere("G11", "de volta a 60%: mesmo valor da semente, revisão nova", [201, 3, "12509.76"], [f60["status"], f60["factor_config_revision"], total(f60)])
 
     # --- pedido: intake e revisão de entrada -----------------------------------------------------------------------------
-    ped = site({"cmd": "pedido", "record": r2["record"], "coupon": r2["coupon"]})
-    confere("G12", "pedido com cupom aceito pelo harness local", [True, 202, "11258.78", codigo(r2)],
+    # r2 foi emitida na revisão 1; o harness agora cria o pedido na revisão 3.
+    # Mesmo total não autentica revisões diferentes: preservar como declaração, sem perder o pedido/histórico.
+    antigo = site({"cmd": "pedido", "record": r2["record"], "coupon": r2["coupon"]})
+    antigo_html = portal.entrada(antigo["submission_id"])
+    confere("G12", "pedido com revisão diferente permanece declarado, sem falsa autenticação", True,
+            antigo["ok"] and "Oferta declarada no pedido, não verificada: R$ 11.258,78" in antigo_html
+            and "PREVIEW_CONTENT_MISMATCH" in antigo_html and "Oferta verificada na prévia emitida" not in antigo_html)
+    confere("G12", "emissão histórica continua consultável com total original", True,
+            "R$ 11.258,78" in site({"cmd": "verificar", "code": codigo(r2)})["text"])
+    atual = site({"cmd": "emitir", "coupon_code": "TESTE-10"})
+    confere("G12", "emissão com cupom usa revisão atual após mudança administrativa", [201, 3, "11258.78"],
+            [atual["status"], atual["factor_config_revision"], (comercial(atual) or {}).get("final_total")])
+    ped = site({"cmd": "pedido", "record": atual["record"], "coupon": atual["coupon"]})
+    confere("G12", "pedido com cupom aceito pelo harness local", [True, 202, "11258.78", codigo(atual)],
             [ped["ok"], ped["status"], (ped["commercial_offer"] or {}).get("final_total"), ped["preview_verification_code"]])
     gravado = json.loads((run / "portal" / "fake_d1" / f"{ped['submission_id']}.json").read_text(encoding="utf-8"))
     sys.path.insert(0, str(eng / "scripts"))
     validador = importlib.import_module("validate_site_intake")
     confere("G12", "pedido capturado passa no validador de intake (oferta reproduzida)", [], validador.validate_payload_v2(gravado["payload"]))
     html = portal.entrada(ped["submission_id"])
-    confere("G12", "revisão de entrada mostra o valor com cupom que o cliente viu", True,
-            "Valor previsto mostrado ao cliente, com cupom: R$ 11.258,78" in html and codigo(r2) in html)
+    confere("G12", "revisão de entrada autentica a oferta contra o registro emitido", True,
+            "Oferta verificada na prévia emitida: R$ 11.258,78" in html and codigo(atual) in html)
     ped0 = site({"cmd": "pedido", "record": None, "coupon": None})
     gravado0 = json.loads((run / "portal" / "fake_d1" / f"{ped0['submission_id']}.json").read_text(encoding="utf-8"))
     confere("G12", "pedido sem cupom: validado e mostrado como antes", [[], True, None],
