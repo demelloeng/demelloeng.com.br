@@ -25,11 +25,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # G1 — testes/guards existentes do site e do /orcamento/ (sem build, sem npm install:
-      # a suíte importa só builtins node:). Nenhum teste novo muda comportamento do produto.
+      # G1 — testes/guards do site e do /orcamento/ (sem build). O harness JSX usa
+      # o Vite já declarado no projeto; instalar exatamente o lockfile antes dos testes.
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "12.18.0"
+      - name: Instalar dependências existentes dos testes (lockfile congelado)
+        working-directory: orcamento-src
+        run: pnpm install --frozen-lockfile
       - name: G1 - guards existentes (node --test + publish-guard)
         working-directory: orcamento-src
         run: |
