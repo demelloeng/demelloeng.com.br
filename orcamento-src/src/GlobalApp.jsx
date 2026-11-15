@@ -111,7 +111,7 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
  }
  async function gerarPrevia(){
   if(issuing.current||pRecord)return;
-  issuing.current=true;const generation=lifetime.current.generation;
+  const owner={};issuing.current=owner;const generation=lifetime.current.generation;
   setPState('issuing');
   try{
   const cs=caseSummaryFromRows(payload.summary,pv.services.map(serviceName));
@@ -129,9 +129,9 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
   // R4: configuração comercial mudou: busca a nova; a tela recalcula e o visitante confere antes de gerar de novo.
   if(!r.ok&&r.factorChanged){await refreshFactorConfig({endpoint:PREVIEW_ENDPOINT});setPState('factor_changed');return;}
   if(!r.ok){setPState(r.outdated?'outdated':'error');return;}
-  setPRecord(r.record);onEmitted({record:r.record,coupon});setPState('ready');issuing.current=false;
+  setPRecord(r.record);onEmitted({record:r.record,coupon});setPState('ready');if(issuing.current===owner)issuing.current=false;
   await gerarPng(r.record);
-  }finally{issuing.current=false;}
+  }finally{if(issuing.current===owner)issuing.current=false;}
  }
  if(isPreview&&pv.status==='CALCULATED'){
   return <div className="result-card">

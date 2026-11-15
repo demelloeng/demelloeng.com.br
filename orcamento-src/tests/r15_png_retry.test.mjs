@@ -89,3 +89,28 @@ test('P3 confirmed record can be invalidated while first PNG is pending',async()
  assert.equal(h.emitted.at(-1),null,'confirmed record invalidated immediately when coupon changes');
  finish({type:'image/png'});await action;h.render();assert.equal(h.nodes().some(n=>n.type==='a'),false);assert.deepEqual(h.created,[]);
 });
+function deferred(){let resolve;const promise=new Promise(r=>{resolve=r;});return {promise,resolve};}
+async function reachPng(h){for(let i=0;i<12&&!h.counts.png;i++)await Promise.resolve();assert.equal(h.counts.png,1,'A reached pending PNG');h.render();}
+for(const interaction of ['repeat emission click','coupon invalidation'])test(`P3 IT125 stale A finalizer keeps pending B owned: ${interaction}`,async()=>{
+ const pngA=deferred(),workerB=deferred();let issues=0;
+ const h=harness({issue:()=>++issues===1?{ok:true,status:201,record:record()}:workerB.promise,png:()=>h.counts.png===1?pngA.promise:Promise.resolve({type:'image/png'})});
+ const actionA=h.button('Gerar prévia DEMELLO').props.onClick();await reachPng(h);
+ h.nodes().find(n=>typeof n.type==='function'&&n.props.onChanged).props.onChanged();h.render();
+ h.props.cupom={input:'',state:'idle',data:null};h.render();
+ const clickB=h.button('Gerar prévia DEMELLO').props.onClick,actionB=clickB();h.render();
+ assert.equal(h.counts.worker,2,'exactly A and pending B before A finishes');
+ pngA.resolve({type:'image/png'});await actionA;h.render();
+ let extra;
+ if(interaction==='repeat emission click')extra=clickB();
+ else h.nodes().find(n=>typeof n.type==='function'&&n.props.onChanged).props.onChanged();
+ const during={worker:h.counts.worker,png:h.counts.png,invalidations:h.emitted.filter(x=>x===null).length};
+ console.log('IT125 B pending after stale A',interaction,JSON.stringify(during));
+ const recB={...record(false),verification_code:'b3m7q9r2t5w8x4z6'};
+ workerB.resolve({ok:true,status:201,record:recB});await Promise.all([actionB,extra]);h.render();
+ assert.deepEqual(during,{worker:2,png:1,invalidations:1},'stale A cannot unlock pending B');
+ assert.equal(h.emitted.filter(Boolean).length,2,'only confirmed A and B emitted');
+ assert.equal(h.emitted.at(-1).record.verification_code,'b3m7q9r2t5w8x4z6');
+ assert.match(h.text(),/Prévia emitida.*b3m7q9r2t5w8x4z6/);assert.match(h.text(),/Valor registrado na prévia: R\$ 12\.509,76/);
+ assert.deepEqual(h.created,['blob:preview-1'],'only B can publish its PNG');
+ h.unmount();assert.deepEqual(h.revoked,['blob:preview-1']);
+});
