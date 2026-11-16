@@ -8,6 +8,8 @@ branch: main
 
 # Mapa do código: site da DEMELLO Engenharia
 
+> **Atualização de 16/11/2026 — maquete V03 da hidrossanitária.** A página troca `maquete-hidro-3d.js` (que fica no repositório, para reversão) pelo motor comum (seção 4.1) com a configuração `hidro.mjs`: casca arquitetônica transparente (decisão 160), redes com as cores do IFC (sem a entrada genérica "Tubo" na legenda), corte, níveis tirados dos pisos da casca e capa WebP. Modelos `hidro-casa` e `casa-exemplo` inalterados. Entra em `PAGINAS_V03` no teste.
+
 > **Atualização de 16/11/2026 — maquete V03 da estrutural.** A página troca o visualizador `maquete-estrutura-3d.js` (que fica no repositório, para reversão) por um **motor comum** em `assets/js/maquetes/` (seção 4.1), preparado para receber a hidrossanitária na entrega seguinte. Na mesma entrega: `?v` de cada modelo = início do SHA-256 **do próprio arquivo** (antes o `.json` levava o hash do `.glb`); capa WebP por baixo do palco; camada "Fundações" (sem afirmar o tipo); e o cartão do mezanino na abertura, na coluna da maquete, acima da caixa (`hero(..., acima_caixa=)` em `layout_rico.py`; chamada vinda da copy `COPY_ESTRUTURAL_V07_20261116.md`, linha "Chamada:" reconhecida pelo importador; decisões de Marcos de 16/11, que alteram o "discreto" da decisão 83). Com a maquete aberta em tela cheia o motor põe `body.mq3-aberta`, que esconde o botão do WhatsApp.
 
 > **Atualização de 16/11/2026 — botão flutuante do WhatsApp (`assets/js/contato-flutuante.js`).** Símbolo e texto passam a branco com uma regra de duas classes (`.dm-fab .dm-fab__link`): as páginas V02 pintavam o símbolo de azul sobre o verde (armadilha 19). Na mesma regra de estilo, `body.mq3-aberta .dm-fab{display:none}` esconde o botão quando uma maquete V03 está aberta em tela cheia; a classe só é posta pelo motor das maquetes V03 (entrega seguinte) e não existe nas maquetes atuais nem na calculadora. Eventos de contato e medição não mudam. Teste de cascata em `p04_transversais.test.mjs`.
@@ -256,7 +258,7 @@ Falhas silenciosas ou obscuras: slug novo sem entrada em `LAYOUTS` ou `PERFIS` c
 |---|---|---|---|
 | Arquitetura | `maquete-3d.js` (sem `?v`) | `casa-exemplo.glb` (sem JSON) | nenhum além da base |
 | Estrutural | `maquetes/estrutural.mjs?v=3` (V03; o antigo `maquete-estrutura-3d.js?v=6` fica sem uso) | `estrutura-concreto` e `estrutura-aco` (`.glb` + `.json`) | `servico-estrutural-v02.css?v=6`, `maquete-v03.css?v=3` |
-| Hidrossanitário | `maquete-hidro-3d.js?v=10` | `hidro-casa.glb` + `.json` | `servico-hidro-v02.css?v=4` |
+| Hidrossanitário | `maquetes/hidro.mjs?v=3` (V03; o antigo `maquete-hidro-3d.js?v=10` fica sem uso) | `hidro-casa.glb` + `.json`, casca `casa-exemplo.glb` | `servico-hidro-v02.css?v=4`, `maquete-v03.css?v=3` |
 | Incêndio (hidrantes, Colégio Luiz Carlos) | `hidrantes-luiz-carlos-ativar.js?v=1` (ativação sob demanda, com pôster e `noscript`) importa `hidrantes-luiz-carlos-v02.js` e `hidrantes-luiz-carlos-core.mjs` | `hidrantes-luiz-carlos-v02.glb` (1.857.508 bytes, 171 peças identificadas) + `.json` | `hidrantes-luiz-carlos-v02.css`, `servico-pscip-glp-v02.css`; o catálogo usa `catalogo-pscip-glp-v02.css` |
 | Infraestrutura | `maquete-terraplanagem-3d.js?v=1` | `terraplanagem-djalma.glb` (683.412 bytes) + `.json` (666 bytes), na allowlist | `servico-infra-v02.css?v=1` |
 
@@ -271,15 +273,15 @@ Falhas silenciosas ou obscuras: slug novo sem entrada em `LAYOUTS` ou `PERFIS` c
 - **Defeito de 04/11, corrigido:** os modelos `estrutura-aco.glb` e `.json` não estavam na allowlist e davam 404; o PR #45 os liberou (deploy e smoke verdes em 04/11).
 - Os comentários do cabeçalho dos quatro JS ainda dizem que o importmap aponta para o jsDelivr; já não é verdade.
 
-### 4.1 Motor comum V03 (estrutural; a hidrossanitária entra na entrega seguinte)
+### 4.1 Motor comum V03 (estrutural e hidrossanitária)
 
 | Arquivo | Papel |
 |---|---|
 | `assets/js/maquetes/motor.mjs` | `maquete(cfg)`: renderizador, luz e ambiente da R4, sombra sob demanda, corte com tampa por stencil (só as peças que o plano atravessa), contorno no material, casca, base, níveis, escala, ficha, tela cheia, teclado, oclusão GTAO só com a maquete aberta e parada (sombreadores compilados em segundo plano), clique guardado do atalho `[data-abrir-maquete]`, estado sem WebGL (`.sem-3d`), `body.mq3-aberta` com a maquete aberta, gancho `window.__maquete` só com `?medir`. |
 | `assets/js/maquetes/enquadrar.mjs` | cópia fiel de `cameraBasis`, `fitBox`, `scaleBar` da calculadora R4 (teste de paridade). |
 | `assets/js/maquetes/dados.mjs` | funções puras, testadas em Node: caixas, níveis, rótulos, arestas reais, junção da casca, `verticesQueCruzam` (tampa do corte) e as regras de acessibilidade da tela cheia: `isolarFundo` (fundo `inert` com a maquete aberta), `focoDeVolta` (o foco volta a quem abriu), `giroFechado` (caixa fechada só gira na apresentação inicial; o movimento todo fica abaixo de 5 s) e `semMaqueteAtalhos` (sem WebGL, o texto do mezanino toma o lugar do cartão). |
-| `assets/js/maquetes/estrutural.mjs` | só configuração (camadas, cores, foco, níveis, rótulos). |
-| `docs/arquivo/paginas-servico-v02/maquete-estrutura-v03-markup.html` | markup da caixa, com a capa `assets/images/maquete-estrutura-capa.webp`. O gerador usa este. |
+| `assets/js/maquetes/estrutural.mjs`, `hidro.mjs` | só configuração (camadas, cores, foco, níveis, rótulos). |
+| `docs/arquivo/paginas-servico-v02/maquete-*-v03-markup.html` | markup da caixa, com a capa `assets/images/maquete-*-capa.webp`. O gerador usa estes. |
 | `assets/css/maquete-v03.css` | só o que é novo da V03; soma-se a `maquete-3d.css` e `maquete-estrutura-3d.css`. O gerador só o põe nas páginas V03. |
 
 - **Versões:** o módulo de cada página importa `motor.mjs?v=N`, e o motor importa `dados.mjs?v=N` e `enquadrar.mjs?v=N`. Mudou um deles, sobe o `?v` de quem o importa, até o `<script>` do gerador.
