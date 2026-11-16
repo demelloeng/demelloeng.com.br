@@ -1,3 +1,5 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 // Regime CORRENTE ESTRUTURAL (DEMELLO_V2 + STRUCT_COMPOSITE_REFS_R2, revisão R2 da tabela de 08/11/2026).
 // Espelha tests/test_site_intake_pricing_v2.py do checkout canônico (mentes-afiadas-demello-engineering).
 // Este motor só EMITE o regime corrente: histórico (legado e STRUCT_INCL_FOUNDATIONS_V2, ex.: primeira
@@ -5,7 +7,6 @@
 import test from 'node:test';
 import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
-import { buildPricingPreview } from '../src/pricing/engine.mjs';
 import { derivePricingInputs, packageForCRMv2 } from '../src/payload_v2.mjs';
 import TABLE from '../src/pricing/pricing-table.v2.json' with { type: 'json' };
 
@@ -13,12 +14,12 @@ const area = (v) => ({ value: v, unknown: false });
 const svc = (pv, name) => pv.services.find((s) => s.service === name);
 const excluded = (est) => Object.fromEntries(est.package.excluded_references.map((e) => [e.source, e.reason]));
 const inputs = (over) => ({ services: ['ESTRUTURAL'], area_total: '63,5', area_fundacao: '63,5', ...over });
-const est = (over) => svc(buildPricingPreview(inputs(over)), 'ESTRUTURAL');
+const est = (over) => svc(pricePreview(inputs(over)), 'ESTRUTURAL');
 
-test('regime corrente: DEMELLO_V2 + STRUCT_COMPOSITE_REFS_R2 (nunca o regime histórico)', () => {
-  const pv = buildPricingPreview(inputs({ typology: 'CASA' }));
+test('regime corrente: DEMELLO_V2 + STRUCT_COMPOSITE_REFS_R2_FC (nunca o regime histórico)', () => {
+  const pv = pricePreview(inputs({ typology: 'CASA' }));
   assert.equal(pv.table_version, 'DEMELLO_V2');
-  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2');
+  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
   assert.notEqual(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R1');
   assert.notEqual(pv.pricing_rule, 'STRUCT_INCL_FOUNDATIONS_V2');
   assert.equal(TABLE.table_version, 'DEMELLO_V2');
@@ -88,23 +89,23 @@ test('Q_SUPERESTRUTURA = Q_FUNDACAO (térreo) x Q_SUPERESTRUTURA > Q_FUNDACAO (m
 
 test('sem Q_FUNDACAO / valor inconsistente: NEEDS_HUMAN_REVIEW, nunca preço aproximado', () => {
   for (const over of [{ area_fundacao: null }, { area_fundacao: '0' }, { area_fundacao: '-3' }, { area_fundacao: 'abc' }]) {
-    const pv = buildPricingPreview(inputs({ typology: 'CASA', ...over }));
+    const pv = pricePreview(inputs({ typology: 'CASA', ...over }));
     assert.equal(pv.status, 'NEEDS_HUMAN_REVIEW', JSON.stringify(over));
     assert.equal(pv.total_demello, null);
     assert.match(svc(pv, 'ESTRUTURAL').reason, /Q_FUNDACAO/);
   }
-  const bigger = svc(buildPricingPreview(inputs({ typology: 'CASA', area_total: '100', area_fundacao: '120' })), 'ESTRUTURAL');
+  const bigger = svc(pricePreview(inputs({ typology: 'CASA', area_total: '100', area_fundacao: '120' })), 'ESTRUTURAL');
   assert.equal(bigger.status, 'NEEDS_HUMAN_REVIEW');
   assert.match(bigger.reason, /maior que Q_SUPERESTRUTURA/);
 });
 
 test('Estrutural + Fundações explícita: intenção preservada, fundação uma única vez', () => {
   const answers = (services) => ({ route: 'known', services, property: 'Casa/sobrado', S3: area('63,5'), area_fundacao: area('63,5') });
-  const implied = buildPricingPreview(derivePricingInputs(answers(['Estrutural'])));
+  const implied = pricePreview(derivePricingInputs(answers(['Estrutural'])));
   const pi = derivePricingInputs(answers(['Estrutural', 'Fundações']));
   assert.equal(pi.foundations_selected, true);
   assert.deepEqual(pi.services, ['ESTRUTURAL']);
-  const explicit = buildPricingPreview(pi);
+  const explicit = pricePreview(pi);
   assert.equal(svc(explicit, 'ESTRUTURAL').pricing_context.foundations_selection, 'EXPLICIT');
   assert.equal(svc(implied, 'ESTRUTURAL').pricing_context.foundations_selection, 'IMPLIED_BY_STRUCTURAL');
   assert.equal(explicit.total_demello, implied.total_demello);
@@ -116,14 +117,14 @@ test('Estrutural + Fundações explícita: intenção preservada, fundação uma
 });
 
 test('Fundações isoladas = FOUNDATION_ONLY sobre Q_FUNDACAO', () => {
-  const pv = buildPricingPreview(derivePricingInputs({
+  const pv = pricePreview(derivePricingInputs({
     route: 'known', services: ['Fundações'], property: 'Comercial', S3: area('1500'), area_fundacao: area('1500'),
   }));
   const e = svc(pv, 'ESTRUTURAL');
   assert.equal(e.pricing_context.structural_scope, 'FOUNDATION_ONLY');
   assert.equal(e.q_basis, 'Q_FUNDACAO');
   assert.equal(e.demello.total, '11220.00'); // FUNDEPAR 1500 x 9,35 x 0,80 (menor que SECID 11,87)
-  assert.equal(svc(buildPricingPreview({ services: ['ESTRUTURAL'], structural_scope: 'FOUNDATION_ONLY', typology: 'EDUCACIONAL', area_fundacao: '80' }), 'ESTRUTURAL').demello.total, '598.40');
+  assert.equal(svc(pricePreview({ services: ['ESTRUTURAL'], structural_scope: 'FOUNDATION_ONLY', typology: 'EDUCACIONAL', area_fundacao: '80' }), 'ESTRUTURAL').demello.total, '598.40');
 });
 
 test('Primeira jornada real reemitida agora: sem Q_FUNDACAO falha fechado; com a projeção informada usa o regime corrente', () => {
@@ -142,11 +143,11 @@ test('Primeira jornada real reemitida agora: sem Q_FUNDACAO falha fechado; com a
 });
 
 test('preços fechados: consultoria R$ 172,08/h, mentoria R$ 218,12/h e demais serviços inalterados', () => {
-  assert.equal(buildPricingPreview({ services: ['CONSULTORIA_TECNICA'], hours: '1' }).total_demello, '172.08');
-  assert.equal(buildPricingPreview({ services: ['CONSULTORIA_TECNICA'], hours: '3' }).total_demello, '516.24');
-  assert.equal(buildPricingPreview({ services: ['MENTORIA_TECNICA'], hours: '1' }).total_demello, '218.12');
-  assert.equal(buildPricingPreview({ services: ['MENTORIA_TECNICA'], hours: '2' }).total_demello, '436.24');
-  assert.equal(buildPricingPreview({ services: ['CONSULTORIA_TECNICA'] }).status, 'NEEDS_HUMAN_REVIEW'); // Q_HORAS ausente
-  assert.equal(buildPricingPreview({ services: ['HIDROSSANITARIO'], typology: 'CASA', area_new: '100' }).total_demello, '467.20');
-  assert.equal(buildPricingPreview({ services: ['HIDROSSANITARIO'], typology: 'EDUCACIONAL', area_new: '100' }).total_demello, '467.20');
+  assert.equal(pricePreview({ services: ['CONSULTORIA_TECNICA'], hours: '1' }).total_demello, '172.08');
+  assert.equal(pricePreview({ services: ['CONSULTORIA_TECNICA'], hours: '3' }).total_demello, '516.24');
+  assert.equal(pricePreview({ services: ['MENTORIA_TECNICA'], hours: '1' }).total_demello, '218.12');
+  assert.equal(pricePreview({ services: ['MENTORIA_TECNICA'], hours: '2' }).total_demello, '436.24');
+  assert.equal(pricePreview({ services: ['CONSULTORIA_TECNICA'] }).status, 'NEEDS_HUMAN_REVIEW'); // Q_HORAS ausente
+  assert.equal(pricePreview({ services: ['HIDROSSANITARIO'], typology: 'CASA', area_new: '100' }).total_demello, '467.20');
+  assert.equal(pricePreview({ services: ['HIDROSSANITARIO'], typology: 'EDUCACIONAL', area_new: '100' }).total_demello, '467.20');
 });

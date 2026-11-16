@@ -1,3 +1,5 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 // Serviços horários (Q_HORAS): Consultoria Técnica / Mentoria Técnica ponta a ponta na jornada.
 //   jornada -> pricing_inputs (hours é UM escalar) -> pricing_preview (motor) -> payload V2.
 // Regras fechadas: horas nunca inferidas/divididas/replicadas; "não sei" => NEEDS_HUMAN_REVIEW;
@@ -8,7 +10,6 @@ import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { nodes, routes, starts, updateAnswer, advance, summary, missingData, valid, hourlyServices } from '../src/journey.mjs';
 import { packageForCRMv2, derivePricingInputs } from '../src/payload_v2.mjs';
-import { buildPricingPreview } from '../src/pricing/engine.mjs';
 
 const area = (v) => ({ value: v, unknown: false });
 const contact = { name: 'Fulano Fictício', whatsapp: '41999990000', email: 'x@exemplo.invalid' };
@@ -78,7 +79,7 @@ for (const [kind, code, hours, total] of [
     assert.equal(p.route, 'known', 'a entrada de apoio emite uma das 4 rotas do contrato');
     assert.equal(p.pricing_inputs.area_total, null);
     assert.equal(p.pricing_inputs.typology, null);
-    assert.deepEqual(p.pricing_preview, buildPricingPreview(p.pricing_inputs));
+    assert.deepEqual(p.pricing_preview, pricePreview(p.pricing_inputs));
     assert.ok(summary(a).some((r) => r.label === 'Horas de apoio' && r.value === `${hours} h`));
   });
 
@@ -149,7 +150,7 @@ test('Consultoria + Mentoria: NEEDS_HUMAN_REVIEW, sem total, nenhuma pergunta de
 
 test('motor: 2 serviços horários NUNCA usam o mesmo hours (fail-closed, mesmo com hours válido)', () => {
   const base = { services: ['CONSULTORIA_TECNICA', 'MENTORIA_TECNICA'], hours: '5' };
-  const pv = buildPricingPreview(base);
+  const pv = pricePreview(base);
   assert.equal(pv.status, 'NEEDS_HUMAN_REVIEW');
   assert.equal(pv.total_demello, null);
   for (const s of pv.services) {
@@ -234,7 +235,7 @@ test('superfície pública: a jornada nova não expõe regime, fator, MIN nem co
 
 test('hours_by_service (paridade com o motor canônico): Consultoria 1h + Mentoria 2h = 608,32; incompleto/zero/escalar seguem fail-closed', () => {
   const C = 'CONSULTORIA_TECNICA', M = 'MENTORIA_TECNICA';
-  const ok = buildPricingPreview({ services: [C, M], hours_by_service: { [C]: '1', [M]: '2' } });
+  const ok = pricePreview({ services: [C, M], hours_by_service: { [C]: '1', [M]: '2' } });
   assert.equal(ok.status, 'CALCULATED');
   assert.equal(ok.total_demello, '608.32');
   assert.equal(ok.services[0].q_inputs.hours_source, 'hours_by_service');
@@ -244,13 +245,13 @@ test('hours_by_service (paridade com o motor canônico): Consultoria 1h + Mentor
     { services: [C, M], hours: '5' },
     { services: [C, M], hours: '5', hours_by_service: { [C]: '1' } },
   ]) {
-    const pv = buildPricingPreview(inputs);
+    const pv = pricePreview(inputs);
     assert.equal(pv.status, 'NEEDS_HUMAN_REVIEW', JSON.stringify(inputs));
     assert.equal(pv.total_demello, null);
   }
-  assert.equal(buildPricingPreview({ services: [C], hours: '5' }).total_demello, '860.39');            // compatibilidade
-  assert.equal(buildPricingPreview({ services: [C], hours: '5', hours_by_service: { [C]: '3' } }).total_demello, '516.24'); // precedência
-  assert.equal(buildPricingPreview({ services: [C], hours: '5', hours_by_service: { [C]: 'abc' } }).status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(pricePreview({ services: [C], hours: '5' }).total_demello, '860.39');            // compatibilidade
+  assert.equal(pricePreview({ services: [C], hours: '5', hours_by_service: { [C]: '3' } }).total_demello, '516.24'); // precedência
+  assert.equal(pricePreview({ services: [C], hours: '5', hours_by_service: { [C]: 'abc' } }).status, 'NEEDS_HUMAN_REVIEW');
 });
 
 test('a jornada do site NÃO emite hours_by_service (UX inalterada): o payload continua igual', () => {

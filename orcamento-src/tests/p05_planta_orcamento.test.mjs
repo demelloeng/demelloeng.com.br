@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // P05 — "Planta que se desenha" + "Orçamento em movimento": o painel só mostra o que o motor devolveu.
 import test from 'node:test';
 import './support/catalogo.mjs';

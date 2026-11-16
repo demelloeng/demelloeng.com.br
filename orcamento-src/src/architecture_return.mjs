@@ -8,7 +8,7 @@
 import { architectureEstimate } from './architecture.mjs';
 import { SOURCE } from './architecture_estimator.mjs';
 import { derivePricingInputs } from './payload_v2.mjs';
-import { buildPricingPreview } from './pricing/engine.mjs';
+import { pricePreview } from './pricing/active_config.mjs';
 import { brlStr } from './pricing/decimal.mjs';
 
 export const m2 = (n) => `${Number(n).toLocaleString('pt-BR')} m²`;
@@ -18,7 +18,7 @@ const faixa = (min, max) => (min === max ? m2(min) : `${m2(min)} a ${m2(max)}`);
 export function architecturePrice(a, reference) {
   if (reference === null || reference === undefined) return null;
   const alone = { ...a, services: ['Arquitetura'], S3: { value: String(reference) } };
-  const pv = buildPricingPreview(derivePricingInputs(alone));
+  const pv = pricePreview(derivePricingInputs(alone));
   const s = pv.services.find((x) => x.service === 'ARQUITETURA');
   return s && s.status === 'CALCULATED' ? brlStr(s.demello.total) : null;
 }

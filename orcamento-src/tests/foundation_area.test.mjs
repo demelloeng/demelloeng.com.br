@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Q_FUNDACAO no fluxo real: a MENOR mudança de UX (uma pergunta condicional) e nenhuma inferência silenciosa.
 import test from 'node:test';
 import './support/catalogo.mjs';

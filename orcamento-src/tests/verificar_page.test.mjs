@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Contrato funcional de /verificar/: executa a lógica da página num sandbox, com fetch SIMULADO.
 // Nenhuma chamada de rede real: o Worker nunca é contatado; cada cenário devolve uma resposta fabricada.
 import test from 'node:test';

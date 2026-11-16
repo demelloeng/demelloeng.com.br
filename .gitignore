@@ -1,1 +1,4 @@
 /orcamento-src/node_modules/
+# R07: perfil de teste local (compilação com endereços 127.0.0.1 e dados da rodada). Nunca versionado nem publicado.
+/docs/prototipos/calculadora-v05-r4/teste/app/
+/docs/prototipos/calculadora-v05-r4/teste/run/

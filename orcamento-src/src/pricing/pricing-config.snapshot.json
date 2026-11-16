@@ -1,0 +1,6 @@
+{
+  "schema": "pricing-config/1",
+  "revision": 1,
+  "factor_demello": "0.60",
+  "nota": "Revisao 1 da configuracao comercial (R4, decisao de Marcos de 13/11/2026: fator inicial universal 0,60). Autoridade em producao: tabela D1 pricing_config, administrada pelo Portal. Este arquivo e a revisao semeada e o padrao das ferramentas offline."
+}

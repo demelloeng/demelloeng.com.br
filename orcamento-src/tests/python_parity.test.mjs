@@ -1,3 +1,5 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 // Paridade Python <-> site JS (regime corrente DEMELLO_V2 + STRUCT_COMPOSITE_REFS_R2).
 //
 // tests/fixtures/python_parity_v2.json é o GOLDEN gerado pelo motor canônico Python
@@ -9,7 +11,6 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildPricingPreview } from '../src/pricing/engine.mjs';
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const golden = JSON.parse(await readFile(path.join(dir, 'fixtures', 'python_parity_v2.json'), 'utf8'));
@@ -18,19 +19,19 @@ test('o golden do Python cobre a matriz completa (68+ casos) no regime corrente'
   assert.ok(golden.length >= 70, `golden com ${golden.length} casos`);
   for (const g of golden) {
     assert.equal(g.preview.table_version, 'DEMELLO_V2', g.name);
-    assert.equal(g.preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2', g.name);
+    assert.equal(g.preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC', g.name);
   }
 });
 
 for (const g of golden) {
   test(`paridade Python <-> site JS: ${g.name}`, () => {
-    assert.deepEqual(buildPricingPreview(g.inputs), g.preview);
+    assert.deepEqual(pricePreview(g.inputs), g.preview);
   });
 }
 
 test('o motor do site nunca emite regime histórico', () => {
   for (const g of golden) {
-    const pv = buildPricingPreview(g.inputs);
+    const pv = pricePreview(g.inputs);
     assert.notEqual(pv.pricing_rule, 'STRUCT_INCL_FOUNDATIONS_V2');
     assert.notEqual(pv.table_version, 'DEMELLO_V1');
   }

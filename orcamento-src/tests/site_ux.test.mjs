@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Frente UX comercial — estrutura + estados editoriais + invariantes.
 // Atualizado para a ARQUITETURA COMERCIAL (situação → orientação → estimativa → prova → proposta):
 //  - HOME: primeira dobra com um único CTA; situações (eixo construir/ampliar + alternativas);

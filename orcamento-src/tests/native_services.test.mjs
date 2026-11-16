@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Serviços nativos (Arquitetura Q_NOVA, Orçamento técnico Q_ESCOPO, Terraplenagem Q_TERRENO), estimativa municipal fail-closed,
 // reforma sem aumento de área, parâmetros duplicados, R1 vigente e disciplina preservada no funil.
 // Os registros/regras municipais abaixo são FIXTURES DE TESTE (nunca embarcados): servem só para provar o encanamento.

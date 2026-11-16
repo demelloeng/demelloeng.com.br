@@ -1,11 +1,13 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPricingPreview, extractPricingInputs } from '../src/pricing/engine.mjs';
+import { extractPricingInputs } from '../src/pricing/engine.mjs';
 import { derivePricingInputs } from '../src/payload_v2.mjs';
 import { toStr, money, brl, dec, numberOut } from '../src/pricing/decimal.mjs';
 
 const area = (v) => ({ value: v, unknown: false });
-const preview = (a) => buildPricingPreview(derivePricingInputs(a));
+const preview = (a) => pricePreview(derivePricingInputs(a));
 const svc = (pv, name) => pv.services.find((s) => s.service === name);
 
 // --- casos canônicos já provados no Python (paridade JS <-> Python) ---
@@ -44,7 +46,7 @@ test('AMPLIAÇÃO 200 + 90, Estrutural + Incêndio -> Q_SUPERESTRUTURA 90 / Q_TO
   assert.equal(pi.area_new, '90');
   assert.equal(pi.area_total, '290');
   assert.equal(pi.area_fundacao, '90');
-  const pv = buildPricingPreview(pi);
+  const pv = pricePreview(pi);
   assert.equal(svc(pv, 'ESTRUTURAL').q_basis, 'Q_SUPERESTRUTURA');
   assert.equal(svc(pv, 'ESTRUTURAL').q, 90);
   assert.equal(svc(pv, 'ESTRUTURAL').q_fundacao, 90);
@@ -60,7 +62,7 @@ test('FUNDAÇÕES isoladas -> ESTRUTURAL FOUNDATION_ONLY, SECID fundação (10,7
   assert.equal(pi.structural_scope, 'FOUNDATION_ONLY');
   assert.equal(pi.area_total, '1500'); // S3 -> area_total
   assert.equal(pi.area_fundacao, '1500');
-  const pv = buildPricingPreview(pi);
+  const pv = pricePreview(pi);
   const est = svc(pv, 'ESTRUTURAL');
   assert.equal(est.status, 'CALCULATED');
   assert.equal(est.q_basis, 'Q_FUNDACAO');
@@ -71,7 +73,7 @@ test('FUNDAÇÕES isoladas -> ESTRUTURAL FOUNDATION_ONLY, SECID fundação (10,7
   assert.equal(est.demello.total, '11220.00'); // R2: FUNDEPAR 1500 * 9,35 * 0,80 (menor que SECID 1500 * 11,87)
   assert.equal(est.pricing_context.structural_scope, 'FOUNDATION_ONLY');
   // sem a área de projeção a fundação isolada NUNCA é aproximada pela área total (S3)
-  const noFoot = buildPricingPreview(derivePricingInputs({ route: 'known', services: ['Fundações'], property: 'Comercial', S3: area('1500') }));
+  const noFoot = pricePreview(derivePricingInputs({ route: 'known', services: ['Fundações'], property: 'Comercial', S3: area('1500') }));
   assert.equal(noFoot.status, 'NEEDS_HUMAN_REVIEW');
   assert.equal(noFoot.total_demello, null);
   // "Fundações" junto de "Estrutural" = escopo cheio
@@ -94,18 +96,18 @@ test('S3 (rota "Já sei o serviço") -> pricing_inputs.area_total; area_new/exis
 });
 
 test('KNOWN + S3: Incêndio usa Q_TOTAL; Gás e Compatibilização NÃO usam S3', () => {
-  const inc = buildPricingPreview(derivePricingInputs({ route: 'known', services: ['Incêndio'], property: 'Comercial', S3: area('1500') }));
+  const inc = pricePreview(derivePricingInputs({ route: 'known', services: ['Incêndio'], property: 'Comercial', S3: area('1500') }));
   assert.equal(svc(inc, 'INCENDIO').q_basis, 'Q_TOTAL');
   assert.equal(svc(inc, 'INCENDIO').q, 1500);
 
   const gasPi = derivePricingInputs({ route: 'known', services: ['Gás'], property: 'Casa/sobrado', S3: area('1500') });
   assert.equal(gasPi.area_total, '1500');
   assert.equal(gasPi.area_atendida, null); // S3 não substitui area_atendida
-  assert.equal(buildPricingPreview(gasPi).status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(pricePreview(gasPi).status, 'NEEDS_HUMAN_REVIEW');
 
   const compPi = derivePricingInputs({ route: 'known', services: ['Compatibilização BIM'], property: 'Comercial', S3: area('1500') });
   assert.equal(compPi.area_escopo, null); // S3 não substitui area_escopo
-  assert.equal(buildPricingPreview(compPi).status, 'NEEDS_HUMAN_REVIEW');
+  assert.equal(pricePreview(compPi).status, 'NEEDS_HUMAN_REVIEW');
 });
 
 test('Drenagem -> HIDROSSANITARIO; Hidro + Drenagem = uma única cobrança', () => {
@@ -113,7 +115,7 @@ test('Drenagem -> HIDROSSANITARIO; Hidro + Drenagem = uma única cobrança', () 
   assert.deepEqual(only.services, ['HIDROSSANITARIO']);
   const both = derivePricingInputs({ route: 'build', CA1: 'Construir do zero', CA_AREA: area('100'), property: 'Comercial', services: ['Hidrossanitário', 'Drenagem'] });
   assert.deepEqual(both.services, ['HIDROSSANITARIO']);
-  const pv = buildPricingPreview(both);
+  const pv = pricePreview(both);
   assert.equal(pv.services.filter((s) => s.service === 'HIDROSSANITARIO').length, 1);
 });
 
@@ -125,17 +127,17 @@ test('Apartamento e Condomínio / edifício -> PREDIO', () => {
 });
 
 test('T04 precisão: só o total monetário final é arredondado (COMPATIBILIZACAO 4.8975)', () => {
-  const pv = buildPricingPreview(extractPricingInputs({ services: ['COMPATIBILIZACAO'], typology: 'PREDIO', area_escopo: '100' }));
+  const pv = pricePreview(extractPricingInputs({ services: ['COMPATIBILIZACAO'], typology: 'PREDIO', area_escopo: '100' }));
   const comp = svc(pv, 'COMPATIBILIZACAO');
   assert.equal(comp.references.secid_pr.unit_value, '5.874');
   assert.equal(comp.references.fundepar_001_2025_demais_edificacoes.unit_value, '4.8975'); // 0,15 x 32,65
-  assert.equal(comp.demello.total, '391.80'); // 100 * 4.8975 * 0.80 = 391.800000 -> arredonda só o total
-  assert.equal(comp.demello.unrounded_total, '391.800000'); // expoente preservado como str(Decimal) do Python
+  assert.equal(comp.demello.total, '391.80'); // 100 * 4.8975 * 0.8 = 391.80000 -> arredonda só o total (R4: fator na forma canônica)
+  assert.equal(comp.demello.unrounded_total, '391.80000'); // expoente preservado como str(Decimal) do Python
   assert.equal(Number(comp.demello.unrounded_total), 391.8);
 });
 
 test('menor referência aplicável (T01/T02) na ampliação comercial', () => {
-  const pv = buildPricingPreview(derivePricingInputs({
+  const pv = pricePreview(derivePricingInputs({
     route: 'build', CA1: 'Ampliar um imóvel existente', CA_EXISTING: area('200'), CA_NEW: area('90'), area_fundacao: area('90'),
     property: 'Comercial', services: ['Estrutural', 'Incêndio'],
   }));

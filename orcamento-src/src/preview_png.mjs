@@ -12,8 +12,9 @@
 import { brlStr } from './pricing/decimal.mjs';
 import { friendlyServiceName } from './client_summary.mjs';
 import { encodeQr } from './qr.mjs';
-import { verifyUrl } from './preview.mjs';
+import { verifyUrl, VERIFY_DISPLAY } from './preview.mjs';
 import { referenceEntries } from './references.mjs';
+import { commercialLines } from './commercial.mjs';
 
 const W = 1080;
 const H_MIN = 1350;
@@ -98,6 +99,16 @@ export function buildPreviewLayout(record) {
     references: referenceEntries(s.references).map(({ label, total }) => ({ label, total: brlStr(total) })),
   }));
 
+  // R15: oferta comercial GRAVADA no registro (valor-base, cupom, desconto, total final). Registro sem cupom
+  // (inclusive os históricos) produz exatamente a mesma peça de antes: nenhuma chave nova no layout.
+  const commercial = pricing.status === 'CALCULATED' ? commercialLines(view.commercial) : null;
+  const offer = commercial ? {
+    forecast_label: 'ESTIMATIVA INICIAL DEMELLO COM CUPOM',
+    forecast_value: commercial.final,
+    commercial,
+    commercial_lines: [`Valor-base ${commercial.base}`, `Cupom ${commercial.code}`, `${commercial.benefit}: − ${commercial.discount}`],
+  } : null;
+
   return {
     width: W,
     wordmark: 'DEMELLO ENGENHARIA',
@@ -111,6 +122,7 @@ export function buildPreviewLayout(record) {
     services,
     criterion: 'Critério: previsão calculada a partir da referência pública aplicável, conforme metodologia DEMELLO.',
     disclaimers: Array.isArray(view.disclaimers) ? view.disclaimers : [],
+    ...(offer || {}),
     issued_at_label: `Emitida em ${fmtIssuedAt(record.issued_at)}`,
     verification_code: record.verification_code,
     verify_url: verifyUrl(record.verification_code),
@@ -239,6 +251,19 @@ export async function renderPreviewPng(record, opts = {}) {
   ctx.fillText(L.forecast_label, PAD + 28, TOTAL_TOP + 22);
   ctx.fillStyle = NAVY; ctx.font = `800 62px ${FONT}`;
   ctx.fillText(L.forecast_value, PAD + 28, TOTAL_TOP + 54);
+  if (L.commercial_lines) {
+    // R15: valor-base, cupom e desconto à direita do total, alinhados à margem; a fonte só reduz se não couber.
+    const valueRight = PAD + 28 + ctx.measureText(L.forecast_value).width + 32;
+    const right = W - PAD - 28;
+    let size = 20;
+    const widest = () => Math.max(...L.commercial_lines.map((t) => { ctx.font = `600 ${size}px ${FONT}`; return ctx.measureText(t).width; }));
+    while (size > 14 && right - widest() < valueRight) size -= 1;
+    ctx.font = `600 ${size}px ${FONT}`;
+    L.commercial_lines.forEach((t, i) => {
+      ctx.fillStyle = i === 2 ? BLUE : MUTED;
+      ctx.fillText(t, right - ctx.measureText(t).width, TOTAL_TOP + 26 + i * 32);
+    });
+  }
 
   // serviços: um por linha, com o preço DEMELLO do serviço e as referências DAQUELE serviço.
   const svTop = plan.servicesTop;
@@ -372,7 +397,7 @@ export async function renderPreviewPng(record, opts = {}) {
   ctx.fillText('Verifique em ', vx + 34, ly2);
   const prefW = ctx.measureText('Verifique em ').width;
   ctx.fillStyle = BLUE; ctx.font = `600 18px ${FONT}`;
-  ctx.fillText('demelloeng.com.br/verificar', vx + 34 + prefW, ly2);
+  ctx.fillText(VERIFY_DISPLAY, vx + 34 + prefW, ly2);
 
   const toBlob = () => new Promise((resolve, reject) => {
     if (canvas.toBlob) canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob nulo'))), 'image/png');

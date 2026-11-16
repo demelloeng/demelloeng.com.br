@@ -19,13 +19,13 @@ REPO = Path(__file__).resolve().parent.parent
 DIR = REPO / 'docs/arquivo/verificar-404-v02-20261107'
 COPY_VF = DIR / 'COPY_VERIFICAR_20261107.md'
 COPY_404 = DIR / 'COPY_404_20261107.md'
-LOGICA = DIR / 'LOGICA_VERIFICAR_20261108.js'
+LOGICA = DIR / 'LOGICA_VERIFICAR_20261114.js'   # R15: bloco comercial (cupom) do registro; 20261108 fica como histórico
 SAIDA_VF = REPO / 'verificar/index.html'
 SAIDA_404 = REPO / '404.html'
 SHA = {
     COPY_VF: 'e379ff19174bf4f4eb3b561664963510a3e5dd9ffb6a783f7aa16b7179cd413a',
     COPY_404: '7b1ecbecb4432ebf51fdc942ff47cbb50831cc4c0c3e94ef4e26aef363c7c33a',
-    LOGICA: '59c95abb5c9185833c84a5b104f6a9e3b2570be7f3073a256ce8c488f3b59089',
+    LOGICA: 'abdeb5c44c0d5a615350c66c6903b5e7dd6f89ce232eeb0d13f6a1221fac32c7',
 }
 URL_VF = 'https://demelloeng.com.br/verificar/'
 BOTOES_404 = {'/': 'Voltar ao início', '/orcamento/': 'Calcular estimativa'}

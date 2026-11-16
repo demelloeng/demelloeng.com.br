@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Camada de mensuração do funil: adaptador neutro, contrato fechado, privacidade, deduplicação e emissores.
 // Nenhum fornecedor externo: os testes usam "sinks" em memória.
 import assert from 'node:assert/strict';

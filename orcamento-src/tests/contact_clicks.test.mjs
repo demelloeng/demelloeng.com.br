@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Cliques em contato direto (WhatsApp, telefone, e-mail): todo link é coberto, o evento entra no mesmo barramento do funil,
 // não leva dado pessoal e não se confunde com lead qualificado nem com pedido de proposta.
 import assert from 'node:assert/strict';

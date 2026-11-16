@@ -1,5 +1,5 @@
 // PAYLOAD V2 REAL da experiência ativa — jornada -> pricing_inputs -> site-intake/payload/2
-// com pricing_preview DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R2) calculado offline no browser.
+// com pricing_preview DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R2_FC, fator da configuração ativa) calculado no browser.
 //
 // Separação explícita: journey.packageForCRM() (source IT083, prototype:true, faixa
 // fictícia) é LEGADO de regressão. Esta emissão é a real: source DEMELLO_SITE,
@@ -9,7 +9,7 @@
 import { summary, safetyHold, terreoDeclared, hourlyServices, hoursOf, REFORMA, resultFor, registerResultAuthority } from './journey.mjs';
 import { architectureFields, referenceAreaForPricing } from './architecture.mjs';
 import { parsePhone } from './phone.mjs';
-import { buildPricingPreview } from './pricing/engine.mjs';
+import { pricePreview } from './pricing/active_config.mjs';
 import { dec, add, toStr } from './pricing/decimal.mjs';
 
 export const V2_SOURCE = 'DEMELLO_SITE';
@@ -177,7 +177,7 @@ export function packageForCRMv2(a, mode) {
   const { photos, contact, ...data } = a;
   const pricing_inputs = derivePricingInputs(a);
   const arch = architectureFields(a);
-  const pricing_preview = buildPricingPreview(pricing_inputs);
+  const pricing_preview = pricePreview(pricing_inputs);
   return {
     schema: 'site-intake/payload/2',
     source: V2_SOURCE,
@@ -199,4 +199,4 @@ export function packageForCRMv2(a, mode) {
 }
 
 // Autoridade do resultado da jornada: o status do motor, sobre os mesmos pricing_inputs do payload.
-registerResultAuthority((answers) => buildPricingPreview(derivePricingInputs(answers)).status);
+registerResultAuthority((answers) => pricePreview(derivePricingInputs(answers)).status);

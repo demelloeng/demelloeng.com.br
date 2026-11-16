@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Visual V2 + base legal + destino de mensuração: a política descreve só o que o site de fato carrega;
 // o destino (Simple Analytics) respeita DNT/GPC e não recebe dado pessoal; nenhuma fonte externa; 404, sitemap e rodapé coerentes.
 import assert from 'node:assert/strict';

@@ -1,3 +1,4 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
 // Arquitetura comercial do /orcamento/: deep links por situação e por disciplina, valores inválidos em estado seguro,
 // contato SOMENTE depois do resultado, dados diferenciados (estimativa / proposta / dúvida / avaliação),
 // consistência "cinco entradas" e versão vigente da tabela.

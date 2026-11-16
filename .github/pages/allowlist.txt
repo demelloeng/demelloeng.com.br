@@ -170,6 +170,19 @@ assets/vendor/three/build/three.module.js
 assets/vendor/three/examples/jsm/controls/OrbitControls.js
 assets/vendor/three/examples/jsm/loaders/GLTFLoader.js
 assets/vendor/three/examples/jsm/utils/BufferGeometryUtils.js
+assets/vendor/three/examples/jsm/environments/RoomEnvironment.js
+assets/vendor/three/examples/jsm/math/SimplexNoise.js
+assets/vendor/three/examples/jsm/postprocessing/EffectComposer.js
+assets/vendor/three/examples/jsm/postprocessing/GTAOPass.js
+assets/vendor/three/examples/jsm/postprocessing/MaskPass.js
+assets/vendor/three/examples/jsm/postprocessing/OutputPass.js
+assets/vendor/three/examples/jsm/postprocessing/Pass.js
+assets/vendor/three/examples/jsm/postprocessing/RenderPass.js
+assets/vendor/three/examples/jsm/postprocessing/ShaderPass.js
+assets/vendor/three/examples/jsm/shaders/CopyShader.js
+assets/vendor/three/examples/jsm/shaders/GTAOShader.js
+assets/vendor/three/examples/jsm/shaders/OutputShader.js
+assets/vendor/three/examples/jsm/shaders/PoissonDenoiseShader.js
 
 # Frente PSCIP + GLP V02 — somente recursos públicos de runtime
 assets/css/servico-pscip-glp-v02.css

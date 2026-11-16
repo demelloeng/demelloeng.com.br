@@ -1,3 +1,5 @@
+import './support/fator_080.mjs';  // R4: metodologia a 0,80; fator vem da configuração
+import { pricePreview } from '../src/pricing/active_config.mjs';
 // P03 — Projeto Elétrico (baixa tensão predial) na calculadora. Revisão R2 da Tabela DEMELLO V2 (08/11/2026, Opção A).
 //
 // Preço = 0,80 x a MENOR referência documentada: SECID/PR 094/2026 (14,83), AltoQi casa residencial (8,60, publicada em
@@ -18,7 +20,6 @@ import { buildClientSummary, friendlyServiceName } from '../src/client_summary.m
 import { serviceParams, createTracking } from '../src/tracking.mjs';
 import { PARAMS } from '../../assets/js/analytics.mjs';
 import { initialState, SERVICE_DEEPLINKS } from '../src/deeplink.mjs';
-import { buildPricingPreview } from '../src/pricing/engine.mjs';
 import TABLE from '../src/pricing/pricing-table.v2.json' with { type: 'json' };
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -62,7 +63,7 @@ test('PREÇO R2: o fator 0,80 é aplicado UMA vez, sobre a menor referência (6,
   assert.equal(s.demello.total, '499.20');
   assert.notEqual(s.demello.total, '399.36', 'o fator nunca é aplicado duas vezes');
   assert.equal(s.base_reference, 'FUNDEPAR_001_2025_ESPORTIVA');
-  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2');
+  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
   assert.equal(TABLE.factor_demello, '0.80');
   assert.equal(TABLE.table_version, 'DEMELLO_V2');
 });
@@ -144,7 +145,7 @@ test('PARIDADE com o Python: o motor JS dá o mesmo resultado dos vetores calcul
     [{ services: ['ELETRICA'], area_new: '10000.01', area_total: '10000.01' }, 'NEEDS_HUMAN_REVIEW', null],
   ];
   for (const [over, status, total] of vetores) {
-    const pv = buildPricingPreview({ ...base, ...over });
+    const pv = pricePreview({ ...base, ...over });
     assert.equal(pv.status, status, JSON.stringify(over));
     assert.equal(pv.total_demello, total, JSON.stringify(over));
   }
@@ -155,7 +156,7 @@ test('metodologia preservada: tabela byte a byte igual à do canônico, fórmula
   assert.equal(sha, '8fd32ba07134ca8f6490020eb831bdcd53df9cdd6e6ad802a5ccf2aa1d671c9d');   // revisão R2 (a r1 congelada, 3bfb1919..., fica no repositório canônico)
   assert.deepEqual(Object.keys(TABLE.services).sort(), ['ARQUITETURA', 'COMPATIBILIZACAO', 'CONSULTORIA_TECNICA', 'ELETRICA', 'ESTRUTURAL', 'GAS_GLP', 'HIDROSSANITARIO', 'INCENDIO', 'MENTORIA_TECNICA', 'ORCAMENTO', 'REGULARIZACAO', 'TERRAPLENAGEM']);
   // preços das outras disciplinas, iguais aos de antes
-  assert.equal(buildPricingPreview({ services: ['HIDROSSANITARIO'], typology: 'CASA', area_new: '100', area_total: '100', area_existing: null, structural_system: null, structural_scope: null, foundations_selected: false, area_atendida: null, area_terreno: null, area_escopo: null, area_fundacao: null, hours: null, regularizacao: { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' }, hidro_scope_includes_existing: null }).total_demello, '467.20');
+  assert.equal(pricePreview({ services: ['HIDROSSANITARIO'], typology: 'CASA', area_new: '100', area_total: '100', area_existing: null, structural_system: null, structural_scope: null, foundations_selected: false, area_atendida: null, area_terreno: null, area_escopo: null, area_fundacao: null, hours: null, regularizacao: { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' }, hidro_scope_includes_existing: null }).total_demello, '467.20');
   assert.ok(!/SERVICES_NOT_OFFERED/.test(await read('src/payload_v2.mjs')), 'a trava histórica foi removida');
 });
 

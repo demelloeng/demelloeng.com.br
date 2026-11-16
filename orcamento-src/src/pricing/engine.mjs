@@ -1,13 +1,15 @@
-// Motor de previsão DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R2) no browser — porte fiel de scripts/site_intake_pricing.py.
-// Determinístico, sem rede. Mesmo pricing_inputs => mesmo pricing_preview do Python.
+// Motor de previsão DEMELLO V2 (regime STRUCT_COMPOSITE_REFS_R2_FC) no browser — porte fiel de scripts/site_intake_pricing.py.
+// Determinístico, sem rede. Mesmo pricing_inputs + mesma configuração do fator => mesmo pricing_preview do Python.
 import TABLE from './pricing-table.v2.json' with { type: 'json' };
 import { dec, num, add, sub, mul, absD, cmp, toStr, money, brl, numberOut } from './decimal.mjs';
 
-// Regime CORRENTE (única EMISSÃO): table_version DEMELLO_V2 + pricing_rule STRUCT_COMPOSITE_REFS_R2 (revisão R2 da tabela).
-// Regimes históricos (DEMELLO_V1 legado, STRUCT_INCL_FOUNDATIONS_V2 e STRUCT_COMPOSITE_REFS_R1) são só REPRODUZIDOS pelo
-// motor Python canônico (validate_payload_v2, tabela congelada r1); este motor JAMAIS os emite.
+// Regime CORRENTE (única EMISSÃO): table_version DEMELLO_V2 + pricing_rule STRUCT_COMPOSITE_REFS_R2_FC (R4): metodologia
+// da revisão R2 da tabela, fator da CONFIGURAÇÃO comercial ({revision, factor_demello}, D1 pricing_config), nunca o
+// factor_demello da tabela (0,80, só para reproduzir R2). Regimes históricos (DEMELLO_V1 legado, STRUCT_INCL_FOUNDATIONS_V2,
+// STRUCT_COMPOSITE_REFS_R1 e STRUCT_COMPOSITE_REFS_R2) são só REPRODUZIDOS pelo motor Python canônico; este motor JAMAIS os emite.
 const TABLE_VERSION = 'DEMELLO_V2';
-const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R2';
+export const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R2_FC';
+const FACTOR_MAX_DECIMALS = 4;
 const STRUCTURAL_SYSTEMS = ['CONCRETO_ARMADO', 'METALICA', 'MADEIRA'];
 const STRUCTURAL_SCOPES = ['FULL', 'FOUNDATION_ONLY'];
 const COMPONENT_STATES = ['DETERMINED', 'NOT_REQUIRED', 'UNDETERMINED'];
@@ -34,7 +36,26 @@ const CUSTOMER_FALLBACK_TEXT =
   'Iremos verificar as informações fornecidas e retornar assim que possível.';
 
 if (TABLE.table_version !== TABLE_VERSION) throw new Error('pricing-table.v2.json: table_version inesperada');
-const FACTOR = dec(String(TABLE.factor_demello));
+
+// Configuração do fator (espelho de parse_factor / parse_factor_config do Python). Sem configuração válida o motor
+// LANÇA erro: não existe fallback para TABLE.factor_demello (evita exibir preço a 0,80 enquanto a configuração carrega).
+// Forma canônica sem zeros à direita ("0.60" -> 0.6): emissão e reprodução produzem os mesmos dígitos.
+export function parseFactor(value) {
+  if (value === null || value === undefined || typeof value === 'boolean') throw new Error('fator ausente ou inválido');
+  const s = String(value).trim();
+  if (!/^\d+(\.\d+)?$/.test(s)) throw new Error('fator inválido: ' + s);
+  let { n, e } = dec(s);
+  while (e > 0 && n % 10n === 0n) { n /= 10n; e -= 1; }
+  if (n <= 0n) throw new Error('fator deve ser positivo: ' + s);
+  if (e > FACTOR_MAX_DECIMALS) throw new Error(`fator com mais de ${FACTOR_MAX_DECIMALS} casas: ${s}`);
+  return { n, e };
+}
+export function parseFactorConfig(cfg) {
+  if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) throw new Error('configuração do fator ausente');
+  const rev = cfg.revision;
+  if (typeof rev !== 'number' || !Number.isInteger(rev) || rev < 1) throw new Error('revisão da configuração inválida');
+  return { revision: rev, factor: parseFactor(cfg.factor_demello) };
+}
 const TYPOLOGIES = TABLE.typologies;
 
 // Componentes (superestrutura + fundação) precisam bater com o total publicado (mesmo pacote, uma vez).
@@ -232,7 +253,7 @@ function structuralReview(inp, ctx, basis, reason) {
 // TOTAL = SUPER x Q_SUPERESTRUTURA + FUNDACAO x Q_FUNDACAO (cada componente na sua própria fonte); a AltoQi é
 // referência de superestrutura e entra como referência composta (+ fundação SECID/PR).
 // Quantidade ausente/inconsistente => NEEDS_HUMAN_REVIEW (nunca preço aproximado).
-function priceStructural(inp) {
+function priceStructural(inp, factor) {
   const svcTbl = TABLE.services.ESTRUTURAL;
   const ctx = structuralContext(inp);
   const foundationOnly = ctx.structural_scope === 'FOUNDATION_ONLY';
@@ -286,7 +307,7 @@ function priceStructural(inp) {
 
   let winner = candidates[0];
   for (const cand of candidates.slice(1)) if (cmp(cand.total, winner.total) < 0) winner = cand;
-  const demelloUnrounded = mul(winner.total, FACTOR);
+  const demelloUnrounded = mul(winner.total, factor);
   const references = {};
   for (const c of candidates) references[c.key] = { total: money(c.total), components: c.components };
   const entry = {
@@ -366,13 +387,13 @@ export function resolveHours(service, inp, hourly) {
   return { q: isPositive(inp.hours) ? inp.hours : null, source: 'hours', review: null };
 }
 
-export function priceService(service, inp, hourly = null) {
+export function priceService(service, inp, hourly, factor) {
   const svcTbl = TABLE.services[service];
   const qBaseInputs = { area_existing: numberOut(inp.area_existing), area_new: numberOut(inp.area_new) };
   if (!svcTbl) {
     return { service, status: REVIEW, q: null, q_basis: null, q_inputs: qBaseInputs, reason: 'serviço fora da TABELA DEMELLO V2' };
   }
-  if (service === 'ESTRUTURAL') return priceStructural(inp);
+  if (service === 'ESTRUTURAL') return priceStructural(inp, factor);
 
   const basis = qBasisFor(service, inp, svcTbl);
   let q = qFromBasis(basis, inp);
@@ -411,7 +432,7 @@ export function priceService(service, inp, hourly = null) {
   }
   let [baseRef, baseUnit] = applicable[0];
   for (const [name, unit] of applicable.slice(1)) if (cmp(unit, baseUnit) < 0) { baseRef = name; baseUnit = unit; }
-  const demelloUnrounded = mul(mul(q, baseUnit), FACTOR);
+  const demelloUnrounded = mul(mul(q, baseUnit), factor);
   const references = {};
   for (const [sid, unit] of applicable) {
     const refOut = { unit_value: toStr(unit), total: money(mul(q, unit)) };
@@ -482,10 +503,12 @@ export function buildCustomerPricingText(preview) {
   return parts.join(' ');
 }
 
-export function buildPricingPreview(pricingInputs) {
+// `factorConfig` = configuração comercial ativa {revision, factor_demello} (obrigatória).
+export function buildPricingPreview(pricingInputs, factorConfig) {
+  const cfg = parseFactorConfig(factorConfig);
   const inp = extractPricingInputs(pricingInputs);
   const hourly = hourlyServices(inp);
-  const servicesOut = inp.services.map((service) => priceService(service, inp, hourly));
+  const servicesOut = inp.services.map((service) => priceService(service, inp, hourly, cfg.factor));
   const calculated = servicesOut.filter((s) => s.status === CALC);
   const needsReview = servicesOut.some((s) => s.status !== CALC) || calculated.length === 0;
   const status = needsReview ? REVIEW : CALC;
@@ -497,13 +520,14 @@ export function buildPricingPreview(pricingInputs) {
   }
   const preview = {
     table_version: TABLE.table_version,
-    factor_demello: Number(TABLE.factor_demello),
+    factor_demello: Number(toStr(cfg.factor)),
     currency: TABLE.currency,
     status,
     services: servicesOut,
     total_demello: totalDemello,
     presented_to_customer: { text: '' },
     pricing_rule: PRICING_RULE,
+    factor_config_revision: cfg.revision,
   };
   preview.presented_to_customer.text = buildCustomerPricingText(preview);
   return preview;

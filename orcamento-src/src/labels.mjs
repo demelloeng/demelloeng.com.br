@@ -9,3 +9,6 @@ export const TABLE_LABEL=`TABELA ${String(TABLE.table_version).replace('_',' ')}
 const WORDS=['nenhuma','uma','duas','três','quatro','cinco','seis','sete','oito'];
 export const ENTRY_COUNT=Object.keys(routes).length;
 export const ENTRY_COUNT_WORD=WORDS[ENTRY_COUNT];
+
+// Nome de cada base de quantidade do motor, como a pessoa lê (detalhamento do resultado e painel da maquete).
+export const Q_PT={Q_NOVA:'área nova',Q_TOTAL:'área total',Q_ATENDIDA:'área atendida',Q_TERRENO:'área do terreno',Q_ESCOPO:'área do escopo',Q_REGULARIZACAO:'diferença de área',Q_SUPERESTRUTURA:'área estrutural total',Q_FUNDACAO:'área de projeção',Q_HORAS:'horas técnicas'};
