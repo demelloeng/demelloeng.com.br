@@ -233,3 +233,29 @@ test('páginas: o botão não muda o visual das páginas V02 (nenhum CSS de pág
   const css = (await readdir(path.join(ROOT, 'assets', 'css'))).filter((f) => f.endsWith('.css'));
   for (const f of css) assert.ok(!/dm-fab|sa-badge/.test(await read(`assets/css/${f}`)), `${f}: sem regra do botão ou da badge`);
 });
+
+test('botão: símbolo e texto brancos também nas páginas que pintam todo link de azul (cascata do CSS)', async () => {
+  // O DOM de teste não aplica a cascata; por isso a conferência é feita na especificidade das regras.
+  // Causa do defeito de 16/11/2026: .servicos-v02 a{color:var(--blue)} (0,1,1) vencia .dm-fab__link{color:#fff} (0,1,0).
+  const esp = (s) => { const t = s.replace(/:[\w-]+/g, '.p'); const c = (t.match(/[.][\w-]+|\[[^\]]+\]/g) || []).length;
+    const e = (t.replace(/[.#][\w-]+|\[[^\]]+\]/g, ' ').match(/(^|[\s>+~])[a-z][\w-]*/g) || []).length; return [(t.match(/#[\w-]+/g) || []).length, c, e]; };
+  const vence = (a, b) => (a[0] - b[0] || a[1] - b[1] || a[2] - b[2]) > 0;
+  const js = await read('assets/js/contato-flutuante.js');
+  const brancos = [...js.matchAll(/'([^'{]*dm-fab__link[^'{]*)\{color:#fff\}'/g)].flatMap((m) => m[1].split(',').map((s) => s.trim()));
+  assert.ok(brancos.includes('.dm-fab .dm-fab__link'), 'regra de cor branca com duas classes');
+  const css = (await readdir(path.join(ROOT, 'assets', 'css'))).filter((f) => f.endsWith('.css'));
+  let conferidas = 0;
+  for (const f of css) {
+    for (const m of (await read(`assets/css/${f}`)).matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (!/(^|;)\s*color\s*:/.test(m[2])) continue;
+      for (const sel of m[1].split(',').map((s) => s.trim().replace(/^\/\*[\s\S]*?\*\/\s*/, ''))) {
+        const g = sel.match(/^((?:body)?[.][\w-]+\s+)?a(:hover|:visited)?$|^a(:hover|:visited)?$/);   // links em geral, sem contexto específico
+        if (!g) continue;
+        const pseudo = g[2] || g[3] || '';
+        const nosso = brancos.includes(`.dm-fab .dm-fab__link${pseudo}`) ? `.dm-fab .dm-fab__link${pseudo}` : '.dm-fab .dm-fab__link';
+        assert.ok(vence(esp(nosso), esp(sel)), `${f}: "${sel}" venceria a cor do botão`); conferidas += 1;
+      }
+    }
+  }
+  assert.ok(conferidas >= 3, 'achou as regras gerais de link (style.css, home, servicos-v02)');
+});
