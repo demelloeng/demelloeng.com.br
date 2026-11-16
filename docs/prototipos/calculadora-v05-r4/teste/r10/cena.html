@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Verificação da maquete R10 (local, não publicado)</title>
+<!-- Mesmo mapa da calculadora: os complementos do Three (oclusão, ambiente) importam "three" por nome. -->
+<script type="importmap">{"imports":{"three":"/assets/vendor/three/build/three.module.js"}}</script>
+<script>
+  // Erros capturados antes de qualquer módulo carregar.
+  window.__erros = [];
+  addEventListener('error', (e) => window.__erros.push(`erro: ${e.message}`));
+  addEventListener('unhandledrejection', (e) => window.__erros.push(`promessa: ${e.reason?.message ?? e.reason}`));
+  const ce = console.error.bind(console);
+  console.error = (...a) => { window.__erros.push(`console: ${a.map(String).join(' ').slice(0, 200)}`); ce(...a); };
+</script>
+<style>
+  body{font:15px/1.45 system-ui,sans-serif;margin:20px;color:#16202a;background:#f3f5f8}
+  h1{font-size:20px;margin:0 0 4px}
+  p{margin:4px 0 12px;color:#44515e}
+  #resumo{font-weight:700;font-size:18px;margin:10px 0}
+  #resumo.ok{color:#11734b}#resumo.falha{color:#b42318}
+  table{border-collapse:collapse;background:#fff;width:100%;max-width:1100px}
+  td,th{border:1px solid #d5dbe2;padding:6px 8px;text-align:left;vertical-align:top;font-size:14px}
+  th{background:#eef2f6}
+  td.r{font-weight:700;white-space:nowrap}td.PASSA{color:#11734b}td.FALHA{color:#b42318}
+  .palcos{display:flex;gap:10px;margin:12px 0}
+  .palco{width:640px;height:420px;background:#1b242d;position:relative}
+  .palco.reduzido{width:320px;height:200px}
+</style>
+</head>
+<body>
+<h1>Verificação da maquete R10</h1>
+<p>Roda neste navegador o código da maquete que a calculadora da candidata R4 usa. Não envia nada e não grava nada. Leva cerca de um minuto; deixe a aba à frente.</p>
+<p id="resumo">Verificando…</p>
+<table><thead><tr><th>Verificação</th><th>Resultado</th><th>Medido</th></tr></thead><tbody id="linhas"></tbody></table>
+<div class="palcos"><div class="palco" id="palco"></div><div class="palco reduzido" id="palcoReduzido"></div></div>
+<script type="module" src="./cena.mjs"></script>
+<pre id="json"></pre></body>
+</html>

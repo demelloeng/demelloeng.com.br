@@ -232,7 +232,7 @@ export async function createMaqueteV5(host, { reduced = false, mobile = false, a
     cutOn: 0, cutOnT: 0,
     band: 0.2, visible: true, running: false, raf: 0, safety: 0, destroyed: false, dragging: false, moved: 0,
     picked: null, dirty: true, shadowDirty: true, ground: null,
-    colorT: 1, tintDirty: false, leaveT: 1, revealOn: false, revealTimer: 0,
+    colorT: 1, tintDirty: false, leaveT: 1, revealOn: false, revealTimer: 0, shadowBatch: null,
   };
   const dummy = new THREE.Object3D();
   const qAxis = { y: new THREE.Quaternion(), x: new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), -Math.PI / 2), z: new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2) };
@@ -242,6 +242,12 @@ export async function createMaqueteV5(host, { reduced = false, mobile = false, a
   const tintTo = new THREE.Color();
 
   function clearBuild() {
+    if (state.shadowBatch) {
+      stage.remove(state.shadowBatch.mesh);
+      state.shadowBatch.mesh.dispose();
+      state.shadowBatch.mesh.material.dispose();
+      state.shadowBatch = null;
+    }
     for (const h of state.helpers ?? []) { stage.remove(h); h.dispose?.(); }
     state.helpers = [];
     state.helperKey = null;
@@ -390,6 +396,25 @@ uniform float uR;`)
       state.buckets.push({ mesh, capped, shape, ghost: false, material, list, layer, glass: !!def.glass, edges, allLeaving: list.every((p) => p.leaving), liveCount: list.filter((p) => !p.leaving).length });
       list.forEach((p, i) => { p.bucket = state.buckets.length - 1; p.index = i; });
     }
+    // R10: as caixas opacas têm o mesmo material de profundidade, plano de corte e geometria.
+    // Só a sombra usa um lote único; cor/AO, camadas, seleção e contornos mantêm os grupos originais.
+    const shadowBuckets = state.buckets.filter((b) => b.shape === 'box' && !b.glass);
+    const shadowCapacity = shadowBuckets.reduce((n, b) => n + b.list.length, 0);
+    if (shadowCapacity) {
+      const material = shadowBuckets[0].material.clone();
+      material.clippingPlanes = cutPlanes;           // clone() copiaria os planos e perderia o corte animado
+      const mesh = new THREE.InstancedMesh(geo.box, material, shadowCapacity);
+      const batch = { mesh, buckets: shadowBuckets, count: 0 };
+      mesh.count = 0; mesh.frustumCulled = false; mesh.castShadow = true;
+      mesh.userData.noAO = true;
+      mesh.raycast = () => {};                       // o lote não é uma peça selecionável
+      mesh.onBeforeShadow = () => { mesh.count = batch.count; };
+      mesh.onAfterShadow = () => { mesh.count = 0; }; // zero instâncias não envia draw de cor
+      for (const b of shadowBuckets) {
+        b.shadowBatched = true; b.shadowCaster = b.mesh.castShadow; b.mesh.castShadow = false;
+      }
+      stage.add(mesh); state.shadowBatch = batch;
+    }
     // Auxiliares da tampa do corte: só escrevem no stencil, então não dependem do material.
     // Um par (face de trás, face da frente) por FORMA, e não por grupo de material: 4 chamadas no lugar de 2 por grupo.
     for (const shape of ['box', 'cyl']) {
@@ -467,6 +492,21 @@ uniform float uR;`)
     for (const h of state.helpers) { h.count = n[h.userData.shape]; h.instanceMatrix.needsUpdate = true; }
   }
 
+  function refreshShadowBatch() {
+    const batch = state.shadowBatch;
+    if (!batch) return;
+    let count = 0;
+    for (const b of batch.buckets) {
+      if (!b.mesh.visible || !b.shadowCaster) continue;
+      for (let i = 0; i < b.mesh.count; i += 1) {
+        b.mesh.getMatrixAt(i, m4);
+        batch.mesh.setMatrixAt(count++, m4);
+      }
+    }
+    batch.count = count;
+    batch.mesh.instanceMatrix.needsUpdate = true; // antes do upload e do passe de sombra
+  }
+
   function applyMaterials() {
     const cutting = state.cutOn > 0.02 && !(mobile && state.dragging);    // no celular a tampa some enquanto se arrasta
     const ghostGround = VIEW_CAM[state.view].ghost;
@@ -481,7 +521,9 @@ uniform float uR;`)
       if (b.material.transparent !== ghost) { b.material.transparent = ghost; b.material.needsUpdate = true; }
       b.material.opacity = op;
       b.material.depthWrite = !ghost;
-      if (b.mesh.castShadow !== !ghost) { b.mesh.castShadow = !ghost; state.shadowDirty = true; }
+      if (b.shadowBatched) {
+        if (b.shadowCaster !== !ghost) { b.shadowCaster = !ghost; state.shadowDirty = true; }
+      } else if (b.mesh.castShadow !== !ghost) { b.mesh.castShadow = !ghost; state.shadowDirty = true; }
       b.mesh.userData.noAO = ghost;
       b.mesh.renderOrder = ghost ? 2 : 0;
       b.mesh.visible = a > 0.01 && !(b.allLeaving && state.leaveT >= LEAVE_S)
@@ -609,7 +651,7 @@ uniform float uR;`)
     camera.up.set(0, 1, 0);
     if (state.el > 89) camera.up.set(0, 0, -1);
     camera.lookAt(tx, ty, tz);
-    if (state.shadowDirty) { renderer.shadowMap.needsUpdate = true; state.shadowDirty = false; }
+    if (state.shadowDirty) { refreshShadowBatch(); renderer.shadowMap.needsUpdate = true; state.shadowDirty = false; }
     renderer.info.reset();
     if (composer) composer.render(); else renderer.render(scene, camera);
     onFrame?.(api);
