@@ -1,7 +1,7 @@
 {
   "slug": "projeto-estrutural",
   "nome_servico": "Projeto estrutural",
-  "fonte_copy": "COPY_ESTRUTURAL_V06_20261030.md",
+  "fonte_copy": "COPY_ESTRUTURAL_V07_20261116.md",
   "titulo_pagina": "Projeto estrutural residencial em BIM | DEMELLO",
   "descricao": "Projeto estrutural para casa, sobrado e ampliação, em BIM, em nível básico ou executivo. Veja a estimativa antes do contato.",
   "h1": "Projeto estrutural pensado junto com a arquitetura e as instalações",
@@ -14,6 +14,7 @@
     "rotulo": "Ver a estimativa do meu projeto estrutural",
     "micro": "Sem compromisso · contato somente no final"
   },
+  "jsonld_nomes": {},
   "blocos_novos": {
     "para_quem": {
       "titulo": "Para quem é",
@@ -119,6 +120,7 @@
     },
     "mezanino": {
       "titulo": "Vai construir um mezanino?",
+      "chamada": "Veja um modelo metálico em 3D.",
       "conteudo": [
         {
           "tipo": "paragrafo",

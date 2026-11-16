@@ -1,0 +1,45 @@
+/* Maquetes V03 (estrutural e hidrossanitária): só os elementos novos. Soma-se a maquete-3d.css e maquete-estrutura-3d.css,
+   que continuam donos da caixa, do painel, da ficha e do pop-up do mezanino. */
+.caixa.mq3 .zoom{position:absolute;z-index:3;right:max(16px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-60%);display:flex;flex-direction:column;gap:6px}
+.caixa.mq3 .zoom button{width:44px;height:44px;display:grid;place-items:center;padding:0;font:700 22px/1 var(--fonte);color:#e8f0f8;background:rgba(27,36,45,.82);border:1px solid #3b5f84;border-radius:3px;cursor:pointer}
+.caixa.mq3 .zoom button:hover{background:var(--azul);border-color:var(--azul-linha)}
+.caixa.mq3 .escala-mq{position:absolute;z-index:3;right:max(16px,env(safe-area-inset-right,0px));top:calc(50% + 52px);margin:0;display:flex;flex-direction:column;align-items:flex-end;gap:3px;font:600 13px var(--fonte);color:#cfe0f1;pointer-events:none;text-shadow:0 1px 6px #000}
+.caixa.mq3 .escala-mq i{display:block;height:6px;border:2px solid #cfe0f1;border-top:0}
+.caixa.mq3 .niveis{position:absolute;inset:0;z-index:2;pointer-events:none}
+.caixa.mq3 .niveis span{position:absolute;left:0;top:0;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font:600 13px var(--fonte);color:#e8f0f8}
+.caixa.mq3 .niveis span{padding:2px 8px;background:rgba(27,36,45,.86);border:1px solid #3b5f84;border-radius:3px}
+.caixa.mq3 .niveis span i{order:2;display:inline-block;width:14px;border-top:1px solid #9cc2ec;margin-right:-22px}
+.caixa.mq3 .linha-corte{display:flex;align-items:center;gap:12px;padding:6px 14px;background:rgba(27,36,45,.82);border:1px solid #33506d;border-radius:4px;color:#e8f0f8;font:600 15px var(--fonte)}
+.caixa.mq3 .chip.principal{opacity:1;background:var(--azul);color:#fff;border-color:var(--azul-linha)}
+.caixa.mq3 #ver-tudo{opacity:1}
+.caixa.mq3 #ver-tudo[aria-pressed="true"]{background:var(--azul);color:#fff}
+.caixa.mq3 .chip.principal[aria-pressed="true"]{background:#1f3f60}
+.caixa.mq3 .chip,.caixa.mq3 .seg button{font:600 16px var(--fonte);min-height:44px}
+.caixa.mq3 .chip i{display:inline-block;width:12px;height:12px;margin-right:8px;border-radius:2px;border:1px solid rgba(255,255,255,.5);vertical-align:-1px}
+.caixa.mq3 .mais{position:relative}
+.caixa.mq3 .mais summary{list-style:none;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;font:600 16px var(--fonte);color:#cfe0f1;border:1px dashed #3b5f84;border-radius:3px;cursor:pointer}
+.caixa.mq3 .mais summary::-webkit-details-marker{display:none}
+.caixa.mq3 .mais summary::after{content:"+";margin-left:10px;color:#9cc2ec}
+.caixa.mq3 .mais[open] summary::after{content:"−"}
+.caixa.mq3 .mais-corpo{position:absolute;bottom:calc(100% + 10px);right:0;display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:max-content;max-width:min(560px,calc(100vw - 32px));padding:12px 14px;background:rgba(15,22,29,.95);border:1px solid #3b5f84;border-radius:4px}
+.caixa.mq3 .mais-corpo .grupo{flex-wrap:wrap}
+@media (max-width:640px){
+  .caixa.mq3 .zoom{top:max(84px,calc(env(safe-area-inset-top,0px) + 76px));transform:none;flex-direction:row}
+  .caixa.mq3 .camadas{scrollbar-width:none}
+  .caixa.mq3 .camadas::-webkit-scrollbar{display:none}
+  .caixa.mq3 .escala-mq{display:none}
+  .caixa.mq3 .linha-corte{font-size:14px;padding:4px 10px}
+  .caixa.mq3 .mais-corpo{right:auto;left:50%;transform:translateX(-50%)}
+  .caixa.mq3 .niveis span{font-size:12px}
+}
+@media (pointer:coarse){.caixa.mq3 .zoom{display:none}}   /* no toque, a pinça já aproxima e afasta */
+/* capa: imagem da própria maquete (capturada do modelo real) por baixo do palco. Aparece enquanto o 3D carrega e fica
+   como reserva sem WebGL; o palco opaco a cobre quando o 3D desenha. Não muda o tamanho da caixa (sem deslocamento). */
+.caixa.mq3 .capa{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.caixa.mq3.aberta .capa{display:none}
+.caixa.mq3 .carregando{text-shadow:0 1px 3px rgba(0,0,0,.85)}
+.caixa.mq3:not([data-pronto]) .palco{visibility:hidden}   /* até o modelo ficar pronto, a capa aparece no lugar do palco vazio */
+.caixa.mq3.sem-3d{cursor:default}.caixa.mq3.sem-3d .explorar{display:none}
+.caixa.mq3.sem-3d .carregando{padding:0 24px;text-align:center;color:#e8f0f8;background:rgba(27,36,45,.78)}
+/* celular: o painel do mezanino desce para baixo do texto do topo (que ocupa duas linhas) */
+@media (max-width:640px){.caixa.mq3 .sobre{top:100px}}

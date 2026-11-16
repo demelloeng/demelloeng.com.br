@@ -37,12 +37,13 @@ def _paragrafos(bloco):
     return [c['texto'] for c in bloco['conteudo'] if c['tipo'] in ('paragrafo', 'nota')]
 
 
-def hero(copia, d, maquete_html, extra=''):
+def hero(copia, d, maquete_html, extra='', acima_caixa=''):
+    """acima_caixa: entra na coluna da maquete, antes dela (o cartão do mezanino, decisão de Marcos de 16/11/2026)."""
     cta = d['cta']
     intro = ''.join(f'<p>{p}</p>' for p in d['introducao'])
     return f'''<section class="rico-hero-fundo" data-block="service-hero"><div class="rico-hero wrap">
 <div class="rico-titulo"><p class="crumb"><a href="../">Serviços</a> / {copia["nome_servico"]}</p><h1>{d["h1"]}</h1></div>
-<div class="rico-caixa">{maquete_html}</div>
+<div class="rico-caixa">{acima_caixa}{maquete_html}</div>
 <div class="rico-texto"><p class="chamada">{d["chamada"]}</p>{intro}<p class="cta-linha"><a class="cta" href="{cta["href"]}">{cta["rotulo"]} →</a></p><p class="micro">{cta["micro"]}</p>{extra}</div>
 </div></section>'''
 
@@ -156,9 +157,16 @@ def estrutura(bloco):
 CUBO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5L12 12l8-4.5M12 12v9"/></svg>'
 
 
+SETA = '<svg class="mz-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>'
+
+
 def mezanino_link(bloco):
-    """Botão discreto na abertura da página: abre a maquete do mezanino em tela cheia."""
-    return f'<p class="rico-mezanino-link"><button type="button" class="rico-link-3d" data-abrir-maquete="aco">{CUBO}<span>{bloco["titulo"]}</span></button></p>'
+    """Cartão na abertura da página (decisão de 16/11/2026, que altera o "discreto" da decisão 83): abre a maquete do
+    mezanino em tela cheia. Continua um botão, sem medição de clique e fora da estrutura da página (sem seção nem título).
+    Sem WebGL, o motor da maquete esconde o cartão (data-sem-webgl)."""
+    chamada = f'<span class="mz-s">{bloco["chamada"]}</span>' if bloco.get('chamada') else ''
+    return (f'<p class="rico-mezanino-link" data-sem-webgl><button type="button" class="rico-mz-cartao" data-abrir-maquete="aco">'
+            f'{CUBO}<span class="mz-txt"><span class="mz-t">{bloco["titulo"]}</span>{chamada}</span>{SETA}</button></p>')
 
 
 def mezanino_painel(bloco, cta_href, cta_rotulo):
