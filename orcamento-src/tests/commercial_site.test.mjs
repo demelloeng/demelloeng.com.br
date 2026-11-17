@@ -417,8 +417,9 @@ const PAGE_FACTS = {
   'servicos/projeto-prevencao-incendio/index.html': ['171', '100'],
   // referências de preço da tabela DEMELLO V2: Resolução SECID/PR e Credenciamento Fundepar (orcamento-src/src/pricing/pricing-table.v2.json; journey.mjs)
   'index.html': ['009/2026', '001/2025'],
-  // data das matérias de imprensa citadas (scripts/importar-copy-servico-v02.py, IMPRENSA, aprovadas na Arquitetura V11)
-  'servicos/projeto-arquitetura/index.html': ['16/06/2026'],
+  // data das matérias de imprensa citadas (scripts/importar-copy-servico-v02.py, IMPRENSA, aprovadas na Arquitetura V11);
+  // "Construir 100%" da maquete V03: estado da interface, não afirmação (como na hidro)
+  'servicos/projeto-arquitetura/index.html': ['16/06/2026', '100'],
   // especificação da maquete e área do projeto estrutural: docs/arquivo/paginas-servico-v02/copy/COPY_ESTRUTURAL_V06_20261030.md (aprovada)
   'servicos/projeto-estrutural/index.html': ['3', '9', '40', '100', '300', '7,50', '4,60', '3,00', '1.200', '2.500', '34,5', '1,1', '4.856,55'],
   // rótulo do botão da maquete ("Construir 100%"): estado da interface, não afirmação
