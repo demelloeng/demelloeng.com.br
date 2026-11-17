@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fitBox, scaleBar } from '../../assets/js/maquetes/enquadrar.mjs';
 import * as R4 from '../src/maquete5_building.mjs';
 import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, APRESENTACAO_MS, semMaqueteAtalhos } from '../../assets/js/maquetes/dados.mjs';
+import { blocoTerreno, curvasDeNivel, linhaDe, fatorLinha, corTerreno, secao, TERRA } from '../../assets/js/maquetes/terreno.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ler = (p) => readFile(path.join(RAIZ, p));
@@ -26,6 +27,9 @@ const MODELOS = {
   'assets/models/casa-exemplo.glb': 'b6f3dba49ab33e64d3235bb6be10a7023f3495001da8a14e9c02321c0ac030d0',
   'assets/models/hidrantes-luiz-carlos-v02.glb': '350b52603363964386270bba4b1fbdda04f9cd26ab4483559f6b12868021c04a',
   'assets/models/hidrantes-luiz-carlos-v02.json': '2e4e019029d304d122a125c6919ea0a9061e30a58890ba4854d03dff8a8feae8',
+  // terraplanagem: o GLB V5 publicado em 02/11/2026 continua o mesmo; o JSON V03 (identidade para a ficha) é novo
+  'assets/models/terraplanagem-djalma.glb': 'b1ac311f016b23f5c316dc253e2f24053f260724c06fa670ad704b87990c66a9',
+  'assets/models/terraplanagem-djalma-v03.json': 'd37665244b4243d1806eb6e4c4a90bd6a2802c867c5d2f1a925769714103f493',
 };
 
 // Páginas com maquete V03: página, capa e módulo de configuração em assets/js/maquetes/.
@@ -33,6 +37,7 @@ const PAGINAS_V03 = [
   { pagina: 'servicos/projeto-estrutural/index.html', capa: 'maquete-estrutura-capa.webp', config: 'estrutural' },
   { pagina: 'servicos/projeto-hidrossanitario/index.html', capa: 'maquete-hidro-capa.webp', config: 'hidro' },
   { pagina: 'servicos/projeto-prevencao-incendio/index.html', capa: 'maquete-incendio-capa.webp', config: 'incendio' },
+  { pagina: 'servicos/projeto-terraplenagem/index.html', capa: 'maquete-terraplanagem-capa.webp', config: 'terraplanagem' },
 ];
 
 // Leitor mínimo de GLB (só o necessário: POSITION e índices de cada nó).
@@ -156,14 +161,15 @@ test('páginas: maquetes V03 com ?v de cada arquivo = início do SHA-256 do pró
 test('publicação: tudo o que as maquetes V03 carregam está na allowlist', async () => {
   const allow = new Set((await texto('.github/pages/allowlist.txt')).split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#')));
   const precisa = ['assets/js/maquetes/motor.mjs', 'assets/js/maquetes/enquadrar.mjs', 'assets/js/maquetes/dados.mjs', ...PAGINAS_V03.map((c) => `assets/js/maquetes/${c.config}.mjs`), 'assets/css/maquete-v03.css',
-    'assets/models/casa-exemplo.glb', 'assets/models/hidrantes-luiz-carlos-casca.glb', 'assets/css/maquete-incendio-v03.css', ...Object.keys(MODELOS)];
+    'assets/models/casa-exemplo.glb', 'assets/models/hidrantes-luiz-carlos-casca.glb', 'assets/css/maquete-incendio-v03.css',
+    'assets/js/maquetes/terreno.mjs', 'assets/css/maquete-terraplanagem-v03.css', ...Object.keys(MODELOS)];
   for (const p of precisa) assert.ok(allow.has(p), p);
   // o motor carrega o Three só depois, por import() dinâmico, e só do próprio site
   const motor = await texto('assets/js/maquetes/motor.mjs');
   assert.doesNotMatch(motor, /^import .* from ['"]three/m);
   assert.match(motor, /await import\('three'\)/);
   assert.doesNotMatch(motor, /https?:\/\//);
-  for (const f of ['motor', 'dados', 'enquadrar', ...PAGINAS_V03.map((c) => c.config)]) {   // nenhum import do código da calculadora (não é publicado)
+  for (const f of ['motor', 'dados', 'enquadrar', 'terreno', ...PAGINAS_V03.map((c) => c.config)]) {   // nenhum import do código da calculadora (não é publicado)
     assert.doesNotMatch(await texto(`assets/js/maquetes/${f}.mjs`), /import[^;\n]*orcamento-src/);
   }
 });
@@ -344,5 +350,107 @@ test('motor: recursos da maquete de incêndio só pela configuração (inclusive
   for (const f of ['estrutural', 'hidro']) {
     const c = await texto(`assets/js/maquetes/${f}.mjs`);
     assert.doesNotMatch(c, /guias:|componentes:|marcadores:|fichaCompleta|nivelChao/, `${f}: comportamento inalterado`);
+  }
+});
+
+// ---- terraplanagem V03 (17/11/2026): GLB V5 intacto; transformação, curvas e seção saem das duas superfícies dele ----
+const TERRA_GLB = 'assets/models/terraplanagem-djalma.glb';
+// cota de uma superfície da grade de 2 m num ponto (x, z), por interpolação no quadrado da grade
+function cotaNaGrade(pos) {
+  const k = (x, z) => `${Math.round(x * 100)},${Math.round(z * 100)}`; const h = new Map(); let x0 = Infinity; let z0 = Infinity;
+  for (let i = 0; i < pos.length; i += 3) { h.set(k(pos[i], pos[i + 2]), pos[i + 1]); x0 = Math.min(x0, pos[i]); z0 = Math.min(z0, pos[i + 2]); }
+  return (x, z) => {
+    const i = Math.floor((x - x0) / 2 + 1e-6); const j = Math.floor((z - z0) / 2 + 1e-6); const fx = (x - x0) / 2 - i; const fz = (z - z0) / 2 - j;
+    const v = [[0, 0], [0, 1], [1, 0], [1, 1]].map(([a, c]) => h.get(k(x0 + 2 * (i + a), z0 + 2 * (j + c))));
+    if (v.some((y) => y === undefined)) return null;
+    return v[0] * (1 - fx) * (1 - fz) + v[1] * (1 - fx) * fz + v[2] * fx * (1 - fz) + v[3] * fx * fz;
+  };
+}
+
+test('terraplanagem: as duas superfícies do GLB têm a mesma planta e só a cota muda (de -2,50 a +2,85 m)', async () => {
+  const { malhas } = await glb(TERRA_GLB); const n = malhas.TERRENO_NATURAL; const f = malhas.TERRENO_FINAL;
+  assert.deepEqual([...n.idx], [...f.idx]);
+  let xz = 0; let dmin = 0; let dmax = 0;
+  for (let i = 0; i < n.pos.length; i += 3) {
+    xz = Math.max(xz, Math.abs(n.pos[i] - f.pos[i]), Math.abs(n.pos[i + 2] - f.pos[i + 2]));
+    const d = f.pos[i + 1] - n.pos[i + 1]; dmin = Math.min(dmin, d); dmax = Math.max(dmax, d);
+  }
+  assert.equal(xz, 0);
+  assert.deepEqual([dmin.toFixed(2), dmax.toFixed(2)], ['-2.50', '2.85']);
+});
+
+test('terraplanagem: os prismas de corte e aterro ficam entre as duas superfícies (a transformação os revela sem invadir o terreno)', async () => {
+  const { malhas } = await glb(TERRA_GLB);
+  const nat = cotaNaGrade(malhas.TERRENO_NATURAL.pos); const fin = cotaNaGrade(malhas.TERRENO_FINAL.pos);
+  for (const nome of ['VOLUME_CORTE', 'VOLUME_ATERRO']) {
+    const P = malhas[nome].pos; let sobre = 0;
+    for (let i = 0; i < P.length; i += 3) {
+      const a = nat(P[i], P[i + 2]); const b = fin(P[i], P[i + 2]);
+      if (a !== null && (Math.abs(P[i + 1] - a) < 0.15 || Math.abs(P[i + 1] - b) < 0.15)) sobre += 1;
+    }
+    assert.ok(sobre / (P.length / 3) >= 0.95, `${nome}: ${(100 * sobre / (P.length / 3)).toFixed(1)}% dos vértices numa das superfícies`);
+  }
+});
+
+test('terraplanagem: o bloco do terreno é fechado, com as faces para fora (a tampa da seção depende disso)', async () => {
+  const { malhas } = await glb(TERRA_GLB); const n = malhas.TERRENO_NATURAL;
+  let ymin = Infinity; for (let i = 1; i < n.pos.length; i += 3) ymin = Math.min(ymin, n.pos[i]);
+  const b = blocoTerreno(n.pos, n.idx, ymin - 1);
+  assert.equal(b.facesTopo, 9046); assert.equal(b.faces, 2 * 9046 + 2 * b.paredes);
+  const k = (i) => `${b.pos[i * 3].toFixed(3)},${b.pos[i * 3 + 1].toFixed(3)},${b.pos[i * 3 + 2].toFixed(3)}`;
+  const arestas = new Map();
+  for (let t = 0; t < b.idx.length; t += 3) for (const [u, v] of [[0, 1], [1, 2], [2, 0]]) { const c = `${k(b.idx[t + u])}>${k(b.idx[t + v])}`; arestas.set(c, (arestas.get(c) || 0) + 1); }
+  for (const [c, q] of arestas) {
+    assert.equal(q, 1, `aresta repetida no mesmo sentido: ${c}`);
+    const [a, d] = c.split('>'); assert.equal(arestas.get(`${d}>${a}`), 1, `aresta sem par: ${c}`);
+  }
+  assert.ok([...b.tipo].every((t, v) => (t <= 1) === (b.origem[v] >= 0)), 'só o topo e o alto das paredes acompanham o terreno');
+});
+
+test('terraplanagem: as curvas de nível do terreno natural ficam nas cotas inteiras', async () => {
+  const { malhas } = await glb(TERRA_GLB); const n = malhas.TERRENO_NATURAL;
+  const c = curvasDeNivel(n.pos, n.idx, 1, 0.06);
+  assert.ok(c.length / 6 > 1000, `${c.length / 6} trechos`);
+  for (let i = 1; i < c.length; i += 3) assert.ok(Math.abs(c[i] - 0.06 - Math.round(c[i] - 0.06)) < 1e-4);
+});
+
+test('terraplanagem: a linha passa por todo o terreno; a cor da terra só muda onde a cota muda', () => {
+  assert.equal(fatorLinha(-80, linhaDe(0, -88.91, 75.09, 8), 8), 0, 'no início, nada mudou');
+  assert.equal(fatorLinha(75.09, linhaDe(1, -88.91, 75.09, 8), 8), 1, 'no fim, até a borda da frente chegou à cota final');
+  assert.deepEqual(corTerreno(0, 1), TERRA, 'sem diferença de cota, a cor é a da terra (decisão de 02/11/2026)');
+  assert.deepEqual(corTerreno(-2, 0), TERRA, 'antes de a linha passar, a cor é a da terra');
+  const c = corTerreno(-2, 1); const a = corTerreno(2, 1);
+  assert.ok(c[0] > TERRA[0] && c[2] < TERRA[2], 'corte puxa para o laranja');
+  assert.ok(a[1] > TERRA[1] && a[0] < TERRA[0], 'aterro puxa para o verde');
+});
+
+test('terraplanagem: seção com corte onde o natural fica acima e aterro onde o atual fica acima', () => {
+  const pos = new Float32Array([0, 0, 0, 2, 0, 0, 0, 0, 2, 2, 0, 2]); const idx = new Uint32Array([0, 2, 1, 1, 2, 3]);
+  const nat = new Float32Array([1, 1, 1, 1]);
+  assert.equal(secao(pos, idx, nat, nat, 1).tris.length, 0, 'sem terraplanagem, nada entre os perfis');
+  assert.ok([...secao(pos, idx, nat, new Float32Array([0, 0, 0, 0]), 1).sinal].every((s) => s === -1), 'só corte');
+  assert.ok([...secao(pos, idx, nat, new Float32Array([2, 2, 2, 2]), 1).sinal].every((s) => s === 1), 'só aterro');
+  assert.deepEqual(new Set(secao(pos, idx, nat, new Float32Array([0, 2, 0, 2]), 1).sinal), new Set([-1, 1]), 'corta de um lado e aterra do outro');
+});
+
+test('terraplanagem: página, configuração e ficha (texto da V5, nenhum volume, motor só pela configuração)', async () => {
+  const cfg = await texto('assets/js/maquetes/terraplanagem.mjs');
+  assert.match(cfg, /exagero: 2,/);
+  assert.match(cfg, /montagemMs: 4200,/, 'caixa fechada: a montagem cabe em 5 s');
+  assert.match(cfg, /sub: 'Terraplanagem de um colégio, em 3D · ilustrativo · relevo exagerado 2 vezes'/);
+  for (const id of ['VOLUME_CORTE', 'VOLUME_ATERRO']) assert.match(cfg, new RegExp(`id: '${id}'[^\\n]*semTampa: true`));
+  const meta = JSON.parse(await texto('assets/models/terraplanagem-djalma-v03.json'));
+  const { malhas } = await glb(TERRA_GLB);
+  for (const [g, els] of Object.entries(meta.grupos)) { assert.equal(els.length, 1, g); assert.equal(els[0][2], 0); assert.equal(els[0][3], malhas[g].idx.length / 3, g); }
+  const markup = await texto('docs/arquivo/paginas-servico-v02/maquete-terraplanagem-v03-markup.html');
+  for (const t of [markup, JSON.stringify(meta)]) { assert.doesNotMatch(t, /\d\s*m³|\d\s*m3\b/, 'a maquete não mostra volume'); assert.doesNotMatch(t, /terraplenagem/i); }
+  const html = await texto('servicos/projeto-terraplenagem/index.html');
+  assert.ok(html.includes(markup.trim().split('\n')[1].trim()), 'a página vem do markup V03, pelo gerador');
+  assert.doesNotMatch(html, /maquete-terraplanagem-3d\.js/, 'a V5 sai da página');
+  for (const f of ['assets/js/maquete-terraplanagem-3d.js', 'assets/models/terraplanagem-djalma.json', 'docs/arquivo/paginas-servico-v02/maquete-terraplanagem-markup.html']) await ler(f);   // ficam para reversão
+  const motor = await texto('assets/js/maquetes/motor.mjs');
+  for (const g of ['antesDeMontar', 'aposMontar', 'aplicar']) assert.match(motor, new RegExp(`cfg\\.extensao\\?\\.${g}\\?\\.`));
+  for (const f of ['estrutural', 'hidro', 'incendio']) {
+    assert.doesNotMatch(await texto(`assets/js/maquetes/${f}.mjs`), /extensao|exagero|montagem(Aberta)?Ms|semTampa|semRealce|textoPorDentro|vistas:|tampa:|brilhoVertice/, `${f}: comportamento inalterado`);
   }
 });

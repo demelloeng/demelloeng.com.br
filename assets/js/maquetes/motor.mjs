@@ -2,6 +2,10 @@
 // Recursos da maquete de incêndio (V02 e protótipo), ligados SÓ pela configuração: nivelChao, níveis com cota fixa,
 // guias (tubo fino com espessura mínima de tela), lista de componentes, marcadores e ficha completa (Aproximar,
 // Isolar, Limpar). Sem eles na configuração, o comportamento das outras maquetes não muda.
+// Ganchos da maquete de terraplanagem (17/11/2026), também só pela configuração: exagero (escala vertical), extensao
+// (antesDeMontar, aposMontar e aplicar: o terreno que se transforma fica em terraplanagem.mjs), montagemMs e
+// montagemAbertaMs (a sequência longa só com a maquete aberta), tampa (cor da seção), brilhoVertice, vistas (direção,
+// abertura e margem por vista), camada com semTampa ou semRealce e textoPorDentro. Ausentes, nada muda.
 // Substitui maquete-estrutura-3d.js e maquete-hidro-3d.js (que ficam no site para reversão) sem mudar o modelo:
 // a geometria vem dos GLB publicados, intactos (SHA-256 conferido em orcamento-src/tests/maquetes_v03.test.mjs).
 // Mantém o comportamento aceito da página (caixa viva no topo, tela cheia, Esc e foco) e traz o acabamento da
@@ -122,15 +126,16 @@ export async function maquete(cfg) {
 
   // ---- corte com tampa: hachura em espaço de TELA, visível mesmo em peças de 20 cm ----
   const planoCorte = new THREE.Plane(new THREE.Vector3(0, 0, -1), 1e5);
+  const hachura = (cfg.tampa?.linha || [0.62, 0.78, 0.93]).map((c) => c.toFixed(2)).join(', ');
   const tampaMat = new THREE.MeshBasicMaterial({
-    color: 0x23507d, side: THREE.DoubleSide, toneMapped: false,
+    color: cfg.tampa?.cor ?? 0x23507d, side: THREE.DoubleSide, toneMapped: false,
     stencilWrite: true, stencilRef: 0, stencilFunc: THREE.NotEqualStencilFunc,
     stencilFail: THREE.ReplaceStencilOp, stencilZFail: THREE.ReplaceStencilOp, stencilZPass: THREE.ReplaceStencilOp,
   });
   tampaMat.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <color_fragment>', `#include <color_fragment>
       float hz = fract((gl_FragCoord.x + gl_FragCoord.y) / 9.0);
-      diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.62, 0.78, 0.93), step(0.72, hz));`);
+      diffuseColor.rgb = mix(diffuseColor.rgb, vec3(${hachura}), step(0.72, hz));`);
   };
   const tampa = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), tampaMat);
   tampa.renderOrder = 1.1; tampa.userData.semAO = true; tampa.visible = false; tampa.onAfterRender = () => renderer.clearStencil();
@@ -143,8 +148,14 @@ export async function maquete(cfg) {
   let caixaTudo = null; let caixaFoco = null; let niveis = []; let tween = null; let tweenCam = null;
   let sombraSuja = true; let quadro = 0; let realce = null; let escolhido = null; let pendente = null;
   let arrastando = false; let agitado = false; let tAcabamento = 0; let jaTocou = false; let visivel = false;
-  let inicioApresentacao = null; let desfazerIsolamento = null; let isolado = null; let pinos = [];
+  let inicioApresentacao = null; let desfazerIsolamento = null; let isolado = null; let pinos = []; let jaAbriu = false;
   const medidas = { quadros: 0, ao: 0, ms: [], carga: 0 };
+  // o que uma extensão (cfg.extensao) enxerga do motor; os valores que mudam são lidos na hora
+  const ctx = {
+    THREE, scene, camera, planoCorte, pedir: () => pedir(),
+    get raiz() { return raiz; }, get G() { return G; }, get meta() { return meta; }, get p() { return p; },
+    get cortando() { return cortando; }, get raioX() { return raioX; }, get aberta() { return aberta; },
+  };
   $('corte').value = Math.round((1 - fracCorte) * 100);
   $('girar').setAttribute('aria-pressed', String(girar));   // com movimento reduzido, começa desligado
 
@@ -177,7 +188,8 @@ export async function maquete(cfg) {
     const gltf = await new Promise((ok, no) => new GLTFLoader().parse(buf, '', ok, no));
     meta = m; CAM = aplicarRotulos(M.camadas ?? cfg.camadas, meta.rotulos);
     raiz = gltf.scene; scene.add(raiz);
-    raiz.rotation.y = THREE.MathUtils.degToRad(cfg.giroCena || 0); raiz.updateMatrixWorld(true);
+    raiz.rotation.y = THREE.MathUtils.degToRad(cfg.giroCena || 0); raiz.scale.y = cfg.exagero || 1; raiz.updateMatrixWorld(true);
+    cfg.extensao?.antesDeMontar?.({ THREE, raiz, meta });   // ex.: a terraplanagem troca a malha do terreno pelo bloco fechado
     let cx = new THREE.Box3().setFromObject(raiz, true); const c = cx.getCenter(new THREE.Vector3());
     // 'zero': o nível 0 do modelo é o do terreno (a fundação fica enterrada); 'min': o chão fica sob o ponto mais baixo
     // nivelChao: altura, no modelo, do piso térreo (no GLB de hidrantes, o 0 é o tubo mais fundo, não o chão)
@@ -214,10 +226,10 @@ export async function maquete(cfg) {
         metalness: metal ? 0.25 : 0, envMapIntensity: metal ? 0.5 : 0.28, flatShading: true, clippingPlanes: planos, clipShadows: true,
         polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1,
       });
-      const forca = cfg.forcaAresta ?? 0.55;
+      const forca = cfg.forcaAresta ?? 0.55; const brilho = cfg.brilhoVertice ?? 0.3;
       mat.onBeforeCompile = (sh) => {
         if (porVertice) {   // tubos: a cor de cada peça (do IFC) também emite um pouco, para o fio não sumir na sombra
-          sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n\ttotalEmissiveRadiance += vColor.rgb * 0.3;');
+          sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>\n\ttotalEmissiveRadiance += vColor.rgb * ${brilho};`);
         }
         if (mask) {          // contorno no próprio material, só nas arestas reais, com largura constante na tela
           sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec3 bary;\nattribute vec3 emask;\nvarying vec3 vBar;\nvarying vec3 vEm;')
@@ -231,7 +243,7 @@ export async function maquete(cfg) {
               diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.24, eE * ${forca.toFixed(2)});`);
         }
       };
-      mat.customProgramCacheKey = () => `mq3|${porVertice}|${!!mask}|${forca}`;
+      mat.customProgramCacheKey = () => `mq3|${porVertice}|${!!mask}|${forca}|${brilho}`;
       o.material = mat; o.castShadow = true; o.receiveShadow = true;
       let matL = null;
       if (!mask && cfg.arestasLinha) {   // reserva: linhas separadas (sem o contorno no material)
@@ -278,7 +290,9 @@ export async function maquete(cfg) {
     if (cfg.casca) { try { await montarCasca(cfg.casca); } catch (e) { console.warn('maquete: sem a casca', e); } }
     if (casca && cfg.casca.enquadrar) { caixaTudo.expandByObject(casca); }   // o quadro mostra o prédio inteiro, não só os tubos
     niveis = calcularNiveis(M);
-    montarBase(); montarCamadas(); montarLegenda(); montarComponentes(); ajustar(); ajustarSombra(); posicionar(vista, 0);
+    montarBase(); montarCamadas(); montarLegenda(); montarComponentes();
+    cfg.extensao?.aposMontar?.(ctx);   // ex.: a terraplanagem prepara o terreno que se transforma, as curvas e a seção
+    ajustar(); ajustarSombra(); posicionar(vista, 0);
     await renderer.compileAsync(scene, camera).catch(() => {});   // compila em segundo plano: o primeiro quadro não trava a página
     if (modeloAtual !== chave) return;
     p = reduz ? 1 : 0; aplicar(); pronto = true; carregando.hidden = true; jaTocou = false;
@@ -408,14 +422,15 @@ export async function maquete(cfg) {
   // ---- montagem, separação, raio-X e corte ----
   function aplicar() {
     const e = +$('explodir').value / 100; const H = caixaTudo ? caixaTudo.max.y - caixaTudo.min.y : 10;
+    const esc = raiz ? raiz.scale.y : 1;   // exagero vertical (só a terraplanagem; nas outras é 1)
     for (const g of Object.values(G)) {
-      const off = e * H * g.cam.desloca; g.malha.position.y = off;
+      const off = e * H * g.cam.desloca; g.malha.position.y = off / esc;
       const s = ease(lim((p - g.cam.janela[0]) / (g.cam.janela[1] - g.cam.janela[0])));
-      g.plano.constant = s >= 1 ? 1e5 : raiz.position.y + off + g.ymin + (g.ymax - g.ymin) * s;
+      g.plano.constant = s >= 1 ? 1e5 : raiz.position.y + off + (g.ymin + (g.ymax - g.ymin) * s) * esc;
       g.malha.visible = g.ligada && s > 0.002 && (!isolado || isolado.g === g);
       g.mat.transparent = raioX; g.mat.opacity = raioX ? (g.cam.id === 'lajes' ? 0.14 : 0.36) : 1; g.mat.depthWrite = !raioX;
       g.malha.castShadow = !raioX; g.malha.userData.semAO = raioX;
-      for (const h of g.aux) h.visible = cortando && !raioX && g.geoTampa.drawRange.count > 0;   // o desenho de cada quadro ainda esconde a tampa enquanto a câmera se move
+      for (const h of g.aux) h.visible = cortando && !raioX && !g.cam.semTampa && g.geoTampa.drawRange.count > 0;   // o desenho de cada quadro ainda esconde a tampa enquanto a câmera se move
     }
     if (cortando) {
       const b = (!verTudo && caixaFoco) ? caixaFoco : caixaTudo; const z = b.max.z - fracCorte * (b.max.z - b.min.z);
@@ -428,6 +443,7 @@ export async function maquete(cfg) {
       const lado = Math.max(caixaTudo.max.x - caixaTudo.min.x, caixaTudo.max.z - caixaTudo.min.z) * 3 + 40;
       tampa.scale.set(lado, lado, 1); tampa.position.set(0, 0, z - 0.004); tampa.visible = !raioX;
     } else { planoCorte.constant = 1e5; tampa.visible = false; }
+    cfg.extensao?.aplicar?.(ctx);
     $('construir').value = Math.round(p * 100); $('pct').textContent = `${Math.round(p * 100)}%`;
     sombraSuja = true; agitado = true; pedir();
   }
@@ -435,7 +451,8 @@ export async function maquete(cfg) {
     if (!pronto) return; if (!jaTocou) inicioApresentacao = performance.now(); jaTocou = true;
     if (reduz) { p = 1; aplicar(); return; }
     const t0 = performance.now(); p = 0; aplicar();
-    tween = (agora) => { p = lim((agora - t0) / MONTAGEM_MS); aplicar(); if (p >= 1) tween = null; };
+    const ms = (aberta && cfg.montagemAbertaMs) || cfg.montagemMs || MONTAGEM_MS;   // fechada, tudo abaixo de 5 s
+    tween = (agora) => { p = lim((agora - t0) / ms); aplicar(); if (p >= 1) tween = null; };
     pedir();
   }
   function montarCamadas() {
@@ -463,7 +480,7 @@ export async function maquete(cfg) {
   // ---- vistas: o quadro desconta a faixa dos controles; a Planta é quase ortográfica ----
   let faixa = 0; let topoUI = 0;
   function posicionar(v, ms = 700, entrada = false) {
-    vista = v; const V = VISTAS[v];
+    vista = v; const V = cfg.vistas?.[v] || VISTAS[v];   // cfg.vistas: só a terraplanagem (câmera mais alta no Conjunto)
     const d = new THREE.Vector3(...V.dir).normalize();
     const b = (!verTudo && caixaFoco) ? caixaFoco : caixaTudo; const centro = b.getCenter(new THREE.Vector3()); const tam = b.getSize(new THREE.Vector3());
     let fundo = tam.z;
@@ -472,7 +489,7 @@ export async function maquete(cfg) {
     const band = aberta ? Math.min(0.7, (faixa + topoUI) / h) : 0.08;
     const dist = fitBox({ w: tam.x, h: tam.y, d: fundo }, {
       az: (Math.atan2(d.x, d.z) * 180) / Math.PI, el: (Math.asin(d.y) * 180) / Math.PI,
-      fovDeg: V.fov, aspect: camera.aspect, band, margin: 0.9,
+      fovDeg: V.fov, aspect: camera.aspect, band, margin: V.margem ?? 0.9,
     });
     const fim = d.clone().multiplyScalar(dist).add(centro);
     controles.minDistance = dist * 0.25; controles.maxDistance = dist * 2.6;
@@ -511,7 +528,7 @@ export async function maquete(cfg) {
   }
   function destacar(h) {
     if (realce) { realce.parent?.remove(realce); realce.geometry.dispose(); realce.material.dispose(); realce = null; }
-    if (!h) { pedir(); return; }
+    if (!h || h.g.cam.semRealce) { pedir(); return; }   // semRealce: o terreno é uma peça só; pintá-lo todo esconderia a maquete
     const pos = h.malha.geometry.attributes.position; const [, , ini, n] = h.el; const v = new Float32Array(n * 9);
     for (let i = 0; i < n * 3; i += 1) v.set([pos.getX(ini * 3 + i), pos.getY(ini * 3 + i), pos.getZ(ini * 3 + i)], i * 3);
     const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.BufferAttribute(v, 3));
@@ -532,7 +549,7 @@ export async function maquete(cfg) {
     const h = achar(ev);
     if (!mesmo(h, sobre)) { sobre = h; destacar(h || escolhido); }
     if (h) {
-      tip.hidden = false; tip.textContent = `${rotulo(h)} · ${pav(h.el[1]).nome}`;
+      tip.hidden = false; tip.textContent = [rotulo(h), pav(h.el[1]).nome].filter(Boolean).join(' · ');
       const r = caixa.getBoundingClientRect(); tip.style.left = `${Math.min(ev.clientX - r.left + 14, r.width - 220)}px`; tip.style.top = `${ev.clientY - r.top + 14}px`; canvas.style.cursor = 'pointer';
     } else { tip.hidden = true; canvas.style.cursor = 'grab'; }
   }
@@ -562,7 +579,7 @@ export async function maquete(cfg) {
       ficha.append(acoes);
       return;
     }
-    ficha.innerHTML = `<b>${rotulo(h)}</b><span>${pv.nome}${pv.ressalva ? ` · ${pv.ressalva}` : ''}</span><span>${h.el[4] || meta.padrao || ''}</span><button type="button" id="soltar">Limpar</button>`;
+    ficha.innerHTML = `<b>${rotulo(h)}</b>${pv.nome ? `<span>${pv.nome}${pv.ressalva ? ` · ${pv.ressalva}` : ''}</span>` : ''}<span>${h.el[4] || meta.padrao || ''}</span><button type="button" id="soltar">Limpar</button>`;
     $('soltar').addEventListener('click', () => { escolhido = null; destacar(null); ficha.hidden = true; });
   }
 
@@ -658,7 +675,9 @@ export async function maquete(cfg) {
     caixa.getAnimations().forEach((a) => a.cancel()); Object.assign(caixa.style, cheia);
     controles.enabled = true; controles.autoRotate = girar; ajustar(); prepararOclusao();
     posicionar(vista, 900, true); $('fechar').focus();
-    if (p < 0.001 && !tween) tocar();
+    // com montagemAbertaMs (terraplanagem), a primeira abertura conta a sequência inteira, mais devagar
+    if ((p < 0.001 && !tween) || (cfg.montagemAbertaMs && !jaAbriu)) tocar();
+    jaAbriu = true;
     const sb = $('sobre'); if (sb && !sb.hidden) sb.open = innerWidth > 640;
   }
   async function fechar() {
@@ -702,7 +721,8 @@ export async function maquete(cfg) {
   function escolherVista(v, mover = true) {
     document.querySelectorAll('#ui [data-vista]').forEach((x) => x.setAttribute('aria-checked', String(x.dataset.vista === v)));
     cortando = v === 'corte'; $('faixa-corte').hidden = !cortando;
-    const pd = $('por-dentro'); if (pd) { pd.setAttribute('aria-pressed', String(cortando)); pd.textContent = cortando ? 'Voltar ao exterior' : 'Ver por dentro'; }
+    const [txtDentro, txtFora] = cfg.textoPorDentro || ['Ver por dentro', 'Voltar ao exterior'];
+    const pd = $('por-dentro'); if (pd) { pd.setAttribute('aria-pressed', String(cortando)); pd.textContent = cortando ? txtFora : txtDentro; }
     medirFaixa(); aplicar(); if (mover) posicionar(v);
   }
   controles.addEventListener('start', () => { arrastando = true; controles.autoRotate = false; clearTimeout(ocioso); if (movel && cortando) aplicar(); });
@@ -792,7 +812,7 @@ export async function maquete(cfg) {
     // corte: a tampa (duas passadas de stencil por camada) some enquanto a câmera se move e volta quando ela para
     const camMovendo = !!(tweenCam || controles.autoRotate || mexeu || arrastando);
     const comTampa = cortando && !raioX && !camMovendo;
-    tampa.visible = comTampa; for (const g of Object.values(G)) for (const h of g.aux) h.visible = comTampa && g.geoTampa.drawRange.count > 0;
+    tampa.visible = comTampa; for (const g of Object.values(G)) for (const h of g.aux) h.visible = comTampa && !g.cam.semTampa && g.geoTampa.drawRange.count > 0;
     clearTimeout(tAcabamento);
     if (podeAO && !movendo) { composer.render(); medidas.ao += 1; } else { renderer.render(scene, camera); if (podeAO || (cortando && camMovendo)) tAcabamento = setTimeout(pedir, 160); }
     medidas.quadros += 1; medidas.ms.push(performance.now() - t0); if (medidas.ms.length > 120) medidas.ms.shift();
@@ -806,6 +826,8 @@ export async function maquete(cfg) {
     pronto: () => pronto && !tween && !tweenCam, abrir: () => abrir(), vista: (v) => escolherVista(v), niveis: () => niveis.map((n) => ({ ...n, y: +n.y.toFixed(2) })),
     interno: () => ({ renderer, scene, camera }),   // só para medir no navegador de teste
     girar: (g) => girarAz(g), parar: () => { clearTimeout(ocioso); girar = false; controles.autoRotate = false; },
+    andamento: (v) => { tween = null; p = v; aplicar(); },   // capturas de um estado da montagem
+    extensao: () => cfg.extensao?.medir?.() ?? null,
   };
 
   try { await carregar(modeloAtual); } catch (e) { carregando.hidden = false; carregando.textContent = 'Não foi possível carregar a maquete.'; console.error(e); semMaquete(); return; }

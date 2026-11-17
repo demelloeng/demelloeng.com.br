@@ -1,0 +1,21 @@
+{
+ "versao": "V03 do visualizador sobre o modelo V5 (terraplanagem-djalma.glb, intacto)",
+ "padrao": "Representação ilustrativa.",
+ "pavimentos": [""],
+ "legenda": {
+  "Terreno natural": "#96805f",
+  "Corte": "#e87e22",
+  "Aterro": "#2ea05a",
+  "Piso": "#d6dce2",
+  "Contenção": "#6e7076",
+  "Curvas do terreno natural": "#f3e6cf"
+ },
+ "grupos": {
+  "TERRENO_NATURAL": [["Terreno", 0, 0, 9046, "Terreno natural reconstruído no modelo e terreno projetado. Relevo exagerado 2 vezes."]],
+  "PISOS": [["Piso", 0, 0, 216, "Piso do projeto, na cota do modelo."]],
+  "VOLUME_CORTE": [["Corte", 0, 0, 1194, "Solo retirado. Região da planta, sem volume."]],
+  "VOLUME_ATERRO": [["Aterro", 0, 0, 248, "Solo acrescentado. Posição pela planta, sem conferência de volume."]],
+  "CONTENCOES": [["Contenção", 0, 0, 1944, "Contenção ilustrativa, sem altura executiva."]]
+ },
+ "aviso": "ilustrativo; sem volumes; terreno natural reconstruido; aterro posicionado pela planta (nao verificado por volume); contencoes ilustrativas, sem altura executiva"
+}
