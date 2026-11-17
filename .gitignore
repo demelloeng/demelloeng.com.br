@@ -2,3 +2,7 @@
 # R07: perfil de teste local (compilação com endereços 127.0.0.1 e dados da rodada). Nunca versionado nem publicado.
 /docs/prototipos/calculadora-v05-r4/teste/app/
 /docs/prototipos/calculadora-v05-r4/teste/run/
+/tests/visual/node_modules/
+/tests/visual/test-results/
+/tests/visual/playwright-report/
+/tests/visual/.snapshots/

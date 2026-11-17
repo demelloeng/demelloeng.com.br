@@ -1,0 +1,116 @@
+name: Gate do PR (testes independentes e governança de capacidades)
+
+# Roda em todo PR para a main, sem depender de nada local nem do repositório canônico privado.
+# Não publica nada: a publicação continua só no pages.yml, no push da main.
+# 1) os mesmos testes do pages.yml (lista lida do próprio pages.yml) e a deriva da lista;
+# 2) montagem e gates G2–G5 do artefato, sem deploy;
+# 3) governança: trailers de MWG e frontend-design nos commits frontend e mapa atualizado na mudança estrutural;
+# 4) headless em 127.0.0.1: acessibilidade, maquetes V03 e regressão visual contra a base do PR.
+#    Diferença visual só passa com o rótulo "visual-autorizado", posto por Marcos.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "12.18.0"
+      - name: Dependências dos testes (lockfile congelado)
+        working-directory: orcamento-src
+        run: pnpm install --frozen-lockfile
+      - name: Mesmos testes node do pages.yml
+        working-directory: orcamento-src
+        run: |
+          node --test $(python3 ../scripts/capacidades.py testes --listar)
+          node scripts/publish-guard.mjs
+      - name: Deriva da lista de testes (teste existente que a publicação não roda)
+        run: python3 scripts/capacidades.py testes
+      - name: Contratos dos geradores e da governança (scripts/test_*.py, um arquivo por vez como no pages.yml)
+        run: |
+          for f in scripts/test_*.py; do
+            echo "== $f"; python3 -B -m unittest discover -s scripts -p "$(basename "$f")" || exit 1
+          done
+      - name: Artefato Pages e gates G2–G5 (sem deploy)
+        run: |
+          python3 .github/pages/build_artifact.py build "$GITHUB_SHA" --out .pages-artifact --report "$RUNNER_TEMP/pages-hashes.json"
+          python3 .github/pages/build_artifact.py validate "$GITHUB_SHA" --artifact .pages-artifact
+          python3 .github/pages/build_artifact.py smoke-local --artifact .pages-artifact
+
+  governanca:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Trailers de capacidades, versões, guias e atualidade do mapa
+        run: >
+          python3 scripts/capacidades.py ci
+          --base "${{ github.event.pull_request.base.sha }}"
+          --head "${{ github.event.pull_request.head.sha }}"
+          --validar-guias
+
+  headless:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Base do PR (referência da regressão visual)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .base
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Playwright
+        working-directory: tests/visual
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Acessibilidade e maquetes sem WebGL (127.0.0.1, externos bloqueados)
+        working-directory: tests/visual
+        run: npx playwright test a11y.spec.mjs maquete-sem-webgl.spec.mjs
+      - name: Maquetes V03 com WebGL por software, uma de cada vez (teclado, foco, Escape)
+        working-directory: tests/visual
+        run: npx playwright test maquete.spec.mjs --workers=1
+      - name: Referência visual a partir da base
+        working-directory: tests/visual
+        env:
+          SITE_ROOT: ${{ github.workspace }}/.base
+          SNAP_DIR: ${{ runner.temp }}/snap
+        run: npx playwright test regressao.spec.mjs --update-snapshots --reporter=dot
+      - name: Regressão visual do PR contra a base
+        id: regressao
+        continue-on-error: ${{ contains(github.event.pull_request.labels.*.name, 'visual-autorizado') }}
+        working-directory: tests/visual
+        env:
+          SNAP_DIR: ${{ runner.temp }}/snap
+        run: npx playwright test regressao.spec.mjs
+      - name: Diferenças visuais (para a revisão de Marcos)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regressao-visual
+          path: tests/visual/test-results/
+          if-no-files-found: ignore

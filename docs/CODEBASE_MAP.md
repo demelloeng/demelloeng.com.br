@@ -1,9 +1,9 @@
 ---
-last_mapped: 2026-11-04T20:32:29Z
-total_files: 207
+last_mapped: 2026-11-17T05:36:17Z
+total_files: 563
 total_tokens: 568758
 commit: 3df7e53
-branch: main
+branch: feat/capacidades-governanca
 ---
 
 # Mapa do código: site da DEMELLO Engenharia
@@ -32,6 +32,8 @@ branch: main
 > **Atualização de 05/11/2026 (frente Regularização V02, issue #16, branch `claude/regularizacao-v02` sobre a `main` `dcd385f`).** `/servicos/regularizacao/` passou do layout antigo, à mão, para o layout rico gerado, com o perfil novo `regularizacao` (copy `COPY_REGULARIZACAO_V02_20261105.md`, módulos `copy_regularizacao.py` e `layout_regularizacao.py`, CSS `servico-regularizacao-v02.css`, teste `test_regularizacao.py`). Inventário: 21 páginas HTML, **11 no V02 e 10 antigas**. Onde as seções abaixo falarem de Regularização como página antiga ou de 10 páginas V02, vale esta nota. Verificado nesta data na branch: `npm test` 370 de 370; artefato de 142 arquivos com G2-G5 e smoke local PASS; `unittest` de `test_pscip_glp.py` e de `test_regularizacao.py` (5 casos cada) passam. O mapa não foi regerado pelo Cartographer.
 >
 > **Atualização de 05/11/2026 (frente PSCIP + GLP V02, PR sobre a `main` `c6541bd`).** Incorpora a `main` após o PR #45 (404 do aço corrigido), as duas páginas novas no layout rico (`projeto-prevencao-incendio` e `projeto-gas-glp`, com a maquete de hidrantes do Colégio Luiz Carlos), o catálogo com 8 cartões e os testes novos. Verificado nesta data na cópia da candidata: `npm test` 370 de 370, `unittest` 5 de 5, artefato de 141 arquivos (G2-G5 e smoke local PASS). Onde as seções abaixo disserem "04/11", vale esta nota quando houver conflito.
+>
+> **Atualização pelo Cartographer em 2026-11-17T05:36:17Z** (modo atualização sobre a `main` `9e7358b`, merges #62 a #67, e a branch `feat/capacidades-governanca`). Duas leituras em paralelo: calculadora R4 (`orcamento-src`) e maquetes V03, publicação e governança. Mudou: seções 2 (acréscimos), 6, 8, 9, 11 (armadilhas 2, 3, 16 e 20 a 26), 12 e a seção nova 14 (governança de capacidades). A seção 13 é retrato de 04/11 e não foi reescrita. `total_tokens` não foi recontado. A âncora `commit:` aponta para o commit que este mapa descreve; `python scripts/capacidades.py mapa` lista o que mudou depois dela.
 >
 > **Atualização pelo Cartographer em 2026-11-04T20:32:29Z** (modo atualização sobre a `main` `3df7e53`, merge do PR #44, 04/11/2026). Quatro leituras em paralelo: scripts e publicação; testes; páginas, CSS e JS; docs, modelos e vendor. **Execução:** só a suíte `node --test` foi rodada (364 de 364 passam). Geradores, build e smoke não foram executados. Esta atualização incorpora e substitui as notas dirigidas de 02, 03 e 04/11, e reescreve as seções 2, 8, 9, 11 e 13. Contagens do cabeçalho: 207 arquivos lidos pelo scanner (binários e arquivos grandes fora); o Git rastreia 291.
 > Onde um número não foi conferido por comando, o texto diz.
@@ -120,6 +122,19 @@ site/
     ├── *.md                    8 documentos (arquitetura comercial, estimativa, mensuração, CSP proposta, pendências)
     ├── arquivo/                copys, JSON de origem e candidatas arquivadas (home, servicos-v01, paginas-servico-v02, contato-v02, construir-ou-ampliar-v02)
     └── seo/20261028/           vocabulário e confronto de busca
+```
+
+**Acréscimos desde 04/11/2026** (contagens por listagem em 17/11): `assets/js` tem 18 arquivos e a pasta `maquetes/` (5 `.mjs`: `motor`, `dados`, `enquadrar`, `estrutural`, `hidro`); `assets/css` tem 17 folhas; `assets/vendor/three/` tem 19 arquivos (17 módulos, `LICENSE`, `ORIGEM.txt`); `assets/models` tem 12; `scripts/` tem 37 (11 `test_*.py`); `orcamento-src/tests` tem 45 `*.test.mjs` e `support/`. Novos na raiz e fora do Pages:
+
+```
+├── AGENTS.md                 ponteiro para agentes (CLAUDE.md, mapa, as duas skills de frontend)
+├── capacidades.site.json     manifesto das capacidades, GERADO pelo canônico (não editar)
+├── .agents/skills/frontend-design/  cópia sem alteração da skill oficial + LICENSE + ORIGEM.json (GERADA)
+├── .githooks/                pre-commit e commit-msg (git config core.hooksPath .githooks)
+├── .github/workflows/pr-gate.yml   gate de PR (3 jobs), não publica
+├── scripts/capacidades.py    executor da governança, GERADO pelo canônico; test_capacidades.py
+├── tests/visual/             Playwright 1.65.1 em 127.0.0.1: a11y, maquete, maquete-sem-webgl, regressao, servidor.py, conhecidos.json
+└── docs/politica-web/        README.md (governança) e PERFIL_FRONTEND_DESIGN_DEMELLO.md (níveis N1/N2/N3)
 ```
 
 ### 2.1 As 21 páginas HTML
@@ -321,21 +336,24 @@ Ordem de `<link>` nas páginas ricas: `servicos-v02` → `servico-pagina-v02` �
 
 | Arquivo | Papel |
 |---|---|
-| `src/main.jsx` → `GlobalApp.jsx` | Entrada e UI inteira (5 rotas, resumo, resultado, contato, envio). `App.jsx` é protótipo antigo, **não usado**. |
-| `src/journey.mjs` | Grafo de perguntas, validação, `advance`, `needsReview`, `safetyHold`, listas de serviços (`services` com 13 itens; `buildServices` menor). |
+| `src/main.jsx` → `GlobalApp.jsx` | Jornada, resultado, cupom, contato e envio; `main.jsx` instala `installContactClicks`. UI auxiliar: `LivePlan.jsx` (planta, maquete e orçamento), `Maquete5.jsx` (palco V05), `pickers.jsx` (município e contato). `App.jsx` é protótipo antigo, **não usado**. |
+| `src/journey.mjs` | Grafo de perguntas, validação, `advance`, `needsReview`, `safetyHold`, `services` com 14 itens (inclui `Elétrica`), `DISPLAY_LABELS` (texto exibido ≠ valor gravado) e `resultFor`, **autoridade única** do resultado X3A/X3B (`registerResultAuthority` no `payload_v2`). |
 | `src/payload_v2.mjs` | Converte respostas em `pricing_inputs` e monta o payload `site-intake/payload/2`. |
-| `src/pricing/` | `pricing-table.v2.json` (**cópia byte a byte do canônico, não editar**), `engine.mjs` (porte do motor Python), `decimal.mjs` (BigInt). Regra: menor referência aplicável × 0,80 (fator interno, nunca exposto). |
+| `src/pricing/` | `pricing-table.v2.json` (**cópia byte a byte do canônico, não editar**; revisão R2), `engine.mjs` (porte do motor Python, regime `STRUCT_COMPOSITE_REFS_R2_FC`), `decimal.mjs` (BigInt), `active_config.mjs` (fator da configuração ativa: semente revisão 1 / 0,60, lida de `{preview}/pricing-config`; sem configuração válida o motor lança erro; o 0,80 da tabela só vale para reprodução R2), `coupon.mjs` (cupom PERCENT/FIXED, **cópia idêntica de outro repositório**, não editar aqui). `src/pricing/README.md` está atrás do código (ainda diz R2 e 0,80). |
+| `src/commercial.mjs` | Oferta do cupom nas superfícies (`safeOffer`, `commercialLines`, `attachCommercialOffer`); o pedido só leva `commercial_offer` se a oferta recalculada for idêntica à gravada na prévia. |
+| `src/maquete5_*.mjs`, `Maquete5.jsx`, `live_plan.mjs`, `LivePlan.jsx` | Maquete V05 paramétrica (`maquete5_building` gera, `maquete5_scene` desenha, `maquete5_transicao` anima, `maquete5_input` tira os fatos da jornada ativa) e o painel planta + orçamento. V04 (`maquete_model`, `maquete3d`) é o fallback. three por importmap local (`/assets/vendor/three/...`). |
+| `src/municipios.mjs`, `phone.mjs`, `pickers.jsx`, `nav_history.mjs` | Município IBGE coerente com a UF (catálogo estático `public/assets/municipios-ibge.v1.json`), telefone/e-mail (`contactCheck`, `whatsapp_e164` aditivo no payload), Voltar/Avançar ligados às perguntas (só ids em `history.state`). |
 | `src/deeplink.mjs` | `?situacao=<rota>[&servico=<slug>]`, fail-closed, 9 atalhos de disciplina. |
 | `src/funnel.mjs` | Intenções pós-resultado e regra R1 de lead qualificado. |
 | `src/submit.mjs` | Única chamada de rede de lead (Worker `site-intake`), 1 retentativa, nunca lança. |
-| `src/preview*.mjs`, `qr.mjs` | Prévia verificável (Worker `preview`), PNG 1080×1350, QR. |
+| `src/preview*.mjs`, `qr.mjs` | Prévia verificável (Worker `preview`), cupom e chave de emissão (mantida nas retentativas técnicas, regerada quando muda a assinatura do pedido); PNG de 1080 de largura e altura variável por número de serviços, etapa separada (falhar o PNG não invalida a emissão); `VITE_VERIFY_BASE` dá o endereço exibido e o do QR. |
 | `src/tracking.mjs` | Ponte para o adaptador de analytics (`assets/js/analytics.mjs`). |
 | `src/architecture*.mjs` | Estimativa de área da Arquitetura (`ARQ_EST_V1`, parâmetros a validar). `municipal/` é histórico, **não é importado**. |
-| `scripts/publish-guard.mjs` | Falha se o endpoint de produção estiver vazio, não-https ou com placeholder. |
+| `scripts/publish-guard.mjs` | Falha se o endpoint de produção estiver vazio, não-https ou com placeholder, e se qualquer `.js` do bundle tiver endereço local, `http://` fora do W3C ou `VITE_VERIFY_BASE` ≠ `https://demelloeng.com.br/verificar/`; aceita `--dir`; testado em `r07_perfis`. |
 
-**Build:** `pnpm build` em `orcamento-src/` regera **toda** a pasta `orcamento/` (`emptyOutDir: true`), com hashes novos a cada vez. O bundle é artefato versionado: mudar `src/` exige rebuildar e commitar o bundle, senão vários testes quebram.
+**Build:** `pnpm build` em `orcamento-src/` regera **toda** a pasta `orcamento/` (`emptyOutDir: true`), com hashes novos a cada vez. O bundle é artefato versionado: mudar `src/` exige rebuildar e commitar o bundle, senão vários testes quebram. `vite build --mode teste` escreve em `docs/prototipos/calculadora-v05-r4/teste/app/orcamento` (fora do Pages, ignorada pelo Git, só 127.0.0.1).
 
-**Fluxo:** HOME (5 rotas) → perguntas → resumo → resultado (calculado ou "avaliação humana") → intenção → contato (**só depois do resultado**) → envio. Fotos nunca são enviadas (só nome, tamanho, tipo).
+**Fluxo:** HOME (5 rotas) → perguntas → resumo → resultado (calculado ou "avaliação humana") → intenção → contato (**só depois do resultado**) → envio. Fotos nunca são enviadas (só nome, tamanho, tipo). No resultado: cupom opcional, prévia verificável e PNG; serviço acima de `automatic_estimate_limits` vai para avaliação da equipe.
 
 ## 7. Módulo: medição e privacidade
 
@@ -343,7 +361,7 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 
 ## 8. Módulo: testes (`orcamento-src/tests`, `node --test`)
 
-**23 arquivos e 370 casos, todos passam** (execução de 05/11 em `orcamento-src`; os arquivos novos são `pscip_glp.test.mjs` e `pscip_race.test.mjs`). Em `package.json` e `pages.yml` os 23 caminhos estão listados à mão, sem glob; o `pages.yml` roda também `python3 -B -m unittest discover -s scripts -p test_pscip_glp.py` (5 casos); o teste `commercial_site` (L477-485) reprova arquivo de teste fora das duas listas. Os que **leem o HTML e os assets publicados** são os que prendem o site:
+**45 arquivos; 625 casos na execução de 17/11** (624 passam; `r15_png_retry` precisa de `node_modules`/vite). Em `package.json` e `pages.yml` os 45 caminhos estão listados à mão; `python scripts/capacidades.py testes` acusa teste existente que o `pages.yml` não roda, e o `pr-gate` reprova por isso. Auxiliares em `tests/support/` (`catalogo.mjs`, `fator_080.mjs`, o pino de 0,80 dos testes que reproduzem a tabela R2).
 
 | Teste | Prende |
 |---|---|
@@ -366,11 +384,16 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 
 **Mudou desde 30/10:** `commercial_site` passou de 23 para 28 casos (rodapé único, menu V02, Facebook, texto estático de `/orcamento/`, `areaServed`); `native_services` de 19 para 20; `contact_clicks`, `hotfix`, `site_ux` e `privacy_and_sink` foram ajustados (posição `menu` nas V02, rótulos V02, ignorar o arquivo do Search Console).
 
+**Mudou desde 05/11:** +22 arquivos: P01–P05 (`p01_confiabilidade`, `p02_municipios_contato`, `p03_eletrico`, `p04_transversais`, `p05_maquete`, `p05_planta_orcamento`), maquete (`maquete5_building`, `maquete5_b4`, `maquete5_transicao`, `maquetes_v03`), R4 (`r03_escala`, `r03b_proveniencia`, `r04_escada`, `r05_painel`, `r06_palco`, `r07_perfis`, `r08_arquitetura`, `r09_terraplanagem`, `r15_cupom_site`, `r15_png_retry`, `r4_fator`) e `verificar_page`. Os hashes presos em `architecture_estimator` (teste 19) e `p03_eletrico` foram trocados para a tabela R2 e o motor R2_FC.
+
+**Testes headless (`tests/visual`, fora do `node --test`):** acessibilidade das 22 páginas publicadas a 390 px (lang, um `h1`, sem rolagem lateral persistente, `alt`, nome acessível, console e recurso local sem falha), maquetes V03 (teclado, foco preso, Escape devolve o foco; sem WebGL vira capa sem botão morto) e regressão visual (390 e 1280 px) contra a base do PR. `conhecidos.json` guarda a conformidade atual que não reprova (hoje: menu móvel fora da tela em `empresa/trajetoria-do-fundador.html`).
+
 ## 9. Publicação (`.github/`)
 
-- `pages.yml`: gatilho `push` na `main` ou `workflow_dispatch`; **não há checks em PR**, então um erro só aparece depois do merge. Três jobs: `build` → `deploy` → `smoke-live`. O `build`, em ordem: `node --test` nos 23 arquivos, o `unittest` de `test_pscip_glp.py` e `publish-guard` (G1), `build_artifact.py build`, `validate` (G2 a G5), `smoke-local`, e o envio do relatório de hashes e do artefato. **Não roda** o `conferir`, os `--check` dos geradores nem testes do build.
-- `allowlist.txt` (181 linhas): **lista fechada**, caminhos exatos mais 1 padrão (`orcamento/assets/**`), artefato esperado de **142 arquivos** (141 antes da Regularização V02, que acrescentou `servico-regularizacao-v02.css`); a frente PSCIP + GLP acrescentou 9 caminhos públicos de runtime (3 CSS, 3 JS, GLB, JSON e o pôster PNG). "Não está na lista, não entra." O bloco "release parcial" tem 59 caminhos exatos. Nova página ou asset obriga a editar a allowlist, o `sitemap.xml` e o `commercial_site`.
-- `build_artifact.py` (359 linhas): copia os bytes **do commit**, não da árvore de trabalho (arquivo não commitado não entra, nem no smoke local). G2: caminho que não existe falha; G3: proíbe `.gitignore`, `orcamento-src/`, `.github/` e três imagens; G4: SHA-256 igual ao do blob; G5: o bundle `index-FTNqd-68.js` e o CSS `index-BKV1UQ1J.css` têm nome fixo em `build_artifact.py` (L40-41, L65, L261): renomear o bundle exige editar o script além da allowlist.
+- `pages.yml`: gatilho `push` na `main` ou `workflow_dispatch`. Três jobs: `build` → `deploy` → `smoke-live`. O `build`: `node --test` nos 45 arquivos, `publish-guard.mjs`, 10 contratos Python um a um (`pscip_glp`, `regularizacao`, `orcamento`, `compatibilizacao`, `avaliar`, `metodologia`, `experiencia`, `privacidade`, `empresa`, `verificar_404`), `build`, `validate` (G2–G5) e `smoke-local`. **Não foi alterado pela governança de capacidades.**
+- `pr-gate.yml` (desde 17/11): gatilho `pull_request` para a `main`, só `contents: read`, **não publica**. Jobs: `testes` (os mesmos testes node, com a lista lida do `pages.yml`, a deriva da lista, todos os `scripts/test_*.py` um por vez, montagem do artefato e G2–G5 sem deploy), `governanca` (`capacidades.py ci`: trailer `Capacidades:` nos commits frontend, versões e guias, mapa tocado na mudança estrutural) e `headless` (Playwright em 127.0.0.1; referência visual gerada da base do PR; diferença visual só passa com o rótulo `visual-autorizado`, posto por Marcos). A proteção da `main` exige este gate depois de ele passar num PR.
+- `allowlist.txt` (211 linhas em 17/11; o número de arquivos do artefato não foi recontado): **lista fechada**, caminhos exatos mais 1 padrão (`orcamento/assets/**`), artefato esperado de **142 arquivos** (141 antes da Regularização V02, que acrescentou `servico-regularizacao-v02.css`); a frente PSCIP + GLP acrescentou 9 caminhos públicos de runtime (3 CSS, 3 JS, GLB, JSON e o pôster PNG). "Não está na lista, não entra." O bloco "release parcial" tem 59 caminhos exatos. Nova página ou asset obriga a editar a allowlist, o `sitemap.xml` e o `commercial_site`.
+- `build_artifact.py` (359 linhas): copia os bytes **do commit**, não da árvore de trabalho (arquivo não commitado não entra, nem no smoke local). G2: caminho que não existe falha; G3: proíbe `.gitignore`, `orcamento-src/`, `.github/` e três imagens; G4: SHA-256 igual ao do blob; G5: o bundle `index-FTNqd-68.js` e o CSS `index-BKV1UQ1J.css` têm nome fixo em `build_artifact.py` (L40-41, L65, L261): renomear o bundle exige editar o script além da allowlist. Bundle G5 em 17/11: `index-D39JyLrp.js` e `index-10SyDMoO.css`; `contato-flutuante.js` entrou no smoke positivo.
 - **Lacuna de cobertura:** `SMOKE_POSITIVE` e `SMOKE_POSITIVE_URLS` não listam as quatro páginas de projeto V02 nem os CSS, JS e modelos V02, e `validate` não confere referência HTML→arquivo. Um asset esquecido na allowlist passa por G2-G5 e pelo smoke (foi o caso de `estrutura-aco.*`, seção 4, já corrigido). O rastreador manual (todas as páginas servidas e cada `href`/`src`) continua necessário antes de publicar.
 - O tamanho de 34 MB do artefato, citado antes, não foi conferido nesta leitura.
 
@@ -386,8 +409,8 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 ## 11. Armadilhas (as que já custaram caro)
 
 1. **A allowlist é fechada: arquivo novo só sai se estiver na lista, e o smoke não pega o esquecido** (seção 9). Confira com o rastreador de referências antes de publicar. O último caso real (`estrutura-aco.*`) foi corrigido no PR #45.
-2. **three.js é hospedado (`assets/vendor/three/`) e precisa manter `build/` e `examples/jsm/`**, porque o `GLTFLoader` importa `../utils/BufferGeometryUtils.js`. Trocar a versão exige trocar os quatro arquivos juntos e atualizar `ORIGEM.txt`. A política de privacidade e a `CSP_PROPOSTA.md` precisam ser relidas à luz de que o jsDelivr saiu (o texto publicado cita só o unpkg).
-3. **`.glb` e `.json` sem `?v=`.** Cache velho de um deles com o outro novo quebra a busca binária e a ficha mostra a peça errada, sem erro visível. O `?v=` hoje está nos JS e CSS, não nos modelos.
+2. **three.js é hospedado (`assets/vendor/three/`) e precisa manter `build/` e `examples/jsm/`**, porque o `GLTFLoader` importa `../utils/BufferGeometryUtils.js`. Trocar a versão exige trocar os quatro arquivos juntos e atualizar `ORIGEM.txt`. A política de privacidade e a `CSP_PROPOSTA.md` precisam ser relidas à luz de que o jsDelivr saiu (o texto publicado cita só o unpkg). Hoje são 17 módulos (inclui pós-processamento GTAO, `RoomEnvironment` e sombreadores): trocar a versão exige trocar todos.
+3. **`.glb` e `.json` sem `?v=`.** Cache velho de um deles com o outro novo quebra a busca binária e a ficha mostra a peça errada, sem erro visível. O `?v=` hoje está nos JS e CSS, não nos modelos. As maquetes V03 já levam `?v=` com o SHA de cada arquivo; falta conferir as demais (pendência 146).
 4. **Edição com `\n` dentro de Python** corrompeu `layout_rico.py` duas vezes. Usar o editor de arquivos ou `chr(92) + 'n'`.
 5. **Regerar uma página não pode mexer nas outras.** Conferir o `git diff` das demais.
 6. **`conferir` com `.copy.json` não confere o texto novo** e só olha o `<main>` (seção 3.9). Não substitui a revisão (subagente `revisor-copy`).
@@ -400,10 +423,17 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 13. **Dois conjuntos de menu nos testes:** `hotfix` (4 páginas) e `commercial_site` (8 páginas). Mudar o menu exige alterar os dois.
 14. **Os testes de incêndio e GLP exigem o texto antigo,** inclusive a ressalva do CNPJ no GLP (seção 8). Trocar o texto dessas páginas obriga a alterar `commercial_site` e `site_ux` na mesma entrega.
 15. **Terraplanagem** (grafia certa) convive com "terraplenagem" em slug, sitemap, testes e em texto visível de `experiencia-tecnica` (3 vezes) e `compatibilizacao-bim` (1 vez).
-16. **O CI só roda na `main`:** valide num clone sem conversão de fim de linha (o CI é Linux; um teste de rodapé já passou no Windows e reprovou no CI).
+16. **O `pages.yml` só roda na `main`; desde 17/11 o `pr-gate.yml` roda no PR.** valide num clone sem conversão de fim de linha (o CI é Linux; um teste de rodapé já passou no Windows e reprovou no CI).
 17. **`.mcp.json` fixa `@playwright/mcp@latest`** (sem versão) e nunca foi testado.
 18. **WebGL indisponível** deixa a maquete parada em "Carregando..." (seção 4) nas maquetes antigas; na V03 a caixa mostra a capa com o aviso e o cartão do mezanino dá lugar ao texto do mezanino, fechado.
 19. **Cascata das páginas V02:** `.servicos-v02 a{color}` (0,1,1) vence qualquer regra de uma classe só em link injetado na página; componente transversal precisa de duas classes (caso do símbolo azul do WhatsApp, 16/11/2026).
+20. **`scripts/capacidades.py`, `capacidades.site.json` e `.agents/skills/frontend-design/` são gerados pelo canônico privado** (`gerar-site`). Editar aqui é perdido na próxima geração; a mudança se faz lá.
+21. **`python -m http.server` recusa conexões sob Playwright em paralelo** (fila de 5): CSS não carrega e aparece falso defeito de layout. Usar `tests/visual/servidor.py` (threads, fila de 256).
+22. **Maquete V03 com WebGL por software (SwiftShader) é lenta:** `maquete.spec.mjs` roda em série e com `--workers=1`; em paralelo o modelo não fica pronto e o teste falha sem defeito real.
+23. **No Windows com `core.autocrlf=true`, quatro testes de gerador falham localmente** (`test_compatibilizacao`, `test_orcamento`, `test_pscip_glp`, `test_regularizacao`: comparam bytes e o HTML sai em CRLF); no CI Linux passam (armadilha 16).
+24. **Teste node novo exige entrar na lista do `pages.yml`:** o `pr-gate` lê a lista de lá e reprova `.test.mjs` fora dela.
+25. **PR com mudança estrutural exige o mapa atualizado** (arquivo novo ou removido, arquivo estrutural, ou import/export/def/script/link alterado no conteúdo; troca de `?v=` não conta). Atualizar o mapa e a âncora `commit:` faz parte da entrega.
+26. **Valor gravado ≠ texto exibido na calculadora:** "Terraplenagem", "Orçamento técnico" e "Elétrica" são valores gravados; o texto vem de `DISPLAY_LABELS`. Trocar o valor quebra payload, CRM e deep link. O cupom não entra em `pricing_preview` e o desconto antes da emissão é só expectativa.
 
 ## 12. Guia de navegação
 
@@ -419,8 +449,16 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 | Publicar | allowlist (feita para as seis páginas do release parcial) + three.js hospedado (feito) + G1 verde + ordem de Marcos para PR e merge; push na `main` publica sem aprovação. |
 | Criar um perfil de maquete novo (exemplo já feito: incêndio, perfil `pscip-glp`) | seção 3.8: `PERFIS`, rótulo do meio, extras e ramos do `gerar()`; novo `maquete-*-markup.html`; JS e CSS próprios em `assets/`; `.glb` e `.json` com o mesmo `?v`; allowlist (caminhos exatos, inclusive o JS auxiliar importado); testes da seção 8 |
 | Trocar a ordem ou os rótulos do menu | os 5 lugares da armadilha 8, `commercial_site` (L241) e `hotfix` (L35-51) |
+| Alterar frontend (HTML, CSS, JS, geradores, layouts) | antes de editar: `python scripts/capacidades.py usar mwg "<consulta>"`, `usar mwg --retrieve <ids>`, `usar frontend-design N1/N2/N3`; `checar <arquivo>`. Ver `docs/politica-web/README.md` |
+| Acrescentar um teste node | `package.json` e a lista do `pages.yml`; `python scripts/capacidades.py testes` confere |
+| Rodar a conferência headless | `cd tests/visual && npm ci && npx playwright test a11y.spec.mjs maquete-sem-webgl.spec.mjs`; `maquete.spec.mjs --workers=1`; regressão com `regressao:base` antes |
+| Problema visual já existente que não deve reprovar | `tests/visual/conhecidos.json`, com o achado descrito |
+| Mudança estrutural num PR | `python scripts/capacidades.py mapa`, atualizar este mapa (Cartographer, modo atualização) e a âncora `commit:` |
+| Mudar o executor, o manifesto ou a cópia do frontend-design | só no canônico, regerando com `gerar-site` |
 
 ## 13. Estado de reestruturação em curso (04/11/2026)
+
+> Retrato de 04/11/2026, mantido como estava. Os PRs citados como "em PR" e "em branch" foram mesclados depois (a `main` de 17/11 está em `9e7358b`); o estado vigente é o do Doc03.
 
 O site deve ficar com **sete páginas de serviço** (decisão 96): Arquitetura, Estrutural, Hidrossanitário, **Infraestrutura**, **PSCIP + GLP**, **Orçamento, cronograma e compatibilização** e **Regularização**. Os serviços continuam diferentes entre si; o agrupamento é estratégico.
 
@@ -431,6 +469,22 @@ O site deve ficar com **sete páginas de serviço** (decisão 96): Arquitetura, 
 - A calculadora tem 11 códigos de preço e nenhum para rodovia, pavimentação, redes públicas ou drenagem urbana, e não precisa ter (decisão de 30/10): infraestrutura é projeto de milhões, que ninguém digita por curiosidade.
 - Publicar exige a allowlist com os arquivos novos, o G1 verde e ordem expressa de Marcos para cada passo (branch, push, PR, merge); um push na `main` publica.
 
+
+## 14. Governança de capacidades (desde 17/11/2026)
+
+Regra: `integrations/agents/CONDUTA_AGENTES.md` §4 e §5 do canônico. Neste repositório público, nada depende do canônico em tempo de execução.
+
+| Peça | Papel |
+|---|---|
+| `capacidades.site.json` | manifesto gerado: versões aprovadas (MWG 1.0.1, frontend-design 1.1.1, Cartographer 1.4.0, Claude Code Setup 1.0.0), globs de frontend, isentos, bloqueados e estruturais, validade de 12 h |
+| `scripts/capacidades.py` | executor gerado, só biblioteca padrão: `usar mwg`, `usar frontend-design N1/N2/N3`, `checar`, `isentar`, `pre-commit`, `commit-msg`, `ci`, `mapa`, `testes` |
+| `.githooks/` | `pre-commit` recusa commit frontend sem evidência das duas skills; `commit-msg` acrescenta o trailer `Capacidades:` (versão e guias, sem caminho local) |
+| `.github/workflows/pr-gate.yml` | barreira independente (seção 9) |
+| `tests/visual/` | headless em 127.0.0.1 com externos bloqueados (seção 8) |
+| `docs/politica-web/` | README da governança e perfil DEMELLO do frontend-design (N1 auditoria de consistência, N2 interação nova com teste headless, N3 visual novo só por ordem) |
+| `.agents/skills/frontend-design/` | cópia rastreável (commit e SHA-256 em `ORIGEM.json`) para o Codex descobrir |
+
+A evidência fica em `.git/…/capacidades/evidencias.jsonl` da worktree (não versionada) e vale na mesma worktree e branch, numa revisão descendente, por 12 horas e na versão aprovada ou acima. **Comprova consulta, não aplicação**: a aplicação é conferida pelos testes headless e pela revisão. Fora do repositório, as hooks de usuário do Claude Code e do Codex aplicam a mesma decisão antes da edição, filtrando pelo caminho do arquivo.
 ---
 
 *Se o Cartographer ajudou, considere dar uma estrela: https://github.com/kingbootoshi/cartographer*

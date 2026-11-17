@@ -1,0 +1,15 @@
+{
+  "name": "demello-site-testes-visuais",
+  "private": true,
+  "type": "module",
+  "description": "Testes headless do site em 127.0.0.1 (CONDUTA §5): acessibilidade, maquetes V03 e regressão visual.",
+  "scripts": {
+    "a11y": "playwright test a11y.spec.mjs maquete-sem-webgl.spec.mjs",
+    "maquete": "playwright test maquete.spec.mjs --workers=1",
+    "regressao:base": "playwright test regressao.spec.mjs --update-snapshots",
+    "regressao": "playwright test regressao.spec.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1"
+  }
+}
