@@ -145,6 +145,7 @@ assets/icons/servicos-v02/incendio.svg
 assets/icons/servicos-v02/orcamento.svg
 assets/icons/servicos-v02/regularizacao.svg
 assets/icons/servicos-v02/terraplanagem.svg
+assets/images/EDUCA_PARANA_logo.png
 assets/images/GERIBELLO_logo_branca.png
 assets/images/JHE_logo.png
 assets/images/ODARA_avatar_linktree.jpg
@@ -158,6 +159,16 @@ assets/images/home-opcao3-hero.webp
 assets/images/home-opcao3-hidro.webp
 assets/images/home-opcao3-incendio.webp
 assets/images/home-opcao3-integracao.webp
+assets/images/home-maquete-arquitetura-1240.webp
+assets/images/home-maquete-arquitetura-640.webp
+assets/images/home-maquete-estrutural-1240.webp
+assets/images/home-maquete-estrutural-640.webp
+assets/images/home-maquete-hidro-1240.webp
+assets/images/home-maquete-hidro-640.webp
+assets/images/home-maquete-incendio-1240.webp
+assets/images/home-maquete-incendio-640.webp
+assets/images/home-maquete-terraplanagem-1240.webp
+assets/images/home-maquete-terraplanagem-640.webp
 assets/images/logo-oficial.png
 assets/images/v02-topografia-proposta.svg
 assets/js/maquete-3d.js
