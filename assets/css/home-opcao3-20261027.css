@@ -159,15 +159,21 @@
  .home-opcao3 .nav-extra{display:flex}}
 @media(max-width:1120px){
  .home-opcao3 .nav .nav-build{margin-top:12px;text-align:center;padding:14px 17px}}
-/* Home V02: chamada secundária do hero para a vitrine das maquetes (#projetos-e-servicos). */
-.home-opcao3 .hero-maquetes{margin:18px 0 0}
-.home-opcao3 .hero-maquetes a{color:#eef2f6;font-size:16px;min-height:44px;display:inline-flex;align-items:center;text-decoration:underline;text-underline-offset:4px}
-.home-opcao3 .hero-maquetes a:hover{color:#fff}
-.home-opcao3 .hero-maquetes a:focus-visible{outline-color:#fff}
+/* Home V02: convite do hero para a vitrine das maquetes (#projetos-e-servicos), no padrão do cartão do mezanino da estrutural. */
+.home-opcao3 .hero-maquetes{display:flex;align-items:center;gap:14px;max-width:440px;min-height:64px;margin-top:22px;padding:14px 16px 14px 18px;color:#e8f0f8;text-decoration:none;background:rgba(74,163,255,.12);border:1px solid rgba(157,182,207,.55);border-left:4px solid #4aa3ff;border-radius:4px;transition:background .15s ease,border-color .15s ease}
+.home-opcao3 .hero-maquetes>svg:first-child{flex:none;width:34px;height:34px;fill:none;stroke:#9cc2ec;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.home-opcao3 .hero-maquetes .hm-txt{display:flex;flex-direction:column;gap:3px;flex:1}
+.home-opcao3 .hero-maquetes .hm-t{font-size:19px;font-weight:700;line-height:1.25;color:#fff}
+.home-opcao3 .hero-maquetes .hm-s{font-size:16px;line-height:1.35;color:#c9dbec}
+.home-opcao3 .hero-maquetes .hm-seta{flex:none;width:22px;height:22px;fill:none;stroke:#9cc2ec;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s ease}
+.home-opcao3 .hero-maquetes:hover{background:rgba(74,163,255,.22);border-color:#9cc2ec #9cc2ec #9cc2ec #4aa3ff;text-decoration:none}
+.home-opcao3 .hero-maquetes:hover .hm-seta{transform:translateY(3px)}
+.home-opcao3 .hero-maquetes:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:700px){.home-opcao3 .hero-maquetes{max-width:none;margin-top:14px;gap:10px;padding:12px 12px 12px 14px}.home-opcao3 .hero-maquetes>svg:first-child{width:28px;height:28px}.home-opcao3 .hero-maquetes .hm-t{font-size:17px}.home-opcao3 .hero-maquetes .hm-s{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.home-opcao3 .hero-maquetes,.home-opcao3 .hero-maquetes .hm-seta{transition:none}}
 /* Home V02: as capas das maquetes ficam centradas (a regra :first-child da v02-proposta era da ilustração antiga). */
 .home-opcao3 .service-rows>.service-row:first-child img{object-position:center}
 /* Home V02: cinco cartões em duas colunas; o quinto fica centrado na última linha. */
 @media(min-width:701px){.home-opcao3 .service-rows>.service-row:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc((100% - 40px) / 2)}}
 /* Home V02: o Consórcio passou de texto a logo; alinha como os outros três clientes. */
 .home-opcao3 .clients-section .clients li:first-child{justify-content:flex-end;padding:0}
-@media(max-width:700px){.home-opcao3 .hero-maquetes{text-align:center;margin-top:10px}}

@@ -53,7 +53,8 @@ test('HOME V02: primeira dobra apresenta o que a DEMELLO projeta e leva à estim
   const acoes = hero.match(/<div class="actions">([\s\S]*?)<\/div>/)?.[1] ?? '';
   assert.equal([...acoes.matchAll(/<a\b/g)].length, 2, 'dois CTAs comerciais na primeira dobra: estimativa e WhatsApp');
   assert.equal([...hero.matchAll(/<a\b/g)].length, 3, 'primeira dobra: os dois CTAs e a chamada das maquetes');
-  assert.match(hero, /<p class="hero-maquetes"><a href="#projetos-e-servicos">Explorar nossas maquetes 3D<\/a><\/p>/, 'chamada secundária leva à vitrine da Home');
+  assert.match(hero, /<a class="hero-maquetes" href="#projetos-e-servicos">[\s\S]*?<span class="hm-t">Explorar nossas maquetes 3D<\/span>[\s\S]*?<\/a>/, 'convite secundário leva à vitrine da Home');
+  assert.doesNotMatch(acoes, /hero-maquetes/, 'o convite fica fora dos CTAs comerciais');
   assert.ok(html.includes('id="projetos-e-servicos"'), 'âncora da vitrine existe');
   assert.doesNotMatch(hero, /\d+ ARTs|\d+ munic[ií]pios|anos de/i, 'números de acervo ficam fora da primeira dobra');
 });
@@ -96,28 +97,30 @@ test('HOME: seções posteriores exigidas (insegurança, prova, benefícios, fun
   assert.match(finalCta, /href="\.\/orcamento\/\?situacao=build">Calcular a estimativa dos projetos/);
 });
 
-test('HOME V02: vitrine com as capas reais das cinco maquetes V03, cada uma levando à sua página; sem motor 3D na Home', async () => {
+test('HOME V02: vitrine com imagens das cinco maquetes V03, cada uma levando à sua página; sem motor 3D na Home', async () => {
   const html = await read('index.html');
   const vitrine = html.match(/<section[^>]*id="projetos-e-servicos"[\s\S]*?<\/section>/)?.[0] ?? '';
   assert.ok(vitrine, 'vitrine presente');
-  const linhas = [...vitrine.matchAll(/<a class="service-row" href="\.\/servicos\/([^"]+)\/"><img src="\.\/assets\/images\/(maquete-[a-z]+-capa\.webp)\?v=([0-9a-f]+)" alt="" width="\d+" height="\d+" loading="lazy">/g)]
-    .map((m) => [m[1], m[2], m[3]]);
-  assert.deepEqual(linhas.map(([slug, capa]) => [slug, capa]), [
-    ['projeto-arquitetura', 'maquete-arquitetura-capa.webp'],
-    ['projeto-estrutural', 'maquete-estrutura-capa.webp'],
-    ['projeto-hidrossanitario', 'maquete-hidro-capa.webp'],
-    ['projeto-prevencao-incendio', 'maquete-incendio-capa.webp'],
-    ['projeto-terraplenagem', 'maquete-terraplanagem-capa.webp'],
-  ], 'cinco linhas, na ordem aprovada, com capa real');
+  // Imagens próprias da Home (capturas da maquete aberta, sem interface), não as capas de carregamento das páginas.
+  const linhas = [...vitrine.matchAll(/<a class="service-row" href="\.\/servicos\/([^"]+)\/"><img src="\.\/assets\/images\/home-maquete-([a-z]+)-1240\.webp" srcset="\.\/assets\/images\/home-maquete-\2-640\.webp 640w, \.\/assets\/images\/home-maquete-\2-1240\.webp 1240w" sizes="[^"]+" alt="" width="1240" height="653" loading="lazy" decoding="async">/g)]
+    .map((m) => [m[1], m[2]]);
+  assert.deepEqual(linhas, [
+    ['projeto-arquitetura', 'arquitetura'],
+    ['projeto-estrutural', 'estrutural'],
+    ['projeto-hidrossanitario', 'hidro'],
+    ['projeto-prevencao-incendio', 'incendio'],
+    ['projeto-terraplenagem', 'terraplanagem'],
+  ], 'cinco linhas, na ordem aprovada, com imagem da maquete');
   const allowlist = (await read('.github/pages/allowlist.txt')).split(/\r?\n/);
-  for (const [slug, capa, v] of linhas) {
-    assert.ok(await exists(`assets/images/${capa}`), `capa existe: ${capa}`);
-    assert.ok(allowlist.includes(`assets/images/${capa}`), `capa publicada: ${capa}`);
-    const pagina = await read(`servicos/${slug}/index.html`);
-    assert.ok(pagina.includes(`${capa}?v=${v}`), `mesmo ?v da página do serviço: ${slug}`);
+  for (const [, n] of linhas) {
+    for (const w of [640, 1240]) {
+      const img = `assets/images/home-maquete-${n}-${w}.webp`;
+      assert.ok(await exists(img), `imagem existe: ${img}`);
+      assert.ok(allowlist.includes(img), `imagem publicada: ${img}`);
+    }
   }
   assert.equal([...vitrine.matchAll(/class="service-row"/g)].length, 5, 'só as cinco linhas');
-  assert.doesNotMatch(vitrine, /Imagens conceituais|service-discipline/, 'capas reais, sem bloco textual');
+  assert.doesNotMatch(vitrine, /Imagens conceituais|service-discipline|maquete-[a-z]+-capa\.webp/, 'sem bloco textual nem capa de carregamento');
   assert.doesNotMatch(html, /three|\.glb|assets\/js\/maquete|<canvas/i, 'a Home não carrega motor 3D nem modelo');
 });
 
