@@ -48,7 +48,13 @@ test('HOME V02: primeira dobra apresenta o que a DEMELLO projeta e leva à estim
   assert.match(hero, /Também desenvolvemos projetos de terraplanagem\./);
   assert.match(hero, /<a class="btn-cta" href="\.\/orcamento\/\?situacao=build">Calcular estimativa<\/a>/);
   assert.match(hero, /<a class="wa-link"[^>]*href="https:\/\/wa\.me\/5541985124056"/);
-  assert.equal([...hero.matchAll(/<a\b/g)].length, 2, 'dois links na primeira dobra: estimativa e WhatsApp');
+  // Home V02 (ordem de Marcos, 17/11/2026): os dois CTAs comerciais continuam os únicos dentro de .actions;
+  // o terceiro link é secundário e leva à vitrine da própria Home, nunca ao catálogo /servicos/.
+  const acoes = hero.match(/<div class="actions">([\s\S]*?)<\/div>/)?.[1] ?? '';
+  assert.equal([...acoes.matchAll(/<a\b/g)].length, 2, 'dois CTAs comerciais na primeira dobra: estimativa e WhatsApp');
+  assert.equal([...hero.matchAll(/<a\b/g)].length, 3, 'primeira dobra: os dois CTAs e a chamada das maquetes');
+  assert.match(hero, /<p class="hero-maquetes"><a href="#projetos-e-servicos">Explorar nossas maquetes 3D<\/a><\/p>/, 'chamada secundária leva à vitrine da Home');
+  assert.ok(html.includes('id="projetos-e-servicos"'), 'âncora da vitrine existe');
   assert.doesNotMatch(hero, /\d+ ARTs|\d+ munic[ií]pios|anos de/i, 'números de acervo ficam fora da primeira dobra');
 });
 
@@ -88,6 +94,50 @@ test('HOME: seções posteriores exigidas (insegurança, prova, benefícios, fun
   assert.match(html, /<details>/, 'FAQ com <details>');
   const finalCta = html.slice(html.lastIndexOf('class="section cta-band"'));
   assert.match(finalCta, /href="\.\/orcamento\/\?situacao=build">Calcular a estimativa dos projetos/);
+});
+
+test('HOME V02: vitrine com as capas reais das cinco maquetes V03, cada uma levando à sua página; sem motor 3D na Home', async () => {
+  const html = await read('index.html');
+  const vitrine = html.match(/<section[^>]*id="projetos-e-servicos"[\s\S]*?<\/section>/)?.[0] ?? '';
+  assert.ok(vitrine, 'vitrine presente');
+  const linhas = [...vitrine.matchAll(/<a class="service-row" href="\.\/servicos\/([^"]+)\/"><img src="\.\/assets\/images\/(maquete-[a-z]+-capa\.webp)\?v=([0-9a-f]+)" alt="" width="\d+" height="\d+" loading="lazy">/g)]
+    .map((m) => [m[1], m[2], m[3]]);
+  assert.deepEqual(linhas.map(([slug, capa]) => [slug, capa]), [
+    ['projeto-arquitetura', 'maquete-arquitetura-capa.webp'],
+    ['projeto-estrutural', 'maquete-estrutura-capa.webp'],
+    ['projeto-hidrossanitario', 'maquete-hidro-capa.webp'],
+    ['projeto-prevencao-incendio', 'maquete-incendio-capa.webp'],
+    ['projeto-terraplenagem', 'maquete-terraplanagem-capa.webp'],
+  ], 'cinco linhas, na ordem aprovada, com capa real');
+  const allowlist = (await read('.github/pages/allowlist.txt')).split(/\r?\n/);
+  for (const [slug, capa, v] of linhas) {
+    assert.ok(await exists(`assets/images/${capa}`), `capa existe: ${capa}`);
+    assert.ok(allowlist.includes(`assets/images/${capa}`), `capa publicada: ${capa}`);
+    const pagina = await read(`servicos/${slug}/index.html`);
+    assert.ok(pagina.includes(`${capa}?v=${v}`), `mesmo ?v da página do serviço: ${slug}`);
+  }
+  assert.equal([...vitrine.matchAll(/class="service-row"/g)].length, 5, 'só as cinco linhas');
+  assert.doesNotMatch(vitrine, /Imagens conceituais|service-discipline/, 'capas reais, sem bloco textual');
+  assert.doesNotMatch(html, /three|\.glb|assets\/js\/maquete|<canvas/i, 'a Home não carrega motor 3D nem modelo');
+});
+
+test('HOME V02: clientes com os quatro logotipos coloridos, nome visível e nome acessível sem duplicidade', async () => {
+  const html = await read('index.html');
+  const lista = html.match(/<ul class="clients">([\s\S]*?)<\/ul>/)?.[1] ?? '';
+  const itens = [...lista.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)].map((m) => m[1]);
+  const nomes = itens.map((li) => li.match(/<span>([^<]+)<\/span>/)?.[1]);
+  assert.deepEqual(nomes, ['Consórcio Educa Paraná', 'JHE Consultores Associados', 'Geribello Engenharia', 'Odara Café Lounge']);
+  const allowlist = (await read('.github/pages/allowlist.txt')).split(/\r?\n/);
+  for (const li of itens) {
+    const src = li.match(/<img src="\.\/([^"]+)" alt=""/)?.[1];
+    assert.ok(src, 'logo com alt vazio: o nome já está escrito logo abaixo');
+    assert.ok(await exists(src), `logo existe: ${src}`);
+    assert.ok(allowlist.includes(src), `logo publicado: ${src}`);
+  }
+  assert.doesNotMatch(lista, /grayscale/, 'logotipos coloridos (decisão de Marcos, 17/11/2026)');
+  assert.match(lista, /EDUCA_PARANA_logo\.png/);
+  assert.doesNotMatch(lista, /nao_usar/);
+  assert.match(lista, /background:#26323e;"><img src="\.\/assets\/images\/GERIBELLO_logo_branca\.png"/, 'fundo escuro da Geribello preservado');
 });
 
 test('HOME: catálogo de nove frentes não é mais a porta de entrada; nove frentes vivem em /servicos/ (Outros serviços)', async () => {

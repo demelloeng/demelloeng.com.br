@@ -159,3 +159,15 @@
  .home-opcao3 .nav-extra{display:flex}}
 @media(max-width:1120px){
  .home-opcao3 .nav .nav-build{margin-top:12px;text-align:center;padding:14px 17px}}
+/* Home V02: chamada secundária do hero para a vitrine das maquetes (#projetos-e-servicos). */
+.home-opcao3 .hero-maquetes{margin:18px 0 0}
+.home-opcao3 .hero-maquetes a{color:#eef2f6;font-size:16px;min-height:44px;display:inline-flex;align-items:center;text-decoration:underline;text-underline-offset:4px}
+.home-opcao3 .hero-maquetes a:hover{color:#fff}
+.home-opcao3 .hero-maquetes a:focus-visible{outline-color:#fff}
+/* Home V02: as capas das maquetes ficam centradas (a regra :first-child da v02-proposta era da ilustração antiga). */
+.home-opcao3 .service-rows>.service-row:first-child img{object-position:center}
+/* Home V02: cinco cartões em duas colunas; o quinto fica centrado na última linha. */
+@media(min-width:701px){.home-opcao3 .service-rows>.service-row:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc((100% - 40px) / 2)}}
+/* Home V02: o Consórcio passou de texto a logo; alinha como os outros três clientes. */
+.home-opcao3 .clients-section .clients li:first-child{justify-content:flex-end;padding:0}
+@media(max-width:700px){.home-opcao3 .hero-maquetes{text-align:center;margin-top:10px}}
