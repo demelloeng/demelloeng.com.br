@@ -679,8 +679,8 @@ export async function maquete(cfg) {
   addEventListener('keydown', (e) => {
     if (!aberta) return;
     const campo = e.target instanceof HTMLInputElement;
-    if (e.key === 'Escape') {   // primeiro limpa a peça escolhida; se o foco estava na ficha (que some), ele vai para a lista
-      if (escolhido) { const naFicha = ficha.contains(document.activeElement); escolher(null); if (naFicha) ($('componente') || $('fechar')).focus(); } else fechar();
+    if (e.key === 'Escape') {   // primeiro limpa a peça escolhida; na ficha completa, se o foco estava nela (que some), vai para a lista
+      if (escolhido) { const naFicha = cfg.fichaCompleta && ficha.contains(document.activeElement); escolher(null); if (naFicha) ($('componente') || $('fechar')).focus(); } else fechar();
       return;
     }
     if (campo) return;
@@ -786,8 +786,9 @@ export async function maquete(cfg) {
     const movendo = !!(tween || tweenCam || controles.autoRotate || mexeu || arrastando || agitado);
     medidas.motivo = movendo ? [tween && 'montagem', tweenCam && 'camera', controles.autoRotate && 'girar', mexeu && 'controles', arrastando && 'arrasto', agitado && 'cena'].filter(Boolean).join(',') : '';
     agitado = false;
-    // com peça escolhida, sem o quadro de oclusão: nele o realce (fora da oclusão) ficava encoberto em parte (medido em 17/11/2026)
-    const podeAO = aberta && composer && p >= 1 && !raioX && !escolhido;
+    // ficha completa (incêndio): com peça escolhida, sem o quadro de oclusão; nele o realce ficava encoberto em parte
+    // (medido em 17/11/2026 na maquete de incêndio). Nas outras maquetes, o comportamento não muda.
+    const podeAO = aberta && composer && p >= 1 && !raioX && !(cfg.fichaCompleta && escolhido);
     // corte: a tampa (duas passadas de stencil por camada) some enquanto a câmera se move e volta quando ela para
     const camMovendo = !!(tweenCam || controles.autoRotate || mexeu || arrastando);
     const comTampa = cortando && !raioX && !camMovendo;

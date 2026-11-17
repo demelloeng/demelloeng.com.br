@@ -333,13 +333,14 @@ test('incêndio: configuração com as cotas do IFC, os textos da V02 e os 171 c
   assert.doesNotMatch(html, /hidrantes-luiz-carlos-ativar\.js/, 'a V02 sai da página (os arquivos ficam no site para reversão)');
 });
 
-test('motor: recursos da maquete de incêndio só pela configuração; com peça escolhida, sem o quadro de oclusão', async () => {
+test('motor: recursos da maquete de incêndio só pela configuração (inclusive as correções de oclusão e de foco da ficha)', async () => {
   const motor = await texto('assets/js/maquetes/motor.mjs');
   assert.match(motor, /-\(cfg\.nivelChao \|\| 0\)/);
   assert.match(motor, /if \(cfg\.guias && G\[cfg\.guias\.camada\] && meta\.eixos_tubos\) montarGuia/);
   assert.match(motor, /if \(!sel \|\| !cfg\.componentes\) return;/);
   assert.match(motor, /if \(cfg\.fichaCompleta\)/);
-  assert.match(motor, /const podeAO = aberta && composer && p >= 1 && !raioX && !escolhido;/);
+  assert.match(motor, /const podeAO = aberta && composer && p >= 1 && !raioX && !\(cfg\.fichaCompleta && escolhido\);/);
+  assert.match(motor, /const naFicha = cfg\.fichaCompleta && ficha\.contains/);
   for (const f of ['estrutural', 'hidro']) {
     const c = await texto(`assets/js/maquetes/${f}.mjs`);
     assert.doesNotMatch(c, /guias:|componentes:|marcadores:|fichaCompleta|nivelChao/, `${f}: comportamento inalterado`);
