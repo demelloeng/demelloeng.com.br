@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { bloquearExterno, errosDeConsole } from './comum.mjs';
 
-const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html'];
+const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html', 'servicos/projeto-prevencao-incendio/index.html'];
 
 test.use({ launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] } });
 
@@ -38,4 +38,44 @@ test.describe('com WebGL (SwiftShader)', () => {
       expect(erros).toEqual([]);
     });
   }
+});
+
+// Incêndio V03: o que vem da V02 (lista de componentes, ficha com ações, marcadores) funciona pelo teclado.
+test.describe('incêndio V03: componentes, ficha e marcadores', () => {
+  test('lista, ficha, Isolar e Escape em dois passos', async ({ page }) => {
+    test.setTimeout(150_000);
+    await bloquearExterno(page);
+    const erros = errosDeConsole(page);
+    await page.goto('/servicos/projeto-prevencao-incendio/index.html');
+    const caixa = page.locator('#caixa');
+    await caixa.scrollIntoViewIfNeeded();
+    await expect(async () => {
+      await caixa.focus();
+      await page.keyboard.press('Enter');
+      await expect(caixa).toHaveAttribute('role', 'dialog', { timeout: 1_500 });
+    }).toPass({ timeout: 120_000 });
+    const lista = page.locator('#componente');
+    await expect(lista.locator('option')).toHaveCount(172);   // 171 componentes da V02 + "Escolha um componente…"
+    await expect(page.locator('#marcadores .pino')).toHaveCount(6);
+    expect(await page.locator('#marcadores .pino').evaluateAll((bs) => bs.every((b) => /^Hidrante/.test(b.getAttribute('aria-label'))))).toBe(true);
+    const valor = await lista.locator('option', { hasText: 'Bomba de incêndio' }).first().getAttribute('value');
+    await lista.focus();
+    await lista.selectOption(valor);
+    const ficha = page.locator('#ficha');
+    await expect(ficha).toBeVisible();
+    await expect(ficha).toHaveAttribute('role', 'status');
+    await expect(ficha).toContainText('Bomba de incêndio');
+    await expect(ficha).toContainText('Representação ilustrativa');
+    const isolar = ficha.locator('[data-acao="isolar"]');
+    await isolar.click();
+    await expect(isolar).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('Escape');   // primeiro Escape: limpa a escolha (e o isolamento), a maquete continua aberta
+    await expect(ficha).toBeHidden();
+    await expect(caixa).toHaveAttribute('role', 'dialog');
+    await expect(lista).toHaveValue('');
+    await page.keyboard.press('Escape');   // segundo: fecha, e o foco volta à caixa
+    await expect(caixa).toHaveAttribute('role', 'button', { timeout: 5_000 });
+    await expect(caixa).toBeFocused();
+    expect(erros).toEqual([]);
+  });
 });

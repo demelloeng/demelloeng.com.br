@@ -116,8 +116,10 @@ assets/css/home-opcao3-20261027.css
 assets/css/maquete-3d.css
 assets/css/maquete-estrutura-3d.css
 assets/css/maquete-v03.css
+assets/css/maquete-incendio-v03.css
 assets/images/maquete-estrutura-capa.webp
 assets/images/maquete-hidro-capa.webp
+assets/images/maquete-incendio-capa.webp
 assets/css/rodape-v02.css
 assets/css/servico-estrutural-v02.css
 assets/css/servico-hidro-v02.css
@@ -162,6 +164,7 @@ assets/js/maquetes/enquadrar.mjs
 assets/js/maquetes/dados.mjs
 assets/js/maquetes/estrutural.mjs
 assets/js/maquetes/hidro.mjs
+assets/js/maquetes/incendio.mjs
 assets/js/maquete-terraplanagem-3d.js
 assets/models/casa-exemplo.glb
 assets/models/estrutura-aco.glb
@@ -204,6 +207,7 @@ assets/js/hidrantes-luiz-carlos-v02.js
 assets/js/hidrantes-luiz-carlos-core.mjs
 assets/models/hidrantes-luiz-carlos-v02.glb
 assets/models/hidrantes-luiz-carlos-v02.json
+assets/models/hidrantes-luiz-carlos-casca.glb
 assets/images/hidrantes-luiz-carlos-v02.png
 assets/css/metodologia-v02.css
 assets/css/experiencia-v02.css
