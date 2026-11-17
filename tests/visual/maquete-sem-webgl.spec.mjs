@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { bloquearExterno } from './comum.mjs';
 
-const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html', 'servicos/projeto-prevencao-incendio/index.html'];
+const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html', 'servicos/projeto-prevencao-incendio/index.html', 'servicos/projeto-terraplenagem/index.html'];
 
 test.describe('sem WebGL', () => {
   for (const pagina of V03) {

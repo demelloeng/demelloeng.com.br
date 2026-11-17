@@ -1,0 +1,19 @@
+/* Maquete V03 da terraplanagem: só o que é próprio dela (o andamento com o nome da etapa e as notas de representação).
+   Soma-se a maquete-3d.css, maquete-estrutura-3d.css, servico-infra-v02.css e maquete-v03.css. */
+/* caixa fechada: o subtítulo é longo e passava por baixo do botão "Ver a terraplanagem" (defeito também na V5) */
+.caixa.mq3-terra .rotulo{max-width:calc(100% - 270px)}
+.caixa.mq3-terra .andamento{flex-wrap:wrap}
+.caixa.mq3-terra .andamento label{font:600 15px var(--fonte);color:#adc2d7}
+.caixa.mq3-terra .andamento .fase{color:#e8f0f8}
+.caixa.mq3-terra .andamento input{width:220px;max-width:100%}
+.caixa.mq3-terra .leg .nota-ilustracao{margin:0 0 10px;font-size:13px;color:#d4c49e;max-width:640px}
+.caixa.mq3-terra .ficha span:last-of-type{color:#d4c49e;font-size:13px;line-height:1.3}
+@media (max-width:640px){
+  /* o nome da etapa numa linha; o deslizador e "Ver de novo" na de baixo (antes o texto cobria o deslizador) */
+  .caixa.mq3-terra .andamento{width:100%;gap:4px 10px}
+  .caixa.mq3-terra .andamento label{flex:1 0 100%;font-size:13px;text-align:center}
+  .caixa.mq3-terra .andamento input{flex:1;min-width:0;width:auto}
+  .caixa.mq3-terra .andamento .chip{padding:0 10px}
+  /* camadas numa linha que rola, como nas outras V03 (o CSS da Infraestrutura as quebrava em duas) */
+  .caixa.mq3-terra .camadas{flex-wrap:nowrap}
+}
