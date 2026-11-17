@@ -2,7 +2,7 @@
 last_mapped: 2026-11-17T20:32:18Z
 total_files: 570
 total_tokens: 568758
-commit: 4afa9e8
+commit: 65617ec
 branch: feat/home-v02-maquetes-clientes
 ---
 
