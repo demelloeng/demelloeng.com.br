@@ -209,7 +209,7 @@ def gerar(slug):
         if incendio:
             extra_head += '\n<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">'
             extra_head += '\n<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n<link rel="stylesheet" href="../../assets/css/maquete-incendio-v03.css?v=1">\n<script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>'
-            extra_body = '<script type="module" src="../../assets/js/maquetes/incendio.mjs?v=1"></script>'
+            extra_body = '<script type="module" src="../../assets/js/maquetes/incendio.mjs?v=2"></script>'
         classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-' + copia['perfil']
         # Mantém os nós existentes e seus URLs; atualiza apenas rótulos editoriais.
         graph = json.loads(re.search(r'<script[^>]*>(.*?)</script>', jsonld, re.S).group(1))

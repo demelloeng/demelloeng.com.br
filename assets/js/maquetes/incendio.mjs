@@ -33,7 +33,7 @@ maquete({
   marcadores: (el) => (el[0].startsWith('Hidrante') ? (el[0].includes('recalque') ? 'R' : true) : false),
   fichaCompleta: true,
   casca: {
-    nome: 'Colégio', glb: caixa.dataset.glbCasca, enquadrar: true,
+    nome: 'Edificação', glb: caixa.dataset.glbCasca, enquadrar: true,
     fatorAresta: 1.6,         // o colégio tem muitas divisórias: aresta discreta para a rede continuar na frente
     opacidades: { paredes: 0.07, cobertura: 0.025, contorno: 0.2 },
   },
