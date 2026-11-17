@@ -198,16 +198,24 @@ def evidencia_valida(raiz, m, ferramenta) -> tuple[dict | None, list[str]]:
     return None, recusas
 
 
+def executor(m) -> str:
+    """Como chamar o executor: o do repositório ou, em worktree antiga sem manifesto, o instalado junto da hook."""
+    if m.get("_reserva"):
+        return f'python "{(AQUI / "capacidades_runtime.py").as_posix()}"'
+    return "python scripts/capacidades.py"
+
+
 def faltas_evidencia(raiz, m) -> list[str]:
     """As duas skills obrigatórias do frontend, com evidência válida aqui; lista vazia = ok."""
     msgs = []
+    exe = executor(m)
     for ferr, cmd in (("modern-web-guidance", 'usar mwg "<consulta>" e depois usar mwg --retrieve <ids>'),
                       ("frontend-design", "usar frontend-design <N1|N2|N3>")):
         e, recusas = evidencia_valida(raiz, m, ferr)
         if e is None:
             extra = f" (encontrada, mas {recusas[0]})" if recusas else ""
             msgs.append(f"{ferr}: sem consulta válida nesta worktree e branch{extra}. "
-                        f"Rode na raiz do repositório: python scripts/capacidades.py {cmd}")
+                        f"Rode na raiz do repositório: {exe} {cmd}")
     return msgs
 
 
@@ -397,7 +405,7 @@ def decidir(alvos, agente="claude") -> list[str]:
                             f"aprovada {aprov}. Atualize pela distribuição oficial: claude plugin marketplace add "
                             f"GoogleChrome/modern-web-guidance && claude plugin install modern-web-guidance@googlechrome")
         if m.get("_reserva"):
-            f.append(f"(Esta worktree não tem {MANIFESTO}; valeu o manifesto instalado. Crie a worktree a partir da origin/main atual.)")
+            f.append(f"(Esta worktree não tem {MANIFESTO}; valeu o manifesto instalado, e o executor instalado acima funciona aqui sem gravar nada na worktree.)")
         if f and not (len(f) == 1 and f[0].startswith("(")):
             msgs.append(f"[{raiz.name}] " + " | ".join(f))
     return msgs
