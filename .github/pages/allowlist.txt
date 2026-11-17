@@ -117,6 +117,7 @@ assets/css/maquete-3d.css
 assets/css/maquete-estrutura-3d.css
 assets/css/maquete-v03.css
 assets/images/maquete-estrutura-capa.webp
+assets/images/maquete-hidro-capa.webp
 assets/css/rodape-v02.css
 assets/css/servico-estrutural-v02.css
 assets/css/servico-hidro-v02.css
@@ -160,6 +161,7 @@ assets/js/maquetes/motor.mjs
 assets/js/maquetes/enquadrar.mjs
 assets/js/maquetes/dados.mjs
 assets/js/maquetes/estrutural.mjs
+assets/js/maquetes/hidro.mjs
 assets/js/maquete-terraplanagem-3d.js
 assets/models/casa-exemplo.glb
 assets/models/estrutura-aco.glb

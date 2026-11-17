@@ -1,4 +1,4 @@
-// Maquetes V03 das páginas de serviço (hoje a estrutural; a hidrossanitária entra na entrega seguinte): integridade dos modelos, dados derivados,
+// Maquetes V03 das páginas de serviço (estrutural e hidrossanitária): integridade dos modelos, dados derivados,
 // paridade do enquadramento com a calculadora R4 e regras de publicação (allowlist, ?v, importmap local).
 // Nada aqui abre navegador; a validação visual e de desempenho é feita à parte, com roteiro próprio.
 import test from 'node:test';
@@ -29,6 +29,7 @@ const MODELOS = {
 // Páginas com maquete V03: página, capa e módulo de configuração em assets/js/maquetes/.
 const PAGINAS_V03 = [
   { pagina: 'servicos/projeto-estrutural/index.html', capa: 'maquete-estrutura-capa.webp', config: 'estrutural' },
+  { pagina: 'servicos/projeto-hidrossanitario/index.html', capa: 'maquete-hidro-capa.webp', config: 'hidro' },
 ];
 
 // Leitor mínimo de GLB (só o necessário: POSITION e índices de cada nó).
@@ -90,6 +91,14 @@ test('estrutural: níveis pelo topo das lajes (Térreo 0,00; Pavimento superior 
   const foco = uniao(todos, els, [2, 3]); const lote = uniao(todos, els);
   assert.ok(foco.max[0] - foco.min[0] < 0.6 * (lote.max[0] - lote.min[0]));
   assert.ok(foco.max[2] - foco.min[2] < 0.6 * (lote.max[2] - lote.min[2]));
+});
+
+test('hidrossanitária: níveis tirados dos pisos da casca (térreo no 0,00 do IFC, com o encaixe do protótipo)', async () => {
+  const { malhas } = await glb('assets/models/casa-exemplo.glb');
+  const piso = alturasHorizontais(malhas.piso.pos, malhas.piso.idx).map((g) => g.y);
+  assert.equal(piso.length, 2);
+  const DY = -3.552;   // posição vertical da casca no sistema dos tubos (hidro.mjs)
+  assert.ok(Math.abs(piso[0] + DY) < 0.2, `térreo em ${piso[0] + DY}`);
 });
 
 test('pavimento: a ressalva do modelo não se perde', () => {
@@ -154,6 +163,11 @@ test('publicação: tudo o que as maquetes V03 carregam está na allowlist', asy
   for (const f of ['motor', 'dados', 'enquadrar', ...PAGINAS_V03.map((c) => c.config)]) {   // nenhum import do código da calculadora (não é publicado)
     assert.doesNotMatch(await texto(`assets/js/maquetes/${f}.mjs`), /import[^;\n]*orcamento-src/);
   }
+});
+
+test('hidrossanitária: a legenda não traz a entrada genérica "Tubo" (a cor do tubo é a de cada rede, do IFC)', async () => {
+  const cfg = await texto('assets/js/maquetes/hidro.mjs');
+  assert.match(cfg, /semLegenda:\s*\['Tubo'\]/);
 });
 
 test('corte: a tampa só leva as peças que o plano atravessa, inteiras', () => {
