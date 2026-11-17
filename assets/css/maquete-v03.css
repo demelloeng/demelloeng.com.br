@@ -43,3 +43,17 @@
 .caixa.mq3.sem-3d .carregando{padding:0 24px;text-align:center;color:#e8f0f8;background:rgba(27,36,45,.78)}
 /* celular: o painel do mezanino desce para baixo do texto do topo (que ocupa duas linhas) */
 @media (max-width:640px){.caixa.mq3 .sobre{top:100px}}
+/* sem WebGL: o texto do mezanino sai da caixa e fica no lugar do cartão, fechado (mesmo texto da copy, sem botão que não responde) */
+.sobre.sobre-pagina{display:block;margin:0 0 16px;background:rgba(74,163,255,.12);border:1px solid rgba(157,182,207,.55);border-left:4px solid #4aa3ff;border-radius:4px;color:#e8f0f8}
+.sobre-pagina summary{cursor:pointer;list-style:none;padding:14px 16px;font-size:19px;font-weight:700;line-height:1.25;color:#fff}
+.sobre-pagina summary::-webkit-details-marker{display:none}
+.sobre-pagina summary::after{content:"−";float:right;color:#9cc2ec}
+.sobre-pagina:not([open]) summary::after{content:"+"}
+.sobre-pagina summary:focus-visible{outline:3px solid #9cc2ec;outline-offset:3px}
+.sobre-pagina .sobre-corpo{padding:0 16px 16px;font-size:16px;line-height:1.45;color:#cfe0f1}
+.sobre-pagina .sobre-corpo p{margin:0 0 10px}
+.sobre-pagina .sobre-corpo ul{margin:0 0 12px;padding:0;list-style:none;display:grid;gap:6px}
+.sobre-pagina .sobre-corpo li{padding-left:12px;border-left:2px solid #3b6ea5}
+.sobre-pagina .sobre-corpo li b{color:#9cc2ec}
+.sobre-pagina .sobre-corpo .aviso{padding:8px 10px;background:rgba(156,194,236,.1);border-radius:3px;color:#9db6cf;font-size:15px}
+.sobre-pagina .sobre-cta{display:inline-block;margin-top:4px;font-weight:700;color:#9cc2ec;text-decoration:underline}

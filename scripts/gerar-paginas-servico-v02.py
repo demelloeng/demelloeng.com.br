@@ -274,8 +274,8 @@ def gerar(slug):
         if estrutura_pg:
             extra_head = (base_css + '<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">\n'
                           '<link rel="stylesheet" href="../../assets/css/' + ('servico-infra-v02.css?v=1' if infra_pg else 'servico-hidro-v02.css?v=4' if hidro_pg else 'servico-estrutural-v02.css?v=6') + '">\n'
-                          + ('' if infra_pg or hidro_pg else '<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=2">\n') + importmap)
-            extra_body = '<script type="module" src="../../assets/js/' + ('maquete-terraplanagem-3d.js?v=1' if infra_pg else 'maquete-hidro-3d.js?v=10' if hidro_pg else 'maquetes/estrutural.mjs?v=2') + '"></script>'
+                          + ('' if infra_pg or hidro_pg else '<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n') + importmap)
+            extra_body = '<script type="module" src="../../assets/js/' + ('maquete-terraplanagem-3d.js?v=1' if infra_pg else 'maquete-hidro-3d.js?v=10' if hidro_pg else 'maquetes/estrutural.mjs?v=3') + '"></script>'
             classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 ' + ('servico-rico-infra' if infra_pg else 'servico-rico-hidro' if hidro_pg else 'servico-rico-estrutural')
         else:
             extra_head = base_css + importmap

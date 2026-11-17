@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { fitBox, scaleBar } from '../../assets/js/maquetes/enquadrar.mjs';
 import * as R4 from '../src/maquete5_building.mjs';
-import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam } from '../../assets/js/maquetes/dados.mjs';
+import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, APRESENTACAO_MS, semMaqueteAtalhos } from '../../assets/js/maquetes/dados.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ler = (p) => readFile(path.join(RAIZ, p));
@@ -195,6 +195,71 @@ test('capa: imagem da própria maquete, leve, versionada pelo hash e publicada',
     const html = await texto(pg);
     const m = html.match(new RegExp(String.raw`<img class="capa" src="\.\./\.\./assets/images/${img}\?v=([0-9a-f]{7})" alt="" width="\d+" height="\d+"`));
     assert.ok(m, `${pg}: capa dentro da caixa`);
+    assert.doesNotMatch(html.match(/<img class="capa"[^>]*>/)[0], /fetchpriority="low"/, `${pg}: capa na área inicial sem prioridade baixa`);
     assert.equal(m[1], createHash('sha256').update(b).digest('hex').slice(0, 7));
   }
+});
+
+// ---- acessibilidade da tela cheia (auditoria Modern Web Guidance de 16/11/2026: A01, A02, A03, A05) ----
+// O DOM de teste não existe aqui; as regras recebem objetos com a mesma forma dos elementos.
+const no = (tagName, filhos = [], extra = {}) => {
+  const n = { tagName, children: filhos, parentElement: null, inert: false, hidden: false, isConnected: true, ...extra };
+  for (const f of filhos) f.parentElement = n;
+  n.closest = (sel) => { for (let x = n; x; x = x.parentElement) if (sel === '[hidden]' ? x.hidden : sel === '[data-sem-webgl]' ? x.semWebgl : false) return x; return null; };
+  return n;
+};
+
+test('A02: maquete aberta deixa inerte só o que está fora dela, e desfaz exatamente isso', () => {
+  const caixa = no('DIV'); const cartao = no('P'); const legenda = no('P');
+  const coluna = no('DIV', [cartao, caixa, legenda]); const aside = no('ASIDE');
+  const main = no('MAIN', [coluna, aside]); const header = no('HEADER'); const footer = no('FOOTER', [], { inert: true }); const script = no('SCRIPT');
+  const body = no('BODY', [header, main, footer, script]); no('HTML', [body]);
+  const desfazer = isolarFundo(caixa);
+  assert.deepEqual([cartao, legenda, aside, header].map((n) => n.inert), [true, true, true, true]);
+  assert.deepEqual([caixa, coluna, main, body, script].map((n) => n.inert), [false, false, false, false, false]);
+  desfazer();
+  assert.deepEqual([cartao, legenda, aside, header, caixa].map((n) => n.inert), [false, false, false, false, false]);
+  assert.equal(footer.inert, true, 'o que já estava inerte continua inerte');
+});
+
+test('A01: ao fechar, o foco volta a quem abriu; se ele sumiu ou está escondido, volta à caixa', () => {
+  const caixa = no('DIV'); const cartao = no('BUTTON');
+  assert.equal(focoDeVolta(cartao, caixa), cartao);
+  assert.equal(focoDeVolta(null, caixa), caixa);
+  assert.equal(focoDeVolta(no('BUTTON', [], { isConnected: false }), caixa), caixa);
+  const escondido = no('BUTTON'); no('P', [escondido], { hidden: true });
+  assert.equal(focoDeVolta(escondido, caixa), caixa);
+});
+
+test('A03: a caixa fechada só gira na apresentação inicial (movimento todo abaixo de 5 s), nunca com movimento reduzido nem depois de parada', () => {
+  assert.ok(APRESENTACAO_MS + 600 <= 5000, 'janela do giro + desaceleração da câmera (~0,5 s medidos) cabem em 5 s');
+  assert.equal(giroFechado(0, { reduz: false, girar: true }), true);
+  assert.equal(giroFechado(APRESENTACAO_MS - 1, { reduz: false, girar: true }), true);
+  assert.equal(giroFechado(APRESENTACAO_MS, { reduz: false, girar: true }), false);
+  assert.equal(giroFechado(1000, { reduz: true, girar: true }), false);
+  assert.equal(giroFechado(1000, { reduz: false, girar: false }), false);
+  assert.equal(giroFechado(null, { reduz: false, girar: true }), false, 'antes da montagem, parada');
+});
+
+test('A05: sem WebGL, o cartão dá lugar ao texto do mezanino (fechado) e nenhum atalho fica na página', () => {
+  let trocadoPor = null; const classes = new Set();
+  const lugar = no('P', [], { semWebgl: true, replaceWith: (x) => { trocadoPor = x; } });
+  const cartao = no('BUTTON'); cartao.parentElement = lugar; cartao.closest = (sel) => (sel === '[data-sem-webgl]' ? lugar : null);
+  const outro = no('BUTTON');
+  const painel = { hidden: true, open: true, classList: { add: (c) => classes.add(c) } };
+  semMaqueteAtalhos([cartao, outro], painel);
+  assert.equal(trocadoPor, painel); assert.equal(painel.hidden, false); assert.equal(painel.open, false); assert.ok(classes.has('sobre-pagina'));
+  assert.equal(outro.hidden, true);
+  const so = no('BUTTON'); semMaqueteAtalhos([so], null); assert.equal(so.hidden, true, 'sem painel de texto, o atalho só some');
+});
+
+test('motor: usa as regras de acessibilidade nos pontos certos', async () => {
+  const motor = await texto('assets/js/maquetes/motor.mjs');
+  assert.match(motor, /desfazerIsolamento = isolarFundo\(caixa\)/);
+  assert.match(motor, /desfazerIsolamento\(\); desfazerIsolamento = null;[\s\S]{0,120}focoDeVolta\(origemEl, caixa\)\.focus\(\)/);
+  assert.match(motor, /if \(!aberta\) controles\.autoRotate = giroFechado\(/);
+  assert.doesNotMatch(motor, /controles\.autoRotate = !reduz; ajustar\(\)/, 'fechar não religa o giro');
+  assert.match(motor, /semMaqueteAtalhos\(atalhos, \$\('sobre'\)\)/);
+  const css = await texto('assets/css/maquete-v03.css');
+  assert.match(css, /\.sobre\.sobre-pagina\{display:block/);
 });

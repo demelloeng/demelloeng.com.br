@@ -1,5 +1,6 @@
-// Leitura dos dados das maquetes das páginas de serviço. Funções PURAS (sem DOM e sem Three), testadas em Node
+// Leitura dos dados das maquetes das páginas de serviço. Funções PURAS (sem DOM global e sem Three), testadas em Node
 // (orcamento-src/tests/maquetes_v03.test.mjs). Nada aqui altera o modelo: só mede o que o GLB e o JSON já trazem.
+// As regras de acessibilidade do fim só mexem nos elementos que recebem.
 //
 // Convenções: pos = Float32Array com x,y,z por vértice; idx = índices (ou null, quando cada 3 vértices formam um triângulo);
 // elementos = lista do JSON da maquete, [nome, iPavimento, primeiraFace, nFaces, detalhe?, ...].
@@ -161,4 +162,50 @@ export function verticesQueCruzam(faixas, z, saida) {
     for (let v = f.f0 * 3, fim = (f.f0 + f.n) * 3; v < fim; v += 1) saida[n++] = v;
   }
   return n;
+}
+
+// ---- acessibilidade da tela cheia (sem DOM próprio: recebem elementos, ou objetos com a mesma forma, e só mexem neles) ----
+
+// Modal sem <dialog>: deixa inerte tudo o que está fora de `el` (os irmãos de cada nível, até os filhos do <body>), para o
+// Tab e o Shift+Tab não saírem da maquete aberta (WCAG 2.4.3 e 2.4.11). Não toca em `el` nem nos seus ancestrais, que
+// desligariam a própria maquete, nem no que já estava inerte. Devolve a função que desfaz exatamente o que fez.
+export function isolarFundo(el) {
+  const feitos = [];
+  for (let n = el; n && n.parentElement; n = n.parentElement) {
+    for (const s of n.parentElement.children) {
+      if (s === n || s.inert || /^(SCRIPT|STYLE|TEMPLATE|LINK|META)$/.test(s.tagName)) continue;
+      s.inert = true; feitos.push(s);
+    }
+    if (n.parentElement.tagName === 'BODY') break;
+  }
+  return () => { for (const s of feitos) s.inert = false; };
+}
+
+// Ao fechar, o foco volta a quem abriu (o cartão do mezanino, por exemplo), se ele ainda está na página e visível;
+// senão, à própria caixa.
+export function focoDeVolta(origem, padrao) {
+  const ok = origem && origem.isConnected && !origem.hidden && !(origem.closest && origem.closest('[hidden]'));
+  return ok ? origem : padrao;
+}
+
+// Giro da caixa fechada: só na apresentação inicial (a montagem leva 4,2 s; o giro para logo depois), nunca com movimento
+// reduzido nem depois de a pessoa ter parado o giro. A câmera ainda desacelera cerca de 0,5 s ao parar, então o movimento
+// todo fica abaixo de 5 s (WCAG 2.2.2); depois a caixa fica parada. Na tela cheia (aberta por quem clicou), o giro começa ao
+// abrir e para pelo botão "Girar" (em "Mais controles") ou ao arrastar; desligado ali, fica desligado até o fim da visita.
+export const APRESENTACAO_MS = 4300;
+export function giroFechado(desdeInicio, { reduz, girar }) {
+  return !reduz && !!girar && desdeInicio != null && desdeInicio >= 0 && desdeInicio < APRESENTACAO_MS;
+}
+
+// Sem WebGL: nenhum botão que abra a maquete fica na página. O primeiro atalho dá lugar ao painel de texto da maquete
+// (no estrutural, o "Vai construir um mezanino?"), fechado, com o mesmo texto da copy; os demais atalhos somem.
+export function semMaqueteAtalhos(atalhos, painel) {
+  let usado = !painel;
+  for (const b of atalhos) {
+    const lugar = (b.closest && b.closest('[data-sem-webgl]')) || b;
+    if (!usado) {
+      painel.classList.add('sobre-pagina'); painel.open = false; painel.hidden = false;
+      lugar.replaceWith(painel); usado = true;
+    } else lugar.hidden = true;
+  }
 }

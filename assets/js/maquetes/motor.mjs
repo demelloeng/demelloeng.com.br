@@ -5,7 +5,7 @@
 // calculadora R4: palco, luz, sombra, oclusão parada, Planta quase ortográfica, corte com tampa, níveis e escala.
 // Three.js e complementos vêm do próprio site (importmap da página); nada é carregado de fora.
 import { fitBox, scaleBar } from './enquadrar.mjs?v=1';
-import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam } from './dados.mjs?v=2';
+import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, semMaqueteAtalhos } from './dados.mjs?v=3';
 
 const $ = (id) => document.getElementById(id);
 const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -34,12 +34,12 @@ export async function maquete(cfg) {
   const caixa = $('caixa'); const palco = $('palco'); const carregando = $('carregando');
   const tip = $('elemento'); const ficha = $('ficha');
   // botões que abrem outra maquete (o cartão do mezanino): um clique dado antes de a maquete estar pronta fica guardado
-  // e é atendido quando ela fica pronta; sem WebGL, o cartão sai da página (não fica um botão que não responde)
+  // e é atendido quando ela fica pronta; sem WebGL, o cartão dá lugar ao texto do mezanino (não fica um botão que não responde)
   const atalhos = [...document.querySelectorAll('[data-abrir-maquete]')]; let pedido = null;
   const guardar = (e) => { pedido = e.currentTarget; pedido.setAttribute('aria-busy', 'true'); };
   atalhos.forEach((b) => b.addEventListener('click', guardar));
   const semMaquete = () => {   // sem 3D: a caixa vira só a capa com o aviso (nada de botão que não responde)
-    atalhos.forEach((b) => { (b.closest('[data-sem-webgl]') || b).hidden = true; });
+    semMaqueteAtalhos(atalhos, $('sobre'));
     caixa.classList.add('sem-3d'); for (const a of ['role', 'tabindex', 'aria-label']) caixa.removeAttribute(a);
   };
   await quandoPerto(caixa.parentElement);
@@ -140,6 +140,7 @@ export async function maquete(cfg) {
   let caixaTudo = null; let caixaFoco = null; let niveis = []; let tween = null; let tweenCam = null;
   let sombraSuja = true; let quadro = 0; let realce = null; let escolhido = null; let pendente = null;
   let arrastando = false; let agitado = false; let tAcabamento = 0; let jaTocou = false; let visivel = false;
+  let inicioApresentacao = null; let desfazerIsolamento = null;
   const medidas = { quadros: 0, ao: 0, ms: [], carga: 0 };
   $('corte').value = Math.round((1 - fracCorte) * 100);
   $('girar').setAttribute('aria-pressed', String(girar));   // com movimento reduzido, começa desligado
@@ -387,7 +388,7 @@ export async function maquete(cfg) {
     sombraSuja = true; agitado = true; pedir();
   }
   function tocar() {
-    if (!pronto) return; jaTocou = true;
+    if (!pronto) return; if (!jaTocou) inicioApresentacao = performance.now(); jaTocou = true;
     if (reduz) { p = 1; aplicar(); return; }
     const t0 = performance.now(); p = 0; aplicar();
     tween = (agora) => { p = lim((agora - t0) / MONTAGEM_MS); aplicar(); if (p >= 1) tween = null; };
@@ -515,6 +516,7 @@ export async function maquete(cfg) {
     const r = (origem || caixa).getBoundingClientRect(); const de = { top: `${r.top}px`, left: `${r.left}px`, width: `${r.width}px`, height: `${r.height}px` };
     Object.assign(caixa.style, de); caixa.classList.add('aberta'); document.body.classList.add('travado', 'mq3-aberta');   // mq3-aberta: o botão do WhatsApp sai
     caixa.setAttribute('role', 'dialog'); caixa.setAttribute('aria-modal', 'true'); caixa.setAttribute('aria-label', cfg.rotuloDialogo);
+    desfazerIsolamento = isolarFundo(caixa);   // Tab e Shift+Tab ficam dentro da maquete aberta
     $('rotulo').hidden = true; $('explorar').hidden = true; $('ui').hidden = false;
     await animar(de, cheia, 480);
     caixa.getAnimations().forEach((a) => a.cancel()); Object.assign(caixa.style, cheia);
@@ -524,7 +526,7 @@ export async function maquete(cfg) {
     const sb = $('sobre'); if (sb && !sb.hidden) sb.open = innerWidth > 640;
   }
   async function fechar() {
-    if (!aberta) return; controles.enabled = false; destacar(null); escolhido = null; tip.hidden = true; ficha.hidden = true;
+    if (!aberta) return; controles.enabled = false; clearTimeout(ocioso); destacar(null); escolhido = null; tip.hidden = true; ficha.hidden = true;
     const v = (origemEl && document.contains(origemEl) ? origemEl : caixa.parentElement).getBoundingClientRect();
     const para = { top: `${v.top}px`, left: `${v.left}px`, width: `${v.width}px`, height: `${v.height}px` };
     $('ui').hidden = true; await animar(cheia, para, 420);
@@ -532,7 +534,8 @@ export async function maquete(cfg) {
     caixa.setAttribute('role', 'button'); caixa.removeAttribute('aria-modal'); caixa.removeAttribute('aria-label');   // fechada, o nome vem do texto visível (título, legenda e "Montar e explorar")
     $('rotulo').hidden = false; $('explorar').hidden = false; aberta = false;
     escolherVista('3d', false); verTudo = false; $('ver-tudo')?.setAttribute('aria-pressed', 'false');
-    controles.autoRotate = !reduz; ajustar(); posicionar('3d', 0); caixa.focus();
+    if (desfazerIsolamento) { desfazerIsolamento(); desfazerIsolamento = null; }
+    controles.autoRotate = false; ajustar(); posicionar('3d', 0); focoDeVolta(origemEl, caixa).focus();   // fechada, a caixa fica parada
     if (modeloAtual !== cfg.principal) carregar(cfg.principal);   // a maquete principal volta a ser a do topo
   }
   caixa.addEventListener('click', () => { if (!aberta) abrir(); });
@@ -564,7 +567,7 @@ export async function maquete(cfg) {
     medirFaixa(); aplicar(); if (mover) posicionar(v);
   }
   controles.addEventListener('start', () => { arrastando = true; controles.autoRotate = false; clearTimeout(ocioso); if (movel && cortando) aplicar(); });
-  controles.addEventListener('end', () => { arrastando = false; if (girar) ocioso = setTimeout(() => { controles.autoRotate = true; pedir(); }, 4000); if (movel && cortando) aplicar(); pedir(); });
+  controles.addEventListener('end', () => { arrastando = false; if (girar) ocioso = setTimeout(() => { if (aberta) { controles.autoRotate = true; pedir(); } }, 4000); if (movel && cortando) aplicar(); pedir(); });
   controles.addEventListener('change', pedir);
   document.querySelectorAll('#ui [data-vista]').forEach((b) => b.addEventListener('click', () => escolherVista(b.dataset.vista)));
   $('por-dentro')?.addEventListener('click', () => escolherVista(cortando ? '3d' : 'corte'));
@@ -633,6 +636,7 @@ export async function maquete(cfg) {
     if (!raiz || (!visivel && !aberta) || document.hidden) return;
     if (tween) tween(agora); if (tweenCam) tweenCam(agora);
     passar();
+    if (!aberta) controles.autoRotate = giroFechado(inicioApresentacao == null ? null : agora - inicioApresentacao, { reduz, girar });
     const mexeu = controles.update();
     const dc = camera.position.distanceTo(controles.target); camera.near = Math.max(0.3, dc * 0.02); camera.far = dc * 4 + 400; camera.updateProjectionMatrix();
     if (sombraSuja) { renderer.shadowMap.needsUpdate = true; sombraSuja = false; }

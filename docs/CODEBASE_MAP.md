@@ -255,7 +255,7 @@ Falhas silenciosas ou obscuras: slug novo sem entrada em `LAYOUTS` ou `PERFIS` c
 | Página | JS | Modelo | CSS próprio |
 |---|---|---|---|
 | Arquitetura | `maquete-3d.js` (sem `?v`) | `casa-exemplo.glb` (sem JSON) | nenhum além da base |
-| Estrutural | `maquetes/estrutural.mjs?v=2` (V03; o antigo `maquete-estrutura-3d.js?v=6` fica sem uso) | `estrutura-concreto` e `estrutura-aco` (`.glb` + `.json`) | `servico-estrutural-v02.css?v=6`, `maquete-v03.css?v=2` |
+| Estrutural | `maquetes/estrutural.mjs?v=3` (V03; o antigo `maquete-estrutura-3d.js?v=6` fica sem uso) | `estrutura-concreto` e `estrutura-aco` (`.glb` + `.json`) | `servico-estrutural-v02.css?v=6`, `maquete-v03.css?v=3` |
 | Hidrossanitário | `maquete-hidro-3d.js?v=10` | `hidro-casa.glb` + `.json` | `servico-hidro-v02.css?v=4` |
 | Incêndio (hidrantes, Colégio Luiz Carlos) | `hidrantes-luiz-carlos-ativar.js?v=1` (ativação sob demanda, com pôster e `noscript`) importa `hidrantes-luiz-carlos-v02.js` e `hidrantes-luiz-carlos-core.mjs` | `hidrantes-luiz-carlos-v02.glb` (1.857.508 bytes, 171 peças identificadas) + `.json` | `hidrantes-luiz-carlos-v02.css`, `servico-pscip-glp-v02.css`; o catálogo usa `catalogo-pscip-glp-v02.css` |
 | Infraestrutura | `maquete-terraplanagem-3d.js?v=1` | `terraplanagem-djalma.glb` (683.412 bytes) + `.json` (666 bytes), na allowlist | `servico-infra-v02.css?v=1` |
@@ -277,12 +277,13 @@ Falhas silenciosas ou obscuras: slug novo sem entrada em `LAYOUTS` ou `PERFIS` c
 |---|---|
 | `assets/js/maquetes/motor.mjs` | `maquete(cfg)`: renderizador, luz e ambiente da R4, sombra sob demanda, corte com tampa por stencil (só as peças que o plano atravessa), contorno no material, casca, base, níveis, escala, ficha, tela cheia, teclado, oclusão GTAO só com a maquete aberta e parada (sombreadores compilados em segundo plano), clique guardado do atalho `[data-abrir-maquete]`, estado sem WebGL (`.sem-3d`), `body.mq3-aberta` com a maquete aberta, gancho `window.__maquete` só com `?medir`. |
 | `assets/js/maquetes/enquadrar.mjs` | cópia fiel de `cameraBasis`, `fitBox`, `scaleBar` da calculadora R4 (teste de paridade). |
-| `assets/js/maquetes/dados.mjs` | funções puras, testadas em Node: caixas, níveis, rótulos, arestas reais, junção da casca, `verticesQueCruzam` (tampa do corte). |
+| `assets/js/maquetes/dados.mjs` | funções puras, testadas em Node: caixas, níveis, rótulos, arestas reais, junção da casca, `verticesQueCruzam` (tampa do corte) e as regras de acessibilidade da tela cheia: `isolarFundo` (fundo `inert` com a maquete aberta), `focoDeVolta` (o foco volta a quem abriu), `giroFechado` (caixa fechada só gira na apresentação inicial; o movimento todo fica abaixo de 5 s) e `semMaqueteAtalhos` (sem WebGL, o texto do mezanino toma o lugar do cartão). |
 | `assets/js/maquetes/estrutural.mjs` | só configuração (camadas, cores, foco, níveis, rótulos). |
 | `docs/arquivo/paginas-servico-v02/maquete-estrutura-v03-markup.html` | markup da caixa, com a capa `assets/images/maquete-estrutura-capa.webp`. O gerador usa este. |
 | `assets/css/maquete-v03.css` | só o que é novo da V03; soma-se a `maquete-3d.css` e `maquete-estrutura-3d.css`. O gerador só o põe nas páginas V03. |
 
 - **Versões:** o módulo de cada página importa `motor.mjs?v=N`, e o motor importa `dados.mjs?v=N` e `enquadrar.mjs?v=N`. Mudou um deles, sobe o `?v` de quem o importa, até o `<script>` do gerador.
+- **Acessibilidade (auditoria Modern Web Guidance de 16/11/2026):** a maquete aberta é um modal sem `<dialog>`: o resto da página fica `inert` enquanto ela está aberta (Tab e Shift+Tab não saem dela) e o foco volta a quem abriu. Fechada, a caixa só se move na apresentação inicial (montagem de 4,2 s e giro até 4,3 s, mais a desaceleração da câmera: abaixo de 5 s; WCAG 2.2.2); com movimento reduzido, não se move. Na tela cheia, o giro começa ao abrir e para pelo botão "Girar" (dentro de "Mais controles", fechado por padrão) ou ao arrastar; a escolha de parar vale até o fim da visita. A capa fica com a prioridade automática (está na área inicial; na hidro do celular é o LCP).
 - **Medir no navegador:** `?medir` na URL; `__maquete.stats()` traz chamadas, triângulos, memória da GPU e peças da tampa. Bloqueie a Meta e o Simple Analytics antes de abrir a página local (as páginas carregam a medição do site).
 - **Testes:** `orcamento-src/tests/maquetes_v03.test.mjs` (modelos intactos, `?v` por arquivo, capa, allowlist, paridade com a R4, tampa do corte). A lista `PAGINAS_V03` diz quais páginas usam o motor; nova maquete V03 entra ali.
 
@@ -399,7 +400,7 @@ Carregados no fim do `<body>` de toda página: `nav.js`, `analytics-sink.js` (Si
 15. **Terraplanagem** (grafia certa) convive com "terraplenagem" em slug, sitemap, testes e em texto visível de `experiencia-tecnica` (3 vezes) e `compatibilizacao-bim` (1 vez).
 16. **O CI só roda na `main`:** valide num clone sem conversão de fim de linha (o CI é Linux; um teste de rodapé já passou no Windows e reprovou no CI).
 17. **`.mcp.json` fixa `@playwright/mcp@latest`** (sem versão) e nunca foi testado.
-18. **WebGL indisponível** deixa a maquete parada em "Carregando..." (seção 4) nas maquetes antigas; na V03 a caixa mostra a capa com o aviso e o cartão do mezanino sai da página.
+18. **WebGL indisponível** deixa a maquete parada em "Carregando..." (seção 4) nas maquetes antigas; na V03 a caixa mostra a capa com o aviso e o cartão do mezanino dá lugar ao texto do mezanino, fechado.
 19. **Cascata das páginas V02:** `.servicos-v02 a{color}` (0,1,1) vence qualquer regra de uma classe só em link injetado na página; componente transversal precisa de duas classes (caso do símbolo azul do WhatsApp, 16/11/2026).
 
 ## 12. Guia de navegação
