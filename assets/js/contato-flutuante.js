@@ -26,6 +26,9 @@
     '.dm-fab--teclado{display:none}',
     '.dm-fab__link{display:flex;align-items:center;gap:10px;min-height:56px;min-width:56px;padding:0 16px;border-radius:28px;background:#0f7a3c;color:#fff;text-decoration:none;font-size:15px;font-weight:600;line-height:1.2;box-shadow:0 0 0 2px #fff,0 4px 14px rgba(0,0,0,.28);justify-content:center}',
     '.dm-fab__link:hover{background:#0b6631}',
+    /* Cor do símbolo e do texto: as páginas V02 pintam todo link de azul (.servicos-v02 a, especificidade 0,1,1), o que vence
+       .dm-fab__link (0,1,0) e deixa o símbolo, que usa currentColor, azul sobre verde (1,49:1). Duas classes (0,2,0) vencem. */
+    '.dm-fab .dm-fab__link,.dm-fab .dm-fab__link:hover,.dm-fab .dm-fab__link:visited{color:#fff}',
     '.dm-fab__link:focus-visible,.dm-fab__fechar:focus-visible{outline:3px solid #fff;box-shadow:0 0 0 6px #0643a7}',
     '.dm-fab__link svg{width:28px;height:28px;flex:none;fill:currentColor}',
     '.dm-fab__rotulo{display:block;max-width:200px;overflow:hidden;white-space:nowrap;transition:max-width .2s ease,opacity .2s ease}',
@@ -44,6 +47,9 @@
     '@keyframes dm-fab-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}',
     '@media (max-width:520px){.dm-fab{right:12px}}',
     '@media (prefers-reduced-motion:reduce){.dm-fab{animation:none}.dm-fab__rotulo{transition:none}}',
+    /* maquete V03 (estrutural e hidro) aberta em tela cheia (body.mq3-aberta, posto pelo motor das maquetes):
+       o botão sai e volta ao fechar; no celular ele cobria o painel de controles. As demais maquetes não mudam. */
+    'body.mq3-aberta .dm-fab{display:none}',
     '@media print{.dm-fab{display:none}}'
   ].join('\n');
 
