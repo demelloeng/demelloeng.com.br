@@ -257,22 +257,25 @@ def gerar(slug):
         estrutura_pg = copia.get('perfil') in ('estrutura', 'hidro', 'infra')
         hidro_pg = copia.get('perfil') == 'hidro'
         infra_pg = copia.get('perfil') == 'infra'
-        maquete_html = (DOCS / ('maquete-terraplanagem-markup.html' if infra_pg else 'maquete-hidro-markup.html' if hidro_pg else 'maquete-estrutura-markup.html' if estrutura_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
+        # Maquete V03 da estrutural: motor comum em assets/js/maquetes/; o markup antigo fica para reversão.
+        # A hidrossanitária continua no visualizador publicado até a entrega da sua V03.
+        maquete_html = (DOCS / ('maquete-terraplanagem-markup.html' if infra_pg else 'maquete-hidro-markup.html' if hidro_pg else 'maquete-estrutura-v03-markup.html' if estrutura_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
         meio = L.estrutura(nv['estrutura']) if estrutura_pg else L.prefeitura(nv['prefeitura'])
         prova_html = (L.prova_volume(nv.get('prova') or ant['Prova técnica']) if infra_pg else
                       L.prova(ant['Prova técnica'], 'de experiência técnica ' + ('hidrossanitária' if hidro_pg else 'estrutural') + ' documentada') if estrutura_pg else L.prova(ant['Prova técnica']))
         extra_hero = L.mezanino_link(nv['mezanino']) if estrutura_pg and 'mezanino' in nv else ''
         if estrutura_pg and 'mezanino' in nv:
             maquete_html = maquete_html.replace('<!--SOBRE-->', L.mezanino_painel(nv['mezanino'], d['cta']['href'], copia['cta']['rotulo']))
-        principal = '\n'.join([L.hero(copia, d, maquete_html, extra_hero), L.para_quem(nv['para_quem']), L.muda(nv['muda']), meio,
+        principal = '\n'.join([L.hero(copia, d, maquete_html, acima_caixa=extra_hero), L.para_quem(nv['para_quem']), L.muda(nv['muda']), meio,
                                (L.faz(nv['faz'], L.DIAGRAMA_INFRA) if infra_pg else L.faz(nv['faz'])), L.perguntas(nv['perguntas']), prova_html,
                                L.djalma(nv['experiencia'] if estrutura_pg else ant[t_dj], '', copia.get('imprensa', [])), detalhes_html])
         importmap = '<script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>'
         base_css = '<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n'
         if estrutura_pg:
             extra_head = (base_css + '<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">\n'
-                          '<link rel="stylesheet" href="../../assets/css/' + ('servico-infra-v02.css?v=1' if infra_pg else 'servico-hidro-v02.css?v=4' if hidro_pg else 'servico-estrutural-v02.css?v=4') + '">\n' + importmap)
-            extra_body = '<script type="module" src="../../assets/js/' + ('maquete-terraplanagem-3d.js?v=1' if infra_pg else 'maquete-hidro-3d.js?v=10' if hidro_pg else 'maquete-estrutura-3d.js?v=6') + '"></script>'
+                          '<link rel="stylesheet" href="../../assets/css/' + ('servico-infra-v02.css?v=1' if infra_pg else 'servico-hidro-v02.css?v=4' if hidro_pg else 'servico-estrutural-v02.css?v=6') + '">\n'
+                          + ('' if infra_pg or hidro_pg else '<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n') + importmap)
+            extra_body = '<script type="module" src="../../assets/js/' + ('maquete-terraplanagem-3d.js?v=1' if infra_pg else 'maquete-hidro-3d.js?v=10' if hidro_pg else 'maquetes/estrutural.mjs?v=3') + '"></script>'
             classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 ' + ('servico-rico-infra' if infra_pg else 'servico-rico-hidro' if hidro_pg else 'servico-rico-estrutural')
         else:
             extra_head = base_css + importmap

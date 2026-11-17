@@ -115,6 +115,8 @@ assets/css/home-20261024.css
 assets/css/home-opcao3-20261027.css
 assets/css/maquete-3d.css
 assets/css/maquete-estrutura-3d.css
+assets/css/maquete-v03.css
+assets/images/maquete-estrutura-capa.webp
 assets/css/rodape-v02.css
 assets/css/servico-estrutural-v02.css
 assets/css/servico-hidro-v02.css
@@ -154,6 +156,10 @@ assets/images/v02-topografia-proposta.svg
 assets/js/maquete-3d.js
 assets/js/maquete-estrutura-3d.js
 assets/js/maquete-hidro-3d.js
+assets/js/maquetes/motor.mjs
+assets/js/maquetes/enquadrar.mjs
+assets/js/maquetes/dados.mjs
+assets/js/maquetes/estrutural.mjs
 assets/js/maquete-terraplanagem-3d.js
 assets/models/casa-exemplo.glb
 assets/models/estrutura-aco.glb

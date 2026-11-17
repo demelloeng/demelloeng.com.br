@@ -147,7 +147,11 @@ def main(slug, arquivo, nome_servico):
     mez = None
     if PERFIS.get(slug) == 'estrutura':
         linhas_mez = s['MEZANINO'].split('\n', 1)
-        mez = {'titulo': linhas_mez[0].strip(), 'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in paragrafos(linhas_mez[1])]}
+        ps_mez = paragrafos(linhas_mez[1])
+        # "Chamada:" (desde a V07 da copy, 16/11/2026) é a segunda linha do cartão da abertura; não entra no painel
+        chamada = next((t.split(':', 1)[1].strip() for t in ps_mez if t.startswith('Chamada:')), None)
+        mez = {'titulo': linhas_mez[0].strip(), **({'chamada': chamada} if chamada else {}),
+               'conteudo': [{'tipo': 'paragrafo', 'texto': t} for t in ps_mez if not t.startswith('Chamada:')]}
 
     dados = {
         'slug': slug,
