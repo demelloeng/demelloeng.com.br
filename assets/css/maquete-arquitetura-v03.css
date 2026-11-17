@@ -1,0 +1,16 @@
+/* Maquete V03 da arquitetura: só o que é próprio dela (legenda, nota da planta e o estilo Realista).
+   Soma-se a maquete-3d.css (dona da caixa e dos textos do estilo Realista), maquete-estrutura-3d.css e maquete-v03.css. */
+.caixa.mq3-arq .leg{align-self:center;max-width:100%;color:#cfe0f1;background:rgba(15,22,29,.94);border:1px solid #33506d;border-radius:3px;font-size:14px;padding:0 12px}
+.caixa.mq3-arq .leg summary{min-height:40px;display:flex;align-items:center;cursor:pointer;color:#bfe3ff}
+.caixa.mq3-arq .legenda{list-style:none;margin:0;padding:0 0 10px;display:flex;flex-wrap:wrap;gap:8px 16px;max-width:960px}
+.caixa.mq3-arq .legenda li{display:flex;align-items:center;gap:6px}
+.caixa.mq3-arq .legenda i{width:12px;height:12px;border-radius:2px;border:1px solid #9db6cf;display:inline-block}
+.caixa.mq3-arq .leg .nota-ilustracao{margin:0 0 10px;font-size:13px;color:#cfe0f1;max-width:640px}
+.caixa.mq3-arq .nota-vista{margin:0;padding:4px 12px;font:600 14px var(--fonte);color:#e8f0f8;background:rgba(27,36,45,.86);border:1px solid #33506d;border-radius:4px}
+/* Realista: o palco é claro; escala ganha contraste (o painel continua escuro) */
+.caixa.mq3-arq.realista .escala-mq{color:#1b242d;text-shadow:none}
+.caixa.mq3-arq.realista .escala-mq i{border-color:#1b242d}
+@media (max-width:640px){
+  .caixa.mq3-arq .camadas{flex-wrap:nowrap}   /* camadas numa linha que rola, como nas outras V03 */
+  .caixa.mq3-arq .leg{font-size:13px}
+}

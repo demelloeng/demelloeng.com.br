@@ -1,0 +1,12 @@
+{
+  "versao": "V03 do visualizador sobre casa-exemplo.glb (intacto; o mesmo GLB da casca da maquete hidrossanitária)",
+  "fonte": "Modelo de exemplo feito no Revit e exportado por classe (paredes, portas, janelas, piso, cobertura, piscina, pilares, deck, muros, gradil). Sem nomes de ambiente, sem pavimentos e sem norte.",
+  "padrao": "Peça do modelo do Revit, na posição original.",
+  "pavimentos": [""],
+  "textos": {
+    "vidros": "Painel de vidro da janela, no modelo.",
+    "cobertura": "Cobertura do modelo, sem especificação de telha."
+  },
+  "grupos": {},
+  "aviso": "Casa de exemplo. As cores do estilo Realista são aproximações visuais dos materiais, não especificação. O solo sai da base dos muros, em degraus; o modelo não tem terreno."
+}
