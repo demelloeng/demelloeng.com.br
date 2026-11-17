@@ -2,7 +2,7 @@
 last_mapped: 2026-11-17T05:36:17Z
 total_files: 563
 total_tokens: 568758
-commit: 72375f9
+commit: 393158f
 branch: feat/capacidades-governanca
 ---
 
