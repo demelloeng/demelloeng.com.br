@@ -1,0 +1,6 @@
+{
+  "descricao": "Conformidade atual: problemas que já existiam na main quando o teste entrou (17/11/2026, main 9e7358b). Aparecem no relatório e não reprovam; problema novo reprova. Sai daqui quando for corrigido, por ordem de Marcos.",
+  "itens": [
+    {"pagina": "empresa/trajetoria-do-fundador.html", "verificacao": "overflow", "achado": "menu móvel (nav.nav) estacionado fora da tela à direita: scrollWidth 780 a 390 px"}
+  ]
+}

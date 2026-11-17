@@ -1,0 +1,10 @@
+{
+  "skill": "frontend-design",
+  "versao": "1.1.1",
+  "licenca": "Apache-2.0 (LICENSE.txt)",
+  "repositorio": "https://github.com/anthropics/claude-plugins-official",
+  "caminho": "plugins/frontend-design/skills/frontend-design",
+  "commit": "30202c767cfaf325212b3921ab484f83adaec850",
+  "skill_sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
+  "nota": "Cópia sem alteração, para o Codex descobrir em .agents/skills. Atualizar só pelo canônico (gerar-site)."
+}

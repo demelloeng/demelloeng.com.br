@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "gerado_de": "integrations/agents/capacidades.json do canônico",
+  "catalogo_sha256": "7bc36ce6e5577e425ea0efbdd738a0eff31a2caca727fb00fdb8b9ed489648de",
+  "capacidades": [
+    {
+      "id": "modern-web-guidance",
+      "classe": "B",
+      "dominio": "frontend",
+      "versao_aprovada": "1.0.1",
+      "origem_oficial": {
+        "tipo": "github_release",
+        "repo": "GoogleChrome/modern-web-guidance",
+        "npm": "modern-web-guidance",
+        "tag_aprovada": "v1.0.1",
+        "commit_aprovado": "64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65",
+        "pasta_guias": "skills/modern-web-guidance/guides/"
+      },
+      "skill_version": "2026_11_10-47b4c80e",
+      "claude": {
+        "plugin": "modern-web-guidance",
+        "marketplace": "googlechrome",
+        "marketplace_fonte": "GoogleChrome/modern-web-guidance"
+      },
+      "codex": {
+        "plugin": "modern-web-guidance",
+        "marketplace": "googlechrome"
+      },
+      "evidencia": "retrieve de guias pelo executor (usar mwg) ou npx registrado pela hook pós-uso",
+      "aplicacao": "qualidade técnica, acessibilidade, desempenho, segurança e compatibilidade do que se altera"
+    },
+    {
+      "id": "frontend-design",
+      "classe": "B",
+      "dominio": "frontend",
+      "versao_aprovada": "1.1.1",
+      "origem_oficial": {
+        "tipo": "github_path",
+        "repo": "anthropics/claude-plugins-official",
+        "path": "plugins/frontend-design",
+        "commit_aprovado": "30202c767cfaf325212b3921ab484f83adaec850",
+        "skill_sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3"
+      },
+      "claude": {
+        "plugin": "frontend-design",
+        "marketplace": "claude-plugins-official"
+      },
+      "codex": {
+        "skill_repo": ".agents/skills/frontend-design/SKILL.md"
+      },
+      "evidencia": "usar frontend-design <nível> pelo executor, com o perfil DEMELLO",
+      "aplicacao": "composição, consistência e qualidade visual, preservando o design aprovado (perfil DEMELLO)"
+    },
+    {
+      "id": "cartographer",
+      "classe": "A",
+      "eventos": [
+        "mudanca_estrutural"
+      ],
+      "versao_aprovada": "1.4.0",
+      "origem_oficial": {
+        "tipo": "github_head",
+        "repo": "kingbootoshi/cartographer",
+        "commit_aprovado": "a62d16981b6aa1f5f6ef56701c49b81a16a8e30a"
+      },
+      "claude": {
+        "plugin": "cartographer",
+        "marketplace": "cartographer-marketplace"
+      },
+      "codex": null,
+      "evidencia": "docs/CODEBASE_MAP.md tocado no PR com mudança estrutural; âncora commit: no frontmatter",
+      "aplicacao": "modo de atualização; mapa completo só por ordem de Marcos; no canônico não reescreve CLAUDE.md"
+    },
+    {
+      "id": "claude-code-setup",
+      "classe": "A",
+      "eventos": [
+        "repositorio_novo",
+        "revisao_trimestral"
+      ],
+      "intervalo_dias": 90,
+      "versao_aprovada": "1.0.0",
+      "origem_oficial": {
+        "tipo": "github_path",
+        "repo": "anthropics/claude-plugins-official",
+        "path": "plugins/claude-code-setup",
+        "commit_aprovado": "fc49e6815f5562bbfd692e65ab6a9b4d7edb0a5f"
+      },
+      "claude": {
+        "plugin": "claude-code-setup",
+        "marketplace": "claude-plugins-official"
+      },
+      "codex": null,
+      "evidencia": "registro em integrations/agents/capacidades_execucoes.json",
+      "aplicacao": "somente leitura; recomenda e não implementa; recomendação só se implementa com ordem"
+    }
+  ],
+  "site": {
+    "repositorio": "demelloeng/demelloeng.com.br",
+    "remotos": [
+      "demelloeng/demelloeng.com.br"
+    ],
+    "validade_horas": 12,
+    "mapa": "docs/CODEBASE_MAP.md",
+    "perfil_frontend_design": "docs/politica-web/PERFIL_FRONTEND_DESIGN_DEMELLO.md",
+    "bloqueados": [
+      "orcamento/**",
+      "orcamento-src/pnpm-lock.yaml"
+    ],
+    "isentos": [
+      "**/*.md",
+      "docs/**",
+      "tests/**",
+      "orcamento-src/tests/**",
+      "orcamento-src/scripts/**",
+      "orcamento-src/vite.config.mjs",
+      "scripts/test_*.py",
+      ".github/**",
+      ".githooks/**",
+      ".agents/**",
+      ".claude/**"
+    ],
+    "frontend": [
+      "**/*.html",
+      "**/*.css",
+      "**/*.js",
+      "**/*.mjs",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.glsl",
+      "scripts/layout_*.py",
+      "scripts/gerar-*.py"
+    ],
+    "estrutura_conjunto": [
+      "servicos/**",
+      "assets/js/**",
+      "assets/css/**",
+      "scripts/**",
+      "orcamento-src/src/**",
+      "orcamento-src/tests/**",
+      "tests/**",
+      ".github/**",
+      ".githooks/**",
+      "*/index.html",
+      "*.html"
+    ],
+    "estrutura_conteudo": [
+      ".github/pages/allowlist.txt",
+      ".github/pages/build_artifact.py",
+      ".github/workflows/*.yml",
+      "orcamento-src/package.json",
+      "orcamento-src/vite.config.mjs",
+      "capacidades.site.json",
+      ".githooks/*",
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "estrutura_marcadores": [
+      "**/*.js",
+      "**/*.mjs",
+      "**/*.py",
+      "**/*.html"
+    ],
+    "fora_da_estrutura": [
+      "docs/**",
+      "assets/images/**",
+      "assets/models/**",
+      "**/*.md"
+    ]
+  }
+}

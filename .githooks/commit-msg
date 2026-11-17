@@ -1,0 +1,6 @@
+#!/bin/sh
+# Governança de capacidades: acrescenta o trailer "Capacidades:" (versões e guias consultados, sem caminho
+# local nem dado privado) quando o commit tem arquivo frontend. O gate do PR confere o trailer.
+PY=$(command -v python3 || command -v python || command -v py)
+[ -n "$PY" ] || { echo "commit-msg: Python não encontrado" >&2; exit 1; }
+exec "$PY" scripts/capacidades.py commit-msg "$1"
