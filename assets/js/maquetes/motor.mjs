@@ -1,4 +1,7 @@
-// MOTOR COMUM das maquetes V03 das páginas de serviço (estrutural e hidrossanitária).
+// MOTOR COMUM das maquetes V03 das páginas de serviço (estrutural, hidrossanitária e incêndio).
+// Recursos da maquete de incêndio (V02 e protótipo), ligados SÓ pela configuração: nivelChao, níveis com cota fixa,
+// guias (tubo fino com espessura mínima de tela), lista de componentes, marcadores e ficha completa (Aproximar,
+// Isolar, Limpar). Sem eles na configuração, o comportamento das outras maquetes não muda.
 // Substitui maquete-estrutura-3d.js e maquete-hidro-3d.js (que ficam no site para reversão) sem mudar o modelo:
 // a geometria vem dos GLB publicados, intactos (SHA-256 conferido em orcamento-src/tests/maquetes_v03.test.mjs).
 // Mantém o comportamento aceito da página (caixa viva no topo, tela cheia, Esc e foco) e traz o acabamento da
@@ -140,14 +143,14 @@ export async function maquete(cfg) {
   let caixaTudo = null; let caixaFoco = null; let niveis = []; let tween = null; let tweenCam = null;
   let sombraSuja = true; let quadro = 0; let realce = null; let escolhido = null; let pendente = null;
   let arrastando = false; let agitado = false; let tAcabamento = 0; let jaTocou = false; let visivel = false;
-  let inicioApresentacao = null; let desfazerIsolamento = null;
+  let inicioApresentacao = null; let desfazerIsolamento = null; let isolado = null; let pinos = [];
   const medidas = { quadros: 0, ao: 0, ms: [], carga: 0 };
   $('corte').value = Math.round((1 - fracCorte) * 100);
   $('girar').setAttribute('aria-pressed', String(girar));   // com movimento reduzido, começa desligado
 
   function limpar() {
     for (const o of [raiz, base]) if (o) { scene.remove(o); o.traverse?.((x) => { x.geometry?.dispose(); x.material?.dispose?.(); }); }
-    raiz = base = casca = null; for (const k of Object.keys(G)) delete G[k];
+    raiz = base = casca = null; isolado = null; for (const k of Object.keys(G)) delete G[k];
     $('camadas').innerHTML = ''; destacar(null); escolhido = null; ficha.hidden = true; tip.hidden = true;
   }
 
@@ -177,7 +180,8 @@ export async function maquete(cfg) {
     raiz.rotation.y = THREE.MathUtils.degToRad(cfg.giroCena || 0); raiz.updateMatrixWorld(true);
     let cx = new THREE.Box3().setFromObject(raiz, true); const c = cx.getCenter(new THREE.Vector3());
     // 'zero': o nível 0 do modelo é o do terreno (a fundação fica enterrada); 'min': o chão fica sob o ponto mais baixo
-    raiz.position.set(-c.x, cfg.chao === 'min' ? -cx.min.y : 0, -c.z); raiz.updateMatrixWorld(true);
+    // nivelChao: altura, no modelo, do piso térreo (no GLB de hidrantes, o 0 é o tubo mais fundo, não o chão)
+    raiz.position.set(-c.x, cfg.chao === 'min' ? -cx.min.y : -(cfg.nivelChao || 0), -c.z); raiz.updateMatrixWorld(true);
 
     const caixasTodas = []; const elsTodos = [];
     raiz.traverse((o) => {
@@ -270,9 +274,11 @@ export async function maquete(cfg) {
       }
       fracCorte = melhor; $('corte').value = Math.round((1 - fracCorte) * 100);
     }
+    if (cfg.guias && G[cfg.guias.camada] && meta.eixos_tubos) montarGuia(G[cfg.guias.camada]);
     if (cfg.casca) { try { await montarCasca(cfg.casca); } catch (e) { console.warn('maquete: sem a casca', e); } }
+    if (casca && cfg.casca.enquadrar) { caixaTudo.expandByObject(casca); }   // o quadro mostra o prédio inteiro, não só os tubos
     niveis = calcularNiveis(M);
-    montarBase(); montarCamadas(); montarLegenda(); ajustar(); ajustarSombra(); posicionar(vista, 0);
+    montarBase(); montarCamadas(); montarLegenda(); montarComponentes(); ajustar(); ajustarSombra(); posicionar(vista, 0);
     await renderer.compileAsync(scene, camera).catch(() => {});   // compila em segundo plano: o primeiro quadro não trava a página
     if (modeloAtual !== chave) return;
     p = reduz ? 1 : 0; aplicar(); pronto = true; carregando.hidden = true; jaTocou = false;
@@ -285,7 +291,7 @@ export async function maquete(cfg) {
   async function montarCasca(c) {
     const g2 = await new Promise((ok, no) => new GLTFLoader().load(c.glb, ok, undefined, no));
     const malhas = []; g2.scene.traverse((o) => { if (o.isMesh) malhas.push({ nome: o.name, pos: o.geometry.attributes.position.array, idx: o.geometry.index ? o.geometry.index.array : null }); });
-    const j = juntarCasca(malhas, { opacidades: c.opacidades, padrao: c.opacidade ?? 0.1, cores: c.cores || {} });
+    const j = juntarCasca(malhas, { opacidades: c.opacidades, padrao: c.opacidade ?? 0.1, cores: c.cores || {}, ...(c.fatorAresta ? { fatorAresta: c.fatorAresta } : {}) });
     const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(j.pos, 3)); geo.setAttribute('color', new THREE.BufferAttribute(j.cor, 4)); geo.computeVertexNormals();
     const faces = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, transparent: true, depthWrite: false, roughness: 1, side: THREE.DoubleSide, clippingPlanes: [planoCorte] }));
     const gl = new THREE.BufferGeometry(); gl.setAttribute('position', new THREE.BufferAttribute(j.linhas.pos, 3)); gl.setAttribute('color', new THREE.BufferAttribute(j.linhas.cor, 4));
@@ -296,6 +302,42 @@ export async function maquete(cfg) {
     casca.userData.malhas = malhas; raiz.add(casca); raiz.updateMatrixWorld(true);
   }
 
+  // ---- guias: tubo na bitola real vira fio de 1 pixel na vista geral. Cada tubo ganha um cilindro no eixo da ficha
+  // (meta.eixos_tubos), com espessura mínima de tela; ao aproximar, o guia some e fica só o tubo real. O guia
+  // responde ao clique (abre a ficha do tubo) e não entra na sombra nem na oclusão. ----
+  const eixoY = new THREE.Vector3(0, 1, 0); const m4 = new THREE.Matrix4(); const q4 = new THREE.Quaternion();
+  const w1 = new THREE.Vector3(); const w2 = new THREE.Vector3(); const w3 = new THREE.Vector3();
+  function montarGuia(g) {
+    const porId = new Map(g.elementos.map((el) => [el[5], el]));
+    const eixos = Object.entries(meta.eixos_tubos).filter(([id]) => porId.has(id));
+    if (!eixos.length) return;
+    const mat = new THREE.MeshStandardMaterial({ color: cfg.guias.cor, emissive: cfg.guias.cor, emissiveIntensity: 0.35, roughness: 0.6, clippingPlanes: [g.plano, planoCorte] });
+    const mesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(1, 1, 1, 8, 1, false), mat, eixos.length);
+    mesh.frustumCulled = false; mesh.userData.semAO = true; mesh.castShadow = false; mesh.visible = false;
+    g.malha.add(mesh);
+    g.guia = { mesh, eixos, els: eixos.map(([id]) => porId.get(id)), raio: -1 };
+  }
+  function atualizarGuias() {
+    for (const g of Object.values(G)) {
+      if (!g.guia) continue;
+      const dist = camera.position.distanceTo(controles.target);
+      const porPixel = (2 * dist * Math.tan((camera.fov * Math.PI) / 360)) / (palcoA || 1);
+      const r = (cfg.guias.pxMin * porPixel) / 2;
+      const liga = r > cfg.guias.raioReal * 1.2 && !raioX && !isolado;
+      if (g.guia.mesh.visible !== liga) g.guia.mesh.visible = liga;
+      if (!liga || Math.abs(r - g.guia.raio) < g.guia.raio * 0.04) continue;
+      g.guia.raio = r;
+      g.guia.eixos.forEach(([, [a, b]], i) => {
+        w1.fromArray(a); w2.fromArray(b); w3.subVectors(w2, w1);
+        const len = w3.length() || 1e-4;
+        q4.setFromUnitVectors(eixoY, w3.divideScalar(len));
+        m4.compose(w1.add(w2).multiplyScalar(0.5), q4, w3.set(r, len + r, r));
+        g.guia.mesh.setMatrixAt(i, m4);
+      });
+      g.guia.mesh.instanceMatrix.needsUpdate = true; g.guia.mesh.boundingSphere = null; g.guia.mesh.boundingBox = null;
+    }
+  }
+
   // ---- níveis: só nomes, tirados da própria geometria (topo das lajes ou pisos da casca) ----
   function calcularNiveis(M) {
     const out = [];
@@ -303,10 +345,12 @@ export async function maquete(cfg) {
       const lista = niveisPorTopo(G.lajes.caixas, G.lajes.elementos);
       if (!lista.some((n) => n.pav === 0) && meta.pavimentos[0] && cfg.chao !== 'min') lista.unshift({ pav: 0, y: 0 });
       for (const n of lista) { const { nome, ressalva } = nomePavimento(meta.pavimentos[n.pav]); out.push({ nome: ressalva ? `${nome} · ${ressalva}` : nome, y: n.y + raiz.position.y }); }
-    } else if (Array.isArray(M.niveis) && casca) {
-      const porNome = Object.fromEntries(casca.userData.malhas.map((m) => [m.nome, m]));
-      casca.updateMatrixWorld(true);
+    } else if (Array.isArray(M.niveis)) {
+      const porNome = casca ? Object.fromEntries(casca.userData.malhas.map((m) => [m.nome, m])) : {};
+      casca?.updateMatrixWorld(true);
       for (const n of M.niveis) {
+        // cota fixa do modelo (ex.: IfcBuildingStorey do mesmo IFC), quando o nível não tem face desenhada
+        if (typeof n.y === 'number') { out.push({ nome: n.nome, y: n.y + raiz.position.y }); continue; }
         const m = porNome[n.malha]; if (!m) continue;
         let yLocal = null;
         if (n.base) { for (let i = 1; i < m.pos.length; i += 3) yLocal = Math.min(yLocal ?? Infinity, m.pos[i]); } else { const gs = alturasHorizontais(m.pos, m.idx); if (gs[n.grupo]) yLocal = gs[n.grupo].y; }
@@ -368,7 +412,7 @@ export async function maquete(cfg) {
       const off = e * H * g.cam.desloca; g.malha.position.y = off;
       const s = ease(lim((p - g.cam.janela[0]) / (g.cam.janela[1] - g.cam.janela[0])));
       g.plano.constant = s >= 1 ? 1e5 : raiz.position.y + off + g.ymin + (g.ymax - g.ymin) * s;
-      g.malha.visible = g.ligada && s > 0.002;
+      g.malha.visible = g.ligada && s > 0.002 && (!isolado || isolado.g === g);
       g.mat.transparent = raioX; g.mat.opacity = raioX ? (g.cam.id === 'lajes' ? 0.14 : 0.36) : 1; g.mat.depthWrite = !raioX;
       g.malha.castShadow = !raioX; g.malha.userData.semAO = raioX;
       for (const h of g.aux) h.visible = cortando && !raioX && g.geoTampa.drawRange.count > 0;   // o desenho de cada quadro ainda esconde a tampa enquanto a câmera se move
@@ -455,8 +499,11 @@ export async function maquete(cfg) {
     ptr.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ptr, camera);
     const vivos = Object.values(G).filter((g) => g.malha.visible);
-    const hit = ray.intersectObjects(vivos.map((g) => g.malha), false).find((h) => !cortando || planoCorte.distanceToPoint(h.point) >= 0);
+    const alvos = vivos.flatMap((g) => (g.guia?.mesh.visible ? [g.malha, g.guia.mesh] : [g.malha]));
+    const hit = ray.intersectObjects(alvos, false).find((h) => !cortando || planoCorte.distanceToPoint(h.point) >= 0);
     if (!hit) return null;
+    const dono = vivos.find((x) => x.guia?.mesh === hit.object);   // clique no guia = clique no tubo dele
+    if (dono) return { g: dono, el: dono.guia.els[hit.instanceId], malha: dono.malha };
     const g = vivos.find((x) => x.malha === hit.object); const f = hit.faceIndex;
     let a = 0; let bb = g.elementos.length - 1;
     while (a < bb) { const m = (a + bb + 1) >> 1; if (g.elementos[m][2] <= f) a = m; else bb = m - 1; }
@@ -496,11 +543,100 @@ export async function maquete(cfg) {
     escolher(achar(ev));
   });
   function escolher(h) {
+    if (isolado && (!h || h.el !== isolado.el)) isolar(null);
     escolhido = h; destacar(h);
+    const sel = $('componente'); if (sel && cfg.componentes) sel.value = h ? String(itensComp.findIndex((it) => it.el === h.el)) : '';
     if (!h) { ficha.hidden = true; return; }
     const pv = pav(h.el[1]); ficha.hidden = false;
+    if (cfg.fichaCompleta) {   // como na V02: nome e identidade, pavimento, camada, representação, e as ações
+      ficha.replaceChildren();
+      const t = document.createElement('b'); t.textContent = `${rotulo(h)}${h.el[5] ? ` · ${h.el[5]}` : ''}`; ficha.append(t);
+      for (const txt of [`${pv.nome}${pv.ressalva ? ` · ${pv.ressalva}` : ''}`, h.g.cam.nome, h.el[4] || meta.padrao || '']) {
+        if (!txt) continue; const s = document.createElement('span'); s.textContent = txt; ficha.append(s);
+      }
+      const acoes = document.createElement('div'); acoes.className = 'ficha-acoes';
+      const botao = (txt, fn, extra = {}) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = txt; Object.assign(b.dataset, extra.dataset || {}); if (extra.pressed !== undefined) b.setAttribute('aria-pressed', String(extra.pressed)); b.addEventListener('click', fn); acoes.append(b); return b; };
+      botao('Aproximar', () => focar(h));
+      const bi = botao(isolado ? 'Ver sistema' : 'Isolar', () => { isolar(isolado ? null : h); bi.textContent = isolado ? 'Ver sistema' : 'Isolar'; bi.setAttribute('aria-pressed', String(!!isolado)); }, { pressed: !!isolado, dataset: { acao: 'isolar' } });
+      botao('Limpar', () => { escolher(null); ($('componente') || $('fechar')).focus(); });   // o botão some com a ficha: o foco não cai no fundo
+      ficha.append(acoes);
+      return;
+    }
     ficha.innerHTML = `<b>${rotulo(h)}</b><span>${pv.nome}${pv.ressalva ? ` · ${pv.ressalva}` : ''}</span><span>${h.el[4] || meta.padrao || ''}</span><button type="button" id="soltar">Limpar</button>`;
     $('soltar').addEventListener('click', () => { escolhido = null; destacar(null); ficha.hidden = true; });
+  }
+
+  // ---- isolar: só a peça escolhida fica na cena (as faces dela, na malha da camada) ----
+  function isolar(h) {
+    if (isolado) isolado.malha.geometry.setDrawRange(0, Infinity);
+    isolado = h;
+    if (h) h.malha.geometry.setDrawRange(h.el[2] * 3, h.el[3] * 3);   // malha sem índice: 3 vértices por face
+    aplicar();
+  }
+
+  // ---- aproximar: a câmera vai até a caixa da peça (el[7], no modelo), sem perder a direção em que se olhava ----
+  function focar(h) {
+    if (!h?.el[7]) return;
+    const [lo, hi] = h.el[7]; h.malha.updateMatrixWorld(true);
+    const a = w1.fromArray(lo).applyMatrix4(h.malha.matrixWorld).clone(); const b = w2.fromArray(hi).applyMatrix4(h.malha.matrixWorld).clone();
+    const centro = a.clone().add(b).multiplyScalar(0.5); const tam = Math.max(a.distanceTo(b), 0.15);
+    const dist = Math.max(tam * 1.6, 0.9) / Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);   // a peça ocupa cerca de 1/3 da altura do quadro
+    const dir = camera.position.clone().sub(controles.target).normalize(); dir.y = Math.max(dir.y, 0.35); dir.normalize();
+    girar = false; controles.autoRotate = false; clearTimeout(ocioso); $('girar').setAttribute('aria-pressed', 'false');
+    controles.minDistance = Math.min(controles.minDistance, dist * 0.3);
+    const fim = centro.clone().addScaledVector(dir, dist); const ini = camera.position.clone(); const alvoIni = controles.target.clone();
+    if (reduz) { camera.position.copy(fim); controles.target.copy(centro); controles.update(); pedir(); return; }
+    const t0 = performance.now();
+    tweenCam = (agora) => { const t = lim((agora - t0) / 700); const e = ease(t); camera.position.lerpVectors(ini, fim, e); controles.target.lerpVectors(alvoIni, centro, e); camera.lookAt(controles.target); if (t >= 1) tweenCam = null; };
+    pedir();
+  }
+
+  // ---- lista de componentes (select nativo, agrupado por camada) e marcadores numerados, como na V02 ----
+  let itensComp = [];
+  function montarComponentes() {
+    const sel = $('componente'); const mk = $('marcadores');
+    if (mk) mk.replaceChildren(); pinos = [];
+    if (!sel || !cfg.componentes) return;
+    sel.replaceChildren(new Option('Escolha um componente…', '')); itensComp = [];
+    const ordem = cfg.ordemComponentes || CAM.map((k) => k.id);
+    for (const id of ordem) {
+      const g = G[id]; if (!g) continue;
+      const grupo = document.createElement('optgroup'); grupo.label = g.cam.nome;
+      for (const el of g.elementos) {
+        if (!cfg.componentes(el, g.cam)) continue;
+        grupo.append(new Option(`${el[0]} · ${el[5]} · ${pav(el[1]).nome}`, String(itensComp.length)));
+        itensComp.push({ g, el });
+        if (mk && cfg.marcadores?.(el)) {
+          const b = document.createElement('button'); b.type = 'button'; b.className = 'pino';
+          b.textContent = cfg.marcadores(el) === true ? String(pinos.filter((x) => x.numerado).length + 1) : cfg.marcadores(el);
+          b.setAttribute('aria-label', `${el[0]} ${el[5]}`); b.hidden = true;
+          const h = { g, el, malha: g.malha };
+          b.addEventListener('click', (e) => { e.stopPropagation(); escolher(h); focar(h); });
+          mk.append(b); pinos.push({ b, g, el, numerado: cfg.marcadores(el) === true, ant: '' });
+        }
+      }
+      if (grupo.children.length) sel.append(grupo);
+    }
+  }
+  $('componente')?.addEventListener('change', (e) => {
+    const it = itensComp[+e.target.value]; if (e.target.value === '' || !it) { escolher(null); return; }
+    if (!it.g.ligada) { it.g.ligada = true; [...$('camadas').children].find((b) => b.textContent === it.g.cam.nome)?.setAttribute('aria-pressed', 'true'); }
+    tween = null; p = 1; aplicar();
+    const h = { g: it.g, el: it.el, malha: it.g.malha }; escolher(h); focar(h);
+  });
+  $('visao-geral')?.addEventListener('click', () => { escolher(null); posicionar(vista === 'corte' ? 'corte' : '3d'); });
+  const vm = new THREE.Vector3(); const ocupados = [];
+  function atualizarMarcadores() {   // não lê layout: posição em % do palco; dois marcadores a menos de 48 px, fica o primeiro
+    ocupados.length = 0;
+    for (const pn of pinos) {
+      vm.fromArray(pn.el[6]).applyMatrix4(pn.g.malha.matrixWorld); const acima = vm.y > pn.g.plano.constant; vm.project(camera);
+      const px = (vm.x + 1) * palcoL / 2; const py = (1 - vm.y) * palcoA / 2;
+      let esconde = !aberta || !pn.g.malha.visible || !!escolhido || acima || vm.z > 1 || vm.z < -1 || Math.abs(vm.x) > 0.95 || Math.abs(vm.y) > 0.85 || (cortando && planoCorte.distanceToPoint(w3.fromArray(pn.el[6]).applyMatrix4(pn.g.malha.matrixWorld)) < 0);
+      if (!esconde && ocupados.some(([x, y]) => Math.abs(x - px) < 48 && Math.abs(y - py) < 48)) esconde = true;
+      if (!esconde) ocupados.push([px, py]);
+      if (pn.b.hidden !== esconde) pn.b.hidden = esconde;
+      const tr = `translate(calc(${Math.round(px)}px - 50%), calc(${Math.round(py)}px - 50%))`; if (!esconde && pn.ant !== tr) { pn.ant = tr; pn.b.style.transform = tr; }
+    }
   }
 
   // ---- abrir e fechar (a caixa cresce até a tela inteira), como na página publicada ----
@@ -543,7 +679,10 @@ export async function maquete(cfg) {
   addEventListener('keydown', (e) => {
     if (!aberta) return;
     const campo = e.target instanceof HTMLInputElement;
-    if (e.key === 'Escape') { if (escolhido) { escolher(null); } else fechar(); return; }
+    if (e.key === 'Escape') {   // primeiro limpa a peça escolhida; se o foco estava na ficha (que some), ele vai para a lista
+      if (escolhido) { const naFicha = ficha.contains(document.activeElement); escolher(null); if (naFicha) ($('componente') || $('fechar')).focus(); } else fechar();
+      return;
+    }
     if (campo) return;
     if (e.key === 'ArrowLeft') { girarAz(-10); e.preventDefault(); }
     if (e.key === 'ArrowRight') { girarAz(10); e.preventDefault(); }
@@ -636,9 +775,10 @@ export async function maquete(cfg) {
     if (!raiz || (!visivel && !aberta) || document.hidden) return;
     if (tween) tween(agora); if (tweenCam) tweenCam(agora);
     passar();
+    if (cfg.guias) atualizarGuias();
     if (!aberta) controles.autoRotate = giroFechado(inicioApresentacao == null ? null : agora - inicioApresentacao, { reduz, girar });
     const mexeu = controles.update();
-    const dc = camera.position.distanceTo(controles.target); camera.near = Math.max(0.3, dc * 0.02); camera.far = dc * 4 + 400; camera.updateProjectionMatrix();
+    const dc = camera.position.distanceTo(controles.target); camera.near = Math.max(cfg.pertoMin ?? 0.3, dc * 0.02); camera.far = dc * 4 + 400; camera.updateProjectionMatrix();
     if (sombraSuja) { renderer.shadowMap.needsUpdate = true; sombraSuja = false; }
     renderer.info.reset();
     const t0 = performance.now();
@@ -646,7 +786,8 @@ export async function maquete(cfg) {
     const movendo = !!(tween || tweenCam || controles.autoRotate || mexeu || arrastando || agitado);
     medidas.motivo = movendo ? [tween && 'montagem', tweenCam && 'camera', controles.autoRotate && 'girar', mexeu && 'controles', arrastando && 'arrasto', agitado && 'cena'].filter(Boolean).join(',') : '';
     agitado = false;
-    const podeAO = aberta && composer && p >= 1 && !raioX;
+    // com peça escolhida, sem o quadro de oclusão: nele o realce (fora da oclusão) ficava encoberto em parte (medido em 17/11/2026)
+    const podeAO = aberta && composer && p >= 1 && !raioX && !escolhido;
     // corte: a tampa (duas passadas de stencil por camada) some enquanto a câmera se move e volta quando ela para
     const camMovendo = !!(tweenCam || controles.autoRotate || mexeu || arrastando);
     const comTampa = cortando && !raioX && !camMovendo;
@@ -654,7 +795,7 @@ export async function maquete(cfg) {
     clearTimeout(tAcabamento);
     if (podeAO && !movendo) { composer.render(); medidas.ao += 1; } else { renderer.render(scene, camera); if (podeAO || (cortando && camMovendo)) tAcabamento = setTimeout(pedir, 160); }
     medidas.quadros += 1; medidas.ms.push(performance.now() - t0); if (medidas.ms.length > 120) medidas.ms.shift();
-    atualizarSobreposicoes();
+    atualizarSobreposicoes(); if (pinos.length) atualizarMarcadores();
     if (tween || tweenCam || controles.autoRotate || mexeu) pedir();
   }
 

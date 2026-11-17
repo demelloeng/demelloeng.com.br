@@ -1,4 +1,4 @@
-// Maquetes V03 das páginas de serviço (estrutural e hidrossanitária): integridade dos modelos, dados derivados,
+// Maquetes V03 das páginas de serviço (estrutural, hidrossanitária e incêndio): integridade dos modelos, dados derivados,
 // paridade do enquadramento com a calculadora R4 e regras de publicação (allowlist, ?v, importmap local).
 // Nada aqui abre navegador; a validação visual e de desempenho é feita à parte, com roteiro próprio.
 import test from 'node:test';
@@ -24,12 +24,15 @@ const MODELOS = {
   'assets/models/hidro-casa.glb': 'c850b21c007c7c1e27443d5bac55a304be46175329e620393e51a1ab7a715a3d',
   'assets/models/hidro-casa.json': '9296b457ee83778009c06685a1347866333ed790f132d09982a176606f14a8dc',
   'assets/models/casa-exemplo.glb': 'b6f3dba49ab33e64d3235bb6be10a7023f3495001da8a14e9c02321c0ac030d0',
+  'assets/models/hidrantes-luiz-carlos-v02.glb': '350b52603363964386270bba4b1fbdda04f9cd26ab4483559f6b12868021c04a',
+  'assets/models/hidrantes-luiz-carlos-v02.json': '2e4e019029d304d122a125c6919ea0a9061e30a58890ba4854d03dff8a8feae8',
 };
 
 // Páginas com maquete V03: página, capa e módulo de configuração em assets/js/maquetes/.
 const PAGINAS_V03 = [
   { pagina: 'servicos/projeto-estrutural/index.html', capa: 'maquete-estrutura-capa.webp', config: 'estrutural' },
   { pagina: 'servicos/projeto-hidrossanitario/index.html', capa: 'maquete-hidro-capa.webp', config: 'hidro' },
+  { pagina: 'servicos/projeto-prevencao-incendio/index.html', capa: 'maquete-incendio-capa.webp', config: 'incendio' },
 ];
 
 // Leitor mínimo de GLB (só o necessário: POSITION e índices de cada nó).
@@ -153,7 +156,7 @@ test('páginas: maquetes V03 com ?v de cada arquivo = início do SHA-256 do pró
 test('publicação: tudo o que as maquetes V03 carregam está na allowlist', async () => {
   const allow = new Set((await texto('.github/pages/allowlist.txt')).split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#')));
   const precisa = ['assets/js/maquetes/motor.mjs', 'assets/js/maquetes/enquadrar.mjs', 'assets/js/maquetes/dados.mjs', ...PAGINAS_V03.map((c) => `assets/js/maquetes/${c.config}.mjs`), 'assets/css/maquete-v03.css',
-    'assets/models/casa-exemplo.glb', ...Object.keys(MODELOS)];
+    'assets/models/casa-exemplo.glb', 'assets/models/hidrantes-luiz-carlos-casca.glb', 'assets/css/maquete-incendio-v03.css', ...Object.keys(MODELOS)];
   for (const p of precisa) assert.ok(allow.has(p), p);
   // o motor carrega o Three só depois, por import() dinâmico, e só do próprio site
   const motor = await texto('assets/js/maquetes/motor.mjs');
@@ -276,4 +279,69 @@ test('motor: usa as regras de acessibilidade nos pontos certos', async () => {
   assert.match(motor, /semMaqueteAtalhos\(atalhos, \$\('sobre'\)\)/);
   const css = await texto('assets/css/maquete-v03.css');
   assert.match(css, /\.sobre\.sobre-pagina\{display:block/);
+});
+
+// ---- incêndio V03: casca do Colégio Luiz Carlos (planta 1:75 do projeto hidrossanitário, registrada no IFC) ----
+const TERREO = 2.25;   // Térreo do IFC no sistema do GLB de hidrantes (o 0 do GLB é o tubo mais fundo)
+
+// distância, em planta (x, z), de um ponto ao conjunto de triângulos do topo das paredes
+function distanciaPlanta(tris, x, z) {
+  let d = Infinity;
+  const seg = (ax, az, bx, bz) => { const vx = bx - ax; const vz = bz - az; const t = Math.max(0, Math.min(1, ((x - ax) * vx + (z - az) * vz) / (vx * vx + vz * vz || 1))); return Math.hypot(ax + t * vx - x, az + t * vz - z); };
+  for (const [a, b, c] of tris) {
+    const s1 = (b[0] - a[0]) * (z - a[1]) - (b[1] - a[1]) * (x - a[0]); const s2 = (c[0] - b[0]) * (z - b[1]) - (c[1] - b[1]) * (x - b[0]); const s3 = (a[0] - c[0]) * (z - c[1]) - (a[1] - c[1]) * (x - c[0]);
+    if ((s1 >= 0 && s2 >= 0 && s3 >= 0) || (s1 <= 0 && s2 <= 0 && s3 <= 0)) return 0;
+    d = Math.min(d, seg(...a, ...b), seg(...b, ...c), seg(...c, ...a));
+  }
+  return d;
+}
+
+test('incêndio: casca nas cotas do IFC (Térreo 0,00 e calha 5,53) e com os abrigos de hidrante encostados nas paredes', async () => {
+  const { malhas, tamanho } = await glb('assets/models/hidrantes-luiz-carlos-casca.glb');
+  assert.ok(tamanho <= 400 * 1024, `${tamanho} bytes`);
+  assert.deepEqual(Object.keys(malhas).sort(), ['cobertura', 'contorno', 'paredes']);
+  for (const m of Object.values(malhas)) assert.equal(m.trs, false, 'sem transformação de nó: a casca já está no sistema do GLB de hidrantes');
+  const ys = (m) => { let lo = Infinity; let hi = -Infinity; for (let i = 1; i < m.pos.length; i += 3) { lo = Math.min(lo, m.pos[i]); hi = Math.max(hi, m.pos[i]); } return [lo, hi]; };
+  const [p0, p1] = ys(malhas.paredes); assert.ok(Math.abs(p0 - TERREO) < 1e-3 && Math.abs(p1 - (TERREO + 5.53)) < 1e-3, `${p0} ${p1}`);
+  const [c0, c1] = ys(malhas.cobertura); assert.ok(Math.abs(c0 - (TERREO + 5.53)) < 1e-3 && Math.abs(c1 - c0) < 1e-6);
+  const [k0, k1] = ys(malhas.contorno); assert.ok(Math.abs(k0 - TERREO) < 1e-3 && k1 - k0 < 0.1, 'muro, meio-fio e calçada ficam no chão: altura não documentada');
+  // registro: os abrigos que caem no térreo desenhado encostam nas paredes lidas da planta
+  const P = malhas.paredes.pos; const topo = [];
+  for (let i = 0; i < P.length; i += 9) if ([1, 4, 7].every((k) => Math.abs(P[i + k] - p1) < 1e-4)) topo.push([[P[i], P[i + 2]], [P[i + 3], P[i + 5]], [P[i + 6], P[i + 8]]]);
+  const meta = JSON.parse(await texto('assets/models/hidrantes-luiz-carlos-v02.json'));
+  const abrigo = Object.fromEntries(meta.grupos.hidrantes.map((e) => [e[5], e[6]]));
+  for (const [id, lim] of [['H050', 0.1], ['H051', 0.1], ['H049', 0.5]]) {
+    const d = distanciaPlanta(topo, abrigo[id][0], abrigo[id][2]);
+    assert.ok(d <= lim, `${id}: ${d.toFixed(3)} m da parede`);
+  }
+});
+
+test('incêndio: configuração com as cotas do IFC, os textos da V02 e os 171 componentes na lista', async () => {
+  const cfg = await texto('assets/js/maquetes/incendio.mjs');
+  assert.match(cfg, /const TERREO = 2\.25;/);
+  assert.match(cfg, /nivelChao: TERREO/);
+  for (const [nome, cota] of [['Térreo', '0.0'], ['Pavimento 1', '5.53'], ['Cobertura', '8.83']]) assert.ok(cfg.includes(`nome: '${nome}', y: TERREO + ${cota} }`), nome);
+  assert.match(cfg, /sub: '171 componentes · materiais e equipamentos refinados'/);
+  assert.match(cfg, /dica: 'Colégio Luiz Carlos · Selecione uma peça para ver sua identificação\.'/);
+  assert.match(cfg, /componentes: \(\) => true/);
+  const meta = JSON.parse(await texto('assets/models/hidrantes-luiz-carlos-v02.json'));
+  assert.equal(Object.values(meta.grupos).reduce((n, g) => n + g.length, 0), 171);
+  const html = await texto('servicos/projeto-prevencao-incendio/index.html');
+  assert.match(html, /<summary>Materiais e representação<\/summary>/);
+  assert.match(html, /Bombas, abrigos e outros equipamentos usam complementos ilustrativos genéricos, identificados por peça\./);
+  assert.match(html, /<div class="ficha" id="ficha" role="status" aria-live="polite" hidden><\/div>/);
+  assert.doesNotMatch(html, /hidrantes-luiz-carlos-ativar\.js/, 'a V02 sai da página (os arquivos ficam no site para reversão)');
+});
+
+test('motor: recursos da maquete de incêndio só pela configuração; com peça escolhida, sem o quadro de oclusão', async () => {
+  const motor = await texto('assets/js/maquetes/motor.mjs');
+  assert.match(motor, /-\(cfg\.nivelChao \|\| 0\)/);
+  assert.match(motor, /if \(cfg\.guias && G\[cfg\.guias\.camada\] && meta\.eixos_tubos\) montarGuia/);
+  assert.match(motor, /if \(!sel \|\| !cfg\.componentes\) return;/);
+  assert.match(motor, /if \(cfg\.fichaCompleta\)/);
+  assert.match(motor, /const podeAO = aberta && composer && p >= 1 && !raioX && !escolhido;/);
+  for (const f of ['estrutural', 'hidro']) {
+    const c = await texto(`assets/js/maquetes/${f}.mjs`);
+    assert.doesNotMatch(c, /guias:|componentes:|marcadores:|fichaCompleta|nivelChao/, `${f}: comportamento inalterado`);
+  }
 });

@@ -41,9 +41,14 @@ test('Hidrantes: arquivos aceitos preservados, 171 peças e indicação ilustrat
  assert.equal(createHash('sha256').update(bytes).digest('hex'),'2e4e019029d304d122a125c6919ea0a9061e30a58890ba4854d03dff8a8feae8');
  const d=JSON.parse(bytes);assert.equal(Object.values(d.grupos).flat().length,171);assert.ok(d.representacoes);
 });
-test('Hidrantes: ativação explícita e pôster sem dependência do 3D',async()=>{
- const h=await read(`servicos/${fire}/index.html`);assert.match(h,/data-poster/);assert.match(h,/Explorar maquete 3D/);assert.match(h,/<noscript>/);
- assert.doesNotMatch(h,/<script[^>]+src="[^"]*hidrantes-luiz-carlos-v02.js/);
- const js=await read('assets/js/hidrantes-luiz-carlos-ativar.js');assert.ok(js.indexOf("addEventListener('click'")<js.indexOf("await import("));
- assert.ok(h.includes('Equipamentos')||h.includes('equipamentos ilustrativos'));
+test('Hidrantes V03: motor comum das maquetes, capa no lugar do 3D e indicação ilustrativa preservada',async()=>{
+ // A V03 (ordem de 17/11/2026) segue o padrão das maquetes V03: capa da própria maquete e o 3D só quando a caixa chega
+ // perto da tela (o motor importa o Three por import() dinâmico). A V02 (pôster e clique) fica no site para reversão.
+ const h=await read(`servicos/${fire}/index.html`);
+ assert.match(h,/<script type="module" src="\.\.\/\.\.\/assets\/js\/maquetes\/incendio\.mjs\?v=\d+"><\/script>/);
+ assert.match(h,/<img class="capa" src="\.\.\/\.\.\/assets\/images\/maquete-incendio-capa\.webp\?v=[0-9a-f]{7}"/);
+ assert.doesNotMatch(h,/hidrantes-luiz-carlos-(v02|ativar)\.js["?]/);
+ assert.ok(h.includes('equipamentos usam complementos ilustrativos genéricos'));
+ const motor=await read('assets/js/maquetes/motor.mjs');assert.match(motor,/await import\('three'\)/);
+ for(const f of ['hidrantes-luiz-carlos-v02.js','hidrantes-luiz-carlos-ativar.js'])await read(`assets/js/${f}`);   // reversão disponível
 });

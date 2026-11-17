@@ -201,14 +201,15 @@ def gerar(slug):
     if rico and copia.get('perfil') in ('pscip-glp', 'gas-glp'):
         import layout_rico as L
         incendio = copia['perfil'] == 'pscip-glp'
-        markup = (DOCS / 'maquete-hidrantes-markup.html').read_text(encoding='utf-8') if incendio else ''
+        # Incêndio V03 (17/11/2026): motor comum em assets/js/maquetes/ com a casca do colégio; o markup V02 fica para reversão.
+        markup = (DOCS / 'maquete-incendio-v03-markup.html').read_text(encoding='utf-8') if incendio else ''
         principal = L.frente_incendio(copia, d, markup, bloco_html) if incendio else L.frente_gas(copia, d, bloco_html)
         extra_head = '<link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">\n<link rel="stylesheet" href="../../assets/css/servico-pscip-glp-v02.css?v=1">'
         extra_body = ''
         if incendio:
             extra_head += '\n<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">'
-            extra_head += '\n<link rel="stylesheet" href="../../assets/css/hidrantes-luiz-carlos-v02.css?v=1">\n<script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>'
-            extra_body = '<script type="module" src="../../assets/js/hidrantes-luiz-carlos-ativar.js?v=1"></script>'
+            extra_head += '\n<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n<link rel="stylesheet" href="../../assets/css/maquete-incendio-v03.css?v=1">\n<script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>'
+            extra_body = '<script type="module" src="../../assets/js/maquetes/incendio.mjs?v=1"></script>'
         classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-' + copia['perfil']
         # Mantém os nós existentes e seus URLs; atualiza apenas rótulos editoriais.
         graph = json.loads(re.search(r'<script[^>]*>(.*?)</script>', jsonld, re.S).group(1))
