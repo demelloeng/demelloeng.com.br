@@ -260,7 +260,10 @@ def gerar(slug):
         infra_pg = copia.get('perfil') == 'infra'
         # Maquetes V03 (estrutural, hidrossanitária e, desde 17/11/2026, terraplanagem): motor comum em assets/js/maquetes/;
         # os markups antigos ficam para reversão (o da terraplanagem V5 é maquete-terraplanagem-markup.html).
-        maquete_html = (DOCS / ('maquete-terraplanagem-v03-markup.html' if infra_pg else 'maquete-hidro-v03-markup.html' if hidro_pg else 'maquete-estrutura-v03-markup.html' if estrutura_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
+        # Arquitetura V03 (17/11/2026): só a maquete muda (markup, CSS e script); os blocos da página continuam os mesmos.
+        # O markup e o visualizador antigos (maquete-markup.html e maquete-3d.js) ficam para reversão.
+        arq_pg = slug == 'projeto-arquitetura'
+        maquete_html = (DOCS / ('maquete-terraplanagem-v03-markup.html' if infra_pg else 'maquete-hidro-v03-markup.html' if hidro_pg else 'maquete-estrutura-v03-markup.html' if estrutura_pg else 'maquete-arquitetura-v03-markup.html' if arq_pg else 'maquete-markup.html')).read_text(encoding='utf-8')
         meio = L.estrutura(nv['estrutura']) if estrutura_pg else L.prefeitura(nv['prefeitura'])
         prova_html = (L.prova_volume(nv.get('prova') or ant['Prova técnica']) if infra_pg else
                       L.prova(ant['Prova técnica'], 'de experiência técnica ' + ('hidrossanitária' if hidro_pg else 'estrutural') + ' documentada') if estrutura_pg else L.prova(ant['Prova técnica']))
@@ -279,6 +282,12 @@ def gerar(slug):
                           + ('<link rel="stylesheet" href="../../assets/css/maquete-terraplanagem-v03.css?v=1">\n' if infra_pg else '') + importmap)
             extra_body = '<script type="module" src="../../assets/js/' + ('maquetes/terraplanagem.mjs?v=1' if infra_pg else 'maquetes/hidro.mjs?v=3' if hidro_pg else 'maquetes/estrutural.mjs?v=3') + '"></script>'
             classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 ' + ('servico-rico-infra' if infra_pg else 'servico-rico-hidro' if hidro_pg else 'servico-rico-estrutural')
+        elif arq_pg:
+            extra_head = (base_css + '<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">\n'
+                          '<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n'
+                          '<link rel="stylesheet" href="../../assets/css/maquete-arquitetura-v03.css?v=1">\n' + importmap)
+            extra_body = '<script type="module" src="../../assets/js/maquetes/arquitetura.mjs?v=1"></script>'
+            classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02'
         else:
             extra_head = base_css + importmap
             extra_body = '<script type="module" src="../../assets/js/maquete-3d.js"></script>'

@@ -1,8 +1,8 @@
-// Maquetes V03 (motor comum; a terraplanagem desde 17/11/2026): abrir por teclado, foco preso, Escape fecha e o foco volta; sem WebGL, sem botão morto.
+// Maquetes V03 (motor comum; a terraplanagem e a arquitetura desde 17/11/2026): abrir por teclado, foco preso, Escape fecha e o foco volta; sem WebGL, sem botão morto.
 import { test, expect } from '@playwright/test';
 import { bloquearExterno, errosDeConsole } from './comum.mjs';
 
-const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html', 'servicos/projeto-prevencao-incendio/index.html', 'servicos/projeto-terraplenagem/index.html'];
+const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html', 'servicos/projeto-prevencao-incendio/index.html', 'servicos/projeto-terraplenagem/index.html', 'servicos/projeto-arquitetura/index.html'];
 
 test.use({ launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] } });
 
@@ -136,6 +136,48 @@ test.describe('terraplanagem V03: andamento, seção e curvas', () => {
     await expect(page.locator('#fase')).toHaveText('Terreno terraplanado');
     await expect(page.locator('#construir')).toHaveValue('100');
     await expect(page.locator('#girar')).toHaveAttribute('aria-pressed', 'false');
+    expect(erros).toEqual([]);
+  });
+});
+
+// Arquitetura V03: os dois estilos (Projeto e Realista), a planta cortada a 1,50 m, a Fachada, o solo e o Escape.
+test.describe('arquitetura V03: estilos, planta cortada e fachada', () => {
+  const PAGINA = '/servicos/projeto-arquitetura/index.html';
+  test('estilo, vistas e camadas por teclado e clique', async ({ page }) => {
+    test.setTimeout(150_000);
+    await bloquearExterno(page);
+    const erros = errosDeConsole(page);
+    await page.goto(PAGINA);
+    const caixa = page.locator('#caixa');
+    await caixa.scrollIntoViewIfNeeded();
+    await expect(async () => {
+      await caixa.focus();
+      await page.keyboard.press('Enter');
+      await expect(caixa).toHaveAttribute('role', 'dialog', { timeout: 1_500 });
+    }).toPass({ timeout: 120_000 });
+    const real = page.locator('[data-estilo="realista"]'); const proj = page.locator('[data-estilo="projeto"]');
+    await real.click();
+    await expect(real).toHaveAttribute('aria-checked', 'true');
+    await expect(proj).toHaveAttribute('aria-checked', 'false');
+    await expect(caixa).toHaveClass(/realista/);
+    await proj.click();
+    await expect(caixa).not.toHaveClass(/realista/);
+    const nota = page.locator('#nota-vista');
+    await page.locator('[data-vista="planta"]').click();
+    await expect(nota).toBeVisible();
+    await expect(nota).toHaveText('Planta cortada a 1,50 m do piso térreo.');
+    await page.locator('[data-vista="frente"]').click();
+    await expect(page.locator('[data-vista="frente"]')).toHaveText('Fachada');
+    await expect(page.locator('[data-vista="frente"]')).toHaveAttribute('aria-checked', 'true');
+    await expect(nota).toBeHidden();
+    // um botão por camada, sem o de vidros (ele acompanha as janelas), e o solo no fim
+    await expect(page.locator('#camadas .chip')).toHaveText(['Piscina', 'Muros', 'Deck', 'Gradil', 'Pisos', 'Pilares', 'Paredes', 'Portas', 'Janelas', 'Cobertura', 'Solo']);
+    const solo = page.locator('#camadas .chip', { hasText: 'Solo' });
+    await solo.click();
+    await expect(solo).toHaveAttribute('aria-pressed', 'false');
+    await page.keyboard.press('Escape');
+    await expect(caixa).toHaveAttribute('role', 'button', { timeout: 5_000 });
+    await expect(caixa).toBeFocused();
     expect(erros).toEqual([]);
   });
 });

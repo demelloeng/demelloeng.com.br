@@ -19,6 +19,9 @@
 <link rel="stylesheet" href="../../assets/css/servico-pagina-v02.css?v=6">
 <link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">
 <link rel="stylesheet" href="../../assets/css/servico-rico-v02.css?v=6">
+<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">
+<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">
+<link rel="stylesheet" href="../../assets/css/maquete-arquitetura-v03.css?v=1">
 <script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Service","name":"Projeto de arquitetura","description":"Projeto arquitetônico e planta de casa em 3D, com projeto aprovado na prefeitura. Estrutura e instalações juntas. Veja a estimativa antes do contato.","url":"https://demelloeng.com.br/servicos/projeto-arquitetura/","provider":{"@id":"https://demelloeng.com.br/#organization"},"areaServed":{"@type":"Country","name":"Brasil"},"inLanguage":"pt-BR"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://demelloeng.com.br/"},{"@type":"ListItem","position":2,"name":"Serviços","item":"https://demelloeng.com.br/servicos/"},{"@type":"ListItem","position":3,"name":"Projeto de arquitetura","item":"https://demelloeng.com.br/servicos/projeto-arquitetura/"}]}]}</script>
 </head>
@@ -28,20 +31,29 @@
 <section class="rico-hero-fundo" data-block="service-hero"><div class="rico-hero wrap">
 <div class="rico-titulo"><p class="crumb"><a href="../">Serviços</a> / Projeto de arquitetura</p><h1>Projeto de casa em 3D: você vê a casa antes de construir</h1></div>
 <div class="rico-caixa"><div class="vaga">
-    <div class="caixa" id="caixa" data-glb="../../assets/models/casa-exemplo.glb" role="button" tabindex="0" aria-label="Abrir a maquete 3D da casa em tela cheia">
+    <div class="caixa estrutura mq3 mq3-arq" id="caixa" data-glb="../../assets/models/casa-exemplo.glb?v=b6f3dba" data-meta="../../assets/models/casa-exemplo-v03.json?v=9d69ab6" role="button" tabindex="0">
+      <img class="capa" src="../../assets/images/maquete-arquitetura-capa.webp?v=54fcb5f" alt="" width="770" height="481" decoding="async">
       <div class="palco" id="palco" aria-hidden="true"></div>
-      <div class="carregando" id="carregando">Carregando a maquete…</div>
+      <div class="carregando" id="carregando">Carregando a casa…</div>
       <div class="rotulo" id="rotulo"><b>Maquete 3D</b><span>Casa de exemplo, modelada no Revit</span></div>
-      <div class="explorar" id="explorar" aria-hidden="true">Explorar
-        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
+      <div class="explorar" id="explorar">Explorar
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></div>
+      <div class="elemento" id="elemento" hidden></div>
+      <div class="ficha" id="ficha" role="status" aria-live="polite" hidden></div>
+      <div class="niveis" id="niveis" aria-hidden="true" hidden></div>
 
       <div class="ui-aberta" id="ui" hidden>
         <div class="topo">
-          <div><h2>Maquete 3D</h2><p>Casa de exemplo, modelada no Revit</p></div>
+          <div><h2>Maquete 3D</h2><p>Casa de exemplo, modelada no Revit. Passe o mouse ou toque nos elementos.</p></div>
           <button class="fechar" id="fechar" type="button" aria-label="Fechar a maquete"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
         </div>
+        <div class="zoom" role="group" aria-label="Aproximação"><button type="button" id="mais-zoom" aria-label="Aproximar">+</button><button type="button" id="menos-zoom" aria-label="Afastar">−</button></div>
+        <p class="escala-mq" id="escala" hidden><i></i><span></span></p>
         <div class="baixo">
-          <p class="dica">Arraste para girar. Role ou pince para aproximar. Botão direito para mover.</p>
+          <details class="leg" id="leg-det"><summary>Cores e representação</summary><ul class="legenda" id="legenda" aria-label="Cores das camadas"></ul><p class="nota-ilustracao">Casa de exemplo. No estilo Realista, as cores são aproximações visuais dos materiais, não especificação. O solo sai da base dos muros, em degraus: o modelo não tem terreno.</p></details>
+          <p class="dica">Arraste para girar. Role ou pince para aproximar. Clique em um elemento para ver a ficha dele.</p>
+          <p class="nota-vista" id="nota-vista" hidden></p>
+          <div class="linha-corte" id="faixa-corte" hidden><label for="corte">Posição do corte</label><input id="corte" type="range" min="5" max="95" value="50"></div>
           <div class="painel" role="group" aria-label="Controles da maquete">
             <div class="grupo"><span id="rot-estilo">Estilo</span>
               <div class="seg" role="radiogroup" aria-labelledby="rot-estilo">
@@ -50,14 +62,21 @@
               </div></div>
             <div class="grupo"><span id="rot-vista">Vista</span>
               <div class="seg" role="radiogroup" aria-labelledby="rot-vista">
-                <button type="button" role="radio" aria-checked="true" data-vista="3d">3D</button>
+                <button type="button" role="radio" aria-checked="true" data-vista="3d">Conjunto</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="corte">Corte</button>
                 <button type="button" role="radio" aria-checked="false" data-vista="planta">Planta</button>
-                <button type="button" role="radio" aria-checked="false" data-vista="fachada">Fachada</button>
+                <button type="button" role="radio" aria-checked="false" data-vista="frente">Fachada</button>
               </div></div>
-            <div class="grupo"><button class="chip" id="raiox" type="button" aria-pressed="false">Raio-X</button>
-              <button class="chip" id="girar" type="button" aria-pressed="true">Girar</button></div>
-            <div class="grupo"><label for="corte"><span>Corte</span></label><input id="corte" type="range" min="0" max="100" value="100" aria-label="Altura do corte horizontal"></div>
+            <div class="grupo"><button class="chip principal" id="por-dentro" type="button" aria-pressed="false">Ver por dentro</button></div>
             <div class="camadas" id="camadas" role="group" aria-label="Camadas visíveis"></div>
+            <details class="mais" id="mais"><summary>Mais controles</summary>
+              <div class="mais-corpo">
+                <div class="grupo"><button class="chip" id="raiox" type="button" aria-pressed="false">Raio-X</button>
+                  <button class="chip" id="girar" type="button" aria-pressed="true">Girar</button>
+                  <button class="chip" id="montar" type="button">Montar de novo</button></div>
+                <div class="grupo"><label for="construir"><span>Construir <b id="pct">100%</b></span></label><input id="construir" type="range" min="0" max="100" value="100" aria-label="Quanto da casa está montada"></div>
+                <div class="grupo"><label for="explodir"><span>Separar camadas</span></label><input id="explodir" type="range" min="0" max="100" value="0" aria-label="Separar as camadas da casa"></div>
+              </div></details>
           </div>
         </div>
       </div>
@@ -107,5 +126,5 @@
 <script src="../../assets/js/contato-flutuante.js" defer></script>
 <script src="../../assets/js/meta-pixel.js" defer></script>
 <script type="module" src="../../assets/js/site-analytics.mjs"></script>
-<script type="module" src="../../assets/js/maquete-3d.js"></script>
+<script type="module" src="../../assets/js/maquetes/arquitetura.mjs?v=1"></script>
 </body></html>

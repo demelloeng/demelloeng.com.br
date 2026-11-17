@@ -6,6 +6,9 @@
 // (antesDeMontar, aposMontar e aplicar: o terreno que se transforma fica em terraplanagem.mjs), montagemMs e
 // montagemAbertaMs (a sequência longa só com a maquete aberta), tampa (cor da seção), brilhoVertice, vistas (direção,
 // abertura e margem por vista), camada com semTampa ou semRealce e textoPorDentro. Ausentes, nada muda.
+// Arquitetura (17/11/2026), também opcional: arestaVariavel (contorno com força ajustável, para os estilos Projeto e
+// Realista), respeitaPlanos (o clique ignora o recorte da planta cortada) e, no ctx da extensão, luzes, tampa, base,
+// renderer e aplicar() (refaz a sombra). Ausentes, as outras maquetes desenham e respondem como antes.
 // Substitui maquete-estrutura-3d.js e maquete-hidro-3d.js (que ficam no site para reversão) sem mudar o modelo:
 // a geometria vem dos GLB publicados, intactos (SHA-256 conferido em orcamento-src/tests/maquetes_v03.test.mjs).
 // Mantém o comportamento aceito da página (caixa viva no topo, tela cheia, Esc e foco) e traz o acabamento da
@@ -78,7 +81,7 @@ export async function maquete(cfg) {
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; pmrem.dispose(); temAmbiente = true;
   } catch { /* sem ambiente: as luzes bastam */ }
-  scene.add(new THREE.HemisphereLight(0xe8eef5, 0x55606b, temAmbiente ? 0.32 : 1.0));
+  const hemi = new THREE.HemisphereLight(0xe8eef5, 0x55606b, temAmbiente ? 0.32 : 1.0); scene.add(hemi);
   const sol = new THREE.DirectionalLight(0xfff4e6, 2.6);
   const MAPA = movel ? 1024 : 2048;
   sol.castShadow = true; sol.shadow.mapSize.set(MAPA, MAPA); sol.shadow.bias = -0.0004;
@@ -151,10 +154,14 @@ export async function maquete(cfg) {
   let inicioApresentacao = null; let desfazerIsolamento = null; let isolado = null; let pinos = []; let jaAbriu = false;
   const medidas = { quadros: 0, ao: 0, ms: [], carga: 0 };
   // o que uma extensão (cfg.extensao) enxerga do motor; os valores que mudam são lidos na hora
+  // arestaVariavel (arquitetura): a força do contorno vira um uniforme que a extensão muda sem recompilar
+  const uForca = { value: cfg.forcaAresta ?? 0.55 };
   const ctx = {
     THREE, scene, camera, planoCorte, pedir: () => pedir(),
     get raiz() { return raiz; }, get G() { return G; }, get meta() { return meta; }, get p() { return p; },
     get cortando() { return cortando; }, get raioX() { return raioX; }, get aberta() { return aberta; },
+    // arquitetura (17/11/2026): a extensão troca o estilo (luz, fundo, base, tampa) e refaz a sombra com aplicar()
+    renderer, tampa, luzes: { hemi, sol, contra }, forcaAresta: uForca, get base() { return base; }, aplicar: () => aplicar(),
   };
   $('corte').value = Math.round((1 - fracCorte) * 100);
   $('girar').setAttribute('aria-pressed', String(girar));   // com movimento reduzido, começa desligado
@@ -226,24 +233,26 @@ export async function maquete(cfg) {
         metalness: metal ? 0.25 : 0, envMapIntensity: metal ? 0.5 : 0.28, flatShading: true, clippingPlanes: planos, clipShadows: true,
         polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1,
       });
-      const forca = cfg.forcaAresta ?? 0.55; const brilho = cfg.brilhoVertice ?? 0.3;
+      const forca = cfg.forcaAresta ?? 0.55; const brilho = cfg.brilhoVertice ?? 0.3; const variavel = !!cfg.arestaVariavel;
+      const fForca = variavel ? 'uForca' : forca.toFixed(2);
       mat.onBeforeCompile = (sh) => {
+        if (variavel) sh.uniforms.uForca = uForca;
         if (porVertice) {   // tubos: a cor de cada peça (do IFC) também emite um pouco, para o fio não sumir na sombra
           sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>\n\ttotalEmissiveRadiance += vColor.rgb * ${brilho};`);
         }
         if (mask) {          // contorno no próprio material, só nas arestas reais, com largura constante na tela
           sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec3 bary;\nattribute vec3 emask;\nvarying vec3 vBar;\nvarying vec3 vEm;')
             .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBar = bary;\nvEm = emask;');
-          sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vBar;\nvarying vec3 vEm;')
+          sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>\nvarying vec3 vBar;\nvarying vec3 vEm;${variavel ? '\nuniform float uForca;' : ''}`)
             .replace('#include <color_fragment>', `#include <color_fragment>
               vec3 dB = vBar + (1.0 - vEm) * 4.0;
               float dE = min(dB.x, min(dB.y, dB.z));
               float wE = max(fwidth(dE), 1e-5);
               float eE = (1.0 - smoothstep(wE * 0.6, wE * 1.6, dE)) * (1.0 - smoothstep(0.12, 0.4, wE));
-              diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.24, eE * ${forca.toFixed(2)});`);
+              diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.24, eE * ${fForca});`);
         }
       };
-      mat.customProgramCacheKey = () => `mq3|${porVertice}|${!!mask}|${forca}|${brilho}`;
+      mat.customProgramCacheKey = () => `mq3|${porVertice}|${!!mask}|${forca}|${brilho}${variavel ? '|v' : ''}`;
       o.material = mat; o.castShadow = true; o.receiveShadow = true;
       let matL = null;
       if (!mask && cfg.arestasLinha) {   // reserva: linhas separadas (sem o contorno no material)
@@ -517,7 +526,9 @@ export async function maquete(cfg) {
     ray.setFromCamera(ptr, camera);
     const vivos = Object.values(G).filter((g) => g.malha.visible);
     const alvos = vivos.flatMap((g) => (g.guia?.mesh.visible ? [g.malha, g.guia.mesh] : [g.malha]));
-    const hit = ray.intersectObjects(alvos, false).find((h) => !cortando || planoCorte.distanceToPoint(h.point) >= 0);
+    // respeitaPlanos (arquitetura): o clique também ignora o que o plano da própria camada recortou (a planta cortada)
+    const naCamada = (h) => { if (!cfg.respeitaPlanos) return true; const g = vivos.find((x) => x.malha === h.object); return !g || g.plano.distanceToPoint(h.point) >= 0; };
+    const hit = ray.intersectObjects(alvos, false).find((h) => (!cortando || planoCorte.distanceToPoint(h.point) >= 0) && naCamada(h));
     if (!hit) return null;
     const dono = vivos.find((x) => x.guia?.mesh === hit.object);   // clique no guia = clique no tubo dele
     if (dono) return { g: dono, el: dono.guia.els[hit.instanceId], malha: dono.malha };

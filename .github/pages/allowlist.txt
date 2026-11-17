@@ -118,10 +118,12 @@ assets/css/maquete-estrutura-3d.css
 assets/css/maquete-v03.css
 assets/css/maquete-incendio-v03.css
 assets/css/maquete-terraplanagem-v03.css
+assets/css/maquete-arquitetura-v03.css
 assets/images/maquete-estrutura-capa.webp
 assets/images/maquete-hidro-capa.webp
 assets/images/maquete-incendio-capa.webp
 assets/images/maquete-terraplanagem-capa.webp
+assets/images/maquete-arquitetura-capa.webp
 assets/css/rodape-v02.css
 assets/css/servico-estrutural-v02.css
 assets/css/servico-hidro-v02.css
@@ -169,6 +171,8 @@ assets/js/maquetes/hidro.mjs
 assets/js/maquetes/incendio.mjs
 assets/js/maquetes/terraplanagem.mjs
 assets/js/maquetes/terreno.mjs
+assets/js/maquetes/arquitetura.mjs
+assets/js/maquetes/casa.mjs
 assets/js/maquete-terraplanagem-3d.js
 assets/models/casa-exemplo.glb
 assets/models/estrutura-aco.glb
@@ -180,6 +184,7 @@ assets/models/hidro-casa.json
 assets/models/terraplanagem-djalma.glb
 assets/models/terraplanagem-djalma.json
 assets/models/terraplanagem-djalma-v03.json
+assets/models/casa-exemplo-v03.json
 assets/vendor/three/LICENSE
 assets/vendor/three/ORIGEM.txt
 assets/vendor/three/build/three.module.js

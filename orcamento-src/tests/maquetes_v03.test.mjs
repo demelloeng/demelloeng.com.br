@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fitBox, scaleBar } from '../../assets/js/maquetes/enquadrar.mjs';
 import * as R4 from '../src/maquete5_building.mjs';
 import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, APRESENTACAO_MS, semMaqueteAtalhos } from '../../assets/js/maquetes/dados.mjs';
+import { pecas, juntarVizinhas, separarPlanas, medida, degrausDoSolo } from '../../assets/js/maquetes/casa.mjs';
 import { blocoTerreno, curvasDeNivel, linhaDe, fatorLinha, corTerreno, secao, TERRA } from '../../assets/js/maquetes/terreno.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -30,6 +31,8 @@ const MODELOS = {
   // terraplanagem: o GLB V5 publicado em 02/11/2026 continua o mesmo; o JSON V03 (identidade para a ficha) é novo
   'assets/models/terraplanagem-djalma.glb': 'b1ac311f016b23f5c316dc253e2f24053f260724c06fa670ad704b87990c66a9',
   'assets/models/terraplanagem-djalma-v03.json': 'd37665244b4243d1806eb6e4c4a90bd6a2802c867c5d2f1a925769714103f493',
+  // arquitetura: casa-exemplo.glb (acima) é o mesmo da casca da hidrossanitária e não muda; o JSON V03 só traz textos
+  'assets/models/casa-exemplo-v03.json': '9d69ab6ef5a7957f7d14432e25bbd67e55feb800dcefca21749537e87b69f89d',
 };
 
 // Páginas com maquete V03: página, capa e módulo de configuração em assets/js/maquetes/.
@@ -38,6 +41,7 @@ const PAGINAS_V03 = [
   { pagina: 'servicos/projeto-hidrossanitario/index.html', capa: 'maquete-hidro-capa.webp', config: 'hidro' },
   { pagina: 'servicos/projeto-prevencao-incendio/index.html', capa: 'maquete-incendio-capa.webp', config: 'incendio' },
   { pagina: 'servicos/projeto-terraplenagem/index.html', capa: 'maquete-terraplanagem-capa.webp', config: 'terraplanagem' },
+  { pagina: 'servicos/projeto-arquitetura/index.html', capa: 'maquete-arquitetura-capa.webp', config: 'arquitetura' },
 ];
 
 // Leitor mínimo de GLB (só o necessário: POSITION e índices de cada nó).
@@ -162,14 +166,15 @@ test('publicação: tudo o que as maquetes V03 carregam está na allowlist', asy
   const allow = new Set((await texto('.github/pages/allowlist.txt')).split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith('#')));
   const precisa = ['assets/js/maquetes/motor.mjs', 'assets/js/maquetes/enquadrar.mjs', 'assets/js/maquetes/dados.mjs', ...PAGINAS_V03.map((c) => `assets/js/maquetes/${c.config}.mjs`), 'assets/css/maquete-v03.css',
     'assets/models/casa-exemplo.glb', 'assets/models/hidrantes-luiz-carlos-casca.glb', 'assets/css/maquete-incendio-v03.css',
-    'assets/js/maquetes/terreno.mjs', 'assets/css/maquete-terraplanagem-v03.css', ...Object.keys(MODELOS)];
+    'assets/js/maquetes/terreno.mjs', 'assets/css/maquete-terraplanagem-v03.css',
+    'assets/js/maquetes/casa.mjs', 'assets/css/maquete-arquitetura-v03.css', ...Object.keys(MODELOS)];
   for (const p of precisa) assert.ok(allow.has(p), p);
   // o motor carrega o Three só depois, por import() dinâmico, e só do próprio site
   const motor = await texto('assets/js/maquetes/motor.mjs');
   assert.doesNotMatch(motor, /^import .* from ['"]three/m);
   assert.match(motor, /await import\('three'\)/);
   assert.doesNotMatch(motor, /https?:\/\//);
-  for (const f of ['motor', 'dados', 'enquadrar', 'terreno', ...PAGINAS_V03.map((c) => c.config)]) {   // nenhum import do código da calculadora (não é publicado)
+  for (const f of ['motor', 'dados', 'enquadrar', 'terreno', 'casa', ...PAGINAS_V03.map((c) => c.config)]) {   // nenhum import do código da calculadora (não é publicado)
     assert.doesNotMatch(await texto(`assets/js/maquetes/${f}.mjs`), /import[^;\n]*orcamento-src/);
   }
 });
@@ -450,6 +455,86 @@ test('terraplanagem: página, configuração e ficha (texto da V5, nenhum volume
   for (const f of ['assets/js/maquete-terraplanagem-3d.js', 'assets/models/terraplanagem-djalma.json', 'docs/arquivo/paginas-servico-v02/maquete-terraplanagem-markup.html']) await ler(f);   // ficam para reversão
   const motor = await texto('assets/js/maquetes/motor.mjs');
   for (const g of ['antesDeMontar', 'aposMontar', 'aplicar']) assert.match(motor, new RegExp(`cfg\\.extensao\\?\\.${g}\\?\\.`));
+  for (const f of ['estrutural', 'hidro', 'incendio']) {
+    assert.doesNotMatch(await texto(`assets/js/maquetes/${f}.mjs`), /extensao|exagero|montagem(Aberta)?Ms|semTampa|semRealce|textoPorDentro|vistas:|tampa:|brilhoVertice/, `${f}: comportamento inalterado`);
+  }
+});
+
+// ---- arquitetura V03 (17/11/2026): casa-exemplo.glb intacto; peças, vidros, solo e níveis saem da geometria dele ----
+const CASA_GLB = 'assets/models/casa-exemplo.glb';
+
+test('arquitetura: cada camada vira peças contíguas que cobrem todas as faces (a ficha acha a peça pelo índice da face)', async () => {
+  const { malhas } = await glb(CASA_GLB);
+  const esperado = { paredes: 28, portas: 40, janelas: 22, piso: 7, cobertura: 1, piscina: 1, pilares: 6, deck: 14, muros: 19, gradil: 4 };
+  for (const [nome, n] of Object.entries(esperado)) {
+    const m = malhas[nome]; const l = pecas(m.pos, m.idx); assert.equal(l.length, n, nome);
+    let f = 0; for (const p of l) { assert.equal(p.ini, f, nome); f += p.n; }
+    assert.equal(f, m.idx.length / 3, `${nome}: todas as faces`);
+  }
+});
+
+test('arquitetura: portas juntam guarnições e folha (14 portas); janelas separam caixilho e vidro (11 + 11)', async () => {
+  const { malhas } = await glb(CASA_GLB);
+  const portas = juntarVizinhas(pecas(malhas.portas.pos, malhas.portas.idx), 0.25);
+  assert.equal(portas.length, 14);
+  assert.deepEqual(portas.slice(0, 2).map(medida), ['0,95 × 2,18 m', '0,95 × 2,18 m']);
+  assert.ok(portas.every((p) => p.max[1] - p.min[1] > 2 && p.max[1] - p.min[1] < 2.3), 'toda porta tem a altura de uma porta');
+  const cfg = await texto('assets/js/maquetes/arquitetura.mjs'); assert.match(cfg, /const FOLGA_PORTA = 0\.25;/);
+  const j = malhas.janelas; const s = separarPlanas(j.pos, j.idx, pecas(j.pos, j.idx));
+  assert.equal(s.solidas.pecas.length, 11); assert.equal(s.planas.pecas.length, 11);
+  assert.equal(s.solidas.pos.length / 9 + s.planas.pos.length / 9, j.idx.length / 3, 'nenhuma face some nem se repete');
+  const esp = (p) => Math.min(p.max[0] - p.min[0], p.max[1] - p.min[1], p.max[2] - p.min[2]);
+  assert.ok(s.planas.pecas.every((p) => esp(p) < 0.02) && s.solidas.pecas.every((p) => esp(p) >= 0.02));
+  assert.deepEqual(s.solidas.pecas.map(medida).slice(0, 4), ['1,80 × 1,10 m', '1,80 × 1,10 m', '1,80 × 1,10 m', '0,90 × 0,60 m']);
+});
+
+test('arquitetura: solo em 3 degraus pela base dos muros, com a piscina no degrau da cota dela', async () => {
+  const { malhas } = await glb(CASA_GLB);
+  const d = degrausDoSolo(malhas.muros.pos);
+  assert.deepEqual(d.degraus.map((g) => +g.y.toFixed(2)), [0.82, 1.51, 3.57]);
+  for (let i = 1; i < d.degraus.length; i += 1) assert.equal(d.degraus[i].z0, d.degraus[i - 1].z1, 'degraus encostados, sem buraco');
+  let topo = -Infinity; const pp = malhas.piscina.pos; for (let i = 1; i < pp.length; i += 3) topo = Math.max(topo, pp[i]);
+  assert.ok(d.degraus.some((g) => Math.abs(g.y - topo) < 0.3), 'a piscina abre no degrau da cota dela');
+});
+
+test('arquitetura: níveis na cota das faces horizontais do GLB, com os nomes já usados para esta casa', async () => {
+  const { malhas } = await glb(CASA_GLB);
+  const cfg = await texto('assets/js/maquetes/arquitetura.mjs');
+  const piso = alturasHorizontais(malhas.piso.pos, malhas.piso.idx); const deck = alturasHorizontais(malhas.deck.pos, malhas.deck.idx);
+  let cob = Infinity; for (let i = 1; i < malhas.cobertura.pos.length; i += 3) cob = Math.min(cob, malhas.cobertura.pos[i]);
+  assert.match(cfg, /const TERREO = 3\.68;/); assert.equal(+piso[0].y.toFixed(2), 3.68);
+  assert.match(cfg, /\{ nome: 'Piscina', y: 1\.51 \}/); assert.equal(+deck[0].y.toFixed(2), 1.51);
+  assert.match(cfg, /\{ nome: 'Laje superior', y: 6\.68 \}/); assert.equal(+piso[1].y.toFixed(2), 6.68);
+  assert.match(cfg, /\{ nome: 'Cobertura', y: 7\.35 \}/); assert.equal(+cob.toFixed(2), 7.35);
+  assert.match(cfg, /const CORTE_PLANTA = 1\.5;/);
+});
+
+test('arquitetura: página, configuração e textos (sem ambiente, pavimento ou norte inventados; GLB compartilhado intacto)', async () => {
+  const cfg = await texto('assets/js/maquetes/arquitetura.mjs');
+  assert.match(cfg, /import \{ maquete \} from '\.\/motor\.mjs\?v=\d+';/);
+  for (const k of ['arestaVariavel: true', 'respeitaPlanos: true', "chao: 'min'", 'giroCena: -90']) assert.ok(cfg.includes(k), k);
+  const meta = JSON.parse(await texto('assets/models/casa-exemplo-v03.json'));
+  assert.deepEqual(meta.pavimentos, ['']); assert.deepEqual(meta.grupos, {}, 'as peças saem da geometria na carga, não do JSON');
+  const markup = await texto('docs/arquivo/paginas-servico-v02/maquete-arquitetura-v03-markup.html');
+  for (const t of [markup, JSON.stringify(meta), cfg]) assert.doesNotMatch(t, /\b(Sala|Cozinha|Quarto|Suíte|Banheiro|Norte)\b/, 'nenhum ambiente nem norte (o GLB não tem)');
+  assert.match(markup, /data-estilo="projeto"[^>]*>Projeto</); assert.match(markup, /data-estilo="realista"[^>]*>Realista</);
+  assert.match(markup, /data-vista="frente">Fachada</); assert.match(markup, /aproximações visuais dos materiais, não especificação/);
+  const html = await texto('servicos/projeto-arquitetura/index.html');
+  assert.ok(html.includes(markup.trim().split('\n')[1].trim()), 'a página vem do markup V03, pelo gerador');
+  assert.doesNotMatch(html, /maquete-3d\.js/, 'o visualizador antigo sai da página');
+  for (const f of ['assets/js/maquete-3d.js', 'docs/arquivo/paginas-servico-v02/maquete-markup.html']) await ler(f);   // ficam para reversão
+  // a hidrossanitária continua usando o mesmo GLB como casca (o SHA dele está em MODELOS)
+  assert.match(await texto('docs/arquivo/paginas-servico-v02/maquete-hidro-v03-markup.html'), /casa-exemplo\.glb\?v=b6f3dba/);
+});
+
+test('motor: recursos da arquitetura só pela configuração; as outras quatro maquetes não os usam', async () => {
+  const motor = await texto('assets/js/maquetes/motor.mjs');
+  assert.match(motor, /const variavel = !!cfg\.arestaVariavel;/);
+  assert.match(motor, /const fForca = variavel \? 'uForca' : forca\.toFixed\(2\);/, 'sem a chave, o contorno é a mesma constante de antes');
+  assert.match(motor, /if \(!cfg\.respeitaPlanos\) return true;/);
+  for (const f of ['estrutural', 'hidro', 'incendio', 'terraplanagem']) {
+    assert.doesNotMatch(await texto(`assets/js/maquetes/${f}.mjs`), /arestaVariavel|respeitaPlanos/, `${f}: comportamento inalterado`);
+  }
   for (const f of ['estrutural', 'hidro', 'incendio']) {
     assert.doesNotMatch(await texto(`assets/js/maquetes/${f}.mjs`), /extensao|exagero|montagem(Aberta)?Ms|semTampa|semRealce|textoPorDentro|vistas:|tampa:|brilhoVertice/, `${f}: comportamento inalterado`);
   }
