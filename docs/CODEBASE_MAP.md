@@ -8,7 +8,7 @@ branch: feat/home-v02-maquetes-clientes
 
 # Mapa do código: site da DEMELLO Engenharia
 
-> **F8A — Privacidade.** A frase aprovada da seção “Que dados chegam ao site” vem da Copy V06, validada por SHA-256, e é renderizada por `scripts/gerar-privacidade-v02.py`. O contrato de eventos continua em `docs/MENSURACAO_FUNIL.md`.
+> **F8A — Privacidade (Copy V07, 20/11/2026).** A página passou a seis tópicos, com os itens do art. 9 da LGPD e sem passo a passo técnico (decisão de Marcos). A frase aprovada fica na seção “Dados recebidos”. A fonte é `docs/arquivo/privacidade-v02-20261107/COPY_PRIVACIDADE_V07_20261120.md`, validada por SHA-256 e renderizada por `scripts/gerar-privacidade-v02.py`. Os testes `privacy_and_sink` e `contact_clicks` conferem a substância da V07 (o que vai para a Meta, a prévia consultável pelo código, o prazo de guarda, a transferência internacional e os direitos do art. 18), não as frases da V06. O contrato de eventos continua em `docs/MENSURACAO_FUNIL.md`.
 
 > **F8A — origem do pedido.** `assets/js/acquisition.mjs` valida os quatro parâmetros UTM da URL. A calculadora mantém os valores válidos no estado React da página, acrescenta `acquisition` ao payload V2 no envio final e preserva a mesma origem ao retentar. Sem valores válidos, o payload segue idêntico. Nas páginas estáticas, o módulo já carregado `site-analytics.mjs` aciona o repasse aos links internos da calculadora, preservando deep links e fragmentos. A origem não é persistida no navegador nem acrescentada aos eventos de medição.
 

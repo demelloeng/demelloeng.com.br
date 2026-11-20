@@ -93,7 +93,7 @@ for (const width of [1440, 390]) {
     await page.setViewportSize({width, height: width === 390 ? 844 : 900});
     await stubExternal(context);
     await page.goto('/privacidade/');
-    const section = page.getByRole('region', {name: 'Que dados chegam ao site'});
+    const section = page.getByRole('region', {name: 'Dados recebidos'});
     const sentence = section.getByText('Chegou por link, relaxa. A DEMELLO só guarda de onde você veio.', {exact: true});
     await expect(sentence).toBeVisible();
     await page.evaluate(() => document.fonts.ready);

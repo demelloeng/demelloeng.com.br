@@ -173,10 +173,8 @@ test('política × código: o que o site carrega está declarado; nada que o sit
   assert.match(txt, /Pixel da Meta/);
   assert.doesNotMatch(txt, /legítimo interesse|art\. 7º, IX\)/i, 'não presume fundamento da publicidade');
   assert.match(txt, /Do Not Track ou Global Privacy Control/);
-  assert.match(txt, /ao abrir a página[^.]*não carrega as ferramentas de medição/);
-  assert.match(txt, /identificadores de anúncio/);
-  assert.match(txt, /nome, tamanho e tipo/, 'distingue metadados dos arquivos');
-  assert.match(txt, /arquivos de imagem não fazem parte desse envio/);
+  assert.match(txt, /Do Not Track ou Global Privacy Control, o site não carrega a medição/);
+  assert.match(txt, /Das imagens, só nome, tamanho e tipo/, 'distingue metadados dos arquivos');
   for (const right of ['acesso', 'correção', 'anonimização', 'bloqueio', 'eliminação', 'portabilidade', 'compartilhamentos', 'consentimento']) {
     assert.ok(txt.includes(right), `direito informado: ${right}`);
   }
@@ -184,11 +182,11 @@ test('política × código: o que o site carrega está declarado; nada que o sit
   assert.match(txt, /Última atualização: \d{1,2} de [a-zç]+ de 20\d\d/);
   const app = await readFile(path.join(appRoot, 'src/GlobalApp.jsx'), 'utf8');
   assert.match(app, /As fotos não são enviadas/);
-  assert.match(txt, /Antes do contato final, gerar a prévia verificável já envia dados à Cloudflare/);
-  assert.match(txt, /prévia fica guardada em um banco de dados/);
-  assert.match(txt, /Quem tem o código pode consultar seu conteúdo público/);
-  assert.match(txt, /Ao confirmar o envio final/);
-  assert.match(txt, /em espera de processamento pela DEMELLO/);
+  // Copy V07 (20/11/2026, Marcos): tópicos com os itens do art. 9 da LGPD, sem passo a passo técnico.
+  assert.match(txt, /A prévia fica guardada\. Quem tem o código consegue consultá-la/);
+  assert.match(txt, /No envio do caso: nome, contato, respostas e dados do cálculo/);
+  assert.match(txt, /Prazo de guarda/);
+  assert.match(txt, /Google Cloud Document AI, na União Europeia/, 'transferência internacional declarada');
   assert.doesNotMatch(txt, /cadastro concluído no CRM|dados ficam apenas no navegador/i);
 });
 
