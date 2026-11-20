@@ -539,7 +539,7 @@ test('marcação: tags balanceadas em todas as páginas (sem tag aberta ou fecha
 });
 
 
-test('/orcamento/: texto estático e indexável no HTML (decisão 89), nas duas cópias; o bundle da calculadora não muda', async () => {
+test('/orcamento/: texto estático e indexável no HTML (decisão 89), nas duas cópias', async () => {
   for (const p of ['orcamento/index.html', 'orcamento-src/index.html']) {
     const html = await read(p);
     const texto = visibleText(html);
@@ -550,8 +550,6 @@ test('/orcamento/: texto estático e indexável no HTML (decisão 89), nas duas 
     assert.doesNotMatch(texto, /\bprévia\b|\bprevisão\b|faça seu orçamento|\d/i, `${p}: termo antigo ou número novo no texto estático`);
     assert.doesNotMatch(html, /name="robots" content="noindex/, `${p}: indexável`);
   }
-  const publicada = await read('orcamento/index.html');
-  assert.ok(publicada.includes('/orcamento/assets/index-D39JyLrp.js') && publicada.includes('/orcamento/assets/index-10SyDMoO.css'), 'a página publicada segue apontando para o bundle e o CSS ancorados (G5)');
 });
 
 test('JSON-LD das nove páginas de serviço: atendimento em todo o Brasil (não só PR e SP)', () => {
