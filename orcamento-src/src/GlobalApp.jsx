@@ -307,7 +307,7 @@ export function App(){
    <p>{SENT_TEXT[answers.request_intent]??SENT_TEXT.evaluation_only}</p>
    <button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar resumo do seu caso</button>
    {followUpHref&&<div className="post-submit-contact">
-     <p id="post-submit-contact-hint">Quer adiantar a conversa? Mande o código do seu caso.</p>
+     <p id="post-submit-contact-hint">Quer adiantar a conversa?</p>
      <a className="secondary-button" href={followUpHref} target="_blank" rel="noopener"
        data-contact-placement="body" aria-describedby="post-submit-contact-hint">Falar agora no WhatsApp</a>
    </div>}

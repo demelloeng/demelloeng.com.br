@@ -107,7 +107,7 @@ test('WhatsApp pós-envio usa apenas o código de um caso sem prévia calculada'
   const href = postSubmitWhatsAppHref(undefined, id);
   const url = new URL(href);
   assert.equal(url.origin + url.pathname, 'https://wa.me/5544998202552');
-  assert.deepEqual([...url.searchParams], [['text', `Olá. Enviei meu caso pelo site. Código: ${id}.`]]);
+  assert.deepEqual([...url.searchParams], [['text', `Olá, Marcos. Acabei de enviar meu caso pelo site e queria adiantar a conversa. (${id})`]]);
   assert.equal(postSubmitWhatsAppHref('NEEDS_REVIEW', id), href);
   assert.equal(postSubmitWhatsAppHref('CALCULATED', id), null);
   for (const invalid of [undefined, 'pessoa@example.invalid', id + '&nome=Pessoa']) {

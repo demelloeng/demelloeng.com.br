@@ -122,7 +122,7 @@ for (const width of [1440, 390]) {
     await expect(link).toHaveAttribute('target', '_blank');
     await expect(link).toHaveAttribute('rel', 'noopener');
     const href = new URL(await link.getAttribute('href'));
-    expect([...href.searchParams]).toEqual([['text', `Olá. Enviei meu caso pelo site. Código: ${id}.`]]);
+    expect([...href.searchParams]).toEqual([['text', `Olá, Marcos. Acabei de enviar meu caso pelo site e queria adiantar a conversa. (${id})`]]);
     expect(attempts.submissions).toHaveLength(1);
     expect(attempts.submissions[0]).not.toBe('CALCULATED');
     expect(context.pages()).toHaveLength(1);
