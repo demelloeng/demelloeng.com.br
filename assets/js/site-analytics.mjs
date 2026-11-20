@@ -3,6 +3,8 @@
 // Contrato e pontos de conexão: docs/MENSURACAO_FUNIL.md
 import { trackPageView } from './analytics.mjs';
 import { installContactClicks } from './contact-clicks.mjs';
+import { forwardAcquisition } from './acquisition.mjs';
 
 trackPageView();
 installContactClicks();
+forwardAcquisition(document);

@@ -7,12 +7,49 @@ import path from 'node:path';
 import test from 'node:test';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { forwardAcquisition } from '../../assets/js/acquisition.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
 const read = (p) => readFile(path.join(siteRoot, p), 'utf8');
 const exists = (p) => access(path.join(siteRoot, p)).then(() => true, () => false);
 const strip = (h) => h.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
+
+test('F8A: repassa UTM válidos aos links internos da calculadora sem armazenamento', async () => {
+  const base = 'https://site.example/empresa/trajetoria-do-fundador.html';
+  const inputs = ['../orcamento/?situacao=known&servico=estrutural#inicio', '/orcamento/',
+    'https://other.example/orcamento/', 'https://wa.me/', '/contato/', '#secao'];
+  const links = inputs.map((href) => ({ href: new URL(href, base).href }));
+  const original = links.map((link) => link.href);
+  const documentAt = (search) => ({
+    URL: base + search,
+    querySelectorAll: () => links,
+  });
+  forwardAcquisition(documentAt('?utm_source=Inválida'));
+  assert.deepEqual(links.map((link) => link.href), original);
+
+  forwardAcquisition(documentAt('?utm_source=instagram&utm_medium=social&utm_campaign=e1-teste&utm_content=INVÁLIDO'));
+  const target = new URL(links[0].href);
+  assert.deepEqual([...target.searchParams], [
+    ['situacao', 'known'], ['servico', 'estrutural'],
+    ['utm_source', 'instagram'], ['utm_medium', 'social'], ['utm_campaign', 'e1-teste'],
+  ]);
+  assert.equal(target.hash, '#inicio');
+  assert.equal(new URL(links[1].href).searchParams.get('utm_source'), 'instagram');
+  assert.deepEqual(links.slice(2).map((link) => link.href), original.slice(2));
+
+  for (const p of ['assets/js/acquisition.mjs', 'assets/js/site-analytics.mjs', 'orcamento-src/src/GlobalApp.jsx']) {
+    assert.doesNotMatch(await read(p), /sessionStorage|localStorage|document\.cookie/, p);
+  }
+});
+
+test('F8A: Privacidade contém a frase aprovada, integral e na seção de dados recebidos', async () => {
+  const page = await read('privacidade/index.html');
+  const section = page.match(/<section[^>]+id="privacidade-2"[\s\S]*?<\/section>/)?.[0];
+  const approved = 'Chegou por link, relaxa. A DEMELLO só guarda de onde você veio.';
+  assert.ok(section?.includes(`<p>${approved}</p>`));
+  assert.equal(page.split(approved).length - 1, 1);
+});
 
 async function staticPages() {
   const out = [];
@@ -136,10 +173,8 @@ test('política × código: o que o site carrega está declarado; nada que o sit
   assert.match(txt, /Pixel da Meta/);
   assert.doesNotMatch(txt, /legítimo interesse|art\. 7º, IX\)/i, 'não presume fundamento da publicidade');
   assert.match(txt, /Do Not Track ou Global Privacy Control/);
-  assert.match(txt, /ao abrir a página[^.]*não carrega as ferramentas de medição/);
-  assert.match(txt, /identificadores de anúncio/);
-  assert.match(txt, /nome, tamanho e tipo/, 'distingue metadados dos arquivos');
-  assert.match(txt, /arquivos de imagem não fazem parte desse envio/);
+  assert.match(txt, /Do Not Track ou Global Privacy Control, o site não carrega a medição/);
+  assert.match(txt, /Das imagens, só nome, tamanho e tipo/, 'distingue metadados dos arquivos');
   for (const right of ['acesso', 'correção', 'anonimização', 'bloqueio', 'eliminação', 'portabilidade', 'compartilhamentos', 'consentimento']) {
     assert.ok(txt.includes(right), `direito informado: ${right}`);
   }
@@ -147,11 +182,11 @@ test('política × código: o que o site carrega está declarado; nada que o sit
   assert.match(txt, /Última atualização: \d{1,2} de [a-zç]+ de 20\d\d/);
   const app = await readFile(path.join(appRoot, 'src/GlobalApp.jsx'), 'utf8');
   assert.match(app, /As fotos não são enviadas/);
-  assert.match(txt, /Antes do contato final, gerar a prévia verificável já envia dados à Cloudflare/);
-  assert.match(txt, /prévia fica guardada em um banco de dados/);
-  assert.match(txt, /Quem tem o código pode consultar seu conteúdo público/);
-  assert.match(txt, /Ao confirmar o envio final/);
-  assert.match(txt, /em espera de processamento pela DEMELLO/);
+  // Copy V07 (20/11/2026, Marcos): tópicos com os itens do art. 9 da LGPD, sem passo a passo técnico.
+  assert.match(txt, /A prévia fica guardada\. Quem tem o código consegue consultá-la/);
+  assert.match(txt, /No envio do caso: nome, contato, respostas e dados do cálculo/);
+  assert.match(txt, /Prazo de guarda/);
+  assert.match(txt, /Google Cloud Document AI, na União Europeia/, 'transferência internacional declarada');
   assert.doesNotMatch(txt, /cadastro concluído no CRM|dados ficam apenas no navegador/i);
 });
 

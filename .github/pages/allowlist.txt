@@ -41,6 +41,7 @@ assets/css/servicos.css
 assets/js/nav.js
 assets/js/three-d-stage.js
 assets/js/analytics.mjs
+assets/js/acquisition.mjs
 assets/js/site-analytics.mjs
 
 # --- modelo 3D (HOME / Experiência) ---

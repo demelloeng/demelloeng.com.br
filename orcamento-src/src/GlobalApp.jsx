@@ -2,6 +2,7 @@ import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,ArrowRight,Check,CaretDown,PencilSimple,X,DownloadSimple,ClipboardText,Plus} from '@phosphor-icons/react';
 import {REFORMA,nodes,routes,starts,keyOf,titleOf,isProject,valid,toggle,updateAnswer,switchRoute,advance,routeNodes,summary,suggestedServices,safetyHold,missingData,ufs,areaZeroValid,HOURLY} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
+import {readAcquisition,withAcquisition} from '../../assets/js/acquisition.mjs';
 import {REASON_ABOVE_AUTOMATIC_LIMIT} from './pricing/engine.mjs';
 import {initialState,deeplinkInfo} from './deeplink.mjs';
 import {allowedIntents,isIntentAllowed,estimateState,canSend,advanceJourney,INTENT_LABEL,LEAD_STAGE,SCOPE_QUESTION_MAX,scopeQuestionError,SCOPE_QUESTION_MESSAGE} from './funnel.mjs';
@@ -178,6 +179,7 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
 export function App(){
  const [init]=useState(()=>initialState(typeof window!=='undefined'?window.location.search:''));
  const [deeplink]=useState(()=>deeplinkInfo(typeof window!=='undefined'?window.location.search:''));
+ const [acquisition]=useState(()=>readAcquisition(typeof window!=='undefined'?window.location.search:''));
  const entries=useRef({first:true,byRoute:{}});
  // Histórico do navegador (P01): cada pergunta nova vira uma entrada; Voltar/Avançar trocam só a pergunta, sem apagar respostas.
  const nav=useRef({last:null,popping:false,replace:false,key:'',session:newSession()});
@@ -195,7 +197,7 @@ export function App(){
  function sendCase(payload){
   const attempt=++sendAttempt.current;
   setSendState('sending');
-  submitToCRM(payload,hp).then(r=>{
+  submitToCRM(withAcquisition(payload,acquisition),hp).then(r=>{
    if(r.ok)tracking.submissionAccepted({answers:payload.answers,sendResult:r,contactValid:valid('X4',{contact:payload.contact}),mode});
    if(attempt!==sendAttempt.current)return;
    setSendResult({...r,pricingStatus:payload.pricing_preview?.status});

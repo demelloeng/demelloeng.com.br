@@ -4,6 +4,29 @@ import test from 'node:test';
 import './support/catalogo.mjs';
 import assert from 'node:assert/strict';
 import { packageForCRMv2, derivePricingInputs, V2_SOURCE } from '../src/payload_v2.mjs';
+import { readAcquisition, withAcquisition } from '../../assets/js/acquisition.mjs';
+
+test('F8A: inclui somente as chaves UTM válidas no nível superior do V2', () => {
+  const acquisition = readAcquisition('?utm_source=linkedin&utm_medium=social&utm_campaign=e1-teste&utm_content=p01');
+  assert.deepEqual(acquisition, { source: 'linkedin', medium: 'social', campaign: 'e1-teste', content: 'p01' });
+  const payload = packageForCRMv2(BUILD);
+  assert.deepEqual(withAcquisition(payload, acquisition), { ...payload, acquisition });
+  assert.equal(Object.hasOwn(payload, 'acquisition'), false);
+  assert.deepEqual(readAcquisition('?utm_source=LinkedIn&utm_medium=two+words&utm_campaign=a%0A&utm_content=bio-s2&other=x'),
+    { content: 'bio-s2' });
+  assert.deepEqual(readAcquisition(`?utm_campaign=${'x'.repeat(40)}&utm_content=${'x'.repeat(41)}`),
+    { campaign: 'x'.repeat(40) });
+});
+
+test('F8A / T-MET-05: URL sem UTM válido preserva os bytes serializados do V2', () => {
+  const payload = packageForCRMv2(BUILD);
+  const reference = JSON.stringify(payload);
+  for (const search of ['', '?servico=estrutural', '?utm_medium=&utm_content=a_b&utm_campaign=%C3%A1']) {
+    const acquisition = readAcquisition(search);
+    assert.equal(acquisition, undefined);
+    assert.equal(JSON.stringify(withAcquisition(payload, acquisition)), reference);
+  }
+});
 
 const area = (v) => ({ value: v, unknown: false });
 const contact = { name: 'Fulano Fictício', whatsapp: '41999990000', email: 'x@exemplo.invalid' };
