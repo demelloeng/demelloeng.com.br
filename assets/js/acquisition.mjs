@@ -21,8 +21,8 @@ export function forwardAcquisition(doc) {
   if (!acquisition || page.origin === 'null') return;
 
   for (const link of doc.querySelectorAll('a[href]')) {
-    if (!URL.canParse(link.href)) continue;
-    const target = new URL(link.href);
+    let target;
+    try { target = new URL(link.href); } catch { continue; }  // URL.canParse falta no iOS 16
     if (target.protocol !== page.protocol || target.origin !== page.origin) continue;
     if (!['/orcamento/', '/orcamento', '/orcamento/index.html'].includes(target.pathname)) continue;
 
