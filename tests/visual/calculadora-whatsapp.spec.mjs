@@ -6,14 +6,16 @@ const intake = 'https://ma-demello-site-intake.ma-demello.workers.dev/api/site-i
 test.describe.configure({mode: 'parallel'});
 
 async function stubExternal(context, {waitForFirst} = {}) {
-  const attempts = { submissions: [], whatsapp: [] };
+  const attempts = { submissions: [], whatsapp: [], acquisitions: [] };
   await context.route('**/*', async (route) => {
     const request = route.request();
     const url = new URL(request.url());
     if (url.hostname === '127.0.0.1') return route.continue();
     if (url.hostname === 'wa.me') attempts.whatsapp.push(url.href);
     if (url.href === intake && request.method() === 'POST') {
-      attempts.submissions.push(request.postDataJSON().payload.pricing_preview?.status);
+      const { payload } = request.postDataJSON();
+      attempts.submissions.push(payload.pricing_preview?.status);
+      attempts.acquisitions.push(payload.acquisition);
       const first = attempts.submissions.length === 1;
       if (first && waitForFirst) await waitForFirst;
       return route.fulfill({status: 202, headers: {'access-control-allow-origin': '*'},
@@ -51,8 +53,8 @@ async function fillContact(page, label) {
   await expect(page.locator('.result-card.success')).toBeVisible();
 }
 
-async function evaluationContact(page) {
-  await page.goto('/orcamento/?situacao=problem');
+async function evaluationContact(page, entry = '/orcamento/?situacao=problem') {
+  await page.goto(entry);
   await choose(page, 'Preciso de uma avaliação técnica por outro motivo');
   await page.getByLabel('Seu relato').fill('Relato inteiramente fictício para o teste.');
   await next(page);
@@ -61,6 +63,45 @@ async function evaluationContact(page) {
   await choose(page, 'Entender o que está acontecendo');
   await next(page);
   await page.getByRole('button', {name: 'Enviar meu caso para avaliação'}).click();
+}
+
+test('F8A: CTA preserva deep link e pedido simulado recebe apenas origem válida', async ({page, context}) => {
+  const attempts = await stubExternal(context);
+  await page.goto('/servicos/projeto-hidrossanitario/?utm_source=linkedin&utm_medium=social&utm_campaign=e1-teste&utm_content=P01');
+  const cta = page.getByRole('link', {name: /Ver a estimativa do meu projeto hidrossanitário/}).first();
+  await expect(cta).toHaveAttribute('href', /utm_campaign=e1-teste/);
+  const target = new URL(await cta.getAttribute('href'));
+  expect([...target.searchParams]).toEqual([
+    ['situacao', 'known'], ['servico', 'hidrossanitario'],
+    ['utm_source', 'linkedin'], ['utm_medium', 'social'], ['utm_campaign', 'e1-teste'],
+  ]);
+  await cta.focus();
+  await expect(cta).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(target.href);
+  expect(await page.evaluate(() => [localStorage.length, sessionStorage.length, document.cookie])).toEqual([0, 0, '']);
+  target.searchParams.set('situacao', 'problem');
+  target.searchParams.delete('servico');
+  await evaluationContact(page, target.href);
+  await fillContact(page, 'Enviar meu caso');
+  expect(attempts.acquisitions).toEqual([{source: 'linkedin', medium: 'social', campaign: 'e1-teste'}]);
+  expect(await page.evaluate(() => [localStorage.length, sessionStorage.length, document.cookie])).toEqual([0, 0, '']);
+});
+
+for (const width of [1440, 390]) {
+  test(`F8A: frase de Privacidade está visível a ${width}px`, async ({page, context}) => {
+    await page.setViewportSize({width, height: width === 390 ? 844 : 900});
+    await stubExternal(context);
+    await page.goto('/privacidade/');
+    const section = page.getByRole('region', {name: 'Que dados chegam ao site'});
+    const sentence = section.getByText('Chegou por link, relaxa. A DEMELLO só guarda de onde você veio.', {exact: true});
+    await expect(sentence).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    await section.evaluate(element => element.scrollIntoView({block: 'start', behavior: 'instant'}));
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    const folder = process.env.F8A_EVIDENCE_DIR;
+    if (folder) await page.screenshot({path: path.join(folder, `privacidade-${width}.png`), animations: 'disabled'});
+  });
 }
 
 for (const width of [1440, 390]) {

@@ -43,6 +43,14 @@ test('F8A: repassa UTM válidos aos links internos da calculadora sem armazename
   }
 });
 
+test('F8A: Privacidade contém a frase aprovada, integral e na seção de dados recebidos', async () => {
+  const page = await read('privacidade/index.html');
+  const section = page.match(/<section[^>]+id="privacidade-2"[\s\S]*?<\/section>/)?.[0];
+  const approved = 'Chegou por link, relaxa. A DEMELLO só guarda de onde você veio.';
+  assert.ok(section?.includes(`<p>${approved}</p>`));
+  assert.equal(page.split(approved).length - 1, 1);
+});
+
 async function staticPages() {
   const out = [];
   async function walk(dir) {
