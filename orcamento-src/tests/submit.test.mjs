@@ -100,3 +100,17 @@ test('collectMeta: lê _fbp/_fbc, monta fbc do fbclid, respeita DNT/GPC e não l
   assert.deepEqual(collectMeta(null), {});
   assert.deepEqual(collectMeta({ navigator: {}, document: { cookie: '' }, location: { origin: 'https://demelloeng.com.br', pathname: '/x/', search: '' } }), { url: 'https://demelloeng.com.br/x/' });
 });
+import { postSubmitWhatsAppHref } from '../src/post_submit_contact.mjs';
+
+test('WhatsApp pós-envio usa apenas o código de um caso sem prévia calculada', () => {
+  const id = 'SITE-SUB-abcdef012345';
+  const href = postSubmitWhatsAppHref(undefined, id);
+  const url = new URL(href);
+  assert.equal(url.origin + url.pathname, 'https://wa.me/5544998202552');
+  assert.deepEqual([...url.searchParams], [['text', `Olá. Enviei meu caso pelo site. Código: ${id}.`]]);
+  assert.equal(postSubmitWhatsAppHref('NEEDS_REVIEW', id), href);
+  assert.equal(postSubmitWhatsAppHref('CALCULATED', id), null);
+  for (const invalid of [undefined, 'pessoa@example.invalid', id + '&nome=Pessoa']) {
+    assert.equal(postSubmitWhatsAppHref(undefined, invalid), null);
+  }
+});

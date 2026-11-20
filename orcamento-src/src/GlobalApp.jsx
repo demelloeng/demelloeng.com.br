@@ -14,6 +14,7 @@ import {PADROES} from './architecture_estimator.mjs';
 import {tracking} from './tracking.mjs';
 import {TABLE_LABEL,ENTRY_COUNT_WORD,Q_PT} from './labels.mjs';
 import {submitToCRM} from './submit.mjs';
+import {postSubmitWhatsAppHref} from './post_submit_contact.mjs';
 import {issuePreview,fetchCoupon,newEmissionKey,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,COUPON_CHANGED_MESSAGE,COUPON_INVALID_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY} from './preview.mjs';
 import {commercialLines,publicFromOffer,safeOffer,attachCommercialOffer} from './commercial.mjs';
 import {refreshFactorConfig,onFactorConfig} from './pricing/active_config.mjs';
@@ -182,6 +183,7 @@ export function App(){
  const nav=useRef({last:null,popping:false,replace:false,key:'',session:newSession()});
  const [id,setId]=useState(init.id),[answers,setAnswers]=useState(init.answers),[history,setHistory]=useState(init.history),[modal,setModal]=useState(null),[expanded,setExpanded]=useState(false),[aux,setAux]=useState(false),[submitted,setSubmitted]=useState(false),[error,setError]=useState(''),[copied,setCopied]=useState(false);
  const [sendState,setSendState]=useState('idle'),[sendResult,setSendResult]=useState(null),[hp,setHp]=useState('');
+ const sendAttempt=useRef(0);
  const mode='preview';
  // R4: configuração comercial ativa do fator. Na abertura consulta o Worker; se a revisão mudou, a tela recalcula.
  const [,setFactorRev]=useState(0);
@@ -190,7 +192,16 @@ export function App(){
  // R15: cupom digitado/consultado e a última prévia emitida (o pedido e o resumo levam a oferta DESSE registro).
  const [cupom,setCupom]=useState(COUPON_EMPTY),emitted=useRef(null);
  const leadPayload=()=>attachCommercialOffer(packageForCRMv2(answers),emitted.current);
- function sendCase(payload){setSendState('sending');submitToCRM(payload,hp).then(r=>{setSendResult(r);setSendState(r.ok?'sent':'error');if(r.ok)tracking.submissionAccepted({answers:payload.answers,sendResult:r,contactValid:valid('X4',{contact:payload.contact}),mode});});}
+ function sendCase(payload){
+  const attempt=++sendAttempt.current;
+  setSendState('sending');
+  submitToCRM(payload,hp).then(r=>{
+   if(r.ok)tracking.submissionAccepted({answers:payload.answers,sendResult:r,contactValid:valid('X4',{contact:payload.contact}),mode});
+   if(attempt!==sendAttempt.current)return;
+   setSendResult({...r,pricingStatus:payload.pricing_preview?.status});
+   setSendState(r.ok?'sent':'error');
+  });
+ }
  const node=nodes[id],sqError=answers.request_intent==='scope_question'?scopeQuestionError(answers.scope_question):null,key=keyOf(id),value=answers[key],rows=summary(answers),home=id==='HOME',canContinue=valid(id,answers)&&(id!=='X4'||canSend(answers,mode))&&!id.startsWith('X3'),resultStep=id==='X3A'||id==='X3B',project=isProject(answers),suggesting=id==='CA7'&&answers.services?.includes('Não sei quais preciso');
  nav.current.key=navKey(id,history);
  useEffect(()=>{
@@ -250,6 +261,10 @@ export function App(){
  async function copy(){try{await navigator.clipboard.writeText(rows.map(r=>`${r.label}: ${r.value}`).join('\n'));setCopied(true);}catch{setError('Selecione o texto do resumo para copiar.');}}
  const selectCards=()=>{const multi=node.type==='multi';return <fieldset className={`choices ${home?'entry-grid':''} ${node.options.length>5&&!home?'compact':''} ${id==='S1'?'service-grid':''}`}><legend className="sr-only">{node.title}</legend>{node.options.map(option=><label className={`choice ${(multi?value?.includes(option.value):value===option.value)?'selected':''}`} key={option.value}><span>{home?<><strong>{option.label}</strong><small>{descriptions[option.value]}</small></>:option.label}</span><input type={multi?'checkbox':'radio'} name={id} checked={multi?!!value?.includes(option.value):value===option.value} onChange={()=>change(multi?toggle(value,option.value,id==='REG_C4'?'Não sei/não tenho agora':id==='CA7'?'Não sei quais preciso':undefined):option.value)}/></label>)}</fieldset>;};
  const stage=home?0:id==='X4'?3:id.startsWith('X3')?2:id==='X1'?1:1;
+ const caseSent=id==='X4'&&submitted&&sendState==='sent';
+ const followUpHref=caseSent
+   ? postSubmitWhatsAppHref(sendResult?.pricingStatus,sendResult?.submission_id)
+   : null;
  return <div className={`app-shell global-v1 ${home?'is-entry':''}`}>
  <a className="skip-link" href="#question">Ir para a pergunta</a>
  <header className="site-header"><a href="/" aria-label="DEMELLO — página inicial"><img src="/assets/images/logo.png" alt="DEMELLO Engenharia"/></a><span>CALCULAR ESTIMATIVA</span><a className="site-link" href="/" aria-label="Voltar ao site"><span>Voltar ao site</span></a></header>
@@ -284,7 +299,17 @@ export function App(){
  {id==='X4'&&!submitted&&answers.request_intent==='scope_question'&&<div className="scope-question"><label className="text-field" htmlFor="scope-question">Qual é a sua dúvida?</label><textarea id="scope-question" rows={3} maxLength={SCOPE_QUESTION_MAX} placeholder="Uma ou duas frases bastam." aria-describedby="scope-question-count scope-question-error" aria-invalid={!!(sqError&&answers.scope_question)} value={answers.scope_question??''} onChange={e=>patch({scope_question:e.target.value})}/><div id="scope-question-count" className="character-count">{(answers.scope_question??'').length}/{SCOPE_QUESTION_MAX} · limite de {SCOPE_QUESTION_MAX} caracteres</div><p id="scope-question-error" className="field-error" role="alert">{sqError&&answers.scope_question?SCOPE_QUESTION_MESSAGE[sqError]:''}</p></div>}
  {id==='X4'&&!submitted&&<><p className="helper">Seu nome e pelo menos um meio de contato.</p><ContactFields value={value} onChange={change}/><div aria-hidden="true" style={{position:'absolute',width:1,height:1,overflow:'hidden',clip:'rect(0 0 0 0)',whiteSpace:'nowrap'}}><label>Não preencha este campo<input type="text" tabIndex={-1} autoComplete="off" value={hp} onChange={e=>setHp(e.target.value)}/></label></div><p className="small-note">Ao concluir, você envia estes dados e as respostas do seu caso para a DEMELLO Engenharia, que poderá usá-los para analisar seu caso e entrar em contato pelos meios informados. As fotos não são enviadas. {answers.request_intent==='scope_question'?'A sua dúvida segue junto com o caso. ':''}Veja Privacidade.</p></>}
  {id==='X4'&&submitted&&sendState==='sending'&&<div className="result-card" role="status" aria-live="polite"><p>Enviando as informações do seu caso…</p></div>}
- {id==='X4'&&submitted&&sendState==='sent'&&<div className="result-card success" role="status"><Check size={36}/><h2>{SENT_TITLE[answers.request_intent]??'Recebemos as informações do seu caso.'}</h2><p>{SENT_TEXT[answers.request_intent]??SENT_TEXT.evaluation_only}</p><button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar resumo do seu caso</button></div>}
+ {caseSent&&<div className="result-card success" role="status">
+   <Check size={36}/>
+   <h2>{SENT_TITLE[answers.request_intent]??'Recebemos as informações do seu caso.'}</h2>
+   <p>{SENT_TEXT[answers.request_intent]??SENT_TEXT.evaluation_only}</p>
+   <button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar resumo do seu caso</button>
+   {followUpHref&&<div className="post-submit-contact">
+     <p id="post-submit-contact-hint">Quer adiantar a conversa? Mande o código do seu caso.</p>
+     <a className="secondary-button" href={followUpHref} target="_blank" rel="noopener"
+       data-contact-placement="body" aria-describedby="post-submit-contact-hint">Falar agora no WhatsApp</a>
+   </div>}
+ </div>}
  {id==='X4'&&submitted&&sendState==='error'&&<div className="result-card needs-review" role="alert"><h2>Não foi possível enviar agora.</h2><p>Sua estimativa e o resumo continuam disponíveis. Tente enviar novamente ou fale com a DEMELLO pelos canais do site.</p><div className="actions"><button type="button" className="secondary-button" onClick={()=>sendCase(sentPayload.current)}>Tentar enviar novamente</button><button type="button" className="secondary-button" onClick={download}><DownloadSimple size={20}/>Baixar resumo do seu caso</button></div></div>}
  </form>
  {home&&<div className="auxiliary"><button type="button" className="text-button" onClick={()=>setAux(x=>!x)} aria-expanded={aux}>Meu caso é outro<ArrowRight size={18}/></button>{aux&&<div className="aux-content"><p>Use “Avaliar um problema” para relatar o que precisa entender, sem escolher um serviço técnico.</p><button className="secondary-button" onClick={()=>redirect('problem')}>Ir para Avaliar um problema<ArrowRight size={18}/></button></div>}</div>}
