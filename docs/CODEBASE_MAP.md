@@ -8,7 +8,7 @@ branch: feat/home-v02-maquetes-clientes
 
 # Mapa do código: site da DEMELLO Engenharia
 
-> **F8A — origem do pedido.** `assets/js/acquisition.mjs` valida os quatro parâmetros UTM da URL. A calculadora mantém os valores válidos no estado React da página, acrescenta `acquisition` ao payload V2 no envio final e reaproveita o mesmo payload ao retentar. Sem valores válidos, o payload segue idêntico.
+> **F8A — origem do pedido.** `assets/js/acquisition.mjs` valida os quatro parâmetros UTM da URL. A calculadora mantém os valores válidos no estado React da página, acrescenta `acquisition` ao payload V2 no envio final e preserva a mesma origem ao retentar. Sem valores válidos, o payload segue idêntico. Nas páginas estáticas, o módulo já carregado `site-analytics.mjs` aciona o repasse aos links internos da calculadora, preservando deep links e fragmentos. A origem não é persistida no navegador nem acrescentada aos eventos de medição.
 
 > **Atualização de 20/11/2026 — confirmação da calculadora sem prévia.** Em `orcamento-src/src/GlobalApp.jsx`, o cartão de envio aceito mostra “Falar agora no WhatsApp” quando o payload enviado não tem `pricing_preview.status` igual a `CALCULATED`. `post_submit_contact.mjs` usa apenas o `submission_id` retornado pelo Worker no formato `SITE-SUB-<12 dígitos hexadecimais>`. O link abre em outra aba por ação do visitante. O ouvinte delegado `contact-clicks.mjs` registra a posição existente `body`.
 

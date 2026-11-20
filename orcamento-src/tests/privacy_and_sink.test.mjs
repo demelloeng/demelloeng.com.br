@@ -7,12 +7,41 @@ import path from 'node:path';
 import test from 'node:test';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { forwardAcquisition } from '../../assets/js/acquisition.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appRoot, '..');
 const read = (p) => readFile(path.join(siteRoot, p), 'utf8');
 const exists = (p) => access(path.join(siteRoot, p)).then(() => true, () => false);
 const strip = (h) => h.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
+
+test('F8A: repassa UTM válidos aos links internos da calculadora sem armazenamento', async () => {
+  const base = 'https://site.example/empresa/trajetoria-do-fundador.html';
+  const inputs = ['../orcamento/?situacao=known&servico=estrutural#inicio', '/orcamento/',
+    'https://other.example/orcamento/', 'https://wa.me/', '/contato/', '#secao'];
+  const links = inputs.map((href) => ({ href: new URL(href, base).href }));
+  const original = links.map((link) => link.href);
+  const documentAt = (search) => ({
+    URL: base + search,
+    querySelectorAll: () => links,
+  });
+  forwardAcquisition(documentAt('?utm_source=Inválida'));
+  assert.deepEqual(links.map((link) => link.href), original);
+
+  forwardAcquisition(documentAt('?utm_source=instagram&utm_medium=social&utm_campaign=e1-teste&utm_content=INVÁLIDO'));
+  const target = new URL(links[0].href);
+  assert.deepEqual([...target.searchParams], [
+    ['situacao', 'known'], ['servico', 'estrutural'],
+    ['utm_source', 'instagram'], ['utm_medium', 'social'], ['utm_campaign', 'e1-teste'],
+  ]);
+  assert.equal(target.hash, '#inicio');
+  assert.equal(new URL(links[1].href).searchParams.get('utm_source'), 'instagram');
+  assert.deepEqual(links.slice(2).map((link) => link.href), original.slice(2));
+
+  for (const p of ['assets/js/acquisition.mjs', 'assets/js/site-analytics.mjs', 'orcamento-src/src/GlobalApp.jsx']) {
+    assert.doesNotMatch(await read(p), /sessionStorage|localStorage|document\.cookie/, p);
+  }
+});
 
 async function staticPages() {
   const out = [];
