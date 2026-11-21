@@ -97,7 +97,7 @@ test('issuePreview: 201 PUBLIC_PREVIEW_V1 -> {ok, record}; envia só pricing_inp
   assert.equal(r.emissionKey, sent.emission_key);
   // expectativa = o que o navegador apresentou (regime, total e valor por serviço); o Worker é a autoridade
   assert.deepEqual(sent.expectation, {
-    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC', factor_config_revision: 1, total_demello: FIXTURE_PREVIEW.total_demello,
+    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC_MIN', factor_config_revision: 1, total_demello: FIXTURE_PREVIEW.total_demello,
     services: [{ service: 'REGULARIZACAO', total_demello: FIXTURE_PREVIEW.services[0].demello.total }],
   });
   assert.equal(sent.case_summary.necessidade, 'x');
@@ -108,7 +108,7 @@ test('expectationFromPreview: só pacote calculado; uma entrada por serviço cal
   const pv = pricePreview({ services: ['ESTRUTURAL', 'ELETRICA'], typology: 'CASA', structural_system: 'CONCRETO_ARMADO',
     area_new: '250', area_total: '250', area_fundacao: '150' });
   assert.deepEqual(expectationFromPreview(pv), {
-    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC', factor_config_revision: 1, total_demello: '5520.00',
+    table_version: 'DEMELLO_V2', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC_MIN', factor_config_revision: 1, total_demello: '5520.00',
     services: [{ service: 'ESTRUTURAL', total_demello: '4272.00' }, { service: 'ELETRICA', total_demello: '1248.00' }],
   });
   assert.equal(expectationFromPreview(pricePreview({ services: ['ESTRUTURAL'] })), null);

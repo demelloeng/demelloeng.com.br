@@ -327,8 +327,15 @@ test('17. compatibilidade com os deep links existentes (Arquitetura abre selecio
   assert.ok(SERVICE_OPTIONS.includes('Arquitetura'));
 });
 
-test('18. SEQUÊNCIA DO PIPELINE preservada: tudo que não é Arquitetura sem área é idêntico ao baseline V2 aprovado', async () => {
+test('18. SEQUÊNCIA DO PIPELINE preservada e piso aplicado aos totais do baseline V2', async () => {
   const fx = JSON.parse(await readFile(path.join(appRoot, 'tests/fixtures/pipeline_baseline_v2.json'), 'utf8'));
+  // A linha GAS_GLP de 85,68 passa a 100,00 nestes quatro casos. Os demais totais vêm do baseline V2.
+  const floorTotals = new Map([
+    ['build|Construir do zero|Gás+Compatibilização BIM', '1275.40'],
+    ['build|Ampliar um imóvel existente|Gás+Compatibilização BIM', '1275.40'],
+    ['build|Ainda estou definindo|Gás+Compatibilização BIM', '1275.40'],
+    ['known|Incêndio+Gás', '383.20'],
+  ]);
   assert.ok(fx.cases.length >= 25);
   for (const c of fx.cases) {
     assert.deepEqual(routeNodes(c.answers), c.route_nodes, `${c.name}: nós da rota`);
@@ -338,7 +345,7 @@ test('18. SEQUÊNCIA DO PIPELINE preservada: tudo que não é Arquitetura sem á
       const p = packageForCRMv2(c.answers);
       assert.deepEqual(p.pricing_inputs, c.pricing_inputs, `${c.name}: pricing_inputs`);
       assert.equal(p.pricing_preview.status, c.pricing_status, `${c.name}: status`);
-      assert.equal(p.pricing_preview.total_demello, c.total, `${c.name}: total`);
+      assert.equal(p.pricing_preview.total_demello, floorTotals.get(c.name) ?? c.total, `${c.name}: total`);
       assert.ok(!Object.keys(p.answers).some((k) => k.startsWith('architecture_')), `${c.name}: sem campos de Arquitetura`);
     }
   }
@@ -381,8 +388,8 @@ test('ramificação: navegação S3 -> terreno -> programa -> S4, validação do
 
 test('19. regressão: serviços existentes inalterados (preços, tabela, motor, envio por hash) e 20. CRM não homologado = falha segura', async () => {
   const sha = async (f) => createHash('sha256').update((await readFile(path.join(appRoot, f), 'utf8')).replace(/\r\n/g, '\n')).digest('hex');
-  assert.equal(await sha('src/pricing/pricing-table.v2.json'), '8fd32ba07134ca8f6490020eb831bdcd53df9cdd6e6ad802a5ccf2aa1d671c9d', 'Tabela V2 (revisão R2, 08/11/2026): SECID/PR 094/2026, FUNDEPAR por categoria, AltoQi elétrica; a r1 congelada fica no canônico. Antes só ganhou automatic_estimate_limits e ELETRICA; preços das demais disciplinas idênticos');
-  assert.equal(await sha('src/pricing/engine.mjs'), '1cb13d037b85075bc02068a5cdc9c6b6b3d8cd49658d5785da97afa8f6a5df01', 'motor R4 (R2_FC: fator da configuração comercial, R02) sobre o motor R2: menor referência entre todas as fontes (FUNDEPAR sem filtro de tipologia), detalhamento package/source_typology e rótulo R2; fórmulas e arredondamento intocados');
+  assert.equal(await sha('src/pricing/pricing-table.v2.json'), '9500b90599fc61d785bfc360726e33d52eb6ee19044dcf0adf05ef59c2897b07', 'Tabela V2 com o piso por regime aprovado; fontes e valores de referência preservados');
+  assert.equal(await sha('src/pricing/engine.mjs'), '736ad685ba09fe520257d9875f7a01d7f30c01eb5e1ff2c402c3688b2ae83770', 'Motor R2_FC_MIN com piso por serviço após fator e arredondamento');
   assert.equal(await sha('src/pricing/decimal.mjs'), 'de8ff4f5bdba6d159d24d0ef44daa1febef6d01e29be9b86132d054dd87c1a48');
   assert.equal(await sha('src/submit.mjs'), 'c47ec9c376aab58b14dd90d6896c304373ef596ea5a26d28c15c02d48ec31f7d', 'envio ao CRM: só acrescentou transport.meta (dados do anúncio para a CAPI; ver collectMeta)');
   // CRM não homologado: o payload novo segue no mesmo envelope; recusa do Worker (422) e queda de rede não lançam e não repetem indevidamente
