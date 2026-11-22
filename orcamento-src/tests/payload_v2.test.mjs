@@ -58,7 +58,7 @@ test('packageForCRMv2: pricing_preview == recomputo determinístico do motor (re
   const p = packageForCRMv2({ ...BUILD, area_fundacao: area('120') }); // 3 pavimentos: Q_SUPERESTRUTURA 320 > Q_FUNDACAO 120
   assert.deepEqual(p.pricing_preview, pricePreview(p.pricing_inputs));
   assert.equal(p.pricing_preview.table_version, 'DEMELLO_V2');
-  assert.equal(p.pricing_preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
+  assert.equal(p.pricing_preview.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC_MIN');
   assert.equal(p.pricing_inputs.area_fundacao, '120');
   assert.equal(p.pricing_preview.status, 'CALCULATED');
   // R2: ESTRUTURAL FUNDEPAR (15,75 x 320 + 9,35 x 120) x 0,80 = 4929.60 ; HIDRO FUNDEPAR esportiva 320 x 5,84 x 0,80 = 1495.04

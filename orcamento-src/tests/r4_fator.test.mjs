@@ -18,7 +18,7 @@ test.beforeEach(() => resetFactorConfig());
 test('R4: o site parte da revisão publicada (1, 0,60) e o sentinela dá R$ 12.509,76', () => {
   assert.deepEqual(getFactorConfig(), { revision: 1, factor_demello: '0.60' });
   const pv = pricePreview(SOBRADO);
-  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
+  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC_MIN');
   assert.equal(pv.factor_config_revision, 1);
   assert.equal(pv.total_demello, '12509.76');
   assert.deepEqual(lines(pv), { ARQUITETURA: '6268.80', ESTRUTURAL: '3921.60', HIDROSSANITARIO: '1121.28', ELETRICA: '1198.08' });
@@ -41,7 +41,7 @@ test('R4: refreshFactorConfig troca a configuração, avisa a tela e a estimativ
   const off = onFactorConfig((c) => seen.push(c.revision));
   const calls = [];
   const fetchImpl = async (url, opts) => { calls.push([url, opts.method, opts.cache]);
-    return jsonResponse(200, { schema: 'PRICING_CONFIG_V1', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC', revision: 2, factor_demello: '0.75' }); };
+    return jsonResponse(200, { schema: 'PRICING_CONFIG_V1', pricing_rule: 'STRUCT_COMPOSITE_REFS_R2_FC_MIN', revision: 2, factor_demello: '0.75' }); };
   const r = await refreshFactorConfig({ endpoint: 'https://w/api/previews/v1/', fetchImpl });
   off();
   assert.deepEqual(r, { ok: true, changed: true, status: 200 });

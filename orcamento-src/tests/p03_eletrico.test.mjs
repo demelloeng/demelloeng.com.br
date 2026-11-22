@@ -63,7 +63,7 @@ test('PREÇO R2: o fator 0,80 é aplicado UMA vez, sobre a menor referência (6,
   assert.equal(s.demello.total, '499.20');
   assert.notEqual(s.demello.total, '399.36', 'o fator nunca é aplicado duas vezes');
   assert.equal(s.base_reference, 'FUNDEPAR_001_2025_ESPORTIVA');
-  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
+  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC_MIN');
   assert.equal(TABLE.factor_demello, '0.80');
   assert.equal(TABLE.table_version, 'DEMELLO_V2');
 });
@@ -151,9 +151,9 @@ test('PARIDADE com o Python: o motor JS dá o mesmo resultado dos vetores calcul
   }
 });
 
-test('metodologia preservada: tabela byte a byte igual à do canônico, fórmulas e motor só ganharam a proteção por limite', async () => {
+test('metodologia preservada: tabela com piso byte a byte igual à do canônico', async () => {
   const sha = createHash('sha256').update((await read('src/pricing/pricing-table.v2.json')).replace(/\r\n/g, '\n')).digest('hex');
-  assert.equal(sha, '8fd32ba07134ca8f6490020eb831bdcd53df9cdd6e6ad802a5ccf2aa1d671c9d');   // revisão R2 (a r1 congelada, 3bfb1919..., fica no repositório canônico)
+  assert.equal(sha, '9500b90599fc61d785bfc360726e33d52eb6ee19044dcf0adf05ef59c2897b07');
   assert.deepEqual(Object.keys(TABLE.services).sort(), ['ARQUITETURA', 'COMPATIBILIZACAO', 'CONSULTORIA_TECNICA', 'ELETRICA', 'ESTRUTURAL', 'GAS_GLP', 'HIDROSSANITARIO', 'INCENDIO', 'MENTORIA_TECNICA', 'ORCAMENTO', 'REGULARIZACAO', 'TERRAPLENAGEM']);
   // preços das outras disciplinas, iguais aos de antes
   assert.equal(pricePreview({ services: ['HIDROSSANITARIO'], typology: 'CASA', area_new: '100', area_total: '100', area_existing: null, structural_system: null, structural_scope: null, foundations_selected: false, area_atendida: null, area_terreno: null, area_escopo: null, area_fundacao: null, hours: null, regularizacao: { area_matricula: null, area_iptu: null, levantamento: 'UNDETERMINED', projeto_legal: 'UNDETERMINED' }, hidro_scope_includes_existing: null }).total_demello, '467.20');
