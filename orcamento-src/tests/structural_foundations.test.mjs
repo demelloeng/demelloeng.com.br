@@ -16,10 +16,10 @@ const excluded = (est) => Object.fromEntries(est.package.excluded_references.map
 const inputs = (over) => ({ services: ['ESTRUTURAL'], area_total: '63,5', area_fundacao: '63,5', ...over });
 const est = (over) => svc(pricePreview(inputs(over)), 'ESTRUTURAL');
 
-test('regime corrente: DEMELLO_V2 + STRUCT_COMPOSITE_REFS_R2_FC (nunca o regime histórico)', () => {
+test('regime corrente: DEMELLO_V2 + STRUCT_COMPOSITE_REFS_R2_FC_MIN (nunca o regime histórico)', () => {
   const pv = pricePreview(inputs({ typology: 'CASA' }));
   assert.equal(pv.table_version, 'DEMELLO_V2');
-  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
+  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC_MIN');
   assert.notEqual(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R1');
   assert.notEqual(pv.pricing_rule, 'STRUCT_INCL_FOUNDATIONS_V2');
   assert.equal(TABLE.table_version, 'DEMELLO_V2');

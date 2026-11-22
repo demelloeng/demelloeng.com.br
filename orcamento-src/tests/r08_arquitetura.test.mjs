@@ -19,7 +19,7 @@ test('R08: Arquitetura aparece em CA7 sem modo de demonstração', () => {
 
 test('R08: sobrado 320/160 com quatro serviços pela jornada Construir = R$ 12.509,76 (fator ativo 0,60)', () => {
   const pv = packageForCRMv2(sobrado()).pricing_preview;
-  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC');
+  assert.equal(pv.pricing_rule, 'STRUCT_COMPOSITE_REFS_R2_FC_MIN');
   assert.equal(pv.factor_config_revision, 1);
   assert.equal(pv.total_demello, '12509.76');
   assert.deepEqual(Object.fromEntries(pv.services.map((s) => [s.service, s.demello.total])),

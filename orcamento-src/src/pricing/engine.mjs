@@ -8,7 +8,8 @@ import { dec, num, add, sub, mul, absD, cmp, toStr, money, brl, numberOut } from
 // factor_demello da tabela (0,80, só para reproduzir R2). Regimes históricos (DEMELLO_V1 legado, STRUCT_INCL_FOUNDATIONS_V2,
 // STRUCT_COMPOSITE_REFS_R1 e STRUCT_COMPOSITE_REFS_R2) são só REPRODUZIDOS pelo motor Python canônico; este motor JAMAIS os emite.
 const TABLE_VERSION = 'DEMELLO_V2';
-export const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R2_FC';
+export const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R2_FC_MIN';
+const MINIMUM_FEE = dec(TABLE.minimum_fee_brl_by_rule[PRICING_RULE]);
 const FACTOR_MAX_DECIMALS = 4;
 const STRUCTURAL_SYSTEMS = ['CONCRETO_ARMADO', 'METALICA', 'MADEIRA'];
 const STRUCTURAL_SCOPES = ['FULL', 'FOUNDATION_ONLY'];
@@ -510,6 +511,14 @@ export function buildPricingPreview(pricingInputs, factorConfig) {
   const hourly = hourlyServices(inp);
   const servicesOut = inp.services.map((service) => priceService(service, inp, hourly, cfg.factor));
   const calculated = servicesOut.filter((s) => s.status === CALC);
+  for (const service of calculated) {
+    const amount = service.demello;
+    if (cmp(dec(amount.total), MINIMUM_FEE) < 0) {
+      amount.total_before_minimum_fee = amount.total;
+      amount.minimum_fee_applied = true;
+      amount.total = money(MINIMUM_FEE);
+    }
+  }
   const needsReview = servicesOut.some((s) => s.status !== CALC) || calculated.length === 0;
   const status = needsReview ? REVIEW : CALC;
   let totalDemello = null;

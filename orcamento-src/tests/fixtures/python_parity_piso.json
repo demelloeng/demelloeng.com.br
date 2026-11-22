@@ -1,0 +1,315 @@
+[
+ {
+  "inputs": {
+   "area_terreno": "300",
+   "services": [
+    "TERRAPLENAGEM"
+   ]
+  },
+  "name": "Terraplanagem 300 m²",
+  "preview": {
+   "currency": "BRL",
+   "factor_config_revision": 1,
+   "factor_demello": 0.6,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 120,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 100,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R2_FC_MIN",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "minimum_fee_applied": true,
+      "total": "100.00",
+      "total_before_minimum_fee": "72.00",
+      "unrounded_total": "72.000"
+     },
+     "package": {
+      "excluded_references": [],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "SERVICO_COMPLETO"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 300,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "120.00",
+       "unit_value": "0.40"
+      }
+     },
+     "service": "TERRAPLENAGEM",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "100.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_terreno": "416.67",
+   "services": [
+    "TERRAPLENAGEM"
+   ]
+  },
+  "name": "Terraplanagem 416,67 m²",
+  "preview": {
+   "currency": "BRL",
+   "factor_config_revision": 1,
+   "factor_demello": 0.6,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 166,67. Pela tabela DEMELLO, nossa previsão inicial é de R$ 100,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R2_FC_MIN",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "100.00",
+      "unrounded_total": "100.00080"
+     },
+     "package": {
+      "excluded_references": [],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "SERVICO_COMPLETO"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 416.67,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "166.67",
+       "unit_value": "0.40"
+      }
+     },
+     "service": "TERRAPLENAGEM",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "100.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_terreno": "500",
+   "services": [
+    "TERRAPLENAGEM"
+   ]
+  },
+  "name": "Terraplanagem 500 m²",
+  "preview": {
+   "currency": "BRL",
+   "factor_config_revision": 1,
+   "factor_demello": 0.6,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 200,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 120,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R2_FC_MIN",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "total": "120.00",
+      "unrounded_total": "120.000"
+     },
+     "package": {
+      "excluded_references": [],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "SERVICO_COMPLETO"
+     },
+     "pricing_context": {
+      "typology": null
+     },
+     "q": 500,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "200.00",
+       "unit_value": "0.40"
+      }
+     },
+     "service": "TERRAPLENAGEM",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "120.00"
+  }
+ },
+ {
+  "inputs": {
+   "area_terreno": "300",
+   "area_total": "500",
+   "services": [
+    "TERRAPLENAGEM",
+    "INCENDIO"
+   ],
+   "typology": "COMERCIAL"
+  },
+  "name": "Terraplanagem 300 m² + incêndio 500 m²",
+  "preview": {
+   "currency": "BRL",
+   "factor_config_revision": 1,
+   "factor_demello": 0.6,
+   "presented_to_customer": {
+    "text": "Para as informações fornecidas, a referência pública SECID/PR resulta em aproximadamente R$ 1.970,00. Pela tabela DEMELLO, nossa previsão inicial é de R$ 631,00. Entraremos em contato para confirmar as particularidades e o escopo."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R2_FC_MIN",
+   "services": [
+    {
+     "base_reference": "SECID_PR",
+     "demello": {
+      "minimum_fee_applied": true,
+      "total": "100.00",
+      "total_before_minimum_fee": "72.00",
+      "unrounded_total": "72.000"
+     },
+     "package": {
+      "excluded_references": [],
+      "references_compared": [
+       "SECID_PR"
+      ],
+      "scope": "SERVICO_COMPLETO"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 300,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "secid_pr": {
+       "total": "120.00",
+       "unit_value": "0.40"
+      }
+     },
+     "service": "TERRAPLENAGEM",
+     "status": "CALCULATED"
+    },
+    {
+     "base_reference": "FUNDEPAR_001_2025_ESPORTIVA",
+     "demello": {
+      "total": "531.00",
+      "unrounded_total": "531.000"
+     },
+     "package": {
+      "excluded_references": [],
+      "references_compared": [
+       "SECID_PR",
+       "ALTOQI",
+       "FUNDEPAR_001_2025_ADMINISTRATIVA",
+       "FUNDEPAR_001_2025_EDUCACIONAL",
+       "FUNDEPAR_001_2025_ESPORTIVA"
+      ],
+      "scope": "SERVICO_COMPLETO"
+     },
+     "pricing_context": {
+      "typology": "COMERCIAL"
+     },
+     "q": 500,
+     "q_basis": "Q_TOTAL",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "references": {
+      "altoqi": {
+       "total": "5250.00",
+       "unit_value": "10.50"
+      },
+      "fundepar_001_2025_administrativa": {
+       "source_typology": "ADMINISTRATIVA",
+       "total": "1485.00",
+       "unit_value": "2.97"
+      },
+      "fundepar_001_2025_educacional": {
+       "source_typology": "EDUCACIONAL",
+       "total": "1685.00",
+       "unit_value": "3.37"
+      },
+      "fundepar_001_2025_esportiva": {
+       "source_typology": "ESPORTIVA",
+       "total": "885.00",
+       "unit_value": "1.77"
+      },
+      "secid_pr": {
+       "total": "1850.00",
+       "unit_value": "3.70"
+      }
+     },
+     "service": "INCENDIO",
+     "status": "CALCULATED"
+    }
+   ],
+   "status": "CALCULATED",
+   "table_version": "DEMELLO_V2",
+   "total_demello": "631.00"
+  }
+ },
+ {
+  "inputs": {
+   "services": [
+    "TERRAPLENAGEM"
+   ]
+  },
+  "name": "Terraplanagem sem área",
+  "preview": {
+   "currency": "BRL",
+   "factor_config_revision": 1,
+   "factor_demello": 0.6,
+   "presented_to_customer": {
+    "text": "A DEMELLO precisa entrar em contato para entender melhor o seu problema. Iremos verificar as informações fornecidas e retornar assim que possível."
+   },
+   "pricing_rule": "STRUCT_COMPOSITE_REFS_R2_FC_MIN",
+   "services": [
+    {
+     "pricing_context": {
+      "typology": null
+     },
+     "q": null,
+     "q_basis": "Q_TERRENO",
+     "q_inputs": {
+      "area_existing": null,
+      "area_new": null
+     },
+     "reason": "quantidade essencial (Q_TERRENO) não informada",
+     "service": "TERRAPLENAGEM",
+     "status": "NEEDS_HUMAN_REVIEW"
+    }
+   ],
+   "status": "NEEDS_HUMAN_REVIEW",
+   "table_version": "DEMELLO_V2",
+   "total_demello": null
+  }
+ }
+]

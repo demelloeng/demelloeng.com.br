@@ -2,6 +2,7 @@
   "table_version": "DEMELLO_V2",
   "factor_demello": "0.80",
   "currency": "BRL",
+  "minimum_fee_brl_by_rule": { "STRUCT_COMPOSITE_REFS_R2_FC_MIN": "100.00" },
   "automatic_estimate_limits": {
     "_nota": "Protecao da ESTIMATIVA AUTOMATICA, por base de quantidade. Acima do limite o motor devolve NEEDS_HUMAN_REVIEW (porte exige analise especifica). Nao e limite de habilitacao, de porte atendido nem de capacidade da DEMELLO. Valores operacionais definidos pelo proprietario (07/11/2026).",
     "Q_NOVA": "10000",
