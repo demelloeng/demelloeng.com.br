@@ -1,0 +1,17 @@
+{
+  "client_id": "https://demelloeng.com.br/oauth/audiencia-client.json",
+  "client_name": "DEMELLO Audiência",
+  "client_uri": "https://demelloeng.com.br/",
+  "redirect_uris": [
+    "http://127.0.0.1:6275/callback"
+  ],
+  "grant_types": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "response_types": [
+    "code"
+  ],
+  "token_endpoint_auth_method": "none",
+  "scope": "websites:read stats:read offline_access"
+}
