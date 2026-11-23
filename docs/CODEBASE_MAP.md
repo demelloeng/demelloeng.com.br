@@ -6,6 +6,8 @@ commit: 13136c6
 branch: feat/home-v02-maquetes-clientes
 ---
 
+> **Atualização de 23/11/2026 — retirada da identidade OAuth da Audiência.** `oauth/audiencia-client.json` sai do repositório e da allowlist: o Simple Analytics recusou documentos de cliente fora da sua lista (`invalid_client`), e o coletor passou a usar a Tools API com token aprovado no painel. Artefato esperado: 201 arquivos. Nota dirigida; o Cartographer não foi executado.
+
 # Mapa do código: site da DEMELLO Engenharia
 
 > **Atualização de 23/11/2026 — identidade OAuth da Audiência (PR #77).** Arquivo estático novo `oauth/audiencia-client.json`, publicado em `https://demelloeng.com.br/oauth/audiencia-client.json` e incluído na allowlist (seção 9). É o documento de metadados de cliente OAuth (o `client_id` é a própria URL) do coletor local da aba Audiência do Portal, que lê as estatísticas do Simple Analytics por MCP com escopos só de leitura (`websites:read stats:read offline_access`) e callback em `http://127.0.0.1:6275/callback`. Não é carregado por nenhuma página, não coleta dado de visitante e não altera menu, rodapé, medição ou calculadora. Artefato esperado: 202 arquivos. O Cartographer não foi executado; esta é uma nota dirigida.
