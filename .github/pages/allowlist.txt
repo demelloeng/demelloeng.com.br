@@ -107,6 +107,9 @@ assets/images/simple-analytics-badge.svg
 # Verificação do Google Search Console (propriedade https://demelloeng.com.br/) — NUNCA REMOVER
 google1483671950bc0cbc.html
 
+# Identidade OAuth pública do coletor da Audiência (só leitura no Simple Analytics; sem dado de visitante)
+oauth/audiencia-client.json
+
 # --- release parcial (02/11/2026): Home V02, Serviços V02 e as quatro páginas de projeto (Arquitetura, Estrutural, Hidrossanitário, Infraestrutura) ---
 # Só caminhos exatos. Dependências conferidas com as páginas renderizadas (CSS, fontes, ícones, imagens, JS, modelos 3D) e o three.js hospedado (assets/vendor/three/, MIT, ver ORIGEM.txt).
 assets/css/construir-ou-ampliar-v02.css
