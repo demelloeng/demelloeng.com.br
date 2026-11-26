@@ -236,3 +236,15 @@ assets/css/metodologia-v02.css
 assets/css/experiencia-v02.css
 assets/js/experiencia-bim.js
 assets/images/experiencia-terraplanagem-djalma.png
+# Home V2 · Grafite, vidro e luz (25–26/11/2026): camada visual, fontes OFL e render do Djalma.
+assets/css/home-grafite-vidro-luz.css
+assets/js/home-grafite-vidro-luz.js
+assets/fonts/host-grotesk-var-latin.woff2
+assets/fonts/host-grotesk-OFL.txt
+assets/fonts/barlow-400-latin.woff2
+assets/fonts/barlow-500-latin.woff2
+assets/fonts/barlow-600-latin.woff2
+assets/fonts/barlow-700-latin.woff2
+assets/fonts/barlow-OFL.txt
+assets/images/djalma-marinho-render-1678.webp
+assets/images/djalma-marinho-render-840.webp

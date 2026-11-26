@@ -8,6 +8,8 @@ branch: feat/home-v02-maquetes-clientes
 
 > **Atualização de 23/11/2026 — retirada da identidade OAuth da Audiência.** `oauth/audiencia-client.json` sai do repositório e da allowlist: o Simple Analytics recusou documentos de cliente fora da sua lista (`invalid_client`), e o coletor passou a usar a Tools API com token aprovado no painel. Artefato esperado: 201 arquivos. Nota dirigida; o Cartographer não foi executado.
 
+> **Atualização de 26/11/2026 — Home V2 "Grafite, vidro e luz".** `index.html` (à mão) recebe `<body class="home-opcao3 gvl">` e carrega por último `assets/css/home-grafite-vidro-luz.css`, camada isolada com seletores `body.gvl …` (0,2,1) que vence as folhas antigas sem `!important`; remover a classe `gvl` devolve a Home anterior. Fontes próprias da Home: `host-grotesk-var-latin.woff2` (títulos, 600) e `barlow-<400|500|600|700>-latin.woff2` (texto), com `host-grotesk-OFL.txt` e `barlow-OFL.txt`; os preloads da Home passam a ser essas fontes (Source Sans 3 continua nas outras páginas). `assets/js/home-grafite-vidro-luz.js` (defer) controla só a luz do hero (botão "Pausar luz", IntersectionObserver, aba oculta, movimento reduzido) e o reflexo do vidro sob o cursor; sem JS a página fica completa e estática. O case usa `djalma-marinho-render-<1678|840>.webp`. A camada neutraliza a grade 2×N de `.service-rows` de `v02-proposta.css` (serviços em placas alternadas). Links, URLs, metadados e navegação sem mudança. Os 11 arquivos novos estão na allowlist; artefato esperado: 212 arquivos. Nota dirigida; o Cartographer não foi executado.
+
 # Mapa do código: site da DEMELLO Engenharia
 
 > **Atualização de 23/11/2026 — identidade OAuth da Audiência (PR #77).** Arquivo estático novo `oauth/audiencia-client.json`, publicado em `https://demelloeng.com.br/oauth/audiencia-client.json` e incluído na allowlist (seção 9). É o documento de metadados de cliente OAuth (o `client_id` é a própria URL) do coletor local da aba Audiência do Portal, que lê as estatísticas do Simple Analytics por MCP com escopos só de leitura (`websites:read stats:read offline_access`) e callback em `http://127.0.0.1:6275/callback`. Não é carregado por nenhuma página, não coleta dado de visitante e não altera menu, rodapé, medição ou calculadora. Artefato esperado: 202 arquivos. O Cartographer não foi executado; esta é uma nota dirigida.
@@ -165,7 +167,7 @@ site/
 
 | Página | Origem | Layout | Menu e rodapé |
 |---|---|---|---|
-| `index.html` | à mão | Home V02 (`home-opcao3`) | V02 |
+| `index.html` | à mão | Home V2 (`home-opcao3 gvl`, Grafite, vidro e luz) | V02 |
 | `servicos/index.html` | gerada (`gerar-servicos-v02.py`) | catálogo V02, 8 cartões | V02 |
 | `servicos/projeto-arquitetura/` | gerada | rico | V02 |
 | `servicos/projeto-estrutural/` | gerada | rico | V02 |
@@ -355,7 +357,7 @@ Ordem de `<link>` nas páginas ricas: `servicos-v02` → `servico-pagina-v02` �
 | `maquete-incendio-v03.css` | `.servico-rico-pscip-glp .vaga` (440 px; 390 px até 900 px) e, sob `.caixa.mq3`: `.seletor` (lista de componentes), `.marcadores` e `.pino` (44 px), `.ficha` e `.ficha-acoes`, `.leg .nota-ilustracao`; cores e medidas da V02 | `maquete-3d`, `maquete-estrutura-3d`, `maquete-v03`; exige `mq3` na `#caixa` |
 | `servico-estrutural-v02.css`, `servico-hidro-v02.css`, `servico-infra-v02.css` | acabamento por disciplina | `.servico-rico-<disciplina>` |
 | `contato-v02.css`, `construir-ou-ampliar-v02.css` | páginas próprias | `servicos-v02`, `rodape-v02` |
-| `home-20261024.css`, `home-opcao3-20261027.css`, `v02-proposta.css` | Home | `v02-proposta` ainda traz o cabeçalho "aceite pendente" |
+| `home-20261024.css`, `home-opcao3-20261027.css`, `v02-proposta.css`, `home-grafite-vidro-luz.css` (por último) | Home | `v02-proposta` ainda traz o cabeçalho "aceite pendente" |
 | `style.css`, `servicos.css` | site antigo (631 linhas em `style.css`) | `servicos.css` com `?v=2` nas antigas e `?v=8` na 404 e na privacidade |
 
 **Duplicações:** (1) as 11 regras do rodapé existem em `rodape-v02.css` e em `servico-pagina-v02.css`; as 4 páginas de projeto carregam só a segunda e as demais V02 só a primeira (a versão nova tem `min-height:0`, `padding:0` e `text-decoration:none` a mais, o que pode dar 1 px de diferença). (2) Fundo e padding do rodapé estão em `servicos-v02.css`, `home-opcao3` e `rodape-v02.css`. (3) `style.css` repete `.site-footer/.footer-in/.fcol` duas vezes; `.footer-grid` de `home-20261024.css` está órfão. (4) A legenda da maquete é literal em `servico-hidro-v02.css` e `servico-infra-v02.css`. (5) O menu móvel quebra em 1280 px (`servicos-v02`) e em 1120 px (`home-opcao3`).
