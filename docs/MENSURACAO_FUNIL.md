@@ -23,6 +23,8 @@ Este documento não é publicado (fora da allowlist de `.github/pages/allowlist.
 | Evento | Emissor | Quando dispara | Parâmetros |
 |---|---|---|---|
 | `page_view` | site | Ao carregar cada página (estática ou `/orcamento/`). Uma vez por caminho por carga. | `page`, `origin`, `origin_page` |
+| `service_showcase_selected` | site | Ao escolher outra disciplina pelos chips ou botões anterior/próximo de `/servicos/`. | `discipline` |
+| `service_showcase_model_opened` | site | Ao acionar “Abrir a maquete” na vitrine de `/servicos/`. | `discipline` |
 | `estimate_started` | site | Quando a jornada exibe o primeiro nó de uma rota (por clique ou deep link). **Uma vez por carga.** | `route`, `entry`, `step` |
 | `situation_selected` | site | Mesmo momento; uma vez por (rota, disciplina). Rota trocada depois gera novo evento. | `route`, `entry`, `service`*, `step` |
 | `estimate_completed` | site | Ao exibir o resultado **com estimativa calculada** (X3A + motor `CALCULATED`). Novo evento só se as respostas mudarem. | `route`, `service`, `service_count`, `result_status`, `step` |
@@ -162,3 +164,7 @@ Hierarquia sugerida para mídia paga (do mais forte ao mais fraco):
 
 Uma futura integração de Ads só precisa se inscrever no barramento (`window.DemelloAnalytics.subscribe`) e mapear estes nomes; o contrato não muda.
 
+
+### Vitrine de Serviços
+
+`discipline` aceita apenas `arquitetura`, `estrutural`, `hidrossanitario`, `incendio` e `terraplanagem`. Os eventos da vitrine têm somente esse parâmetro. Carga, rolagem nativa e seleção do chip já ativo ficam fora da medição. O destino aplica os controles de DNT/GPC vigentes.

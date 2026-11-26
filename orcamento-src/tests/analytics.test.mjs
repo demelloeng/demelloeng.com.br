@@ -340,7 +340,7 @@ async function adapter(file, {navigator = {}, brokenDOM = false} = {}) {
  sent.length=0;
  return {sent,scripts,window,emit(detail){listeners['demello:analytics']?.({detail});}};
 }
-const values = {page:'/contato/',origin:'direct',origin_page:'/',route:'build',entry:'manual',service:'estrutural',service_count:1,step:'X3A',result_status:'calculated',request_intent:'proposal',rule:'R1',area_source:'USER_DECLARED',area_band:'60_100',lot_area_band:'200_360',program_size_band:'80_140',estimation_version:'ARQ_EST_V1',placement:'footer'};
+const values = {discipline:'estrutural',page:'/contato/',origin:'direct',origin_page:'/',route:'build',entry:'manual',service:'estrutural',service_count:1,step:'X3A',result_status:'calculated',request_intent:'proposal',rule:'R1',area_source:'USER_DECLARED',area_band:'60_100',lot_area_band:'200_360',program_size_band:'80_140',estimation_version:'ARQ_EST_V1',placement:'footer'};
 
 test('Simple Analytics rejects unknown and back-office events from the public bus',async()=>{
  const a=await adapter('analytics-sink.js');
@@ -426,3 +426,24 @@ for(const file of ['analytics-sink.js','meta-pixel.js']){
   assert.doesNotThrow(()=>a.emit({name:'estimate_completed',params:{route:'build'}}));
  });
 }
+
+test('vitrine de Serviços: eventos de interação têm apenas as cinco disciplinas válidas', async () => {
+  const disciplinas = ['arquitetura', 'estrutural', 'hidrossanitario', 'incendio', 'terraplanagem'];
+  const a = await adapter('analytics-sink.js');
+  for (const name of ['service_showcase_selected', 'service_showcase_model_opened']) {
+    assert.deepEqual(EVENTS[name]?.params, ['discipline']);
+    const t = createTracker();
+    for (const discipline of disciplinas) {
+      const out = t.track(name, { discipline, email: 'teste@example.invalid' });
+      assert.deepEqual(out.event.params, { discipline });
+      a.emit({ name, params: { discipline, email: 'teste@example.invalid' } });
+      assert.deepEqual(JSON.parse(JSON.stringify(a.sent.at(-1))), [name, { discipline }]);
+    }
+    for (const discipline of ['terraplenagem', 'compatibilizacao', 'fixture@example.invalid', '/servicos/', 'Arquitetura', {}, null]) {
+      assert.equal(PARAMS.discipline(discipline), false);
+      a.emit({ name, params: { discipline, page: '/servicos/' } });
+      assert.deepEqual(JSON.parse(JSON.stringify(a.sent.at(-1))), [name, {}]);
+    }
+    assert.equal(createTracker({ emitter: 'crm' }).track(name, { discipline: disciplinas[0] }).ok, false);
+  }
+});
