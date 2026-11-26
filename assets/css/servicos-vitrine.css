@@ -417,6 +417,61 @@ body.gvl .site-footer { background: var(--g-night); }
   body.gvl .service { display: block; padding: 18px; }
 }
 
+/* Desktop: the space under each title gets a lit version of the service's own icon,
+   like the paper-and-calculator art of the Home. Decorative only; hidden below 1100px. */
+body.gvl .service[data-service="arquitetura"] { --sv-art: url("../icons/servicos-v02/arquitetura.svg"); }
+body.gvl .service[data-service="estrutural"] { --sv-art: url("../icons/servicos-v02/estrutural.svg"); }
+body.gvl .service[data-service="hidrossanitario"] { --sv-art: url("../icons/servicos-v02/hidrossanitario.svg"); }
+body.gvl .service[data-service="incendio"] { --sv-art: url("../icons/servicos-v02/incendio.svg"); }
+body.gvl .service[data-service="terraplanagem"] { --sv-art: url("../icons/servicos-v02/terraplanagem.svg"); }
+body.gvl .service[data-service="bim"] { --sv-art: url("../icons/servicos-v02/bim.svg"); }
+body.gvl .service[data-service="regularizacao"] { --sv-art: url("../icons/servicos-v02/regularizacao.svg"); }
+body.gvl .service[data-service="orcamento"] { --sv-art: url("../icons/servicos-v02/orcamento.svg"); }
+
+@media (min-width: 1100px) {
+  body.gvl .service { position: relative; isolation: isolate; }
+  body.gvl .service > * { position: relative; z-index: 1; }
+  /* room for the glyph below the title, so a two-line title grows the card instead of overlapping */
+  body.gvl .service h3 { padding-bottom: 96px; }
+  /* halo: an ellipse of light rising from the bottom edge, under the title column */
+  body.gvl .service::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    left: 40px;
+    bottom: 0;
+    width: 260px;
+    height: 150px;
+    border-radius: 0 0 0 18px;
+    background: radial-gradient(ellipse 60% 75% at 50% 100%, rgb(156 194 236 / .3), rgb(37 82 128 / .2) 45%, transparent 72%);
+    pointer-events: none;
+  }
+  /* glyph: the service icon as a mask, filled with an ice-to-blue gradient */
+  body.gvl .service::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    left: 128px;
+    bottom: 16px;
+    width: 92px;
+    aspect-ratio: 1;
+    background: linear-gradient(160deg, #eef2f6, #9cc2ec 50%, #3672b4);
+    -webkit-mask: var(--sv-art) center / contain no-repeat;
+    mask: var(--sv-art) center / contain no-repeat;
+    opacity: .62;
+    pointer-events: none;
+  }
+  /* the fire/gas card already fills that space with its row of three links */
+  body.gvl .service[data-service="incendio"] h3 { padding-bottom: 0; }
+  body.gvl .service[data-service="incendio"]::before,
+  body.gvl .service[data-service="incendio"]::after { content: none; }
+}
+
+@media (min-width: 1100px) and (prefers-reduced-motion: no-preference) and (hover: hover) {
+  body.gvl .service::after { transition: opacity .3s ease, translate .4s var(--ease); }
+  body.gvl .service:hover::after { opacity: .9; translate: 0 -4px; }
+}
+
 @media print {
   body.servicos-v02.gvl { color-scheme: light; color: #121b24; background: #fff; }
   body.gvl :is(.sv3-stage, .service, .b2b, .group-secondary, .final-cta .wrap, .site-footer) {
@@ -429,5 +484,6 @@ body.gvl .site-footer { background: var(--g-night); }
   body.gvl .final-cta a.gvl-neon { color: #121b24 !important; box-shadow: none; border-color: #26323e; }
   body.gvl .gvl-neon-t { color: #121b24; text-shadow: none; }
   body.gvl :is(.gvl-aurora, .gvl-beam, .gvl-cta-art, .sv3-controls, .sv3-arrows),
-  body.gvl::before, body.gvl::after { display: none; }
+  body.gvl::before, body.gvl::after,
+  body.gvl .service::before, body.gvl .service::after { display: none; }
 }\n
