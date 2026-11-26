@@ -18,9 +18,18 @@ for (const pagina of PAGINAS) {
         window.scrollTo(0, 0);
         await document.fonts.ready;
       });
+      // A captura de página inteira estica a janela até a altura do documento. O carrossel de Serviços
+      // reage a essa mudança e troca de maquete no meio da captura. Esticar antes e esperar assentar deixa
+      // a página no mesmo estado que a captura vai ver: a comparação continua a mesma, só fica estável.
+      for (let i = 0; i < 3; i++) {
+        const altura = await page.evaluate(() => document.documentElement.scrollHeight);
+        await page.setViewportSize({ width: largura, height: altura });
+        await page.waitForTimeout(300);
+      }
       await page.waitForTimeout(400);
       await expect(page).toHaveScreenshot(`${nome(pagina)}-${largura}.png`, {
         fullPage: true,
+        timeout: 20_000, // página alta com vidro e desfoque demora mais que 5 s para capturar duas vezes
         mask: [page.locator('canvas, video, iframe, #palco')],
       });
     });

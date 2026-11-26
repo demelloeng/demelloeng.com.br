@@ -68,6 +68,8 @@ assets/images/fundador-mangue-casa.png
 assets/images/fundador-mangue-retrato.png
 assets/images/fundador-mercado.png
 assets/images/fundador-obra-estaca.jpg
+# 2026-11-26 - Retrato responsivo do responsável técnico no Portfólio V03.
+assets/images/fundador-obra-estaca-900.webp
 assets/images/fundador-obra-grupo.jpg
 assets/images/fundador-trainee.png
 assets/images/fundador-treliça.png
@@ -255,3 +257,7 @@ assets/fonts/rajdhani-OFL.txt
 # 26/11/2026 — Serviços V03: vitrine de maquetes.
 assets/css/servicos-vitrine.css
 assets/js/servicos-vitrine.mjs
+
+# 26/11/2026 — Portfólio V03: régua e camada de luz.
+assets/css/portfolio-vitrine.css
+assets/js/portfolio-vitrine.mjs

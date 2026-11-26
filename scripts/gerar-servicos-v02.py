@@ -25,12 +25,12 @@ def row(item):
 <h3><a href="{esc(item['url'])}">{esc(item['title'])}</a></h3>
 <div class="service-copy"><p>{esc(item['description'])}</p><p class="service-limit">{esc(item['limit'])}</p></div>
 <a class="service-link" href="{esc(item['url'])}">Ver o serviço →<span class="sr-only">: {esc(item['title'])}</span></a>{extra_html}</article>'''
-header = (doc / 'header.template.html').read_text(encoding='utf-8').strip()
+header = (doc / 'header.template.html').read_text(encoding='utf-8').strip().replace('experiencia-tecnica/">Projetos</a>', 'experiencia-tecnica/">Portfólio</a>')
 common = data['common']
 intro = link(common['Construir ou ampliar'], 'Construir ou ampliar', 'https://demelloeng.com.br/construir-ou-ampliar/')
 b2b = link(common['B2B copy'], 'compatibilização BIM', next(x['url'] for x in data['items'] if x['id'] == 'bim'))
 routes = ''.join(f'<article class="route"><h3><a href="{esc(r["url"])}">{esc(r["title"])}</a></h3><p>{esc(r["description"])}</p></article>' for r in data['routes'])
-footer = (doc / 'footer.template.html').read_text(encoding='utf-8').strip()
+footer = (doc / 'footer.template.html').read_text(encoding='utf-8').strip().replace('experiencia-tecnica/">Projetos</a>', 'experiencia-tecnica/">Portfólio</a>')
 
 # Serviços V03 keeps the approved catalog copy in the existing source.
 # Only the title and eyebrow have explicit V03 wording approval.

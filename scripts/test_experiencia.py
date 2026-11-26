@@ -42,7 +42,7 @@ class ExperienciaTests(unittest.TestCase):
         self.assertNotIn('1720261245965', page)
         source=self.module().COPY.read_text(encoding='utf-8').split('## B. METADADOS SEO CONSOLIDADOS',1)[0]
         self.assertEqual(set(re.findall(r'\b(?:17\d{11}|201\d{8})\b',source)),set(re.findall(r'\b(?:17\d{11}|201\d{8})\b',page)))
-        for value in ['67.761,78','42.789,24','12.879,17','4.980,61','9.451,06','4.486,65','26,00','2.447,14','2.511,56','4.856,55']:
+        for value in ['67.761,78','42.789,24','12.879,17','4.980,61','9.451,06','4.958,70','4.512,65','4.856,55']:
             self.assertIn(value,page)
         self.assertIn('1720261281228', page)
         self.assertIn('4.856,55 m²', page)
@@ -57,10 +57,32 @@ class ExperienciaTests(unittest.TestCase):
         parsed = Text(); parsed.feed(m.montar(m.COPY.read_bytes().decode()))
         visible = ' '.join(' '.join(parsed.parts).split())
         public = m.COPY.read_text(encoding='utf-8').split('### BLOCO 01 — HERO',1)[1].split('## B. METADADOS SEO CONSOLIDADOS',1)[0]
+        removed = {
+            'A contagem inclui ARTs substituídas e não equivale a 60 projetos distintos. '
+            'As fichas identificam os registros utilizados em cada trabalho.',
+            'Os quantitativos representam serviços técnicos. Uma mesma edificação pode aparecer em mais de uma disciplina; '
+            'essas áreas não formam uma área física total.',
+            'Atividades de uma mesma disciplina sobre a mesma área não são multiplicadas. '
+            'Central e tubulação de GLP permanecem separadas, assim como os volumes de corte e aterro.',
+            'Conheça também um anteprojeto estrutural em concreto, um modelo preliminar de mezanino metálico '
+            'e as instalações hidrossanitárias de uma residência.',
+            'Esses exemplos apresentam outras aplicações das disciplinas. '
+            'Não são identificados como modelos dos colégios deste portfólio.',
+            'Para entender como as interfaces entre disciplinas são analisadas e as soluções são coordenadas:',
+            'As ARTs identificam os serviços e as responsabilidades registrados em cada empreendimento. '
+            'As fichas preservam essa atribuição, incluindo as referências a equipe e coautoria quando aplicáveis.',
+            'O terreno natural foi reconstruído para a demonstração. O relevo tem exagero vertical de duas vezes, '
+            'e as contenções são ilustrativas. A maquete não substitui levantamento topográfico, não representa '
+            'um projeto executivo completo e não deve ser usada para conferir quantitativos.',
+        }
+        for paragraph in removed:
+            self.assertNotIn(paragraph, visible)
         for paragraph in re.split(r'\n\s*\n', public):
             paragraph=paragraph.strip()
             if not paragraph or paragraph.startswith(('#','**','|','- ')) or paragraph=='---': continue
-            self.assertIn(' '.join(paragraph.split()), visible)
+            normalized = ' '.join(paragraph.split())
+            if normalized not in removed:
+                self.assertIn(normalized, visible)
 
     def test_check_nao_escreve(self):
         m=self.module()
