@@ -448,6 +448,17 @@ body.gvl.experiencia-v02 .portfolio-poster::before {
   object-fit: contain;
 }
 
+/* A imagem do BIM tem fundo branco: invertida em tons escuros para casar com os outros cartazes. */
+body.gvl.experiencia-v02 .portfolio-poster[href$="compatibilizacao-bim/"] .portfolio-poster-image { background: #000; }
+body.gvl.experiencia-v02 .portfolio-poster[href$="compatibilizacao-bim/"] .portfolio-poster-image img {
+  object-fit: cover;
+  filter: invert(1) hue-rotate(180deg) brightness(.92);
+}
+@media print {
+  body.gvl.experiencia-v02 .portfolio-poster[href$="compatibilizacao-bim/"] .portfolio-poster-image { background: #fff; }
+  body.gvl.experiencia-v02 .portfolio-poster[href$="compatibilizacao-bim/"] .portfolio-poster-image img { filter: none; }
+}
+
 .portfolio-poster-copy {
   position: relative;
   display: grid;
