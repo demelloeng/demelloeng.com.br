@@ -81,7 +81,10 @@ test('fontes: nenhuma página carrega Google Fonts; Montserrat é autohospedada 
   assert.ok(await exists('assets/fonts/SpecialElite-LICENSE.txt'), 'licença da Special Elite acompanha a fonte');
   const spa = await readFile(path.join(appRoot, 'src/styles.css'), 'utf8');
   assert.doesNotMatch(spa, /Archivo|Source Sans/, 'estimador sem as fontes anteriores');
-  assert.match(spa, /montserrat-var-latin\.woff2/, 'estimador usa a mesma Montserrat do site');
+  assert.match(spa, /host-grotesk-var-latin\.woff2/, 'títulos do estimador em Host Grotesk');
+  assert.match(spa, /barlow-/, 'texto do estimador em Barlow');
+  assert.match(spa, /rajdhani-600-latin\.woff2/, 'botões do estimador em Rajdhani');
+  assert.ok(await exists('assets/fonts/rajdhani-OFL.txt'), 'licença da Rajdhani acompanha a fonte');
 });
 
 test('destino de mensuração: Simple Analytics só liga sem DNT/GPC; page_view não é reenviado; só metadados primitivos', async () => {

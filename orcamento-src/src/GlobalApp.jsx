@@ -269,7 +269,7 @@ export function App(){
    : null;
  return <div className={`app-shell global-v1 ${home?'is-entry':''}`}>
  <a className="skip-link" href="#question">Ir para a pergunta</a>
- <header className="site-header"><a href="/" aria-label="DEMELLO — página inicial"><img src="/assets/images/logo.png" alt="DEMELLO Engenharia"/></a><span>CALCULAR ESTIMATIVA</span><a className="site-link" href="/" aria-label="Voltar ao site"><span>Voltar ao site</span></a></header>
+ <header className="site-header"><a href="/" aria-label="DEMELLO — página inicial"><img src="/assets/images/logo-branca.png" alt="DEMELLO Engenharia"/></a><span>CALCULAR ESTIMATIVA</span><a className="site-link" href="/" aria-label="Voltar ao site"><span>Voltar ao site</span></a></header>
  <div className="workspace"><main className="question-panel" id="question" data-state={id}>
  {!home&&<div className="section-label"><button type="button" className="icon-button" onClick={back} aria-label="Voltar à pergunta anterior"><ArrowLeft size={18}/></button><span>{routes[answers.route]}</span></div>}
  <h1 tabIndex={-1} ref={heading}>{titleOf(id,answers)}</h1>
