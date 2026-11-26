@@ -284,7 +284,7 @@ test('navegação: item atual marcado com aria-current na página correspondente
   const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim']);
   assert.deepEqual(current('servicos/index.html'), ['Serviços']);
   for (const s of SERVICE_SLUGS) assert.deepEqual(current(`servicos/${s}/index.html`), V02_SERVICES.has(s) ? ['Serviços'] : ['Outros serviços'], s);
-  assert.deepEqual(current('experiencia-tecnica/index.html'), ['Projetos']);
+  assert.deepEqual(current('experiencia-tecnica/index.html'), ['Portfólio']);
   assert.deepEqual(current('metodologia/index.html'), ['Como trabalhamos']);
   assert.deepEqual(current('contato/index.html'), ['Contato']);
 });
@@ -411,8 +411,8 @@ const NUMERIC_FACTS = new Set([
 
 // Numerais que só valem em UMA página, cada um com a fonte conferida (nada é liberado para o site inteiro).
 const PAGE_FACTS = {
-  // Fonte integral aprovada: números restritos ao portfólio, sem liberar para outras páginas.
-  'experiencia-tecnica/index.html': [...new Set((await read('docs/arquivo/experiencia-tecnica-v02-20261106/COPY_EXPERIENCIA_TECNICA_V01_CONSOLIDADA_20261106.md')).match(/\d[\d.,/-]*\d|\d/g)), '100'],
+  // Portfólio: fonte integral aprovada, estado 100% do widget e somas V02 de corte + aterro e tubulação + central.
+  'experiencia-tecnica/index.html': [...new Set((await read('docs/arquivo/experiencia-tecnica-v02-20261106/COPY_EXPERIENCIA_TECNICA_V01_CONSOLIDADA_20261106.md')).match(/\d[\d.,/-]*\d|\d/g)), '100', '4.958,70', '4.512,65'],
   // Maquete Luiz Carlos V02 aceita (b52e32d): 171 IDs; 100% é estado do controle.
   'servicos/projeto-prevencao-incendio/index.html': ['171', '100'],
   // referências de preço da tabela DEMELLO V2: Resolução SECID/PR e Credenciamento Fundepar (orcamento-src/src/pricing/pricing-table.v2.json; journey.mjs)

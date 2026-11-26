@@ -533,3 +533,10 @@ A evidência fica em `.git/…/capacidades/evidencias.jsonl` da worktree (não v
 ---
 
 *Se o Cartographer ajudou, considere dar uma estrela: https://github.com/kingbootoshi/cartographer*
+
+## Portfólio V03 (26/11/2026)
+
+- A rota /experiencia-tecnica/ e seus sete blocos saem de scripts/gerar-experiencia-v02.py. A régua lê os valores da fonte consolidada com SHA-256 fixado e monta duas listas independentes para m² e m³.
+- A página herda a camada Grafite, vidro e luz da Home V2. assets/css/portfolio-vitrine.css instala a composição local e assets/js/portfolio-vitrine.mjs controla o reflexo e a entrada das barras. Os ícones usam os SVGs já publicados de Serviços.
+- O rótulo Portfólio vem de gerar-construir-ou-ampliar-v02.py (também herdado pelas páginas institucionais e por Verificar/404), gerar-contato-v02.py, gerar-paginas-servico-v02.py e da adaptação dos templates históricos em gerar-servicos-v02.py. A Home e a Trajetória do fundador têm navegação no HTML.
+- As fichas mantêm os detalhes nativos e os registros. A demonstração de hidrantes mantém a ativação do 3D sob demanda em assets/js/experiencia-bim.js.

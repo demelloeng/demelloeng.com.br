@@ -255,3 +255,7 @@ assets/fonts/rajdhani-OFL.txt
 # 26/11/2026 — Serviços V03: vitrine de maquetes.
 assets/css/servicos-vitrine.css
 assets/js/servicos-vitrine.mjs
+
+# 26/11/2026 — Portfólio V03: régua e camada de luz.
+assets/css/portfolio-vitrine.css
+assets/js/portfolio-vitrine.mjs

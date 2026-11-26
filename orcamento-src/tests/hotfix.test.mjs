@@ -35,11 +35,11 @@ test('home leads with the estimate CTA and keeps the way to "Como trabalhamos"',
 });
 
 test('shared navigation: commercial order, estimate CTA highlighted, Contato and WhatsApp secondary', async () => {
-  // Principais, na ordem: Início · Construir ou ampliar · Outros serviços · Experiência · Como trabalhamos · Calcular estimativa.
+  // Principais, na ordem: Início · Construir ou ampliar · Outros serviços · Portfólio · Como trabalhamos · Calcular estimativa.
   // Contato e WhatsApp seguem acessíveis (faixa superior no desktop; dentro do menu no móvel), sem competir com o CTA.
-  const expected = ['Início', 'Construir ou ampliar', 'Outros serviços', 'Experiência', 'Como trabalhamos', 'Calcular estimativa', 'Contato', 'WhatsApp'];
-  // Páginas V02 (Home, Serviços e Contato): "Início · Serviços · Projetos · Como trabalhamos · Contato · Construir ou ampliar · Calcular estimativa · WhatsApp".
-  const expectedV02 = ['Início', 'Serviços', 'Projetos', 'Como trabalhamos', 'Contato', 'Construir ou ampliar', 'Calcular estimativa', 'WhatsApp'];
+  const expected = ['Início', 'Construir ou ampliar', 'Outros serviços', 'Portfólio', 'Como trabalhamos', 'Calcular estimativa', 'Contato', 'WhatsApp'];
+  // Páginas V02 (Home, Serviços e Contato): "Início · Serviços · Portfólio · Como trabalhamos · Contato · Construir ou ampliar · Calcular estimativa · WhatsApp".
+  const expectedV02 = ['Início', 'Serviços', 'Portfólio', 'Como trabalhamos', 'Contato', 'Construir ou ampliar', 'Calcular estimativa', 'WhatsApp'];
   for (const page of pages) {
     const html = await readFile(path.join(siteRoot, page), 'utf8');
     const nav = html.match(/<nav class="nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
