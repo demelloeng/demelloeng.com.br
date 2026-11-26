@@ -64,6 +64,16 @@ class ExperienciaTests(unittest.TestCase):
             'essas áreas não formam uma área física total.',
             'Atividades de uma mesma disciplina sobre a mesma área não são multiplicadas. '
             'Central e tubulação de GLP permanecem separadas, assim como os volumes de corte e aterro.',
+            'Conheça também um anteprojeto estrutural em concreto, um modelo preliminar de mezanino metálico '
+            'e as instalações hidrossanitárias de uma residência.',
+            'Esses exemplos apresentam outras aplicações das disciplinas. '
+            'Não são identificados como modelos dos colégios deste portfólio.',
+            'Para entender como as interfaces entre disciplinas são analisadas e as soluções são coordenadas:',
+            'As ARTs identificam os serviços e as responsabilidades registrados em cada empreendimento. '
+            'As fichas preservam essa atribuição, incluindo as referências a equipe e coautoria quando aplicáveis.',
+            'O terreno natural foi reconstruído para a demonstração. O relevo tem exagero vertical de duas vezes, '
+            'e as contenções são ilustrativas. A maquete não substitui levantamento topográfico, não representa '
+            'um projeto executivo completo e não deve ser usada para conferir quantitativos.',
         }
         for paragraph in removed:
             self.assertNotIn(paragraph, visible)

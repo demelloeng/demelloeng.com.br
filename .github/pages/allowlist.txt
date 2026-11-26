@@ -68,6 +68,8 @@ assets/images/fundador-mangue-casa.png
 assets/images/fundador-mangue-retrato.png
 assets/images/fundador-mercado.png
 assets/images/fundador-obra-estaca.jpg
+# 2026-11-26 - Retrato responsivo do responsável técnico no Portfólio V03.
+assets/images/fundador-obra-estaca-900.webp
 assets/images/fundador-obra-grupo.jpg
 assets/images/fundador-trainee.png
 assets/images/fundador-treliça.png

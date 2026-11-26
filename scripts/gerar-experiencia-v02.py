@@ -205,12 +205,48 @@ def widget(copy):
     return mark
 
 
+def visualization_posters(title):
+    posters = (
+        ('home-maquete-estrutural-640.webp', 640, 337, 'home-maquete-estrutural-1240.webp', 1240,
+         'projeto-estrutural', 'Estrutura em concreto e aço', 'Anteprojeto em concreto e mezanino metálico, em 3D.',
+         'Maquete com pilares e vigas de concreto e mezanino de perfis metálicos.'),
+        ('home-maquete-hidro-640.webp', 640, 337, 'home-maquete-hidro-1240.webp', 1240,
+         'projeto-hidrossanitario', 'Instalações de uma residência', 'Hidrossanitário em 3D, peça por peça.',
+         'Maquete da residência com tubulações de água e esgoto aparentes.'),
+        ('bim-compatibilizacao-v3.webp', 900, 781, 'bim-compatibilizacao-v3@2x.webp', 1820,
+         'compatibilizacao-bim', 'Coordenação em BIM', 'Como as disciplinas se encontram antes da obra.',
+         'Vista do modelo com estrutura e redes de instalações sobrepostas.'),
+    )
+    sizes = '(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw'
+    result = [
+        '<section class="portfolio-visualizations" aria-labelledby="portfolio-visualizations-title">',
+        f'<h3 id="portfolio-visualizations-title">{inline(title)}</h3>',
+        '<p>Modelos 3D de outras aplicações das disciplinas.</p>',
+        '<ul class="portfolio-posters" role="list">',
+    ]
+    for image, width, height, large, large_width, service, name, caption, alt in posters:
+        result.append(
+            f'<li><a class="portfolio-poster gvl-spot" href="../servicos/{service}/">'
+            '<span class="portfolio-poster-image">'
+            f'<img src="../assets/images/{image}" srcset="../assets/images/{image} {width}w, '
+            f'../assets/images/{large} {large_width}w" sizes="{sizes}" '
+            f'width="{width}" height="{height}" loading="lazy" decoding="async" alt="{alt}">'
+            '</span><span class="portfolio-poster-copy">'
+            f'<strong>{name}</strong><span>{caption}</span></span></a></li>'
+        )
+    result.append('</ul></section>')
+    return '\n'.join(result)
+
+
 def bim(text):
     sections = re.split(r'^#### ', text, flags=re.M)
     result = [render(sections[0])]
     for i, section in enumerate(sections[1:]):
         title, body = section.split('\n', 1)
-        intro = body.split('**Legenda da prévia:**')[0] if i < 2 else body
+        if i == 2:
+            result.append(visualization_posters(title))
+            continue
+        intro = body.split('**Legenda da prévia:**')[0]
         result.append('<article class="demonstracao"><h3>' + inline(title) + '</h3>' + render(intro))
         if i == 0:
             result.append(widget(body))
@@ -220,12 +256,31 @@ def bim(text):
         elif i == 1:
             result.append('<a class="previa-terreno" href="../servicos/projeto-terraplenagem/"><img src="../assets/images/experiencia-terraplanagem-djalma.png" width="1000" height="625" loading="lazy" alt="' + html.escape(field(body, 'Texto alternativo da imagem'), quote=True) + '"></a>')
             result.append('<p class="legenda">' + inline(field(body, 'Legenda da prévia')) + '</p>')
-            result.append('<p class="aviso">' + inline(field(body, 'Aviso técnico')) + '</p>')
             tail = body[body.index('**Link de acesso:**'):]
-            tail = tail.replace('**Microcopy:**', '**Microcopy:**')
             result.append(render(tail))
         result.append('</article>')
     return '\n'.join(result)
+
+
+def technical_provenance(text, home):
+    title, introduction, _, links = render(text).splitlines()
+    links = re.sub(r'<li><a href="\.\./empresa/trajetoria-do-fundador\.html">[^<]+</a></li>', '', links)
+    links = links.replace('<ul>', '<ul class="portfolio-founder-links" role="list">', 1)
+    lead = re.search(r'<p class="experience-lead">[^<]+</p>', home).group()
+    neon = re.search(r'<a class="text-link gvl-neon" href="\./empresa/trajetoria-do-fundador\.html".*?</a>', home).group()
+    neon = re.sub(r' style="[^"]*"', '', neon).replace('href="./', 'href="../')
+    return '\n'.join((
+        '<div class="portfolio-founder">',
+        '<picture class="portfolio-founder-photo">',
+        '<source srcset="../assets/images/fundador-obra-estaca-900.webp" type="image/webp">',
+        '<img src="../assets/images/fundador-obra-estaca.jpg" width="2048" height="1536" '
+        'loading="lazy" decoding="async" '
+        'alt="Marcos de capacete em canteiro de obra, ao lado de perfuratriz de estacas">',
+        '</picture>',
+        '<div class="portfolio-founder-copy">',
+        title, introduction, lead, '<p class="portfolio-founder-crea">CREA-PR 146906/D</p>', neon, links,
+        '</div></div>',
+    ))
 
 
 def montar(source):
@@ -234,6 +289,7 @@ def montar(source):
     body = source.split('### BLOCO 01 — HERO', 1)[1].split('## B. METADADOS SEO CONSOLIDADOS', 1)[0]
     blocks = re.split(r'^### BLOCO \d{2} — [^\n]+\n', body, flags=re.M)
     if len(blocks) != 7: raise ValueError('Sete blocos obrigatórios.')
+    home = (ROOT / 'index.html').read_text(encoding='utf-8')
     sections = []
     for i, text in enumerate(blocks):
         if i == 1:
@@ -242,16 +298,17 @@ def montar(source):
             content = content.replace('<p><strong>60</strong><br>ARTs documentadas</p>\n<p><strong>23</strong><br>Municípios identificados</p>\n<p><strong>Paraná e São Paulo</strong><br>Estados com serviços documentados</p>', '<div class="indicadores"><p><strong>60</strong><span>ARTs documentadas</span></p><p><strong>23</strong><span>Municípios identificados</span></p><p><strong>Paraná e São Paulo</strong><span>Estados com serviços documentados</span></p></div>')
         elif i == 4:
             content = bim(text)
+        elif i == 5:
+            content = technical_provenance(text, home)
         else:
             content = render(text, 'main' if i == 2 else 'additional' if i == 3 else None)
         tag = 'h1' if i == 0 else 'h2'
         content = content.replace('<' + tag + '>', f'<{tag} id="titulo-{i+1}">', 1)
         ident = ' id="projetos"' if i == 2 else ''
-        extra = ' hero' if i == 0 else ' portfolio-cta' if i == 6 else ''
+        extra = ' hero' if i == 0 else ' portfolio-cta' if i == 6 else ' experience-section' if i == 5 else ''
         if i == 0:
             content = AURORA + content
         if i == 6:
-            home = (ROOT / 'index.html').read_text(encoding='utf-8')
             art = re.search(r'<div class="gvl-cta-art"[^>]*>.*?</svg></div>', home, re.S).group()
             content = content.replace('acao acao-principal', 'acao acao-principal gvl-neon', 1) + art
         sections.append(f'<section class="bloco bloco-{i+1}{extra}" data-block="{BLOCKS[i]}"{ident} aria-labelledby="titulo-{i+1}"><div class="wrap">{content}</div></section>')

@@ -1,4 +1,4 @@
-// A Home carrega sua camada original. Aqui, só a régua reage ao ponteiro.
+// A Home carrega sua camada original. Aqui, a régua e os cartazes reagem ao ponteiro.
 const ruler = document.querySelector('.portfolio-ruler');
 const control = ruler.querySelector('.gvl-motion');
 const label = control.querySelector('.gvl-motion-label');
@@ -36,3 +36,13 @@ ruler.addEventListener('pointermove', event => {
 reduced.addEventListener('change', updateMotion);
 pointer.addEventListener('change', updateMotion);
 updateMotion();
+
+const posterHover = matchMedia('(hover: hover)');
+for (const poster of document.querySelectorAll('.portfolio-poster')) {
+  poster.addEventListener('pointermove', event => {
+    if (!posterHover.matches || event.pointerType === 'touch') return;
+    const box = poster.getBoundingClientRect();
+    poster.style.setProperty('--mx', (event.clientX - box.left) + 'px');
+    poster.style.setProperty('--my', (event.clientY - box.top) + 'px');
+  }, { passive: true });
+}

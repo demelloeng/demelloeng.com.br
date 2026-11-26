@@ -2,7 +2,7 @@
 last_mapped: 2026-11-17T22:02:01Z
 total_files: 570
 total_tokens: 568758
-commit: 13136c6
+commit: 9943a29
 branch: feat/home-v02-maquetes-clientes
 ---
 
@@ -536,7 +536,8 @@ A evidência fica em `.git/…/capacidades/evidencias.jsonl` da worktree (não v
 
 ## Portfólio V03 (26/11/2026)
 
-- A rota /experiencia-tecnica/ e seus sete blocos saem de scripts/gerar-experiencia-v02.py. A régua lê os valores da fonte consolidada com SHA-256 fixado e monta duas listas independentes para m² e m³.
+- A rota /experiencia-tecnica/ e seus sete blocos saem de scripts/gerar-experiencia-v02.py. A régua lê os valores da fonte consolidada com SHA-256 fixado e monta uma lista com sete quantitativos, com os pares de GLP e terraplanagem somados em Decimal.
 - A página herda a camada Grafite, vidro e luz da Home V2. assets/css/portfolio-vitrine.css instala a composição local e assets/js/portfolio-vitrine.mjs controla o reflexo e a entrada das barras. Os ícones usam os SVGs já publicados de Serviços.
 - O rótulo Portfólio vem de gerar-construir-ou-ampliar-v02.py (também herdado pelas páginas institucionais e por Verificar/404), gerar-contato-v02.py, gerar-paginas-servico-v02.py e da adaptação dos templates históricos em gerar-servicos-v02.py. A Home e a Trajetória do fundador têm navegação no HTML.
 - As fichas mantêm os detalhes nativos e os registros. A demonstração de hidrantes mantém a ativação do 3D sob demanda em assets/js/experiencia-bim.js.
+- A fileira de cartazes reutiliza os WebP publicados de Serviços e da compatibilização BIM. O bloco do responsável reaproveita o link neon da Home e a foto da Trajetória, com variante WebP e fallback JPEG.

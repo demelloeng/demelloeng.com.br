@@ -361,7 +361,7 @@ test('experiência V02: portfólio aprovado, atribuição e duas demonstrações
   assert.equal([...html.matchAll(/class="projeto-principal"/g)].length, 4);
   assert.equal([...html.matchAll(/class="projeto-complementar"/g)].length, 7);
   assert.match(html, /acervo técnico-profissional de Marcos de Mello Silva/);
-  assert.match(html, /referências a equipe e coautoria/);
+  assert.match(html, /A ART contém referência a coautoria\. A participação apresentada corresponde aos serviços nela registrados\./);
   assert.match(html, /1720261281228/);
   assert.doesNotMatch(html, /1720261245965|Único case|modelo estrutural original|Modelo 3D.IFC|three-d-stage/);
   assert.equal([...html.matchAll(/data-hidrantes-widget/g)].length, 1);
@@ -412,7 +412,7 @@ const NUMERIC_FACTS = new Set([
 // Numerais que só valem em UMA página, cada um com a fonte conferida (nada é liberado para o site inteiro).
 const PAGE_FACTS = {
   // Portfólio: fonte integral aprovada, estado 100% do widget e somas V02 de corte + aterro e tubulação + central.
-  'experiencia-tecnica/index.html': [...new Set((await read('docs/arquivo/experiencia-tecnica-v02-20261106/COPY_EXPERIENCIA_TECNICA_V01_CONSOLIDADA_20261106.md')).match(/\d[\d.,/-]*\d|\d/g)), '100', '4.958,70', '4.512,65'],
+  'experiencia-tecnica/index.html': [...new Set((await read('docs/arquivo/experiencia-tecnica-v02-20261106/COPY_EXPERIENCIA_TECNICA_V01_CONSOLIDADA_20261106.md')).match(/\d[\d.,/-]*\d|\d/g)), '100', '4.958,70', '4.512,65', '120', '146906', '010/2026'],
   // Maquete Luiz Carlos V02 aceita (b52e32d): 171 IDs; 100% é estado do controle.
   'servicos/projeto-prevencao-incendio/index.html': ['171', '100'],
   // referências de preço da tabela DEMELLO V2: Resolução SECID/PR e Credenciamento Fundepar (orcamento-src/src/pricing/pricing-table.v2.json; journey.mjs)
