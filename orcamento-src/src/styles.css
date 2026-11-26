@@ -312,6 +312,7 @@ html.v5-full-open :is(.site-footer,.demo-bar,.dm-fab){display:none}
   font-family: var(--calc-title);
   font-weight: 600;
   color: var(--g-ice);
+  text-wrap: balance; /* evita palavra solta na última linha ("é?") */
 }
 
 button, .secondary-button, .link-button, .mq-tab, .mq-v5 .mq-tab-sec,
