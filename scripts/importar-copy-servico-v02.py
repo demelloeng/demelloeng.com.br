@@ -30,9 +30,9 @@ IMPRENSA = {
          'url': 'https://www.folhadecampolargo.com.br/noticia/56187/ccm-djalma-marinho-recebe-investimento-historico-de-r-83-mil', 'data': '16/06/2026'},
     ],
 }
-LAYOUTS = {'projeto-arquitetura': 'rico', 'projeto-estrutural': 'rico', 'projeto-hidrossanitario': 'rico', 'projeto-terraplenagem': 'rico'}
+LAYOUTS = {'projeto-arquitetura': 'rico', 'projeto-estrutural': 'rico', 'projeto-hidrossanitario': 'rico', 'projeto-terraplanagem': 'rico'}
 LAYOUTS['projeto-prevencao-incendio'] = 'rico'
-PERFIS = {'projeto-estrutural': 'estrutura', 'projeto-hidrossanitario': 'hidro', 'projeto-terraplenagem': 'infra'}   # layout próprio: maquete estrutural e bloco "Da fundação à laje"   # as demais páginas ficam no layout simples até terem copy aprovada
+PERFIS = {'projeto-estrutural': 'estrutura', 'projeto-hidrossanitario': 'hidro', 'projeto-terraplanagem': 'infra'}   # layout próprio: maquete estrutural e bloco "Da fundação à laje"   # as demais páginas ficam no layout simples até terem copy aprovada
 FIGURAS = {
     'projeto-arquitetura': {
         'Experiência aplicada — CECM Djalma Marinho': [{
@@ -53,7 +53,7 @@ LINKS = {
     'projeto-arquitetura': [('pode ser necessária regularização', 'regularização', '../regularizacao/')],
     'projeto-estrutural': [('serviço de Orçamento e cronograma', 'Orçamento e cronograma', '../orcamento-tecnico/')],
     'projeto-hidrossanitario': [('serviço de Orçamento e cronograma', 'Orçamento e cronograma', '../orcamento-tecnico/')],
-    'projeto-terraplenagem': [('serviço de Orçamento e cronograma', 'Orçamento e cronograma', '../orcamento-tecnico/')],
+    'projeto-terraplanagem': [('serviço de Orçamento e cronograma', 'Orçamento e cronograma', '../orcamento-tecnico/')],
 }
 
 ROTULOS = ['TITULO', 'DESCRICAO', 'H1', 'CHAMADA', 'INTRODUCAO 1', 'INTRODUCAO 2', 'PARA QUEM E', 'O QUE MUDA PARA VOCE',

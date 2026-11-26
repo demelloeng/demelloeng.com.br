@@ -1,5 +1,5 @@
 {
-  "slug": "projeto-terraplenagem",
+  "slug": "projeto-terraplanagem",
   "nome_servico": "Projeto de terraplanagem e infraestrutura",
   "fonte_copy": "COPY_INFRAESTRUTURA_V02_20261102.md",
   "titulo_pagina": "Terraplanagem: projeto de corte, aterro e drenagem | DEMELLO",
@@ -16,7 +16,7 @@
     "href": "../../contato/"
   },
   "jsonld_nomes": {
-    "Projeto de terraplenagem": "Projeto de terraplanagem e infraestrutura"
+    "Projeto de terraplanagem": "Projeto de terraplanagem e infraestrutura"
   },
   "blocos_novos": {
     "para_quem": {

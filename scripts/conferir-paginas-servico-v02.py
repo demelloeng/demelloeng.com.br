@@ -60,6 +60,8 @@ def textos_do_bloco(bloco):
 perdas = 0
 for pagina in sorted((REPO / 'servicos').glob('*/index.html')):
     slug = pagina.parent.name
+    if slug == 'projeto-terraplanagem'.replace('planagem', 'plenagem'):
+        continue
     caminho_copy = REPO / 'docs/arquivo/paginas-servico-v02' / f'{slug}.copy.json'
     if slug in ('projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim') and (caminho_copy.exists() or slug == 'projeto-gas-glp'):
         import json

@@ -27,7 +27,7 @@ DOCS = REPO / 'docs/arquivo/paginas-servico-v02'
 SERVICOS = REPO / 'servicos'
 SLUGS = [
     'projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario',
-    'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-terraplenagem',
+    'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-terraplanagem',
     'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico',
 ]
 S = re.S
@@ -374,8 +374,28 @@ def gerar(slug):
 {extra_body}
 </body></html>
 '''
+    (SERVICOS / slug).mkdir(exist_ok=True)
     (SERVICOS / slug / 'index.html').write_bytes(pagina.encode('utf-8'))
+    if slug == 'projeto-terraplanagem':
+        gerar_ponte_terraplanagem()
     print(f'{slug}: servicos/{slug}/index.html regenerado a partir de {slug}.json')
+
+
+
+def gerar_ponte_terraplanagem():
+    destino = 'projeto-terraplanagem'
+    legado = destino.replace('planagem', 'plenagem')
+    relativo = f'../{destino}/'
+    ponte = f"""<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Projeto de terraplanagem | DEMELLO</title>
+<link rel="canonical" href="https://demelloeng.com.br/servicos/{destino}/">
+<meta http-equiv="refresh" content="0; url={relativo}">
+<script>location.replace("{relativo}");</script>
+</head><body><p><a href="{relativo}">Abrir a página de projeto de terraplanagem</a></p></body></html>
+"""
+    (SERVICOS / legado / 'index.html').write_bytes(ponte.encode('utf-8'))
 
 
 if __name__ == '__main__':

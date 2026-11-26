@@ -44,6 +44,20 @@ class SeoContracts(unittest.TestCase):
         self.assertEqual([('City', 'Curitiba'), ('State', 'Paraná'), ('Country', 'Brasil')],
                          [(item['@type'], item['name']) for item in org['areaServed']])
 
+    def test_bridge_targets_only_the_canonical_service(self):
+        new_slug = 'projeto-terraplanagem'
+        old_slug = new_slug.replace('planagem', 'plenagem')
+        bridge = (ROOT / 'servicos' / old_slug / 'index.html').read_text(encoding='utf-8')
+        current = (ROOT / 'servicos' / new_slug / 'index.html').read_text(encoding='utf-8')
+        target = f'../{new_slug}/'
+        canonical = f'<link rel="canonical" href="https://demelloeng.com.br/servicos/{new_slug}/">'
+        self.assertIn(canonical, bridge)
+        self.assertIn(canonical, current)
+        self.assertIn(f'<meta http-equiv="refresh" content="0; url={target}">', bridge)
+        self.assertIn(f'location.replace("{target}")', bridge)
+        self.assertIn(f'<a href="{target}">', bridge)
+        self.assertNotIn('noindex', bridge)
+
     def test_faq_schema_matches_public_questions_and_answers(self):
         local_slugs = {'projeto-prevencao-incendio', 'regularizacao'}
         count = 0

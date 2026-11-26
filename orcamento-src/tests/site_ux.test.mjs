@@ -34,7 +34,7 @@ const H1_NAMES = [
 const SERVICE_SLUGS = [
   'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio',
   'projeto-gas-glp', 'projeto-arquitetura', 'regularizacao',
-  'orcamento-tecnico', 'projeto-terraplenagem', 'compatibilizacao-bim',
+  'orcamento-tecnico', 'projeto-terraplanagem', 'compatibilizacao-bim',
 ];
 
 test('HOME V02: primeira dobra apresenta o que a DEMELLO projeta e leva à estimativa ou ao WhatsApp; sem números de acervo', async () => {
@@ -109,7 +109,7 @@ test('HOME V02: vitrine com imagens das cinco maquetes V03, cada uma levando à 
     ['projeto-estrutural', 'estrutural'],
     ['projeto-hidrossanitario', 'hidro'],
     ['projeto-prevencao-incendio', 'incendio'],
-    ['projeto-terraplenagem', 'terraplanagem'],
+    ['projeto-terraplanagem', 'terraplanagem'],
   ], 'cinco linhas, na ordem aprovada, com imagem da maquete');
   const allowlist = (await read('.github/pages/allowlist.txt')).split(/\r?\n/);
   for (const [, n] of linhas) {
@@ -157,7 +157,7 @@ test('SERVIÇOS V02: nove destinos, copy corrigida, limites e caminhos por situa
   const titles = items.map(item => item.match(/<h3><a[^>]*>([^<]+)<\/a><\/h3>/)?.[1]);
   assert.deepEqual(titles, expected, 'ordem e nomes da copy validada');
   const slugs = items.map(item => item.match(/<h3><a href="\.\/([a-z-]+)\/">/)?.[1]);
-  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-terraplanagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
   assert.match(items[3], /href="\.\/projeto-gas-glp\/"/);
   for (const item of items) {
     assert.match(item, /<p class="service-limit">[^<]+<\/p>/, 'limite técnico disponível sem interação');
@@ -184,7 +184,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
     'projeto-estrutural': ['Ver a estimativa do meu projeto estrutural', '../../orcamento/?situacao=known&amp;servico=estrutural'],
     'projeto-hidrossanitario': ['Ver a estimativa do meu projeto hidrossanitário', '../../orcamento/?situacao=known&amp;servico=hidrossanitario'],
     'projeto-arquitetura': ['Ver a estimativa do meu projeto de casa', '../../orcamento/?situacao=known&amp;servico=arquitetura'],
-    'projeto-terraplenagem': ['Conversar sobre meu projeto de terraplanagem', '../../contato/'],
+    'projeto-terraplanagem': ['Conversar sobre meu projeto de terraplanagem', '../../contato/'],
   };
   const CTA = {
     'projeto-estrutural': ['Ver uma estimativa para meu projeto', 'known&amp;servico=estrutural'],
@@ -194,7 +194,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
     'projeto-arquitetura': ['Descrever meu projeto de arquitetura', 'known&amp;servico=arquitetura'],
     regularizacao: ['Entender o que meu imóvel precisa', 'regularize'],
     'orcamento-tecnico': ['Descrever o orçamento que preciso', 'known&amp;servico=orcamento-tecnico'],
-    'projeto-terraplenagem': ['Descrever meu projeto de terraplenagem', 'known&amp;servico=terraplenagem'],
+    'projeto-terraplanagem': ['Descrever meu projeto de terraplanagem', 'known&amp;servico=terraplanagem'],
     'compatibilizacao-bim': ['Avaliar a compatibilização do meu projeto', 'known&amp;servico=compatibilizacao'],
   };
   for (const slug of SERVICE_SLUGS) {
@@ -280,9 +280,9 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       const [rotulo, destino] = V02[slug];
       const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
       assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
-      const corpo = slug === 'projeto-terraplenagem' ? ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'] : ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'];
+      const corpo = slug === 'projeto-terraplanagem' ? ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'] : ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'];
       for (const h2 of corpo) assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
-      const detalhes = slug === 'projeto-terraplenagem' ? ['Entregáveis', 'Como o escopo é definido'] : ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites'];
+      const detalhes = slug === 'projeto-terraplanagem' ? ['Entregáveis', 'Como o escopo é definido'] : ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites'];
       for (const h3 of detalhes) assert.ok(html.includes(`<h3>${h3}</h3>`), `${slug}: detalhe "${h3}"`);
     } else {
     const [label, query] = CTA[slug];

@@ -366,7 +366,7 @@ test('páginas de serviço de Arquitetura e Orçamento técnico descrevem a esti
 });
 
 test('Infraestrutura (terraplanagem): sem estimativa (decisão 97); o chamado leva ao contato e não ao /orcamento/', async () => {
-  const html = await readFile(path.join(siteRoot, 'servicos/projeto-terraplenagem/index.html'), 'utf8');
+  const html = await readFile(path.join(siteRoot, 'servicos/projeto-terraplanagem/index.html'), 'utf8');
   const principal = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
   assert.doesNotMatch(principal, /orcamento\/\?/, 'a página de Infraestrutura não abre a estimativa');
   assert.match(principal, /<a class="cta" href="\.\.\/\.\.\/contato\/">Conversar sobre meu projeto de terraplanagem/);

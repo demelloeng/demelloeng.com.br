@@ -254,7 +254,7 @@ def bim(text):
             result.append('<p class="aviso">' + inline(field(body, 'Aviso de abrangência')) + '</p>')
             result.append(render(body[body.index('**Link de apoio:**'):]))
         elif i == 1:
-            result.append('<a class="previa-terreno" href="../servicos/projeto-terraplenagem/"><img src="../assets/images/experiencia-terraplanagem-djalma.png" width="1000" height="625" loading="lazy" alt="' + html.escape(field(body, 'Texto alternativo da imagem'), quote=True) + '"></a>')
+            result.append('<a class="previa-terreno" href="../servicos/projeto-terraplanagem/"><img src="../assets/images/experiencia-terraplanagem-djalma.png" width="1000" height="625" loading="lazy" alt="' + html.escape(field(body, 'Texto alternativo da imagem'), quote=True) + '"></a>')
             result.append('<p class="legenda">' + inline(field(body, 'Legenda da prévia')) + '</p>')
             tail = body[body.index('**Link de acesso:**'):]
             result.append(render(tail))

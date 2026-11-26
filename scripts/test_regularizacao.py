@@ -86,7 +86,7 @@ class Regularizacao(unittest.TestCase):
 
     def test_pipeline_deterministico_e_outras_paginas_intactas(self):
         protegidas = ['index.html', 'contato/index.html', 'construir-ou-ampliar/index.html', 'servicos/index.html'] + [
-            f'servicos/{s}/index.html' for s in ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem',
+            f'servicos/{s}/index.html' for s in ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplanagem',
                                                   'projeto-prevencao-incendio', 'projeto-gas-glp']]
         antes = {p: (ROOT / p).read_bytes() for p in protegidas}
         alvos = [f'servicos/{SLUG}/index.html', f'docs/arquivo/paginas-servico-v02/{SLUG}.copy.json']

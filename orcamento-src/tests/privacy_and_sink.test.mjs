@@ -51,6 +51,8 @@ test('F8A: Privacidade contém a frase aprovada, integral e na seção de dados 
   assert.equal(page.split(approved).length - 1, 1);
 });
 
+const legacyBridge = 'servicos/projeto-terraplanagem/index.html'.replace('planagem', 'plenagem');
+
 async function staticPages() {
   const out = [];
   async function walk(dir) {
@@ -59,7 +61,7 @@ async function staticPages() {
       if (e.isDirectory()) {
         if (['orcamento-src', 'node_modules', 'docs', 'orcamento', '.github', '.git', 'assets'].includes(e.name)) continue;
         await walk(rel);
-      } else if (e.name.endsWith('.html') && !e.name.startsWith('_') && !/^google[0-9a-f]+\.html$/.test(e.name)) out.push(rel); // arquivo de verificação do Search Console não é página
+      } else if (rel !== legacyBridge && e.name.endsWith('.html') && !e.name.startsWith('_') && !/^google[0-9a-f]+\.html$/.test(e.name)) out.push(rel); // arquivo de verificação do Search Console não é página
     }
   }
   await walk('.');

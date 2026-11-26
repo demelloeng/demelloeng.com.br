@@ -32,6 +32,7 @@ servicos/projeto-gas-glp/index.html
 servicos/projeto-arquitetura/index.html
 servicos/regularizacao/index.html
 servicos/orcamento-tecnico/index.html
+servicos/projeto-terraplanagem/index.html
 servicos/projeto-terraplenagem/index.html
 servicos/compatibilizacao-bim/index.html
 

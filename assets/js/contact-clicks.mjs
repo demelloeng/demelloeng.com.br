@@ -35,7 +35,7 @@ const PAGE_CONTEXT = Object.freeze({
   '/servicos/projeto-arquitetura/': { route: 'known', service: 'arquitetura' },
   '/servicos/regularizacao/': { route: 'regularize', service: 'regularizacao' },
   '/servicos/orcamento-tecnico/': { route: 'known', service: 'orcamento' },
-  '/servicos/projeto-terraplenagem/': { route: 'known', service: 'terraplenagem' },
+  '/servicos/projeto-terraplanagem/': { route: 'known', service: 'terraplenagem' },
   '/servicos/compatibilizacao-bim/': { route: 'known', service: 'compatibilizacao' },
 });
 

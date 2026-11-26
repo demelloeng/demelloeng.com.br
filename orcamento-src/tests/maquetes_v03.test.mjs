@@ -40,7 +40,7 @@ const PAGINAS_V03 = [
   { pagina: 'servicos/projeto-estrutural/index.html', capa: 'maquete-estrutura-capa.webp', config: 'estrutural' },
   { pagina: 'servicos/projeto-hidrossanitario/index.html', capa: 'maquete-hidro-capa.webp', config: 'hidro' },
   { pagina: 'servicos/projeto-prevencao-incendio/index.html', capa: 'maquete-incendio-capa.webp', config: 'incendio' },
-  { pagina: 'servicos/projeto-terraplenagem/index.html', capa: 'maquete-terraplanagem-capa.webp', config: 'terraplanagem' },
+  { pagina: 'servicos/projeto-terraplanagem/index.html', capa: 'maquete-terraplanagem-capa.webp', config: 'terraplanagem' },
   { pagina: 'servicos/projeto-arquitetura/index.html', capa: 'maquete-arquitetura-capa.webp', config: 'arquitetura' },
 ];
 
@@ -449,7 +449,7 @@ test('terraplanagem: página, configuração e ficha (texto da V5, nenhum volume
   for (const [g, els] of Object.entries(meta.grupos)) { assert.equal(els.length, 1, g); assert.equal(els[0][2], 0); assert.equal(els[0][3], malhas[g].idx.length / 3, g); }
   const markup = await texto('docs/arquivo/paginas-servico-v02/maquete-terraplanagem-v03-markup.html');
   for (const t of [markup, JSON.stringify(meta)]) { assert.doesNotMatch(t, /\d\s*m³|\d\s*m3\b/, 'a maquete não mostra volume'); assert.doesNotMatch(t, /terraplenagem/i); }
-  const html = await texto('servicos/projeto-terraplenagem/index.html');
+  const html = await texto('servicos/projeto-terraplanagem/index.html');
   assert.ok(html.includes(markup.trim().split('\n')[1].trim()), 'a página vem do markup V03, pelo gerador');
   assert.doesNotMatch(html, /maquete-terraplanagem-3d\.js/, 'a V5 sai da página');
   for (const f of ['assets/js/maquete-terraplanagem-3d.js', 'assets/models/terraplanagem-djalma.json', 'docs/arquivo/paginas-servico-v02/maquete-terraplanagem-markup.html']) await ler(f);   // ficam para reversão

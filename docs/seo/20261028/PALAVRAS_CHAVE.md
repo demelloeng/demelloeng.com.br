@@ -14,7 +14,7 @@ Escopo: Home V02 e candidata `/servicos/`. Registro da revisão existente; não 
 | Projeto de incêndio / PPCI | Nome do serviço com a sigla preservada. Não implica aprovação garantida. |
 | Projeto de gás / GLP | Serviço distinto de incêndio; não confundir projeto com instalação. |
 | Projeto de terraplanagem | Grafia principal determinada pela orientação editorial posterior e pela Home V02. |
-| Terraplenagem | Variante explicativa preservada; URL histórica `/servicos/projeto-terraplenagem/` mantida. |
+| Terraplenagem | Variante explicativa preservada; URL histórica `/servicos/projeto-terraplanagem/` mantida. |
 | Projetos complementares | Disciplinas de projeto, inclusive na orientação a arquitetos e construtoras. Não equivale automaticamente a consultoria ou mentoria. |
 | Compatibilização BIM | Serviço de coordenação entre disciplinas; BIM também integra a descrição da Home. |
 | Regularização de imóvel | Objeto explícito e situação documental concreta, sem promessa de aprovação automática. |

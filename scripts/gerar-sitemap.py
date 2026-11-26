@@ -49,10 +49,6 @@ def render(staged=False):
     for url in URLS:
         path = url.removeprefix('/') + ('index.html' if url.endswith('/') else '')
         lastmod = date if path in pending else git('log', '-1', '--format=%cs', '--', path)
-        if not lastmod and 'terraplanagem' in path:
-            # A URL já consta no sitemap na etapa A; a migração ocorre no commit seguinte.
-            previous = path.replace('terraplanagem', 'terraplenagem')
-            lastmod = date if previous in pending else git('log', '-1', '--format=%cs', '--', previous)
         if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', lastmod):
             raise ValueError(f'{path}: sem data no histórico Git')
         lines.append(f'  <url><loc>{DOMAIN}{url}</loc><lastmod>{lastmod}</lastmod></url>')

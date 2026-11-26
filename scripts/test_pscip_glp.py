@@ -55,14 +55,14 @@ class Frente(unittest.TestCase):
     def test_perfis_anteriores_reproduzem_html_versionado(self):
         with tempfile.TemporaryDirectory(prefix='pscip-test-',dir=ROOT) as tmp:
             target=Path(tmp);shutil.copytree(ROOT/'scripts',target/'scripts');shutil.copytree(DOC,target/'docs/arquivo/paginas-servico-v02')
-            for slug in ['projeto-arquitetura','projeto-estrutural','projeto-hidrossanitario','projeto-terraplenagem']:
+            for slug in ['projeto-arquitetura','projeto-estrutural','projeto-hidrossanitario','projeto-terraplanagem']:
                 page=target/f'servicos/{slug}/index.html';page.parent.mkdir(parents=True)
                 subprocess.run([sys.executable,'-B','scripts/gerar-paginas-servico-v02.py','gerar',slug],cwd=target,check=True,capture_output=True)
                 original=subprocess.run(['git','show',f'HEAD:servicos/{slug}/index.html'],cwd=ROOT,check=True,capture_output=True).stdout
                 self.assertEqual(page.read_bytes(),original,slug)
 
     def test_pipeline_deterministico_e_perfis_preservados(self):
-        protected = ['index.html', 'contato/index.html', 'construir-ou-ampliar/index.html'] + [f'servicos/{s}/index.html' for s in ['projeto-arquitetura','projeto-estrutural','projeto-hidrossanitario','projeto-terraplenagem']]
+        protected = ['index.html', 'contato/index.html', 'construir-ou-ampliar/index.html'] + [f'servicos/{s}/index.html' for s in ['projeto-arquitetura','projeto-estrutural','projeto-hidrossanitario','projeto-terraplanagem']]
         before = {p: (ROOT / p).read_bytes() for p in protected}
         html_paths = ['servicos/index.html', f'servicos/{SLUG}/index.html', 'servicos/projeto-gas-glp/index.html']
         # A referência é a saída rastreada em servicos/, antes de gerar qualquer coisa.

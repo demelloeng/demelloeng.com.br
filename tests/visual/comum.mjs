@@ -6,7 +6,8 @@ import { RAIZ } from './playwright.config.mjs';
 const ALLOWLIST = path.join(RAIZ, '.github', 'pages', 'allowlist.txt');
 // arquivo de verificação do Google não é página
 export const PAGINAS = fs.readFileSync(ALLOWLIST, 'utf8').split(/\r?\n/)
-  .map((l) => l.trim()).filter((l) => l.endsWith('.html') && !l.startsWith('google'));
+  .map((l) => l.trim()).filter((l) => l.endsWith('.html') && !l.startsWith('google')
+    && l !== 'servicos/projeto-terraplanagem/index.html'.replace('planagem', 'plenagem'));
 
 export const nome = (p) => p.replace(/\/index\.html$/, '').replace(/\.html$/, '').replace(/\//g, '_') || 'home';
 

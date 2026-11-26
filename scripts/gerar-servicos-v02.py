@@ -135,7 +135,7 @@ stage = '''<section class="sv3-stage wrap" aria-label="Maquetes 3D" aria-roledes
           </figure>
         </div>
         <div class="sv3-slide" role="group" aria-roledescription="slide" aria-label="5 de 5"
-             data-discipline="terraplanagem" data-title="Projeto de terraplanagem" data-service-url="/servicos/projeto-terraplenagem/">
+             data-discipline="terraplanagem" data-title="Projeto de terraplanagem" data-service-url="/servicos/projeto-terraplanagem/">
           <figure class="sv3-poster">
             <img src="/assets/images/home-maquete-terraplanagem-640.webp" srcset="/assets/images/home-maquete-terraplanagem-640.webp 640w, /assets/images/home-maquete-terraplanagem-1240.webp 1240w"
                  sizes="(max-width: 760px) min(320px, calc(100vw - 64px)), (max-width: 1440px) 43vw, 565px"
