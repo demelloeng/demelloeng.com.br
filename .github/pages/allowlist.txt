@@ -251,3 +251,7 @@ assets/images/djalma-marinho-render-840.webp
 # Calculadora V2 (26/11/2026): fonte Rajdhani OFL para os botões.
 assets/fonts/rajdhani-600-latin.woff2
 assets/fonts/rajdhani-OFL.txt
+
+# 26/11/2026 — Serviços V03: vitrine de maquetes.
+assets/css/servicos-vitrine.css
+assets/js/servicos-vitrine.mjs

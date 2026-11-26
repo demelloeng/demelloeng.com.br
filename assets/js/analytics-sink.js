@@ -30,6 +30,7 @@
     origin_page: (v) => typeof v === 'string' && v.length <= 100 && PAGE_RE.test(v),
     route: (v) => ROUTES.includes(v),
     entry: (v) => ['deeplink', 'manual', 'redirect'].includes(v),
+    discipline: (v) => ['arquitetura', 'estrutural', 'hidrossanitario', 'incendio', 'terraplanagem'].includes(v),
     service: (v) => SERVICES.includes(v),
     service_count: (v) => Number.isInteger(v) && v >= 0 && v <= 12,
     step: (v) => typeof v === 'string' && /^[A-Z][A-Z0-9_-]{0,15}$/.test(v),
@@ -45,6 +46,8 @@
   });
 
   const EVENTS = Object.freeze({
+    service_showcase_selected: { emitters: ['site'], params: ['discipline'], stage: 'servicos' },
+    service_showcase_model_opened: { emitters: ['site'], params: ['discipline'], stage: 'servicos' },
     page_view: { emitters: ['site'], params: ['page', 'origin', 'origin_page'], stage: 'visita' },
     estimate_started: { emitters: ['site'], params: ['route', 'entry', 'step'], stage: 'estimativa' },
     situation_selected: { emitters: ['site'], params: ['route', 'entry', 'service', 'step'], stage: 'estimativa' },

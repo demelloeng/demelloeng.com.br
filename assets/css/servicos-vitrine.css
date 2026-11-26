@@ -1,0 +1,489 @@
+@font-face {
+  font-family: Rajdhani;
+  src: url("../fonts/rajdhani-600-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+body.servicos-v02.gvl {
+  --ink: var(--g-ice);
+  --muted: var(--g-muted);
+  --pale: var(--g-deep);
+}
+
+body.servicos-v02.gvl :focus-visible {
+  outline: 2px solid var(--g-light);
+  outline-offset: 3px;
+}
+
+body.gvl :is(h1, h2, h3) { text-wrap: balance; }
+body.gvl .skip:focus { color: var(--g-night); }
+body.gvl .site-header .nav-toggle { color: var(--g-ice); }
+body.gvl .site-header .nav { background-color: var(--g-graphite); }
+body.gvl .site-header .nav-budget { font-family: Rajdhani, var(--f-text); }
+body.servicos-v02.gvl .hero { display: block; padding: 0; }
+
+.sv3-opening {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .77fr);
+  align-items: end;
+  gap: clamp(24px, 5vw, 80px);
+  padding-block: clamp(32px, 5vw, 74px) clamp(28px, 5vw, 70px);
+}
+
+.sv3-heading { container-type: inline-size; }
+body.gvl .sv3-opening .eyebrow { margin-bottom: 14px; }
+body.gvl .sv3-opening h1 { color: var(--g-ice); font-size: clamp(36px, 12cqi, 84px); }
+.sv3-title-accent {
+  display: inline-block;
+  padding-block-end: .2em;
+  color: var(--g-light);
+}
+
+@supports (background-clip: text) {
+  .sv3-title-accent {
+    background: linear-gradient(105deg, var(--g-ice), var(--g-light)) text;
+    color: transparent;
+  }
+}
+
+body.gvl .sv3-opening .hero-copy {
+  padding: 0 0 .25em;
+  line-height: 1.42;
+}
+body.gvl .sv3-opening .hero-copy > p:not(.eyebrow) { font-size: 18px; }
+body.gvl .sv3-opening .hero-copy .secondary { margin-top: 12px; }
+body.gvl .sv3-opening .hero-copy a { color: var(--g-light); text-decoration: underline; }
+body.gvl .hero[data-moving] .sv3-opening .gvl-aurora span,
+body.gvl .sv3-opening .hero-copy > * { animation: none; }
+
+.sv3-stage {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(14px, 2.5vw, 36px);
+  margin-bottom: clamp(40px, 6vw, 90px);
+  background: var(--glass), var(--g-night);
+  border: 1px solid var(--glass-line-hi);
+  border-radius: 22px;
+}
+
+body.gvl .sv3-stage > .gvl-aurora {
+  inset: 0;
+  filter: blur(36px);
+}
+
+body.gvl .sv3-stage > .gvl-aurora span:nth-child(1) {
+  left: -7%;
+  top: -22%;
+  opacity: 1;
+}
+
+body.gvl .sv3-stage > .gvl-aurora span:nth-child(2) {
+  left: 32%;
+  top: -2%;
+  scale: 1.25;
+  opacity: 1;
+}
+
+body.gvl .sv3-stage > .gvl-aurora span:nth-child(3) {
+  right: -3%;
+  bottom: -13%;
+  opacity: 1;
+}
+
+body.gvl .sv3-stage .gvl-beam {
+  z-index: 1;
+  opacity: 1;
+
+}
+
+body.gvl .hero[data-moving] .sv3-stage .gvl-beam { animation-delay: -1.8s; }
+body.gvl .sv3-stage:not([data-in-view]) :is(.gvl-aurora span, .gvl-beam) {
+  animation-play-state: paused;
+}
+.sv3-stage > h2 { font-size: clamp(24px, 3vw, 38px); }
+
+.sv3-carousel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sv3-track {
+  --slot: 91%;
+  --gap: 2.25%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  min-width: 0;
+  padding-block: clamp(16px, 3vw, 38px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  touch-action: manipulation;
+  scroll-snap-type: x mandatory;
+  perspective: 1000px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--g-light) var(--g-deep);
+}
+
+.sv3-track::before,
+.sv3-track::after {
+  content: "";
+  flex: 0 0 max(0px, calc((100% - var(--slot)) / 2 - var(--gap)));
+}
+
+.sv3-slide {
+  flex: 0 0 var(--slot);
+  min-width: 0;
+  scroll-snap-align: center;
+  position: relative;
+}
+
+.sv3-slide:first-child {
+  order: clamp(0, var(--current) - (var(--children-count, sibling-count()) - 3), 1);
+}
+.sv3-slide:last-child { order: calc(-1 * clamp(0, 2 - var(--current), 1)); }
+
+/* Spacers keep the end slides centered, including after the parked slides move. */
+.sv3-track::before { order: -2; }
+.sv3-track::after { order: 2; }
+
+.sv3-slide[data-active] { z-index: 1; }
+
+.sv3-poster {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1240 / 653;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--glass-line-hi);
+  border-radius: 14px;
+  background: var(--g-night);
+}
+
+.sv3-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body.gvl .sv3-poster figcaption {
+  display: none;
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 1;
+  padding: 3px 8px;
+  border: 1px solid var(--glass-line-hi);
+  border-radius: 6px;
+  background: var(--g-night);
+  color: var(--g-ice);
+  font: 500 12px/1.3 var(--f-text);
+}
+
+body.gvl .sv3-slide[data-active] figcaption { display: block; }
+body.gvl .sv3-slide:not([data-active]) .gvl-spot::before { content: none; }
+body.gvl .sv3-slide[data-active] .gvl-spot::before { z-index: 2; }
+body.gvl .sv3-slide[data-active] figcaption { z-index: 3; }
+
+.sv3-caption,
+.sv3-actions,
+.sv3-controls,
+.sv3-arrows {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sv3-caption {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-block: 16px;
+}
+
+.sv3-caption h3 { font-size: clamp(22px, 3vw, 34px); }
+.sv3-actions { flex-wrap: wrap; }
+body.gvl .sv3-actions a,
+body.gvl .sv3-controls button,
+body.gvl .sv3-arrows button {
+  font-family: Rajdhani, var(--f-text);
+  font-weight: 600;
+  font-size: 17px;
+  min-height: 44px;
+  touch-action: manipulation;
+}
+body.gvl .sv3-actions a { display: inline-flex; align-items: center; padding: 7px 12px; }
+body.gvl .sv3-actions a:last-child { padding-inline: 3px; }
+
+.sv3-arrows {
+  position: absolute;
+  inset: 0 0 auto;
+  top: clamp(52px, 10vw, 145px);
+  justify-content: space-between;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.sv3-arrows[hidden], .sv3-controls[hidden] { display: none; }
+.sv3-controls { justify-content: space-between; min-width: 0; }
+
+body.gvl .sv3-controls .gvl-motion {
+  position: static;
+  flex: none;
+  font-size: 15px;
+}
+
+.sv3-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 5px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-color: var(--g-light) var(--g-deep);
+  scrollbar-width: thin;
+}
+
+.sv3-chips button, .sv3-arrows button {
+  flex: none;
+  padding: 6px 10px;
+  border: 1px solid var(--glass-line-hi);
+  border-radius: 999px;
+  background: var(--g-deep);
+  color: var(--g-ice);
+  cursor: pointer;
+}
+.sv3-arrows button { min-width: 44px; pointer-events: auto; }
+.sv3-chips button[aria-current="true"] {
+  background: var(--g-blue-dark);
+  box-shadow: inset 0 0 0 2px var(--g-light);
+}
+.sv3-chips button:hover, .sv3-arrows button:hover { border-color: var(--g-light); }
+
+/* Five distinct posters share the desktop stage. Keep the active poster and
+   two neighbors on each side without inserting copies in the reading order. */
+@media (min-width: 1100px) {
+  .sv3-track { --slot: 19%; --gap: .75%; }
+  .sv3-track .sv3-slide {
+    order: calc(clamp(0, var(--current) - var(--index) - 2, 1) - clamp(0, var(--index) - var(--current) - 2, 1));
+  }
+  .sv3-track {
+    min-height: 46vh;
+    padding-block: clamp(134px, 11vw, 220px);
+  }
+
+  .sv3-arrows { top: clamp(174px, 17vw, 350px); }
+  body.gvl .sv3-chips button { font-size: 16px; padding-inline: 8px; }
+}
+@media (min-width: 761px) and (max-width: 1099px) {
+  .sv3-track { --slot: 65%; --gap: 2%; }
+}
+
+@property --fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes sv3-fade-start { to { --fade-start: 16px; } }
+@keyframes sv3-fade-end { from { --fade-end: 16px; } }
+
+@keyframes sv3-cylinder {
+  0% { transform: translateX(52%) perspective(1250px) rotateY(62deg) translateZ(-130px) scale(2.23); opacity: .47; }
+  17% { transform: translate(18%, -16%) perspective(1250px) rotateY(55deg) translateZ(-96px) scale(2.49); opacity: .65; }
+  33% { transform: translate(38%, 18%) perspective(1250px) rotateY(33deg) translateZ(-54px) scale(2.68); opacity: .84; }
+  50% { transform: perspective(1250px) rotateY(0) translateZ(0) scale(3.15); opacity: 1; }
+  67% { transform: translate(-38%, 18%) perspective(1250px) rotateY(-33deg) translateZ(-54px) scale(2.68); opacity: .84; }
+  83% { transform: translate(-18%, -16%) perspective(1250px) rotateY(-55deg) translateZ(-96px) scale(2.49); opacity: .65; }
+  100% { transform: translateX(-52%) perspective(1250px) rotateY(-62deg) translateZ(-130px) scale(2.23); opacity: .47; }
+}
+@keyframes sv3-cylinder-touch {
+  0% { transform: perspective(1000px) rotateY(36deg) translateZ(-82px) scale(.86); opacity: .5; }
+  50% { transform: perspective(1000px) rotateY(0) translateZ(0) scale(1); opacity: 1; }
+  100% { transform: perspective(1000px) rotateY(-36deg) translateZ(-82px) scale(.86); opacity: .5; }
+}
+@keyframes sv3-arrival { from { scale: .98; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.sv3-track, .sv3-chips) { scroll-behavior: smooth; }
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .sv3-poster {
+      animation: sv3-cylinder-touch auto linear both;
+      animation-timeline: view(inline);
+    }
+    .sv3-carousel {
+      animation: sv3-arrival auto linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 95%;
+    }
+    @media (min-width: 1100px) {
+      .sv3-poster { animation-name: sv3-cylinder; }
+      body.gvl .sv3-slide[data-active] figcaption {
+        bottom: 4px;
+        right: 4px;
+        padding: 1px 3px;
+        border-width: .5px;
+        border-radius: 2px;
+        font-size: 5px;
+      }
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .sv3-opening {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 13px;
+    padding-block: 26px 19px;
+  }
+  body.gvl .sv3-opening h1 { font-size: clamp(36px, 12cqi, 62px); }
+  body.gvl .sv3-opening .hero-copy > p:not(.eyebrow) { font-size: 17px; }
+  body.gvl .sv3-stage {
+    width: calc(100% - 24px);
+    margin-bottom: 26px;
+  }
+  body.servicos-v02.gvl .hero { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  .sv3-stage:not([data-engaged]) .sv3-slide:not([data-active]) img { display: none; }
+  .sv3-stage:not([data-engaged]) :is(.sv3-carousel, .sv3-poster) { animation: none; }
+  .sv3-controls { align-items: start; flex-direction: column; }
+  .sv3-chips { width: 100%; scroll-padding-inline: 16px; }
+  .sv3-arrows { top: clamp(52px, 22vw, 115px); }
+  .sv3-actions { column-gap: 8px; }
+  .sv3-caption { row-gap: 9px; padding-block: 12px; }
+  @supports ((animation-timeline: scroll()) and (animation-range: entry)) {
+    .sv3-chips {
+      mask:
+        linear-gradient(black, black) no-clip subtract,
+        linear-gradient(to right, black, transparent) 0 0 / var(--fade-start) 100% no-repeat no-clip,
+        linear-gradient(to right, transparent, black) 100% 0 / var(--fade-end) 100% no-repeat no-clip;
+      animation: sv3-fade-start linear both, sv3-fade-end linear both;
+      animation-timeline: scroll(self inline);
+      animation-range: 0 16px, calc(100% - 16px) 100%;
+    }
+  }
+}
+
+/* The catalog is still a text-first list. Glass here stays still. */
+body.gvl .catalog { border-color: var(--glass-line-hi); }
+body.gvl .group-intro { margin-bottom: 18px; }
+body.gvl .group-secondary { background: var(--g-graphite); }
+body.gvl .service {
+  grid-template-columns: 32px minmax(125px, .95fr) minmax(0, 1.6fr) minmax(108px, .65fr);
+  gap: 18px;
+  min-height: 0;
+  margin-bottom: 12px;
+  padding: 22px;
+  border: 1px solid var(--glass-line);
+  border-radius: 18px;
+  background: var(--glass), var(--g-graphite);
+}
+body.gvl .service h3 a { color: var(--g-ice); }
+body.gvl .service-limit { margin-top: 12px; }
+body.gvl .service-mark img { filter: brightness(0) saturate(100%) invert(86%); }
+body.gvl .group-secondary .service {
+  padding-block: 28px;
+  background: var(--glass), var(--g-deep);
+}
+body.gvl .service-link::after { content: none; }
+body.gvl .service:hover { border-color: var(--glass-line-hi); }
+body.gvl .b2b { background: var(--g-blue-dark); }
+body.gvl .b2b a { color: var(--g-light); text-decoration: underline; }
+body.gvl .route { border-color: var(--glass-line-hi); }
+body.gvl .final-cta { background: transparent; }
+body.gvl .final-cta .wrap { padding: clamp(20px, 4vw, 60px); }
+body.gvl .final-cta p { color: var(--g-ice); }
+body.gvl .final-cta h2 { font-size: clamp(26px, 3.1vw, 43px); margin: 0; }
+body.gvl .final-cta a.gvl-neon { padding-inline-end: clamp(20px, 4vw, 38px); }
+body.gvl .final-cta a.gvl-neon::after { content: none; }
+body.gvl .site-footer { background: var(--g-night); }
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  body.gvl .service { transition: translate .22s var(--ease), border-color .22s ease; }
+  body.gvl .service:hover { translate: 0 -2px; }
+}
+
+@media (max-width: 760px) {
+  body.gvl .service { display: block; padding: 18px; }
+}
+
+/* Desktop: the space under each title gets a lit version of the service's own icon,
+   like the paper-and-calculator art of the Home. Decorative only; hidden below 1100px. */
+body.gvl .service[data-service="arquitetura"] { --sv-art: url("../icons/servicos-v02/arquitetura.svg"); }
+body.gvl .service[data-service="estrutural"] { --sv-art: url("../icons/servicos-v02/estrutural.svg"); }
+body.gvl .service[data-service="hidrossanitario"] { --sv-art: url("../icons/servicos-v02/hidrossanitario.svg"); }
+body.gvl .service[data-service="incendio"] { --sv-art: url("../icons/servicos-v02/incendio.svg"); }
+body.gvl .service[data-service="terraplanagem"] { --sv-art: url("../icons/servicos-v02/terraplanagem.svg"); }
+body.gvl .service[data-service="bim"] { --sv-art: url("../icons/servicos-v02/bim.svg"); }
+body.gvl .service[data-service="regularizacao"] { --sv-art: url("../icons/servicos-v02/regularizacao.svg"); }
+body.gvl .service[data-service="orcamento"] { --sv-art: url("../icons/servicos-v02/orcamento.svg"); }
+
+@media (min-width: 1100px) {
+  body.gvl .service { position: relative; isolation: isolate; }
+  body.gvl .service > * { position: relative; z-index: 1; }
+  /* room for the glyph below the title, so a two-line title grows the card instead of overlapping */
+  body.gvl .service h3 { padding-bottom: 96px; }
+  /* halo: an ellipse of light rising from the bottom edge, under the title column */
+  body.gvl .service::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    left: 40px;
+    bottom: 0;
+    width: 260px;
+    height: 150px;
+    border-radius: 0 0 0 18px;
+    background: radial-gradient(ellipse 60% 75% at 50% 100%, rgb(156 194 236 / .3), rgb(37 82 128 / .2) 45%, transparent 72%);
+    pointer-events: none;
+  }
+  /* glyph: the service icon as a mask, filled with an ice-to-blue gradient */
+  body.gvl .service::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    left: 128px;
+    bottom: 16px;
+    width: 92px;
+    aspect-ratio: 1;
+    background: linear-gradient(160deg, #eef2f6, #9cc2ec 50%, #3672b4);
+    -webkit-mask: var(--sv-art) center / contain no-repeat;
+    mask: var(--sv-art) center / contain no-repeat;
+    opacity: .62;
+    pointer-events: none;
+  }
+  /* the fire/gas card already fills that space with its row of three links */
+  body.gvl .service[data-service="incendio"] h3 { padding-bottom: 0; }
+  body.gvl .service[data-service="incendio"]::before,
+  body.gvl .service[data-service="incendio"]::after { content: none; }
+}
+
+@media (min-width: 1100px) and (prefers-reduced-motion: no-preference) and (hover: hover) {
+  body.gvl .service::after { transition: opacity .3s ease, translate .4s var(--ease); }
+  body.gvl .service:hover::after { opacity: .9; translate: 0 -4px; }
+}
+
+@media print {
+  body.servicos-v02.gvl { color-scheme: light; color: #121b24; background: #fff; }
+  body.gvl :is(.sv3-stage, .service, .b2b, .group-secondary, .final-cta .wrap, .site-footer) {
+    background: #fff;
+    color: #121b24;
+    box-shadow: none;
+  }
+  body.gvl :is(main, .site-footer) :is(h1, h2, h3, p, a, figcaption),
+  body.gvl .sv3-title-accent { color: #121b24; background: transparent; }
+  body.gvl .final-cta a.gvl-neon { color: #121b24 !important; box-shadow: none; border-color: #26323e; }
+  body.gvl .gvl-neon-t { color: #121b24; text-shadow: none; }
+  body.gvl :is(.gvl-aurora, .gvl-beam, .gvl-cta-art, .sv3-controls, .sv3-arrows),
+  body.gvl::before, body.gvl::after,
+  body.gvl .service::before, body.gvl .service::after { display: none; }
+}\n
