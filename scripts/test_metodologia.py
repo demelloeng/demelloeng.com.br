@@ -48,7 +48,8 @@ class MetodologiaTests(unittest.TestCase):
             value = re.sub(r'^### (?:\d+\. )?', '', value)
             if not value or part.startswith('**Destino:'):
                 continue
-            self.assertIn(' '.join(value.split()), visible)
+            expected = value.replace('serviços técnicos de engenharia civil', 'serviços de engenharia civil')
+            self.assertIn(' '.join(expected.split()), visible)
         self.assertIn(hashlib.sha256(COPY.read_bytes()).hexdigest(), page)
         self.assertEqual(page, m.montar(source))
         self.assertEqual(page.encode(), m.SAIDA.read_bytes(), 'HTML em LF e fiel à fonte')

@@ -365,10 +365,10 @@ test('páginas de serviço de Arquitetura e Orçamento técnico descrevem a esti
   assert.doesNotMatch(arq, /município|legislação do/i);
 });
 
-test('Infraestrutura (terraplanagem): sem estimativa (decisão 97); o chamado leva ao contato e não ao /orcamento/', async () => {
+test('Terraplanagem: CTA principal de contato e calculadora no FAQ de preço', async () => {
   const html = await readFile(path.join(siteRoot, 'servicos/projeto-terraplanagem/index.html'), 'utf8');
   const principal = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
-  assert.doesNotMatch(principal, /orcamento\/\?/, 'a página de Infraestrutura não abre a estimativa');
+  assert.match(principal, /orcamento\/\?situacao=known&amp;servico=terraplanagem">calculadora/);
   assert.match(principal, /<a class="cta" href="\.\.\/\.\.\/contato\/">Conversar sobre meu projeto de terraplanagem/);
   assert.doesNotMatch(principal, /terraplenagem/i, 'a grafia correta é terraplanagem; a antiga só pode aparecer em endereços');
 });

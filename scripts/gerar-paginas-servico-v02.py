@@ -16,11 +16,16 @@ Uso:
 
 Sem dependências externas. Não toca em nenhum outro arquivo além do JSON e do index.html da página.
 """
+import hashlib
 import html
 import json
 import re
+import subprocess
 import sys
+from functools import lru_cache
 from pathlib import Path
+
+from seo_servicos import TITULOS_SEO
 
 REPO = Path(__file__).resolve().parent.parent
 DOCS = REPO / 'docs/arquivo/paginas-servico-v02'
@@ -135,14 +140,67 @@ def schema_servico(jsonld, principal, slug):
     return f'<script type="application/ld+json">{schema}</script>'
 
 
+MOTOR = REPO / 'orcamento-src/src/pricing/pricing-table.v2.json'
+NOVAS_PERGUNTAS = {
+    'projeto-gas-glp': 'Quanto custa um projeto de gás/GLP?',
+    'compatibilizacao-bim': 'Quanto custa a compatibilização BIM?',
+}
+TERRAPLANAGEM_CALCULADORA = '../../orcamento/?situacao=known&amp;servico=terraplanagem'
+
+
+@lru_cache(maxsize=1)
+def precos():
+    saida = subprocess.check_output(['node', str(REPO / 'scripts/precos-servicos.mjs')],
+                                    cwd=REPO, encoding='utf-8')
+    return json.loads(saida)
+
+
+def publicar_preco(slug, copia, cta_original):
+    blocos = copia['blocos_novos']
+    if slug == 'projeto-gas-glp':
+        blocos['perguntas'] = {'titulo': 'Perguntas', 'conteudo': [{'tipo': 'perguntas', 'itens': []}]}
+        copia['ordem'].append('perguntas')
+    perguntas = next(item['itens'] for item in blocos['perguntas']['conteudo']
+                    if item['tipo'] == 'perguntas')
+    if slug in NOVAS_PERGUNTAS:
+        pergunta = {'pergunta': NOVAS_PERGUNTAS[slug]}
+        perguntas.append(pergunta)
+    else:
+        pergunta, = [item for item in perguntas if 'quanto custa' in item['pergunta'].casefold()]
+    preco = precos()[slug]
+    valor = preco['valor'].replace('.', ',')
+    href = TERRAPLANAGEM_CALCULADORA if slug == 'projeto-terraplanagem' else copia['cta'].get('href', cta_original)
+    frase = f'A estimativa aparece na <a href="{href}">calculadora</a>, antes do contato.'
+    resposta = (f"A partir de R$ {valor} por m² de {preco['base_m2']}. "
+                f"O valor do seu caso depende da área, do tipo de obra e do nível contratado. {frase}")
+    if slug == 'projeto-terraplanagem':
+        execucao = pergunta['resposta'].split('</p><p>', 1)[0]
+        resposta = execucao + '</p><p>' + resposta
+    pergunta['resposta'] = resposta
+
+
+def gravar_ou_conferir(path, html, check):
+    expected = html.encode('utf-8')
+    if check:
+        if not path.is_file() or path.read_bytes() != expected:
+            sys.exit(f'{path.relative_to(REPO)} desatualizado: rode gerar --todas')
+    else:
+        path.parent.mkdir(exist_ok=True)
+        path.write_bytes(expected)
+
+
 # ----------------------------------------------------------------------- gerar
-def gerar(slug):
+def gerar(slug, check=False):
     d = json.loads((DOCS / f'{slug}.json').read_text(encoding='utf-8'))
     caminho_copy = DOCS / f'{slug}.copy.json'
     copia = json.loads(caminho_copy.read_text(encoding='utf-8')) if caminho_copy.exists() else None
     if slug == 'projeto-gas-glp' and copia is None:
         from copy_pscip_glp import gas_copy
         copia = gas_copy(d)
+    if copia:
+        publicar_preco(slug, copia, d['cta']['href'])
+        if slug in TITULOS_SEO:
+            copia['titulo_pagina'] = TITULOS_SEO[slug]
     nome_servico = copia['nome_servico'] if copia else re.sub(r'\s*\|.*$', '', d['titulo_pagina'])
 
     # JSON-LD: preserva tudo; só o nome do breadcrumb acompanha o menu ("Serviços").
@@ -331,6 +389,8 @@ def gerar(slug):
 
     jsonld = schema_servico(jsonld, principal, slug)
 
+    tabela_sha = hashlib.sha256(MOTOR.read_bytes()).hexdigest()
+
     pagina = f'''<!doctype html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8">
@@ -338,6 +398,7 @@ def gerar(slug):
 <title>{d['titulo_pagina']}</title>
 <meta name="description" content="{d['descricao']}">
 <meta name="theme-color" content="#26323e">
+<!-- Tabela de preços SHA-256 {tabela_sha} -->
 <link rel="canonical" href="https://demelloeng.com.br/servicos/{slug}/">
 <meta property="og:title" content="{d['titulo_pagina']}">
 <meta property="og:description" content="{d['descricao']}">
@@ -374,15 +435,15 @@ def gerar(slug):
 {extra_body}
 </body></html>
 '''
-    (SERVICOS / slug).mkdir(exist_ok=True)
-    (SERVICOS / slug / 'index.html').write_bytes(pagina.encode('utf-8'))
+    gravar_ou_conferir(SERVICOS / slug / 'index.html', pagina, check)
     if slug == 'projeto-terraplanagem':
-        gerar_ponte_terraplanagem()
-    print(f'{slug}: servicos/{slug}/index.html regenerado a partir de {slug}.json')
+        gerar_ponte_terraplanagem(check)
+    if not check:
+        print(f'{slug}: servicos/{slug}/index.html regenerado a partir de {slug}.json')
 
 
 
-def gerar_ponte_terraplanagem():
+def gerar_ponte_terraplanagem(check=False):
     destino = 'projeto-terraplanagem'
     legado = destino.replace('planagem', 'plenagem')
     relativo = f'../{destino}/'
@@ -395,10 +456,15 @@ def gerar_ponte_terraplanagem():
 <script>location.replace("{relativo}");</script>
 </head><body><p><a href="{relativo}">Abrir a página de projeto de terraplanagem</a></p></body></html>
 """
-    (SERVICOS / legado / 'index.html').write_bytes(ponte.encode('utf-8'))
+    gravar_ou_conferir(SERVICOS / legado / 'index.html', ponte, check)
 
 
 if __name__ == '__main__':
+    if sys.argv[1:] == ['--check']:
+        for slug in SLUGS:
+            gerar(slug, check=True)
+        print('Páginas de serviço: geração e tabela de preços conferidas')
+        sys.exit(0)
     if len(sys.argv) < 3 or sys.argv[1] not in ('extrair', 'gerar'):
         sys.exit(__doc__)
     alvo = SLUGS if sys.argv[2] == '--todas' else [sys.argv[2]]

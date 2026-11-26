@@ -66,6 +66,7 @@ for pagina in sorted((REPO / 'servicos').glob('*/index.html')):
     if slug in ('projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim') and (caminho_copy.exists() or slug == 'projeto-gas-glp'):
         import json
         from copy_pscip_glp import gas_copy
+        from seo_servicos import TITULOS_SEO
         copia = (json.loads(caminho_copy.read_text(encoding='utf-8')) if caminho_copy.exists() else
                  gas_copy(json.loads((caminho_copy.parent / f'{slug}.json').read_text(encoding='utf-8'))))
         bruto = pagina.read_text(encoding='utf-8')
@@ -79,12 +80,14 @@ for pagina in sorted((REPO / 'servicos').glob('*/index.html')):
                 for x in obj: conferir(x)
             elif isinstance(obj,dict):
                 for k,v in obj.items():
-                    if k not in ('tipo','resposta'): conferir(v)
+                    if k in ('tipo', 'resposta') or (k == 'paragrafos' and 'quanto custa' in obj.get('pergunta', '').casefold()):
+                        continue
+                    conferir(v)
         conferir([copia['h1'],copia['chamada'],copia['introducao'],copia['blocos_novos'],copia['proximo_passo'],copia['cta']['micro']])
         faltam=[x for x in fragmentos if x and x not in visivel]
         titulo=re.search(r'<title>(.*?)</title>',bruto,re.S)
         descricao=re.search(r'<meta name="description" content="([^"]*)"',bruto)
-        if not titulo or html_lib.unescape(titulo[1]) != copia['titulo_pagina']: faltam.append('Título SEO divergente da fonte')
+        if not titulo or html_lib.unescape(titulo[1]) != TITULOS_SEO.get(slug, copia['titulo_pagina']): faltam.append('Título SEO divergente da fonte')
         if not descricao or html_lib.unescape(descricao[1]) != copia['descricao']: faltam.append('Descrição SEO divergente da fonte')
         for cta in [copia['cta']] + ([copia['cta_secundario']] if 'cta_secundario' in copia else []):
             if not re.search(r'<a\b[^>]*href="'+re.escape(cta['href'])+r'"[^>]*>\s*'+re.escape(cta['rotulo'])+r'(?: →)?</a>',bruto):

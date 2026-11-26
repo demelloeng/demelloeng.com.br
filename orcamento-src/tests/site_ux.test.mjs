@@ -267,7 +267,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
         assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
       }
       assert.equal([...html.matchAll(/<ol class="rico-etapas bim-etapas"[\s\S]*?<\/ol>/g)].map((m) => (m[0].match(/<li>/g) ?? []).length)[0], 4, `${slug}: quatro etapas`);
-      assert.equal([...html.matchAll(/<details class="rico-pergunta"/g)].length, 5, `${slug}: cinco perguntas`);
+      assert.equal([...html.matchAll(/<details class="rico-pergunta"/g)].length, 6, `${slug}: seis perguntas`);
       const nodes = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap((m) => JSON.parse(m[1])['@graph'] ?? []);
       const services = nodes.filter((n) => n['@type'] === 'Service');
       assert.equal(services.length, 1, `${slug}: somente o próprio Service`);

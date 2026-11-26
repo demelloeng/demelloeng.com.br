@@ -68,9 +68,6 @@ class SeoContracts(unittest.TestCase):
             visible = [(text_of(q), text_of(a)) for q, a in
                        re.findall(r'<details class="rico-pergunta"[^>]*><summary>(.*?)</summary>(.*?)</details>',
                                   source, re.S)]
-            if path.parent.name == 'projeto-gas-glp' and not visible:
-                # A pergunta nova e o valor do GLP entram juntos na etapa de preço.
-                continue
             count += 1
             with self.subTest(page=path.parent.name):
                 nodes = [node for graph in structured_data(path) for node in graph['@graph']]
@@ -83,4 +80,26 @@ class SeoContracts(unittest.TestCase):
                     self.assertEqual(['Curitiba', 'Paraná', 'Brasil'], [item['name'] for item in actual_area])
                 else:
                     self.assertEqual({'@type': 'Country', 'name': 'Brasil'}, actual_area)
-        self.assertGreaterEqual(count, 8)
+        self.assertEqual(count, 9)
+
+
+    def test_prices_come_from_the_current_engine_at_the_floor(self):
+        prices = json.loads(subprocess.check_output(['node', 'scripts/precos-servicos.mjs'],
+                                                   cwd=ROOT, encoding='utf-8'))
+        self.assertEqual(len(prices), 9)
+        for slug, data in prices.items():
+            with self.subTest(page=slug):
+                self.assertEqual('0.60', data['fator'])
+                self.assertEqual('CASA', data['entrada']['typology'])
+                path = ROOT / 'servicos' / slug / 'index.html'
+                expected = f"A partir de R$ {data['valor'].replace('.', ',')} por m² de {data['base_m2']}."
+                source = path.read_text(encoding='utf-8')
+                self.assertIn(expected, source)
+                self.assertNotIn('Não é proposta, contrato nem garantia de preço', source)
+                faq = next(node for graph in structured_data(path) for node in graph['@graph']
+                           if node['@type'] == 'FAQPage')
+                self.assertTrue(any(expected in item['acceptedAnswer']['text'] for item in faq['mainEntity']))
+
+    def test_service_generator_checks_the_pricing_source(self):
+        subprocess.run([sys.executable, 'scripts/gerar-paginas-servico-v02.py', '--check'],
+                       cwd=ROOT, check=True)

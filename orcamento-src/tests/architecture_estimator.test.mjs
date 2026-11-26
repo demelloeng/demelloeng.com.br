@@ -389,7 +389,7 @@ test('ramificação: navegação S3 -> terreno -> programa -> S4, validação do
 test('19. regressão: serviços existentes inalterados (preços, tabela, motor, envio por hash) e 20. CRM não homologado = falha segura', async () => {
   const sha = async (f) => createHash('sha256').update((await readFile(path.join(appRoot, f), 'utf8')).replace(/\r\n/g, '\n')).digest('hex');
   assert.equal(await sha('src/pricing/pricing-table.v2.json'), '9500b90599fc61d785bfc360726e33d52eb6ee19044dcf0adf05ef59c2897b07', 'Tabela V2 com o piso por regime aprovado; fontes e valores de referência preservados');
-  assert.equal(await sha('src/pricing/engine.mjs'), '736ad685ba09fe520257d9875f7a01d7f30c01eb5e1ff2c402c3688b2ae83770', 'Motor R2_FC_MIN com piso por serviço após fator e arredondamento');
+  assert.equal(await sha('src/pricing/engine.mjs'), '4e0195a96d8a442fd3a356520d98cc58fcf05070e09ecf40559bd3b2c14453bc', 'Motor R2_FC_MIN com piso de fator e piso de valor por serviço');
   assert.equal(await sha('src/pricing/decimal.mjs'), 'de8ff4f5bdba6d159d24d0ef44daa1febef6d01e29be9b86132d054dd87c1a48');
   assert.equal(await sha('src/submit.mjs'), 'c47ec9c376aab58b14dd90d6896c304373ef596ea5a26d28c15c02d48ec31f7d', 'envio ao CRM: só acrescentou transport.meta (dados do anúncio para a CAPI; ver collectMeta)');
   // CRM não homologado: o payload novo segue no mesmo envelope; recusa do Worker (422) e queda de rede não lançam e não repetem indevidamente

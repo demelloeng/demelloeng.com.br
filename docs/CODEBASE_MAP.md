@@ -548,3 +548,5 @@ A evidência fica em `.git/…/capacidades/evidencias.jsonl` da worktree (não v
 - A Home e a Trajetória são fontes HTML diretas. A primeira declara a organização e aponta para a pessoa da segunda. O gerador de serviços monta a FAQ a partir das perguntas renderizadas.
 - orcamento-src/index.html é a fonte da descrição da calculadora e o build Vite atualiza orcamento/index.html.
 - A rota de terraplanagem tem conteúdo no slug atual e uma ponte mínima gerada separadamente no endereço legado. A ponte fica na allowlist, passa no smoke, e não integra o sitemap nem as listas de páginas de conteúdo.
+- A FAQ de preço sai de scripts/precos-servicos.mjs, que executa o motor da calculadora com o piso fixo. O gerador expõe os valores e a base em m² e inclui o hash da tabela para o --check detectar alterações.
+- A fonte consolidada do Portfólio alimenta os quantitativos mostrados na página da Empresa via indicadores_acervo().

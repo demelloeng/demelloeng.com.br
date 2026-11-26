@@ -41,7 +41,7 @@ class Frente(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='pscip-test-',dir=ROOT) as tmp:
             target=Path(tmp)
             (target/'scripts').mkdir(); (target/'docs/arquivo').mkdir(parents=True)
-            for script in ['conferir-paginas-servico-v02.py','copy_pscip_glp.py']: shutil.copyfile(ROOT/'scripts'/script,target/'scripts'/script)
+            for script in ['conferir-paginas-servico-v02.py','copy_pscip_glp.py','seo_servicos.py']: shutil.copyfile(ROOT/'scripts'/script,target/'scripts'/script)
             shutil.copytree(DOC,target/'docs/arquivo/paginas-servico-v02')
             page=target/f'servicos/{SLUG}/index.html';page.parent.mkdir(parents=True)
             original=(ROOT/f'servicos/{SLUG}/index.html').read_text(encoding='utf-8');page.write_text(original,encoding='utf-8')
@@ -55,10 +55,11 @@ class Frente(unittest.TestCase):
     def test_perfis_anteriores_reproduzem_html_versionado(self):
         with tempfile.TemporaryDirectory(prefix='pscip-test-',dir=ROOT) as tmp:
             target=Path(tmp);shutil.copytree(ROOT/'scripts',target/'scripts');shutil.copytree(DOC,target/'docs/arquivo/paginas-servico-v02')
+            shutil.copytree(ROOT / 'orcamento-src/src/pricing', target / 'orcamento-src/src/pricing')
             for slug in ['projeto-arquitetura','projeto-estrutural','projeto-hidrossanitario','projeto-terraplanagem']:
                 page=target/f'servicos/{slug}/index.html';page.parent.mkdir(parents=True)
                 subprocess.run([sys.executable,'-B','scripts/gerar-paginas-servico-v02.py','gerar',slug],cwd=target,check=True,capture_output=True)
-                original=subprocess.run(['git','show',f'HEAD:servicos/{slug}/index.html'],cwd=ROOT,check=True,capture_output=True).stdout
+                original=subprocess.run(['git','show',f':servicos/{slug}/index.html'],cwd=ROOT,check=True,capture_output=True).stdout
                 self.assertEqual(page.read_bytes(),original,slug)
 
     def test_pipeline_deterministico_e_perfis_preservados(self):
@@ -72,6 +73,7 @@ class Frente(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='pscip-test-',dir=ROOT) as tmp:
             target=Path(tmp)
             shutil.copytree(ROOT/'scripts',target/'scripts')
+            shutil.copytree(ROOT / 'orcamento-src/src/pricing', target / 'orcamento-src/src/pricing')
             shutil.copytree(DOC,target/'docs/arquivo/paginas-servico-v02')
             shutil.copytree(ROOT/'docs/arquivo/servicos-v01-20261028',target/'docs/arquivo/servicos-v01-20261028')
             for p in html_paths: (target/p).parent.mkdir(parents=True,exist_ok=True)

@@ -17,7 +17,7 @@ COPY = ROOT / 'docs/arquivo/empresa-v02-20261107/COPY_EMPRESA_V01_20261107.md'
 JSONLD = ('{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":['
           '{"@type":"ListItem","position":1,"name":"Início","item":"https://demelloeng.com.br/"},'
           '{"@type":"ListItem","position":2,"name":"Empresa","item":"https://demelloeng.com.br/empresa/"}]}]}')
-DESCRIPTION = ('Conheça a DEMELLO Engenharia: projetos e serviços técnicos de engenharia civil, '
+DESCRIPTION = ('Conheça a DEMELLO Engenharia: projetos e serviços de engenharia civil, '
                'responsabilidade técnica, sede em Curitiba e atendimento em todo o Brasil.')
 # Botões aprovados por bloco: (rótulo, destino relativo à página, principal?).
 BOTOES = {
@@ -96,7 +96,13 @@ class EmpresaTests(unittest.TestCase):
             part = re.sub(r'^\*\*[^*]+:\*\*\s*', '', part)
             part = re.sub(r'^### ', '', part)
             for piece in part.split(' — ', 1) if re.match(r'^0\d — ', part) else [part]:
-                self.assertIn(flat(piece), visible, piece)
+                expected = piece.replace('serviços técnicos de Engenharia Civil', 'serviços de engenharia civil')
+                self.assertIn(flat(expected), visible, piece)
+        self.assertIn(
+            '<p><a href="../experiencia-tecnica/">Acervo de Marcos de Mello Silva</a>: '
+            '67.761,78 m² em projeto estrutural. São 60 ARTs, em 23 municípios do Paraná e de São Paulo.</p>',
+            page,
+        )
         for label in module.IDENTITY:
             self.assertIn(label, visible)
         self.assertIn(hashlib.sha256(COPY.read_bytes()).hexdigest(), page)

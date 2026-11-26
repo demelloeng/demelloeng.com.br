@@ -304,11 +304,11 @@ test('navegação: "Empresa" deixa de ser eixo principal, mas a página e as URL
 
 // ---- conteúdo ---------------------------------------------------------------------------------------------------
 test('promessa de contato: toda página com CTA de estimativa diz que o contato só vem no final', () => {
-  // Infraestrutura (terraplanagem) não leva estimativa (decisão 97): o CTA vai a /contato/ e não há promessa de "contato só no final".
+  // A pergunta de preço aponta à calculadora. O CTA principal de Terraplanagem mantém o contato.
   for (const file of ['construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html', 'metodologia/index.html', ...SERVICE_SLUGS.filter((s) => s !== 'projeto-terraplanagem').map((s) => `servicos/${s}/index.html`)]) {
     assert.match(HTML[file], /Sem compromisso · contato somente no final/, file);
   }
-  assert.doesNotMatch(mainOf(HTML['servicos/projeto-terraplanagem/index.html']), /orcamento\/\?/, 'Infraestrutura não abre a estimativa');
+  assert.match(mainOf(HTML['servicos/projeto-terraplanagem/index.html']), /orcamento\/\?situacao=known&amp;servico=terraplanagem">calculadora/);
   // Home V02: a seção da estimativa foi reescrita; a promessa equivalente é que nada é enviado sem confirmação.
   assert.match(HTML['index.html'], /Nada é enviado sem a sua confirmação\./, 'Home V02: nada é enviado sem confirmação');
   for (const file of COMMERCIAL) assert.doesNotMatch(visibleText(mainOf(HTML[file])), /entraremos em contato (agora|imediatamente)|ligamos em|retornamos em \d/i, file);
@@ -426,6 +426,7 @@ const PAGE_FACTS = {
   'servicos/projeto-hidrossanitario/index.html': ['100'],
   // indicador de andamento da maquete ("Andamento 0%"): estado da interface, não afirmação
   'servicos/projeto-terraplanagem/index.html': ['0'],
+  'empresa/index.html': ['67.761,78'],
 };
 
 test('nenhum número técnico, case ou credencial novo: todo numeral visível existe no conteúdo original (ou é limite/segurança documentado)', () => {
@@ -433,7 +434,12 @@ test('nenhum número técnico, case ou credencial novo: todo numeral visível ex
   // A política de privacidade traz só referências legais (Lei 13.709/2018, art. 7º, V) e "3D"; ela é conferida em privacy_and_sink.test.mjs.
   for (const file of ALL.filter((f) => f !== 'verificar/index.html' && f !== 'privacidade/index.html')) {
     // "3D" é notação de dimensão, não quantidade
-    for (const m of visibleText(HTML[file]).replace(/\b3D\b/g, ' ').matchAll(/\d[\d.,/-]*\d|\d/g)) if (!NUMERIC_FACTS.has(m[0]) && !(PAGE_FACTS[file] ?? []).includes(m[0])) unexpected.push(`${file}: ${m[0]}`);
+    let text = visibleText(HTML[file]).replace(/\b3D\b/g, ' ');
+    if (SERVICE_SLUGS.some((slug) => file === 'servicos/' + slug + '/index.html')) {
+      // O teste Python de SEO recalcula e confere este preço no HTML e no FAQPage.
+      text = text.replace(/A partir de R\$ \d+,\d{2} por m²/, '');
+    }
+    for (const m of text.matchAll(/\d[\d.,/-]*\d|\d/g)) if (!NUMERIC_FACTS.has(m[0]) && !(PAGE_FACTS[file] ?? []).includes(m[0])) unexpected.push(`${file}: ${m[0]}`);
   }
   assert.deepEqual(unexpected, []);
   // quantidade de disciplinas/etapas descritas por extenso continua batendo com a estrutura

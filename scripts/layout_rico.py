@@ -215,4 +215,6 @@ def frente_incendio(copia, d, maquete_html, render_bloco):
 
 def frente_gas(copia,d,render_bloco):
     visual='''<div class="glp-visual" role="img" aria-label="Rede e central de GLP coordenadas com os demais projetos"><p class="eyebrow">Projeto de gás/GLP</p><div class="glp-rede"><span>Central de GLP</span><i aria-hidden="true"></i><span>Rede de gás</span></div><p>Arquitetura · Estrutura · Instalações</p><strong>Coordenação em BIM</strong></div>'''
-    return hero_instalacoes(copia,d,visual)+'\n'+'\n'.join(render_bloco(b) for b in copia['blocos_novos'].values())
+    blocos = copia['blocos_novos']
+    conteudo = [perguntas(blocos[k]) if k == 'perguntas' else render_bloco(blocos[k]) for k in copia['ordem']]
+    return '\n'.join([hero_instalacoes(copia, d, visual), *conteudo])
