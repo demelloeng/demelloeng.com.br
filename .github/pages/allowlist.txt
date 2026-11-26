@@ -261,3 +261,6 @@ assets/js/servicos-vitrine.mjs
 # 26/11/2026 — Portfólio V03: régua e camada de luz.
 assets/css/portfolio-vitrine.css
 assets/js/portfolio-vitrine.mjs
+
+# IndexNow (chave pública).
+7d84948f1ba6bfad09da3cb601be8377.txt

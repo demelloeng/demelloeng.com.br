@@ -2,7 +2,7 @@
 last_mapped: 2026-11-17T22:02:01Z
 total_files: 570
 total_tokens: 568758
-commit: 9943a29
+commit: 3e6d5b0
 branch: feat/home-v02-maquetes-clientes
 ---
 
@@ -541,3 +541,9 @@ A evidência fica em `.git/…/capacidades/evidencias.jsonl` da worktree (não v
 - O rótulo Portfólio vem de gerar-construir-ou-ampliar-v02.py (também herdado pelas páginas institucionais e por Verificar/404), gerar-contato-v02.py, gerar-paginas-servico-v02.py e da adaptação dos templates históricos em gerar-servicos-v02.py. A Home e a Trajetória do fundador têm navegação no HTML.
 - As fichas mantêm os detalhes nativos e os registros. A demonstração de hidrantes mantém a ativação do 3D sob demanda em assets/js/experiencia-bim.js.
 - A fileira de cartazes reutiliza os WebP publicados de Serviços e da compatibilização BIM. O bloco do responsável reaproveita o link neon da Home e a foto da Trajetória, com variante WebP e fallback JPEG.
+
+## SEO, AEO e GEO V03
+- O sitemap é produzido por scripts/gerar-sitemap.py com datas do histórico Git. Antes de um commit com páginas staged, gere com a opção --staged.
+- Após o deploy, .github/pages/indexnow.py compara os lastmod do sitemap com o anterior. A chave pública da raiz faz parte do artefato Pages.
+- A Home e a Trajetória são fontes HTML diretas. A primeira declara a organização e aponta para a pessoa da segunda. O gerador de serviços monta a FAQ a partir das perguntas renderizadas.
+- orcamento-src/index.html é a fonte da descrição da calculadora e o build Vite atualiza orcamento/index.html.

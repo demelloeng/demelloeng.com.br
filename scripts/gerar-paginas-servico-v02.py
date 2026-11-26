@@ -16,6 +16,7 @@ Uso:
 
 Sem dependências externas. Não toca em nenhum outro arquivo além do JSON e do index.html da página.
 """
+import html
 import json
 import re
 import sys
@@ -102,6 +103,36 @@ def extrair(slug):
     DOCS.mkdir(parents=True, exist_ok=True)
     (DOCS / f'{slug}.json').write_text(json.dumps(dados, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'{slug}: extraído ({len(dados["blocos"])} blocos + próximo passo)')
+
+
+AREAS_LOCAIS = [
+    {'@type': 'City', 'name': 'Curitiba'},
+    {'@type': 'State', 'name': 'Paraná'},
+    {'@type': 'Country', 'name': 'Brasil'},
+]
+PERGUNTA = re.compile(
+    r'<details class="rico-pergunta"[^>]*><summary>(.*?)</summary>(.*?)</details>', re.S
+)
+
+
+def texto_visivel(fragmento):
+    return ' '.join(html.unescape(re.sub('<[^>]*>', ' ', fragmento)).split())
+
+
+def schema_servico(jsonld, principal, slug):
+    graph = json.loads(re.search(r'<script[^>]*>(.*?)</script>', jsonld, re.S).group(1))
+    if slug in ('projeto-prevencao-incendio', 'regularizacao'):
+        service = next(node for node in graph['@graph'] if node.get('@type') == 'Service')
+        service['areaServed'] = AREAS_LOCAIS
+    perguntas = [
+        {'@type': 'Question', 'name': texto_visivel(pergunta),
+         'acceptedAnswer': {'@type': 'Answer', 'text': texto_visivel(resposta)}}
+        for pergunta, resposta in PERGUNTA.findall(principal)
+    ]
+    if perguntas:
+        graph['@graph'].append({'@type': 'FAQPage', 'mainEntity': perguntas})
+    schema = json.dumps(graph, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
+    return f'<script type="application/ld+json">{schema}</script>'
 
 
 # ----------------------------------------------------------------------- gerar
@@ -297,6 +328,8 @@ def gerar(slug):
 {corpo}'''
         extra_head = extra_body = ''
         classe_body = 'servicos-v02 servico-pagina-v02'
+
+    jsonld = schema_servico(jsonld, principal, slug)
 
     pagina = f'''<!doctype html>
 <html lang="pt-BR"><head>
