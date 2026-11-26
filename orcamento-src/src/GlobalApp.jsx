@@ -13,7 +13,7 @@ import {contactCheck} from './phone.mjs';
 import {architectureReturn} from './architecture_return.mjs';
 import {PADROES} from './architecture_estimator.mjs';
 import {tracking} from './tracking.mjs';
-import {TABLE_LABEL,ENTRY_COUNT_WORD,Q_PT} from './labels.mjs';
+import {ENTRY_COUNT_WORD,Q_PT} from './labels.mjs';
 import {submitToCRM} from './submit.mjs';
 import {postSubmitWhatsAppHref} from './post_submit_contact.mjs';
 import {issuePreview,fetchCoupon,newEmissionKey,caseSummaryFromRows,OUTDATED_MESSAGE,FACTOR_CHANGED_MESSAGE,COUPON_CHANGED_MESSAGE,COUPON_INVALID_MESSAGE,PREVIEW_ENDPOINT,VERIFY_DISPLAY} from './preview.mjs';
@@ -269,7 +269,7 @@ export function App(){
    : null;
  return <div className={`app-shell global-v1 ${home?'is-entry':''}`}>
  <a className="skip-link" href="#question">Ir para a pergunta</a>
- <header className="site-header"><a href="/" aria-label="DEMELLO — página inicial"><img src="/assets/images/logo.png" alt="DEMELLO Engenharia"/></a><span>CALCULAR ESTIMATIVA</span><a className="site-link" href="/" aria-label="Voltar ao site"><span>Voltar ao site</span></a></header>
+ <header className="site-header"><a href="/" aria-label="DEMELLO — página inicial"><img src="/assets/images/logo-branca.png" alt="DEMELLO Engenharia"/></a><span>CALCULAR ESTIMATIVA</span><a className="site-link" href="/" aria-label="Voltar ao site"><span>Voltar ao site</span></a></header>
  <div className="workspace"><main className="question-panel" id="question" data-state={id}>
  {!home&&<div className="section-label"><button type="button" className="icon-button" onClick={back} aria-label="Voltar à pergunta anterior"><ArrowLeft size={18}/></button><span>{routes[answers.route]}</span></div>}
  <h1 tabIndex={-1} ref={heading}>{titleOf(id,answers)}</h1>
@@ -324,7 +324,7 @@ export function App(){
  <aside className={`case-panel ${expanded?'expanded':''}`} aria-label="Resumo"><div className="case-heading"><h2>{home?'Seu caso, organizado.':project?'Seu projeto':'Seu caso'}</h2>{!home&&<button className="mobile-summary-toggle" onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded} aria-controls="case-body">{/* R06: no celular este é o acesso à maquete; fechar volta à mesma pergunta, com as escolhas */}{project?(expanded?'Voltar à pergunta':'Ver maquete'):(expanded?'Recolher':'Expandir')}<CaretDown size={18}/></button>}</div>{home?<><p className="entry-summary-intro">Suas escolhas vão formar o escopo da sua estimativa.</p><div className="entry-promise"><ClipboardText size={38}/><div><strong>Primeiro, a estimativa.<br/>Depois, seu contato.</strong><p>Alguns casos precisam de avaliação técnica antes do valor.</p></div></div></>:<><p className="case-subtitle">{routes[answers.route]}</p>{!expanded&&<LiveChip answers={answers}/>}<div className="case-body" id="case-body"><LivePlan answers={answers} expanded={expanded}/><details className="case-answers"><summary>Suas respostas</summary><Summary rows={rows} onEdit={edit}/></details></div></>}</aside>
  </div>
  <footer className="site-footer"><ol className="progress" aria-label="Etapas">{['Seu caso','Escopo','Estimativa',...(home?[]:['Contato'])].map((label,i)=><li key={label} className={`${i===stage?'active':''} ${i<stage?'done':''}`} aria-current={i===stage?'step':undefined}><span className="step-number">{i<stage?<Check size={12}/>:i+1}</span><span>{label}</span></li>)}</ol><nav aria-label="Informações"><button onClick={()=>setModal('how')}>Como funciona</button><button onClick={()=>setModal('privacy')}>Privacidade</button><a className="sa-badge" href="https://www.simpleanalytics.com?utm_source=demelloeng.com.br&utm_content=badge" referrerPolicy="origin" target="_blank"><img src="/assets/images/simple-analytics-badge.svg" width="100" height="24" alt="Simple Analytics" loading="lazy"/></a></nav></footer>
- <div className="demo-bar">Estimativa inicial DEMELLO · Cálculo nesta página pela {TABLE_LABEL} · Envio só ao concluir</div>
+ <div className="demo-bar">Estimativa inicial DEMELLO · Envio só ao concluir</div>
  {modal&&<Dialog title={modal==='privacy'?'Privacidade':'Como funciona'} onClose={()=>setModal(null)}>{modal==='privacy'?<><p>As respostas e a estimativa ficam nesta página enquanto você a usa. Quando você conclui e confirma o envio, os dados do seu caso e o contato informado são enviados à DEMELLO Engenharia para análise e eventual retorno. As fotos não são enviadas. A estimativa é um valor inicial calculado nesta página — não é proposta, contrato nem garantia de preço.</p><p>Recomeçar ou atualizar a página apaga o conteúdo. O arquivo baixado é um resumo humano do caso e não inclui fotos nem dados técnicos internos.</p></>:<><p>Escolha uma das {ENTRY_COUNT_WORD} entradas e responda apenas às perguntas do seu percurso. Todas chegam ao mesmo resumo e ao mesmo resultado, e o seu contato só é pedido depois dele.</p><p>O lápis permite revisar respostas. Informações compatíveis podem ser reaproveitadas; áreas e escopos não são transferidos automaticamente entre rotas.</p><p>A estimativa é calculada nesta página pela {TABLE_LABEL}, por serviço, com um motor determinístico — nunca a IA. É uma estimativa inicial, não uma proposta; o escopo final é confirmado pela equipe.</p><p>Depois do resultado, você escolhe entre receber uma proposta ou tirar uma dúvida sobre o escopo. Só então pedimos seu contato.</p></>}</Dialog>}
  </div>;
 }

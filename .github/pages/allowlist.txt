@@ -248,3 +248,6 @@ assets/fonts/barlow-700-latin.woff2
 assets/fonts/barlow-OFL.txt
 assets/images/djalma-marinho-render-1678.webp
 assets/images/djalma-marinho-render-840.webp
+# Calculadora V2 (26/11/2026): fonte Rajdhani OFL para os botões.
+assets/fonts/rajdhani-600-latin.woff2
+assets/fonts/rajdhani-OFL.txt
