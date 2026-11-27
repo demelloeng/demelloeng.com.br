@@ -265,3 +265,7 @@ assets/js/portfolio-vitrine.mjs
 
 # IndexNow (chave pública).
 7d84948f1ba6bfad09da3cb601be8377.txt
+
+# Serviços individuais V03: camada Grafite, vidro e luz.
+assets/css/servicos-pagina-gvl.css
+assets/js/servicos-pagina-gvl.mjs

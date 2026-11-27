@@ -6,3 +6,6 @@
 /tests/visual/test-results/
 /tests/visual/playwright-report/
 /tests/visual/.snapshots/
+
+# Caches dos scripts Python locais
+__pycache__/

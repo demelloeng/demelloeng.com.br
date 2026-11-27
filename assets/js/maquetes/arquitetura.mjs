@@ -7,7 +7,7 @@
 // - o solo sob o lote sai da base dos muros, em degraus (o comportamento da maquete publicada);
 // - dois estilos: Projeto (técnico, com contorno) e Realista (cores de material por aproximação, luz de dia);
 // - a Planta é cortada a 1,50 m do piso térreo, como uma planta baixa.
-import { maquete } from './motor.mjs?v=6';
+import { maquete } from './motor.mjs?v=7';
 import { pecas, juntarVizinhas, separarPlanas, medida, degrausDoSolo } from './casa.mjs?v=1';
 
 const caixa = document.getElementById('caixa');

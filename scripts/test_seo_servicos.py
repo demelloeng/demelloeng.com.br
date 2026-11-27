@@ -1,8 +1,10 @@
 import html
 import json
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -103,3 +105,39 @@ class SeoContracts(unittest.TestCase):
     def test_service_generator_checks_the_pricing_source(self):
         subprocess.run([sys.executable, 'scripts/gerar-paginas-servico-v02.py', '--check'],
                        cwd=ROOT, check=True)
+
+    def test_table_drift_requires_regeneration_even_without_a_price_change(self):
+        with tempfile.TemporaryDirectory(prefix='seo-tabela-') as temp:
+            root = Path(temp)
+            path = 'orcamento-src/src/pricing'
+            for folder in ('scripts', 'docs/arquivo/paginas-servico-v02', 'servicos', path):
+                shutil.copytree(ROOT / folder, root / folder)
+            command = [sys.executable, '-B', 'scripts/gerar-paginas-servico-v02.py']
+            table = root / path / 'pricing-table.v2.json'
+            data = json.loads(table.read_text(encoding='utf-8'))
+            data['note'] += ' Mudança de teste sem impacto nos preços.'
+            table.write_bytes(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+            drift = subprocess.run([*command, '--check'], cwd=root, capture_output=True)
+            self.assertNotEqual(drift.returncode, 0)
+            self.assertIn(b'desatualizado', drift.stderr)
+            subprocess.run([*command, 'gerar', '--todas'], cwd=root, capture_output=True, check=True)
+            subprocess.run([*command, '--check'], cwd=root, capture_output=True, check=True)
+
+    def test_service_visual_uses_the_shared_layers_and_preserves_cta_target(self):
+        for path in (ROOT / 'servicos').glob('*/index.html'):
+            source = path.read_text(encoding='utf-8')
+            if 'servico-pagina-v02' not in source:
+                continue
+            with self.subTest(service=path.parent.name):
+                self.assertRegex(source, r'<body class="[^"]+ gvl">')
+                self.assertIn('home-grafite-vidro-luz.css', source)
+                self.assertIn('home-grafite-vidro-luz.js', source)
+                self.assertIn('servicos-pagina-gvl.css', source)
+                self.assertIn('class="gvl-aurora" aria-hidden="true"', source)
+                hero = re.search(r'class="cta" href="([^"]+)">([^<]+) →', source)
+                final = re.search(r'<a class="cta gvl-neon" href="([^"]+)">'
+                                  r'<span class="gvl-neon-t">([^<]+)</span>'
+                                  r'<span class="gvl-neon-s">([^<]+)</span>', source)
+                self.assertIsNotNone(final)
+                self.assertEqual(hero.groups(), final.groups()[:2])
+                self.assertNotIn('style=', final.group())

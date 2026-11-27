@@ -298,7 +298,7 @@ def gerar(slug, check=False):
         if incendio:
             extra_head += '\n<link rel="stylesheet" href="../../assets/css/maquete-3d.css?v=6">\n<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">'
             extra_head += '\n<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n<link rel="stylesheet" href="../../assets/css/maquete-incendio-v03.css?v=1">\n<script type="importmap">{"imports":{"three":"../../assets/vendor/three/build/three.module.js","three/addons/":"../../assets/vendor/three/examples/jsm/"}}</script>'
-            extra_body = '<script type="module" src="../../assets/js/maquetes/incendio.mjs?v=2"></script>'
+            extra_body = '<script type="module" src="../../assets/js/maquetes/incendio.mjs?v=3"></script>'
         classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 servico-rico-' + copia['perfil']
         # Mantém os nós existentes e seus URLs; atualiza apenas rótulos editoriais.
         graph = json.loads(re.search(r'<script[^>]*>(.*?)</script>', jsonld, re.S).group(1))
@@ -369,13 +369,13 @@ def gerar(slug, check=False):
                           '<link rel="stylesheet" href="../../assets/css/' + ('servico-infra-v02.css?v=1' if infra_pg else 'servico-hidro-v02.css?v=4' if hidro_pg else 'servico-estrutural-v02.css?v=6') + '">\n'
                           + '<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n'
                           + ('<link rel="stylesheet" href="../../assets/css/maquete-terraplanagem-v03.css?v=1">\n' if infra_pg else '') + importmap)
-            extra_body = '<script type="module" src="../../assets/js/' + ('maquetes/terraplanagem.mjs?v=1' if infra_pg else 'maquetes/hidro.mjs?v=3' if hidro_pg else 'maquetes/estrutural.mjs?v=3') + '"></script>'
+            extra_body = '<script type="module" src="../../assets/js/' + ('maquetes/terraplanagem.mjs?v=2' if infra_pg else 'maquetes/hidro.mjs?v=4' if hidro_pg else 'maquetes/estrutural.mjs?v=4') + '"></script>'
             classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02 ' + ('servico-rico-infra' if infra_pg else 'servico-rico-hidro' if hidro_pg else 'servico-rico-estrutural')
         elif arq_pg:
             extra_head = (base_css + '<link rel="stylesheet" href="../../assets/css/maquete-estrutura-3d.css?v=3">\n'
                           '<link rel="stylesheet" href="../../assets/css/maquete-v03.css?v=3">\n'
                           '<link rel="stylesheet" href="../../assets/css/maquete-arquitetura-v03.css?v=1">\n' + importmap)
-            extra_body = '<script type="module" src="../../assets/js/maquetes/arquitetura.mjs?v=1"></script>'
+            extra_body = '<script type="module" src="../../assets/js/maquetes/arquitetura.mjs?v=2"></script>'
             classe_body = 'servicos-v02 servico-pagina-v02 servico-rico-v02'
         else:
             extra_head = base_css + importmap
@@ -387,6 +387,19 @@ def gerar(slug, check=False):
         extra_head = extra_body = ''
         classe_body = 'servicos-v02 servico-pagina-v02'
 
+    preload_capa = ""
+    if rico:
+        aurora = '<div class="gvl-aurora" aria-hidden="true"><span></span><span></span><span></span></div>'
+        principal = principal.replace('data-block="service-hero">', 'data-block="service-hero">' + aurora, 1)
+        principal = re.sub(r'<section class="(?!rico-hero-fundo)([^"]+)"',
+                           lambda m: '<section class="' + m[1] + ('' if 'wrap' in m[1].split() else ' wrap')
+                           + '" data-servico-vidro', principal)
+        principal = principal.replace('class="rico-caixa"', 'class="rico-caixa" data-servico-vidro', 1)
+        capa = re.search(r'<img class="capa" src="([^"]+)"', principal)
+        if capa:
+            preload_capa = f'<link rel="preload" as="image" href="{capa[1]}" fetchpriority="high">\n'
+            principal = principal.replace(capa[0], capa[0] + ' fetchpriority="high"', 1)
+        classe_body += ' gvl'
     jsonld = schema_servico(jsonld, principal, slug)
 
     tabela_sha = hashlib.sha256(MOTOR.read_bytes()).hexdigest()
@@ -406,19 +419,19 @@ def gerar(slug, check=False):
 <meta property="og:locale" content="pt_BR">
 <meta property="og:url" content="https://demelloeng.com.br/servicos/{slug}/">
 <meta property="og:image" content="https://demelloeng.com.br/assets/images/logo.png">
-<link rel="icon" href="../../assets/images/favicon.png">
-<link rel="preload" href="../../assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../../assets/fonts/source-sans-3-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+{preload_capa}<link rel="icon" href="../../assets/images/favicon.png">
 <link rel="stylesheet" href="../../assets/css/servicos-v02.css?v=7">
 <link rel="stylesheet" href="../../assets/css/servico-pagina-v02.css?v=6">
 {extra_head}
+<link rel="stylesheet" href="../../assets/css/home-grafite-vidro-luz.css">
+<link rel="stylesheet" href="../../assets/css/servicos-pagina-gvl.css?v=2">
 {jsonld}
 </head>
 <body class="{classe_body}"><a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <header class="site-header"><div class="wrap header-inner"><a class="logo" href="../../"><img src="../../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="760" height="220"></a><button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="site-nav">Menu</button><nav class="nav" id="site-nav" aria-label="Principal">{nav}<a class="nav-build" href="../../construir-ou-ampliar/">Construir ou ampliar</a><a class="nav-budget" href="../../orcamento/">Calcular estimativa</a><a class="nav-extra nav-whatsapp" href="https://wa.me/5541985124056" target="_blank" rel="noopener">WhatsApp</a></nav></div></header>
 <main id="conteudo">
 {principal}
-<section class="final-cta"><div class="wrap"><h2>{prox['titulo']}</h2>{prox_texto}<a class="cta" href="{cta['href']}">{cta['rotulo']} →</a><p class="micro">{cta['micro']}</p></div></section>
+<section class="final-cta experience-section"><div class="wrap" data-servico-vidro><h2>{prox['titulo']}</h2>{prox_texto}<a class="cta gvl-neon" href="{cta['href']}"><span class="gvl-neon-t">{cta['rotulo']}</span><span class="gvl-neon-s">{cta['micro']}</span></a></div></section>
 </main>
 <footer class="site-footer rodape"><div class="wrap rodape-grade">
 <div class="rodape-marca"><img src="../../assets/images/logo-branca.png" alt="DEMELLO Engenharia" width="230" height="67"><p class="tag">projetos possíveis, planos reais</p>
@@ -432,6 +445,8 @@ def gerar(slug, check=False):
 <script src="../../assets/js/contato-flutuante.js" defer></script>
 <script src="../../assets/js/meta-pixel.js" defer></script>
 <script type="module" src="../../assets/js/site-analytics.mjs"></script>
+<script src="../../assets/js/home-grafite-vidro-luz.js" defer></script>
+<script type="module" src="../../assets/js/servicos-pagina-gvl.mjs"></script>
 {extra_body}
 </body></html>
 '''
