@@ -15,7 +15,7 @@
 // calculadora R4: palco, luz, sombra, oclusão parada, Planta quase ortográfica, corte com tampa, níveis e escala.
 // Three.js e complementos vêm do próprio site (importmap da página); nada é carregado de fora.
 import { fitBox, scaleBar } from './enquadrar.mjs?v=1';
-import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, semMaqueteAtalhos } from './dados.mjs?v=3';
+import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, semMaqueteAtalhos } from './dados.mjs?v=4';
 
 const $ = (id) => document.getElementById(id);
 const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -50,6 +50,7 @@ export async function maquete(cfg) {
   atalhos.forEach((b) => b.addEventListener('click', guardar));
   const semMaquete = () => {   // sem 3D: a caixa vira só a capa com o aviso (nada de botão que não responde)
     semMaqueteAtalhos(atalhos, $('sobre'));
+    caixa.parentElement.querySelector('.maquete-giro')?.remove();
     caixa.classList.add('sem-3d'); for (const a of ['role', 'tabindex', 'aria-label']) caixa.removeAttribute(a);
   };
   await quandoPerto(caixa.parentElement);
@@ -151,7 +152,7 @@ export async function maquete(cfg) {
   let caixaTudo = null; let caixaFoco = null; let niveis = []; let tween = null; let tweenCam = null;
   let sombraSuja = true; let quadro = 0; let realce = null; let escolhido = null; let pendente = null;
   let arrastando = false; let agitado = false; let tAcabamento = 0; let jaTocou = false; let visivel = false;
-  let inicioApresentacao = null; let desfazerIsolamento = null; let isolado = null; let pinos = []; let jaAbriu = false;
+  let desfazerIsolamento = null; let isolado = null; let pinos = []; let jaAbriu = false;
   const medidas = { quadros: 0, ao: 0, ms: [], carga: 0 };
   // o que uma extensão (cfg.extensao) enxerga do motor; os valores que mudam são lidos na hora
   // arestaVariavel (arquitetura): a força do contorno vira um uniforme que a extensão muda sem recompilar
@@ -164,7 +165,26 @@ export async function maquete(cfg) {
     renderer, tampa, luzes: { hemi, sol, contra }, forcaAresta: uForca, get base() { return base; }, aplicar: () => aplicar(),
   };
   $('corte').value = Math.round((1 - fracCorte) * 100);
-  $('girar').setAttribute('aria-pressed', String(girar));   // com movimento reduzido, começa desligado
+  const controleFechado = document.createElement('button');
+  controleFechado.type = 'button';
+  controleFechado.className = 'maquete-giro';
+  controleFechado.setAttribute('aria-label', 'Pausar ou girar a maquete');
+  const controleAberto = $('girar');
+  function refletirGiro() {
+    for (const controle of [controleFechado, controleAberto]) {
+      controle.setAttribute('aria-pressed', String(girar));
+    }
+    controleFechado.textContent = girar ? 'Pausar' : 'Girar';
+  }
+  function definirGiro(ativo) {
+    clearTimeout(ocioso);
+    girar = ativo;
+    controles.autoRotate = girar && !arrastando;
+    refletirGiro();
+    pedir();
+  }
+  refletirGiro();
+  caixa.after(controleFechado);
 
   function limpar() {
     for (const o of [raiz, base]) if (o) { scene.remove(o); o.traverse?.((x) => { x.geometry?.dispose(); x.material?.dispose?.(); }); }
@@ -457,7 +477,7 @@ export async function maquete(cfg) {
     sombraSuja = true; agitado = true; pedir();
   }
   function tocar() {
-    if (!pronto) return; if (!jaTocou) inicioApresentacao = performance.now(); jaTocou = true;
+    if (!pronto) return; jaTocou = true;
     if (reduz) { p = 1; aplicar(); return; }
     const t0 = performance.now(); p = 0; aplicar();
     const ms = (aberta && cfg.montagemAbertaMs) || cfg.montagemMs || MONTAGEM_MS;   // fechada, tudo abaixo de 5 s
@@ -610,7 +630,7 @@ export async function maquete(cfg) {
     const centro = a.clone().add(b).multiplyScalar(0.5); const tam = Math.max(a.distanceTo(b), 0.15);
     const dist = Math.max(tam * 1.6, 0.9) / Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);   // a peça ocupa cerca de 1/3 da altura do quadro
     const dir = camera.position.clone().sub(controles.target).normalize(); dir.y = Math.max(dir.y, 0.35); dir.normalize();
-    girar = false; controles.autoRotate = false; clearTimeout(ocioso); $('girar').setAttribute('aria-pressed', 'false');
+    definirGiro(false);
     controles.minDistance = Math.min(controles.minDistance, dist * 0.3);
     const fim = centro.clone().addScaledVector(dir, dist); const ini = camera.position.clone(); const alvoIni = controles.target.clone();
     if (reduz) { camera.position.copy(fim); controles.target.copy(centro); controles.update(); pedir(); return; }
@@ -680,6 +700,7 @@ export async function maquete(cfg) {
     const r = (origem || caixa).getBoundingClientRect(); const de = { top: `${r.top}px`, left: `${r.left}px`, width: `${r.width}px`, height: `${r.height}px` };
     Object.assign(caixa.style, de); caixa.classList.add('aberta'); document.body.classList.add('travado', 'mq3-aberta');   // mq3-aberta: o botão do WhatsApp sai
     caixa.setAttribute('role', 'dialog'); caixa.setAttribute('aria-modal', 'true'); caixa.setAttribute('aria-label', cfg.rotuloDialogo);
+    controleFechado.hidden = true;
     desfazerIsolamento = isolarFundo(caixa);   // Tab e Shift+Tab ficam dentro da maquete aberta
     $('rotulo').hidden = true; $('explorar').hidden = true; $('ui').hidden = false;
     await animar(de, cheia, 480);
@@ -701,7 +722,8 @@ export async function maquete(cfg) {
     $('rotulo').hidden = false; $('explorar').hidden = false; aberta = false;
     escolherVista('3d', false); verTudo = false; $('ver-tudo')?.setAttribute('aria-pressed', 'false');
     if (desfazerIsolamento) { desfazerIsolamento(); desfazerIsolamento = null; }
-    controles.autoRotate = false; ajustar(); posicionar('3d', 0); focoDeVolta(origemEl, caixa).focus();   // fechada, a caixa fica parada
+    controleFechado.hidden = false;
+    controles.autoRotate = false; ajustar(); posicionar('3d', 0); focoDeVolta(origemEl, caixa).focus();
     if (modeloAtual !== cfg.principal) carregar(cfg.principal);   // a maquete principal volta a ser a do topo
   }
   caixa.addEventListener('click', () => { if (!aberta) abrir(); });
@@ -743,7 +765,9 @@ export async function maquete(cfg) {
   $('por-dentro')?.addEventListener('click', () => escolherVista(cortando ? '3d' : 'corte'));
   $('ver-tudo')?.addEventListener('click', (e) => { verTudo = !verTudo; e.currentTarget.setAttribute('aria-pressed', String(verTudo)); ajustarSombra(); aplicar(); posicionar(vista); });
   $('raiox').addEventListener('click', (e) => { raioX = !raioX; e.currentTarget.setAttribute('aria-pressed', String(raioX)); for (const g of Object.values(G)) g.mat.needsUpdate = true; aplicar(); });
-  $('girar').addEventListener('click', (e) => { clearTimeout(ocioso); girar = !girar; e.currentTarget.setAttribute('aria-pressed', String(girar)); controles.autoRotate = girar; pedir(); });
+  for (const controle of [controleFechado, controleAberto]) {
+    controle.addEventListener('click', () => definirGiro(!girar));
+  }
   $('montar').addEventListener('click', tocar);
   $('construir').addEventListener('input', (e) => { tween = null; p = +e.target.value / 100; aplicar(); });
   $('explodir').addEventListener('input', aplicar);
@@ -807,7 +831,7 @@ export async function maquete(cfg) {
     if (tween) tween(agora); if (tweenCam) tweenCam(agora);
     passar();
     if (cfg.guias) atualizarGuias();
-    if (!aberta) controles.autoRotate = giroFechado(inicioApresentacao == null ? null : agora - inicioApresentacao, { reduz, girar });
+    if (!aberta) controles.autoRotate = giroFechado({ pronto, girar });
     const mexeu = controles.update();
     const dc = camera.position.distanceTo(controles.target); camera.near = Math.max(cfg.pertoMin ?? 0.3, dc * 0.02); camera.far = dc * 4 + 400; camera.updateProjectionMatrix();
     if (sombraSuja) { renderer.shadowMap.needsUpdate = true; sombraSuja = false; }
@@ -836,7 +860,7 @@ export async function maquete(cfg) {
     stats: () => ({ chamadas: renderer.info.render.calls, triangulos: renderer.info.render.triangles, memoria: { ...renderer.info.memory, programas: renderer.info.programs?.length ?? 0 }, tampa: Object.fromEntries(Object.entries(G).map(([k, g]) => [k, g.geoTampa.drawRange.count / 3])), quadros: medidas.quadros, quadrosAO: medidas.ao, msMediana: [...medidas.ms].sort((a, b) => a - b)[medidas.ms.length >> 1] ?? null, carga: medidas.carga, motivo: medidas.motivo, ao: !!composer, p, vista, aberta, modelo: modeloAtual, texelSombra: +((2 * sol.shadow.camera.right) / MAPA).toFixed(4), normalBias: +sol.shadow.normalBias.toFixed(4) }),
     pronto: () => pronto && !tween && !tweenCam, abrir: () => abrir(), vista: (v) => escolherVista(v), niveis: () => niveis.map((n) => ({ ...n, y: +n.y.toFixed(2) })),
     interno: () => ({ renderer, scene, camera }),   // só para medir no navegador de teste
-    girar: (g) => girarAz(g), parar: () => { clearTimeout(ocioso); girar = false; controles.autoRotate = false; },
+    girar: (g) => girarAz(g), parar: () => definirGiro(false),
     andamento: (v) => { tween = null; p = v; aplicar(); },   // capturas de um estado da montagem
     extensao: () => cfg.extensao?.medir?.() ?? null,
   };

@@ -32,6 +32,7 @@ servicos/projeto-gas-glp/index.html
 servicos/projeto-arquitetura/index.html
 servicos/regularizacao/index.html
 servicos/orcamento-tecnico/index.html
+servicos/projeto-terraplanagem/index.html
 servicos/projeto-terraplenagem/index.html
 servicos/compatibilizacao-bim/index.html
 
@@ -261,3 +262,10 @@ assets/js/servicos-vitrine.mjs
 # 26/11/2026 — Portfólio V03: régua e camada de luz.
 assets/css/portfolio-vitrine.css
 assets/js/portfolio-vitrine.mjs
+
+# IndexNow (chave pública).
+7d84948f1ba6bfad09da3cb601be8377.txt
+
+# Serviços individuais V03: camada Grafite, vidro e luz.
+assets/css/servicos-pagina-gvl.css
+assets/js/servicos-pagina-gvl.mjs

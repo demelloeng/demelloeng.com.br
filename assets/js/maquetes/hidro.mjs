@@ -2,7 +2,7 @@
 // Tubos: hidro-casa.glb com as cores do IFC (por vértice, decisão 103). Casa: casa-exemplo.glb, do MESMO projeto,
 // como casca transparente (decisão 160). Nenhum GLB é alterado: o encaixe são três números (hidro/encaixe.py do
 // protótipo; a inversa confere a 4 mm). A espessura dos tubos é ampliada só no visual, e a página avisa.
-import { maquete } from './motor.mjs?v=3';
+import { maquete } from './motor.mjs?v=4';
 
 const caixa = document.getElementById('caixa');
 maquete({

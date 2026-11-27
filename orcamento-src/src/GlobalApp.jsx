@@ -1,6 +1,6 @@
 import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,ArrowRight,Check,CaretDown,PencilSimple,X,DownloadSimple,ClipboardText,Plus} from '@phosphor-icons/react';
-import {REFORMA,nodes,routes,starts,keyOf,titleOf,isProject,valid,toggle,updateAnswer,switchRoute,advance,routeNodes,summary,suggestedServices,safetyHold,missingData,ufs,areaZeroValid,HOURLY} from './journey.mjs';
+import {REFORMA,DISPLAY_LABELS,nodes,routes,starts,keyOf,titleOf,isProject,valid,toggle,updateAnswer,switchRoute,advance,routeNodes,summary,suggestedServices,safetyHold,missingData,ufs,areaZeroValid,HOURLY} from './journey.mjs';
 import {packageForCRMv2} from './payload_v2.mjs';
 import {readAcquisition,withAcquisition} from '../../assets/js/acquisition.mjs';
 import {REASON_ABOVE_AUTOMATIC_LIMIT} from './pricing/engine.mjs';
@@ -204,7 +204,7 @@ export function App(){
    setSendState(r.ok?'sent':'error');
   });
  }
- const node=nodes[id],sqError=answers.request_intent==='scope_question'?scopeQuestionError(answers.scope_question):null,key=keyOf(id),value=answers[key],rows=summary(answers),home=id==='HOME',canContinue=valid(id,answers)&&(id!=='X4'||canSend(answers,mode))&&!id.startsWith('X3'),resultStep=id==='X3A'||id==='X3B',project=isProject(answers),suggesting=id==='CA7'&&answers.services?.includes('Não sei quais preciso');
+ const node=nodes[id],sqError=answers.request_intent==='scope_question'?scopeQuestionError(answers.scope_question):null,key=keyOf(id),value=answers[key],rows=summary(answers).map(row=>row.label==='Serviços também informados'?{...row,value:row.value.split(' · ').map(value=>DISPLAY_LABELS[value]??value).join(' · ')}:row),home=id==='HOME',canContinue=valid(id,answers)&&(id!=='X4'||canSend(answers,mode))&&!id.startsWith('X3'),resultStep=id==='X3A'||id==='X3B',project=isProject(answers),suggesting=id==='CA7'&&answers.services?.includes('Não sei quais preciso');
  nav.current.key=navKey(id,history);
  useEffect(()=>{
   const n=nav.current,{session}=n;

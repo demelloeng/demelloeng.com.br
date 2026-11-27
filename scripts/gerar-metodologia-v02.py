@@ -136,6 +136,8 @@ def agrupados(nodes: list[tuple[str, str, str]], momentos: bool = False) -> str:
 
 def montar(texto_copy: str) -> str:
     meta, b = ler_copy(texto_copy)
+    b[0] = [(kind, text.replace('serviços técnicos de engenharia civil', 'serviços de engenharia civil'), label)
+            for kind, text, label in b[0]]
     title, description = (html.escape(meta[k], quote=True) for k in ('TITULO SEO', 'DESCRICAO SEO'))
     h1 = next(i for i, node in enumerate(b[0]) if node[0] == 'h1')
     hero = '<div>' + render(b[0][:h1 + 1]) + '</div><div class="hero-copy">' + render(b[0][h1 + 1:]) + '</div>'

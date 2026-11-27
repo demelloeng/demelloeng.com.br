@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { bloquearExterno, errosDeConsole } from './comum.mjs';
 
-const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html', 'servicos/projeto-prevencao-incendio/index.html', 'servicos/projeto-terraplenagem/index.html', 'servicos/projeto-arquitetura/index.html'];
+const V03 = ['servicos/projeto-estrutural/index.html', 'servicos/projeto-hidrossanitario/index.html', 'servicos/projeto-prevencao-incendio/index.html', 'servicos/projeto-terraplanagem/index.html', 'servicos/projeto-arquitetura/index.html'];
 
 test.use({ launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] } });
 
@@ -83,7 +83,7 @@ test.describe('incêndio V03: componentes, ficha e marcadores', () => {
 // Terraplanagem V03: o andamento mostra a etapa, a seção e as curvas do natural respondem, e com movimento reduzido
 // a maquete já nasce no terreno terraplanado (sem animação).
 test.describe('terraplanagem V03: andamento, seção e curvas', () => {
-  const PAGINA = '/servicos/projeto-terraplenagem/index.html';
+  const PAGINA = '/servicos/projeto-terraplanagem/index.html';
   const abrir = async (page) => {
     const caixa = page.locator('#caixa');
     await caixa.scrollIntoViewIfNeeded();

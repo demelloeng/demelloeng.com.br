@@ -18,7 +18,7 @@ const PAGES = [
   'index.html', '404.html', 'verificar/index.html', 'privacidade/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
   'avaliar-um-problema/index.html', 'empresa/index.html', 'empresa/trajetoria-do-fundador.html', 'experiencia-tecnica/index.html',
   'metodologia/index.html', 'servicos/index.html',
-  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`),
+  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplanagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`),
 ];
 
 const BADGE_HREF = 'https://www.simpleanalytics.com?utm_source=demelloeng.com.br&amp;utm_content=badge';

@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { fitBox, scaleBar } from '../../assets/js/maquetes/enquadrar.mjs';
 import * as R4 from '../src/maquete5_building.mjs';
-import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, APRESENTACAO_MS, semMaqueteAtalhos } from '../../assets/js/maquetes/dados.mjs';
+import { caixasDosElementos, uniao, niveisPorTopo, alturasHorizontais, nomePavimento, aplicarRotulos, bordasReais, juntarCasca, verticesQueCruzam, isolarFundo, focoDeVolta, giroFechado, semMaqueteAtalhos } from '../../assets/js/maquetes/dados.mjs';
 import { pecas, juntarVizinhas, separarPlanas, medida, degrausDoSolo } from '../../assets/js/maquetes/casa.mjs';
 import { blocoTerreno, curvasDeNivel, linhaDe, fatorLinha, corTerreno, secao, TERRA } from '../../assets/js/maquetes/terreno.mjs';
 
@@ -40,7 +40,7 @@ const PAGINAS_V03 = [
   { pagina: 'servicos/projeto-estrutural/index.html', capa: 'maquete-estrutura-capa.webp', config: 'estrutural' },
   { pagina: 'servicos/projeto-hidrossanitario/index.html', capa: 'maquete-hidro-capa.webp', config: 'hidro' },
   { pagina: 'servicos/projeto-prevencao-incendio/index.html', capa: 'maquete-incendio-capa.webp', config: 'incendio' },
-  { pagina: 'servicos/projeto-terraplenagem/index.html', capa: 'maquete-terraplanagem-capa.webp', config: 'terraplanagem' },
+  { pagina: 'servicos/projeto-terraplanagem/index.html', capa: 'maquete-terraplanagem-capa.webp', config: 'terraplanagem' },
   { pagina: 'servicos/projeto-arquitetura/index.html', capa: 'maquete-arquitetura-capa.webp', config: 'arquitetura' },
 ];
 
@@ -221,9 +221,9 @@ test('capa: imagem da própria maquete, leve, versionada pelo hash e publicada',
     assert.equal(b.subarray(8, 12).toString('latin1'), 'WEBP');
     assert.ok(allow.has(`assets/images/${img}`), `${img} na allowlist`);
     const html = await texto(pg);
-    const m = html.match(new RegExp(String.raw`<img class="capa" src="\.\./\.\./assets/images/${img}\?v=([0-9a-f]{7})" alt="" width="\d+" height="\d+"`));
+    const m = html.match(new RegExp(String.raw`<img class="capa" src="\.\./\.\./assets/images/${img}\?v=([0-9a-f]{7})" fetchpriority="high" alt="" width="\d+" height="\d+"`));
     assert.ok(m, `${pg}: capa dentro da caixa`);
-    assert.doesNotMatch(html.match(/<img class="capa"[^>]*>/)[0], /fetchpriority="low"/, `${pg}: capa na área inicial sem prioridade baixa`);
+    assert.match(html.match(/<img class="capa"[^>]*>/)[0], /fetchpriority="high"/, `${pg}: capa na área inicial sem prioridade baixa`);
     assert.equal(m[1], createHash('sha256').update(b).digest('hex').slice(0, 7));
   }
 });
@@ -259,14 +259,10 @@ test('A01: ao fechar, o foco volta a quem abriu; se ele sumiu ou está escondido
   assert.equal(focoDeVolta(escondido, caixa), caixa);
 });
 
-test('A03: a caixa fechada só gira na apresentação inicial (movimento todo abaixo de 5 s), nunca com movimento reduzido nem depois de parada', () => {
-  assert.ok(APRESENTACAO_MS + 600 <= 5000, 'janela do giro + desaceleração da câmera (~0,5 s medidos) cabem em 5 s');
-  assert.equal(giroFechado(0, { reduz: false, girar: true }), true);
-  assert.equal(giroFechado(APRESENTACAO_MS - 1, { reduz: false, girar: true }), true);
-  assert.equal(giroFechado(APRESENTACAO_MS, { reduz: false, girar: true }), false);
-  assert.equal(giroFechado(1000, { reduz: true, girar: true }), false);
-  assert.equal(giroFechado(1000, { reduz: false, girar: false }), false);
-  assert.equal(giroFechado(null, { reduz: false, girar: true }), false, 'antes da montagem, parada');
+test('Adendo V01: a caixa fechada gira enquanto pronta e ligada, até pausa explícita', () => {
+  assert.equal(giroFechado({ pronto: true, girar: true }), true);
+  assert.equal(giroFechado({ pronto: false, girar: true }), false);
+  assert.equal(giroFechado({ pronto: true, girar: false }), false);
 });
 
 test('A05: sem WebGL, o cartão dá lugar ao texto do mezanino (fechado) e nenhum atalho fica na página', () => {
@@ -449,7 +445,7 @@ test('terraplanagem: página, configuração e ficha (texto da V5, nenhum volume
   for (const [g, els] of Object.entries(meta.grupos)) { assert.equal(els.length, 1, g); assert.equal(els[0][2], 0); assert.equal(els[0][3], malhas[g].idx.length / 3, g); }
   const markup = await texto('docs/arquivo/paginas-servico-v02/maquete-terraplanagem-v03-markup.html');
   for (const t of [markup, JSON.stringify(meta)]) { assert.doesNotMatch(t, /\d\s*m³|\d\s*m3\b/, 'a maquete não mostra volume'); assert.doesNotMatch(t, /terraplenagem/i); }
-  const html = await texto('servicos/projeto-terraplenagem/index.html');
+  const html = await texto('servicos/projeto-terraplanagem/index.html');
   assert.ok(html.includes(markup.trim().split('\n')[1].trim()), 'a página vem do markup V03, pelo gerador');
   assert.doesNotMatch(html, /maquete-terraplanagem-3d\.js/, 'a V5 sai da página');
   for (const f of ['assets/js/maquete-terraplanagem-3d.js', 'assets/models/terraplanagem-djalma.json', 'docs/arquivo/paginas-servico-v02/maquete-terraplanagem-markup.html']) await ler(f);   // ficam para reversão

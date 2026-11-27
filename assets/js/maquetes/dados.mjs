@@ -188,13 +188,9 @@ export function focoDeVolta(origem, padrao) {
   return ok ? origem : padrao;
 }
 
-// Giro da caixa fechada: só na apresentação inicial (a montagem leva 4,2 s; o giro para logo depois), nunca com movimento
-// reduzido nem depois de a pessoa ter parado o giro. A câmera ainda desacelera cerca de 0,5 s ao parar, então o movimento
-// todo fica abaixo de 5 s (WCAG 2.2.2); depois a caixa fica parada. Na tela cheia (aberta por quem clicou), o giro começa ao
-// abrir e para pelo botão "Girar" (em "Mais controles") ou ao arrastar; desligado ali, fica desligado até o fim da visita.
-export const APRESENTACAO_MS = 4300;
-export function giroFechado(desdeInicio, { reduz, girar }) {
-  return !reduz && !!girar && desdeInicio != null && desdeInicio >= 0 && desdeInicio < APRESENTACAO_MS;
+// O estado só muda por ação do visitante. Movimento reduzido começa com girar=false.
+export function giroFechado({ pronto, girar }) {
+  return pronto && girar;
 }
 
 // Sem WebGL: nenhum botão que abra a maquete fica na página. O primeiro atalho dá lugar ao painel de texto da maquete

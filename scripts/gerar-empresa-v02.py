@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 import re
 import runpy
+import runpy
 
 REPO = Path(__file__).resolve().parent.parent
 COPY = REPO / 'docs/arquivo/empresa-v02-20261107/COPY_EMPRESA_V01_20261107.md'
@@ -235,12 +236,21 @@ def identidade(nodes: list[tuple[str, str, str]]) -> str:
     # Logo oficial colorida (PNG com fundo transparente já publicado), uma única vez no corpo da página.
     selo = ('<img class="selo-marca" src="../assets/images/logo.png" alt="Logo da DEMELLO Engenharia" '
             'width="760" height="196" loading="lazy" decoding="async">')
+    portfolio = runpy.run_path(str(REPO / 'scripts/gerar-experiencia-v02.py'))
+    metragem, arts, municipios = portfolio['indicadores_acervo']()
+    acervo = ('<p><a href="../experiencia-tecnica/">Acervo de Marcos de Mello Silva</a>'
+              f': {metragem} em projeto estrutural. São {arts} ARTs, em {municipios} municípios do Paraná e de São Paulo.</p>')
+    primeiro, *restante = tail
     return ('<div class="identidade-topo"><div>' + simples(head) + '</div>' + selo + '</div>\n'
-            '<dl class="dados">\n' + rows + '\n</dl>\n' + simples(tail))
+            '<dl class="dados">\n' + rows + '\n</dl>\n' + simples([primeiro]) + '\n' + acervo + simples(restante))
 
 
 def montar(texto_copy: str) -> str:
     meta, b = ler_copy(texto_copy)
+    meta['DESCRICAO SEO'] = meta['DESCRICAO SEO'].replace(
+        'serviços técnicos de engenharia civil', 'serviços de engenharia civil')
+    b[0] = [(kind, text.replace('serviços técnicos de Engenharia Civil', 'serviços de engenharia civil'), label)
+            for kind, text, label in b[0]]
     title, description = (html.escape(meta[k], quote=True) for k in ('TITULO SEO', 'DESCRICAO SEO'))
     # Hero: sobretítulo e H1 à esquerda; apresentação e botões à direita.
     hero = ('<div>' + simples(b[0][:2]) + '</div><div class="hero-copy">' + simples(b[0][2:4]) + '\n'

@@ -11,6 +11,8 @@ const TABLE_VERSION = 'DEMELLO_V2';
 export const PRICING_RULE = 'STRUCT_COMPOSITE_REFS_R2_FC_MIN';
 const MINIMUM_FEE = dec(TABLE.minimum_fee_brl_by_rule[PRICING_RULE]);
 const FACTOR_MAX_DECIMALS = 4;
+export const FATOR_PISO = '0.60';
+export const FACTOR_BELOW_FLOOR = 'FACTOR_BELOW_FLOOR';
 const STRUCTURAL_SYSTEMS = ['CONCRETO_ARMADO', 'METALICA', 'MADEIRA'];
 const STRUCTURAL_SCOPES = ['FULL', 'FOUNDATION_ONLY'];
 const COMPONENT_STATES = ['DETERMINED', 'NOT_REQUIRED', 'UNDETERMINED'];
@@ -49,7 +51,13 @@ export function parseFactor(value) {
   while (e > 0 && n % 10n === 0n) { n /= 10n; e -= 1; }
   if (n <= 0n) throw new Error('fator deve ser positivo: ' + s);
   if (e > FACTOR_MAX_DECIMALS) throw new Error(`fator com mais de ${FACTOR_MAX_DECIMALS} casas: ${s}`);
-  return { n, e };
+  const factor = { n, e };
+  if (cmp(factor, dec(FATOR_PISO)) < 0) {
+    const error = new RangeError('fator abaixo do piso comercial');
+    error.code = FACTOR_BELOW_FLOOR;
+    throw error;
+  }
+  return factor;
 }
 export function parseFactorConfig(cfg) {
   if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) throw new Error('configuração do fator ausente');

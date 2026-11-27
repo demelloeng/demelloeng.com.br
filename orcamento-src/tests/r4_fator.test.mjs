@@ -80,3 +80,15 @@ test('R4: a expectativa enviada ao Worker leva a revisão; 409 de revisão vira 
   assert.equal(r.factorChanged, true);
   assert.equal(posts, 1, '4xx é final: nenhuma segunda tentativa');
 });
+
+test('o motor recusa fator abaixo do piso e uma revisão remota subpiso restaura o snapshot', async () => {
+  const invalid = { revision: 3, factor_demello: '0.5999' };
+  assert.throws(() => buildPricingPreview(SOBRADO, invalid), /abaixo do piso/);
+  setFactorConfig({ revision: 2, factor_demello: '0.75' });
+  const fetchImpl = async () => jsonResponse(200, { schema: 'PRICING_CONFIG_V1', ...invalid });
+  const result = await refreshFactorConfig({ endpoint: 'https://example.test', fetchImpl });
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, 'FACTOR_BELOW_FLOOR');
+  assert.deepEqual(getFactorConfig(), { revision: 1, factor_demello: '0.60' });
+  assert.equal(pricePreview(SOBRADO).factor_demello, 0.60);
+});

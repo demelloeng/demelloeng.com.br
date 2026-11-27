@@ -1,0 +1,228 @@
+/* Grafite, vidro e luz nas páginas individuais de serviço. */
+body.gvl.servico-pagina-v02 {
+  --f-display: "Host Grotesk", system-ui, sans-serif;
+  --f-text: "Barlow", system-ui, sans-serif;
+  --pale: var(--g-deep);
+  isolation: isolate;
+  font-family: var(--f-text);
+  overflow-wrap: anywhere;
+}
+
+body.gvl.servico-pagina-v02 .skip:focus { color: var(--g-night); }
+body.gvl.servico-pagina-v02 .site-header .nav { background-color: var(--g-graphite); }
+body.gvl.servico-pagina-v02 .site-header .nav-toggle { color: var(--g-ice); }
+body.gvl.servico-pagina-v02 :focus-visible {
+  outline: 3px solid var(--g-light);
+  outline-offset: 3px;
+}
+
+body.gvl.servico-pagina-v02 .rico-hero-fundo {
+  position: relative;
+  isolation: isolate;
+  background: var(--g-graphite);
+  overflow: clip;
+}
+
+body.gvl.servico-pagina-v02 .rico-hero-fundo .gvl-aurora {
+  inset: 0;
+  filter: blur(36px);
+}
+
+body.gvl.servico-pagina-v02 .rico-titulo .crumb {
+  color: var(--g-light);
+  letter-spacing: .04em;
+  text-transform: none;
+}
+
+body.gvl.servico-pagina-v02 .rico-titulo .crumb::before {
+  display: inline-block;
+  vertical-align: .2em;
+  inline-size: 7px;
+  block-size: 7px;
+  margin-inline-end: .65em;
+  border-radius: 50%;
+  background: var(--g-light);
+  box-shadow: 0 0 12px var(--g-light);
+  content: "";
+}
+
+body.gvl.servico-pagina-v02 .rico-titulo h1 {
+  color: var(--g-ice);
+  font-weight: 600;
+  padding-block-end: .1em;
+}
+
+@supports (background-clip: text) {
+  body.gvl.servico-pagina-v02 .rico-titulo h1 {
+    background: linear-gradient(155deg, var(--g-ice) 42%, var(--g-light)) text;
+    color: transparent;
+  }
+}
+
+body.gvl.servico-pagina-v02 [data-servico-vidro] {
+  --blue: var(--g-light);
+  --mx: 20%;
+  --my: 0%;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--glass-line-hi);
+  border-radius: 22px;
+  background: var(--glass), var(--g-graphite);
+  box-shadow: var(--glass-shadow);
+}
+
+body.gvl.servico-pagina-v02 [data-servico-vidro]::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--mx) var(--my), #9cc2ec26, transparent 60%);
+  pointer-events: none;
+  content: "";
+}
+
+body.gvl.servico-pagina-v02 main > [data-servico-vidro] {
+  margin-block: clamp(26px, 4.5vw, 72px);
+  padding: clamp(18px, 4vw, 52px);
+}
+
+body.gvl.servico-pagina-v02 main > [data-servico-vidro] > .wrap { width: 100%; }
+body.gvl.servico-pagina-v02 .rico-caixa[data-servico-vidro] {
+  min-width: 0;
+  padding: clamp(8px, 1.5vw, 18px);
+}
+body.gvl.servico-pagina-v02 .rico-caixa .caixa { --blue: var(--g-blue); }
+body.gvl.servico-pagina-v02 .rico-caixa[data-servico-vidro] :is(.caixa, .glp-visual) { box-shadow: none; }
+body.gvl.servico-pagina-v02 .rico-caixa[data-servico-vidro] .glp-visual { border-radius: 14px; }
+body.gvl.servico-pagina-v02 [data-servico-vidro] :is(h2, h3) { color: var(--g-ice); }
+body.gvl.servico-pagina-v02 [data-servico-vidro] :is(p, li, figcaption) { color: var(--g-muted); }
+
+body.gvl.servico-pagina-v02 [data-servico-vidro] :is(
+  .rico-opcoes li, .rico-cartao, .rico-imprensa a, .reg-grade article, .beneficios > div, .pscip-acao
+) {
+  border-color: var(--glass-line-hi);
+  border-radius: 12px;
+  background: var(--glass), var(--g-night);
+  color: var(--g-ice);
+}
+
+body.gvl.servico-pagina-v02 [data-servico-vidro] .rico-cartao.destaque {
+  border-color: var(--g-light);
+  background: var(--g-blue-dark);
+}
+
+body.gvl.servico-pagina-v02 .rico-bim .entrada rect { fill: var(--g-deep); }
+body.gvl.servico-pagina-v02 .rico-bim .modelo rect { fill: var(--g-blue-dark); }
+body.gvl.servico-pagina-v02 .pscip-etapas li > span { color: var(--g-light); }
+body.gvl.servico-pagina-v02 .rico-etapas .ponto { background: var(--g-deep); }
+body.gvl.servico-pagina-v02 .rico-etapas .dm .ponto { background: var(--g-light); }
+body.gvl.servico-pagina-v02 .rico-sanfona a { text-decoration: underline; }
+
+body.gvl.servico-pagina-v02 .final-cta {
+  margin-block-start: clamp(32px, 6vw, 92px);
+  padding-block: clamp(36px, 6vw, 80px);
+  background: transparent;
+}
+
+body.gvl.servico-pagina-v02 .final-cta > .wrap {
+  padding: clamp(22px, 4vw, 52px);
+}
+
+body.gvl.servico-pagina-v02 .final-cta h2 { font-size: clamp(30px, 4vw, 48px); }
+body.gvl.servico-pagina-v02 .final-cta a.gvl-neon {
+  max-inline-size: 100%;
+  white-space: normal;
+}
+body.gvl.servico-pagina-v02 .final-cta a.gvl-neon:focus-visible { outline-color: var(--g-ice); outline-offset: 6px; }
+
+body.gvl.servico-pagina-v02 .rico-caixa .vaga { position: relative; }
+body.gvl.servico-pagina-v02 .rico-caixa .vaga:not(:has(.caixa.aberta)) { --fonte: var(--f-text); }
+body.gvl.servico-pagina-v02 .maquete-giro {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 12px;
+  inset-inline-end: 12px;
+  min-block-size: 36px;
+  min-inline-size: 68px;
+  padding: 5px 12px;
+  border: 1px solid var(--g-light);
+  border-radius: 8px;
+  background: var(--g-night);
+  color: var(--g-ice);
+  font: 600 16px/1.2 var(--f-text);
+  cursor: pointer;
+}
+
+body.gvl.servico-pagina-v02 .maquete-giro:hover { background: var(--g-deep); }
+body.gvl.servico-pagina-v02 .maquete-giro:focus-visible {
+  outline: 3px solid var(--g-ice);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--g-night);
+}
+body.gvl.servico-pagina-v02 .maquete-giro[hidden] { display: none; }
+@media print {
+  body.gvl.servico-pagina-v02 .maquete-giro { display: none; }
+}
+
+@media (max-width: 600px) {
+  body.gvl.servico-pagina-v02 .glp-visual { padding-inline: 12px; }
+  body.gvl.servico-pagina-v02 .glp-rede span { padding-inline: 6px; }
+  body.gvl.servico-pagina-v02 .glp-rede i { width: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  body.gvl.servico-pagina-v02 [data-servico-vidro]::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.gvl.servico-pagina-v02 .gvl-neon,
+  body.gvl.servico-pagina-v02 .gvl-neon::after { animation: none; transition: none; }
+}
+
+@media (forced-colors: active) {
+  body.gvl.servico-pagina-v02 .rico-titulo h1 { color: CanvasText; }
+  body.gvl.servico-pagina-v02 :focus-visible { outline-color: Highlight; }
+}
+
+@media print {
+  body.gvl.servico-pagina-v02 {
+    color-scheme: light;
+    --ink: #16222e;
+    --muted: #243645;
+    --pale: #f7f9fb;
+    --g-light: #255280;
+    color: var(--ink);
+    background: white;
+  }
+
+  body.gvl.servico-pagina-v02 main :is(.rico-hero-fundo, [data-servico-vidro], .final-cta, a.gvl-neon) {
+    color: var(--ink) !important;
+    border-color: #9eaebb;
+    background: white;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  body.gvl.servico-pagina-v02 main :is(h1, h2, h3, p, li, summary, .gvl-neon-t, .gvl-neon-s) {
+    color: var(--ink);
+    background: none;
+    text-shadow: none;
+  }
+
+  body.gvl.servico-pagina-v02 [data-servico-vidro]::before,
+  body.gvl.servico-pagina-v02 .gvl-neon::before,
+  body.gvl.servico-pagina-v02 .gvl-neon::after { display: none; }
+}
+
+body.gvl.servico-pagina-v02 [data-servico-vidro] .rico-embreve {
+  border-color: var(--glass-line-hi);
+  border-radius: 12px;
+  background: var(--glass), var(--g-night);
+}
+
+@media print {
+  body.gvl.servico-pagina-v02 [data-servico-vidro] .rico-embreve {
+    color: var(--ink);
+    background: white;
+  }
+}

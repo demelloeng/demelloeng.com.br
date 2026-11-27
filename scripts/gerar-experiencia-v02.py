@@ -141,6 +141,20 @@ def icon(discipline):
     return f'<span class="portfolio-icon" data-icon="{ICONS[key]}" aria-hidden="true"></span>'
 
 
+def bloco_indicadores(source):
+    if hashlib.sha256(source.encode()).hexdigest() != COPY_SHA256:
+        raise ValueError('Copy consolidada divergente; revisão editorial não autorizada.')
+    return source.split('### BLOCO 02 — INDICADORES DOCUMENTADOS\n', 1)[1].split('\n### BLOCO 03', 1)[0]
+
+
+def indicadores_acervo():
+    bloco = bloco_indicadores(COPY.read_text(encoding='utf-8'))
+    metragem = re.search(r'^\| Estrutural \| ([\d.,]+ m²) \|$', bloco, flags=re.M).group(1)
+    arts = re.search(r'^\*\*(\d+)\*\*\nARTs documentadas$', bloco, flags=re.M).group(1)
+    municipios = re.search(r'^\*\*(\d+)\*\*\nMunicípios identificados$', bloco, flags=re.M).group(1)
+    return metragem, arts, municipios
+
+
 def ruler(source):
     intro, disclosure = source.split('**Rótulo da expansão:**', 1)
     label, expanded = disclosure.split('**Conteúdo expandido:**', 1)
@@ -254,7 +268,7 @@ def bim(text):
             result.append('<p class="aviso">' + inline(field(body, 'Aviso de abrangência')) + '</p>')
             result.append(render(body[body.index('**Link de apoio:**'):]))
         elif i == 1:
-            result.append('<a class="previa-terreno" href="../servicos/projeto-terraplenagem/"><img src="../assets/images/experiencia-terraplanagem-djalma.png" width="1000" height="625" loading="lazy" alt="' + html.escape(field(body, 'Texto alternativo da imagem'), quote=True) + '"></a>')
+            result.append('<a class="previa-terreno" href="../servicos/projeto-terraplanagem/"><img src="../assets/images/experiencia-terraplanagem-djalma.png" width="1000" height="625" loading="lazy" alt="' + html.escape(field(body, 'Texto alternativo da imagem'), quote=True) + '"></a>')
             result.append('<p class="legenda">' + inline(field(body, 'Legenda da prévia')) + '</p>')
             tail = body[body.index('**Link de acesso:**'):]
             result.append(render(tail))

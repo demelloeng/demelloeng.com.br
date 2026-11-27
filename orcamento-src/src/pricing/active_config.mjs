@@ -6,7 +6,7 @@
 // mudou na área privada, troca a configuração e avisa os assinantes (a tela recalcula). Se a consulta falhar, fica o
 // instantâneo: o Worker confere a revisão na emissão e responde 409 FACTOR_REVISION_MISMATCH se ela estiver velha.
 import SNAPSHOT from './pricing-config.snapshot.json' with { type: 'json' };
-import { buildPricingPreview, parseFactorConfig } from './engine.mjs';
+import { buildPricingPreview, FACTOR_BELOW_FLOOR, parseFactorConfig } from './engine.mjs';
 
 const CONFIG_ROUTE = 'pricing-config';
 const TIMEOUT_MS = 6000;
@@ -56,7 +56,10 @@ export async function refreshFactorConfig({ endpoint, fetchImpl } = {}) {
     const body = await r.json();
     if (!body || body.schema !== 'PRICING_CONFIG_V1') return { ok: false, changed: false, status: r.status };
     return { ok: true, changed: setFactorConfig({ revision: body.revision, factor_demello: body.factor_demello }), status: 200 };
-  } catch {
+  } catch (error) {
+    if (error.code === FACTOR_BELOW_FLOOR) {
+      return { ok: false, changed: setFactorConfig(SNAPSHOT), status: 200, reason: FACTOR_BELOW_FLOOR };
+    }
     return { ok: false, changed: false, status: 0 };
   } finally {
     if (timer) clearTimeout(timer);

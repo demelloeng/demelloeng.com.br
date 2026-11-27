@@ -34,7 +34,7 @@ const H1_NAMES = [
 const SERVICE_SLUGS = [
   'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio',
   'projeto-gas-glp', 'projeto-arquitetura', 'regularizacao',
-  'orcamento-tecnico', 'projeto-terraplenagem', 'compatibilizacao-bim',
+  'orcamento-tecnico', 'projeto-terraplanagem', 'compatibilizacao-bim',
 ];
 
 test('HOME V02: primeira dobra apresenta o que a DEMELLO projeta e leva à estimativa ou ao WhatsApp; sem números de acervo', async () => {
@@ -109,7 +109,7 @@ test('HOME V02: vitrine com imagens das cinco maquetes V03, cada uma levando à 
     ['projeto-estrutural', 'estrutural'],
     ['projeto-hidrossanitario', 'hidro'],
     ['projeto-prevencao-incendio', 'incendio'],
-    ['projeto-terraplenagem', 'terraplanagem'],
+    ['projeto-terraplanagem', 'terraplanagem'],
   ], 'cinco linhas, na ordem aprovada, com imagem da maquete');
   const allowlist = (await read('.github/pages/allowlist.txt')).split(/\r?\n/);
   for (const [, n] of linhas) {
@@ -157,7 +157,7 @@ test('SERVIÇOS V02: nove destinos, copy corrigida, limites e caminhos por situa
   const titles = items.map(item => item.match(/<h3><a[^>]*>([^<]+)<\/a><\/h3>/)?.[1]);
   assert.deepEqual(titles, expected, 'ordem e nomes da copy validada');
   const slugs = items.map(item => item.match(/<h3><a href="\.\/([a-z-]+)\/">/)?.[1]);
-  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-terraplenagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
+  assert.deepEqual(slugs, ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-terraplanagem', 'compatibilizacao-bim', 'regularizacao', 'orcamento-tecnico']);
   assert.match(items[3], /href="\.\/projeto-gas-glp\/"/);
   for (const item of items) {
     assert.match(item, /<p class="service-limit">[^<]+<\/p>/, 'limite técnico disponível sem interação');
@@ -177,6 +177,12 @@ test('SERVIÇOS V02: nove destinos, copy corrigida, limites e caminhos por situa
   assert.ok(html.indexOf('data-block="service-summary"') < html.indexOf('data-block="routes"'));
 });
 
+function serviceCtas(html) {
+  const heroLinks = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)];
+  const finalLinks = [...html.matchAll(/<a class="cta gvl-neon" href="([^"]+)"><span class="gvl-neon-t">([^<]+)<\/span>/g)];
+  return [...heroLinks, ...finalLinks].map((match) => [match[2], match[1]]);
+}
+
 test('nove páginas individuais: H1 único, canonical, hero com CTA específico e seções exigidas', async () => {
   // Páginas V02 (estrutural, hidrossanitário, arquitetura, terraplanagem): CTA `a.cta` com seta; seções do corpo em <h2>; Entregáveis, Como funciona e Escopo e limites
   // ficam em "Detalhes do escopo" (<h3>). A Infraestrutura não leva estimativa (decisão 97) e seu CTA vai a /contato/.
@@ -184,7 +190,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
     'projeto-estrutural': ['Ver a estimativa do meu projeto estrutural', '../../orcamento/?situacao=known&amp;servico=estrutural'],
     'projeto-hidrossanitario': ['Ver a estimativa do meu projeto hidrossanitário', '../../orcamento/?situacao=known&amp;servico=hidrossanitario'],
     'projeto-arquitetura': ['Ver a estimativa do meu projeto de casa', '../../orcamento/?situacao=known&amp;servico=arquitetura'],
-    'projeto-terraplenagem': ['Conversar sobre meu projeto de terraplanagem', '../../contato/'],
+    'projeto-terraplanagem': ['Conversar sobre meu projeto de terraplanagem', '../../contato/'],
   };
   const CTA = {
     'projeto-estrutural': ['Ver uma estimativa para meu projeto', 'known&amp;servico=estrutural'],
@@ -194,7 +200,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
     'projeto-arquitetura': ['Descrever meu projeto de arquitetura', 'known&amp;servico=arquitetura'],
     regularizacao: ['Entender o que meu imóvel precisa', 'regularize'],
     'orcamento-tecnico': ['Descrever o orçamento que preciso', 'known&amp;servico=orcamento-tecnico'],
-    'projeto-terraplenagem': ['Descrever meu projeto de terraplenagem', 'known&amp;servico=terraplenagem'],
+    'projeto-terraplanagem': ['Descrever meu projeto de terraplanagem', 'known&amp;servico=terraplanagem'],
     'compatibilizacao-bim': ['Avaliar a compatibilização do meu projeto', 'known&amp;servico=compatibilizacao'],
   };
   for (const slug of SERVICE_SLUGS) {
@@ -207,7 +213,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       const id=slug==='projeto-gas-glp'?'gas-glp':'incendio';
       const destino=`../../orcamento/?situacao=known&amp;servico=${id}`;
       const rotulo=id==='incendio'?'Ver a estimativa do meu projeto de incêndio':'Ver a estimativa do projeto de gás/GLP';
-      const ctas=[...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].filter(m=>m[1]===destino).map(m=>[m[2],m[1]]);
+      const ctas=serviceCtas(html).filter(([, href]) => href === destino);
       assert.deepEqual(ctas,[[rotulo,destino],[rotulo,destino]],`${slug}: CTA principal no hero e fechamento`);
       const sections=['Para quem é','O que muda para você','Prova técnica','Escopo e limites','Próximo passo',...(id==='gas-glp'?['Entregáveis','Como funciona']:['Do projeto ao AVCB','Rede e central de gás/GLP'])];
       for(const section of sections) assert.ok(html.includes(`<h2>${section}</h2>`),`${slug}: ${section}`);
@@ -221,7 +227,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       assert.match(html, /class="rico-hero-fundo"/, `${slug}: hero no layout rico`);
       const destino = '../../orcamento/?situacao=regularize';
       const rotulo = 'Entender o que meu imóvel precisa';
-      const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
+      const ctas = serviceCtas(html);
       assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
       for (const h2 of ['Qual é a situação do seu imóvel?', 'Quando a pendência aparece', 'Do problema ao documento', 'O que a DEMELLO faz', 'Experiência aplicada: Colégio Djalma Marinho', 'Perguntas frequentes', 'Próximo passo']) {
         assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
@@ -241,7 +247,7 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       assert.match(html, /class="rico-hero-fundo"/, `${slug}: hero no layout rico`);
       const destino = '../../orcamento/?situacao=known&amp;servico=orcamento-tecnico';
       const rotulo = 'Calcular a estimativa deste serviço';
-      const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
+      const ctas = serviceCtas(html);
       assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
       for (const h2 of ['Quando o orçamento faz diferença', 'O que você precisa ter', 'O que você recebe', 'Do projeto à planilha', 'Orçamento ou estimativa?', 'Prova técnica', 'Experiência aplicada: Colégio Djalma Marinho', 'Perguntas frequentes', 'Próximo passo']) {
         assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
@@ -261,13 +267,13 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       assert.match(html, /class="rico-hero-fundo"/, `${slug}: hero no layout rico`);
       const destino = '../../orcamento/?situacao=known&amp;servico=compatibilizacao';
       const rotulo = 'Calcular a estimativa da compatibilização';
-      const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
+      const ctas = serviceCtas(html);
       assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
       for (const h2 of ['Quando vale compatibilizar', 'O que muda para você', 'O que a DEMELLO faz', 'Das interfaces às decisões coordenadas', 'Experiência aplicada: Colégio Djalma Marinho', 'Perguntas frequentes', 'Detalhes do escopo', 'Próximo passo']) {
         assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
       }
       assert.equal([...html.matchAll(/<ol class="rico-etapas bim-etapas"[\s\S]*?<\/ol>/g)].map((m) => (m[0].match(/<li>/g) ?? []).length)[0], 4, `${slug}: quatro etapas`);
-      assert.equal([...html.matchAll(/<details class="rico-pergunta"/g)].length, 5, `${slug}: cinco perguntas`);
+      assert.equal([...html.matchAll(/<details class="rico-pergunta"/g)].length, 6, `${slug}: seis perguntas`);
       const nodes = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap((m) => JSON.parse(m[1])['@graph'] ?? []);
       const services = nodes.filter((n) => n['@type'] === 'Service');
       assert.equal(services.length, 1, `${slug}: somente o próprio Service`);
@@ -278,11 +284,11 @@ test('nove páginas individuais: H1 único, canonical, hero com CTA específico 
       }
     } else if (V02[slug]) {
       const [rotulo, destino] = V02[slug];
-      const ctas = [...html.matchAll(/<a class="cta" href="([^"]+)">([^<]+) →<\/a>/g)].map((m) => [m[2], m[1]]);
+      const ctas = serviceCtas(html);
       assert.deepEqual(ctas, [[rotulo, destino], [rotulo, destino]], `${slug}: o mesmo CTA no hero e no fechamento`);
-      const corpo = slug === 'projeto-terraplenagem' ? ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'] : ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'];
+      const corpo = slug === 'projeto-terraplanagem' ? ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'] : ['Para quem é', 'O que muda para você', 'Prova técnica', 'Próximo passo'];
       for (const h2 of corpo) assert.ok(html.includes(`<h2>${h2}</h2>`), `${slug}: seção "${h2}"`);
-      const detalhes = slug === 'projeto-terraplenagem' ? ['Entregáveis', 'Como o escopo é definido'] : ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites'];
+      const detalhes = slug === 'projeto-terraplanagem' ? ['Entregáveis', 'Como o escopo é definido'] : ['Entregáveis', 'Como funciona', 'Como o escopo é definido', 'Escopo e limites'];
       for (const h3 of detalhes) assert.ok(html.includes(`<h3>${h3}</h3>`), `${slug}: detalhe "${h3}"`);
     } else {
     const [label, query] = CTA[slug];

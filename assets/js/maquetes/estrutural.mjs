@@ -1,6 +1,6 @@
 // Maquete V03 da página de projeto estrutural: só a configuração. O desenho está em motor.mjs.
 // Modelos: os mesmos GLB/JSON publicados (caminhos com ?v no atributo da caixa, gerados pelo gerador da página).
-import { maquete } from './motor.mjs?v=3';
+import { maquete } from './motor.mjs?v=4';
 
 const caixa = document.getElementById('caixa');
 // ordem de montagem; janela = trecho (0 a 1) em que a camada cresce; desloca = quanto sobe ao separar (fração da altura).

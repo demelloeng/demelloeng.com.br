@@ -16,6 +16,7 @@ Allowlist: .github/pages/allowlist.txt  (caminhos exatos + um único "orcamento/
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 import hashlib
 import json
 import os
@@ -37,9 +38,11 @@ FORBIDDEN_EXACT = [
 FORBIDDEN_PREFIX = ["orcamento-src/", ".github/"]
 
 # G5 anchors — bytes that must survive untouched (no rebuild / rename / minify).
-RUNTIME_BUNDLE = "orcamento/assets/index-TMnGqtjS.js"
+RUNTIME_BUNDLE = "orcamento/assets/index-JIoxV7ly.js"
 RUNTIME_CSS = "orcamento/assets/index-CAQjgmps.css"
 
+TERRAPLANAGEM = "servicos/projeto-terraplanagem/index.html"
+TERRAPLANAGEM_BRIDGE = TERRAPLANAGEM.replace("planagem", "plenagem")
 # §8 positive smoke surface (paths, mapped to URLs by the caller).
 SMOKE_POSITIVE = [
     "index.html", "servicos/index.html", "orcamento/index.html",
@@ -51,7 +54,7 @@ SMOKE_POSITIVE = [
     "assets/js/analytics.mjs", "assets/js/site-analytics.mjs", "assets/js/analytics-sink.js", "assets/js/contact-clicks.mjs", "assets/js/contato-flutuante.js",
     "assets/models/guatupe.obj",
     "privacidade/index.html", "404.html", "assets/fonts/montserrat-var-latin.woff2",
-    RUNTIME_BUNDLE, RUNTIME_CSS,
+    RUNTIME_BUNDLE, RUNTIME_CSS, TERRAPLANAGEM, TERRAPLANAGEM_BRIDGE,
 ]
 SMOKE_POSITIVE_URLS = [
     "/", "/servicos/", "/orcamento/", "/empresa/",
@@ -62,7 +65,7 @@ SMOKE_POSITIVE_URLS = [
     "/assets/js/analytics.mjs", "/assets/js/site-analytics.mjs", "/assets/js/analytics-sink.js", "/assets/js/contact-clicks.mjs", "/assets/js/contato-flutuante.js",
     "/assets/models/guatupe.obj",
     "/privacidade/", "/assets/fonts/montserrat-var-latin.woff2",
-    "/orcamento/assets/index-TMnGqtjS.js", "/orcamento/assets/index-CAQjgmps.css",
+    "/orcamento/assets/index-JIoxV7ly.js", "/orcamento/assets/index-CAQjgmps.css",
 ]
 
 # §9 negative smoke — must be 404 after the new pipeline.
@@ -254,11 +257,23 @@ def cmd_smoke_local(a) -> int:
     ):
         if os.path.exists(os.path.join(artifact, rel)):
             fails.append(f"present negative: {rel}")
+    bridge = Path(artifact) / TERRAPLANAGEM_BRIDGE
+    if bridge.is_file():
+        target = "../projeto-terraplanagem/"
+        text = bridge.read_text(encoding="utf-8")
+        expected = (
+            f'<link rel="canonical" href="https://demelloeng.com.br/servicos/projeto-terraplanagem/">',
+            f'<meta http-equiv="refresh" content="0; url={target}">',
+            f'location.replace("{target}")',
+            f'<a href="{target}">',
+        )
+        if not all(part in text for part in expected) or "noindex" in text:
+            fails.append("invalid terraplanagem bridge")
     # /orcamento/ HTML must reference the two runtime assets present in the artifact
     orc = os.path.join(artifact, "orcamento", "index.html")
     if os.path.isfile(orc):
         html = open(orc, encoding="utf-8", errors="replace").read()
-        for asset in ("index-TMnGqtjS.js", "index-CAQjgmps.css"):
+        for asset in ("index-JIoxV7ly.js", "index-CAQjgmps.css"):
             if asset not in html:
                 fails.append(f"/orcamento/index.html does not reference {asset}")
             if not os.path.isfile(os.path.join(artifact, "orcamento", "assets", asset)):

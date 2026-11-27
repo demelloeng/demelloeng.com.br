@@ -27,7 +27,7 @@ test('Contato: CTA inicial abre WhatsApp institucional e telefone da empresa man
 
 const SERVICE_SLUGS = [
   'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'projeto-arquitetura',
-  'regularizacao', 'orcamento-tecnico', 'projeto-terraplenagem', 'compatibilizacao-bim',
+  'regularizacao', 'orcamento-tecnico', 'projeto-terraplanagem', 'compatibilizacao-bim',
 ];
 const COMMERCIAL = [
   'index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html', 'servicos/index.html',
@@ -43,7 +43,7 @@ const PAGINAS_V02 = [
   'metodologia/index.html',
   'avaliar-um-problema/index.html',
   'index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html',
-  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`),
+  ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplanagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`),
 ];
 
 const pageUrl = (file) => `${ORIGIN}/${file.replace(/index\.html$/, '')}`;
@@ -247,7 +247,7 @@ test('rodapé: as seis páginas lançadas (Home, Serviços e as quatro de projet
     const dir = path.posix.dirname(`/${file}`);
     return rodape.replace(/(href|src)="([^"]+)"/g, (m, attr, v) => (/^(?:[a-z]+:|#|\/)/i.test(v) ? m : `${attr}="${path.posix.join(dir, v)}"`));
   };
-  const LANCADAS = ['metodologia/index.html', 'index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html'];
+  const LANCADAS = ['metodologia/index.html', 'index.html', 'servicos/index.html', ...['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplanagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim'].map((s) => `servicos/${s}/index.html`), 'contato/index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html'];
   const referencia = normaliza('servicos/projeto-arquitetura/index.html', HTML['servicos/projeto-arquitetura/index.html']);
   assert.match(referencia, /rodape-grade/, 'a referência é o rodapé rico das páginas de projeto');
   for (const file of LANCADAS) assert.equal(normaliza(file, HTML[file]), referencia, `${file}: rodapé diferente do das páginas de projeto`);
@@ -281,7 +281,7 @@ test('navegação: item atual marcado com aria-current na página correspondente
   assert.deepEqual(current('index.html'), ['Início']);
   assert.deepEqual(current('construir-ou-ampliar/index.html'), ['Construir ou ampliar']);
   // Páginas V02 (Serviços e as quatro de projeto com copy nova): o item atual do menu é "Serviços". As demais seguem com "Outros serviços".
-  const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim']);
+  const V02_SERVICES = new Set(['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplanagem', 'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico', 'compatibilizacao-bim']);
   assert.deepEqual(current('servicos/index.html'), ['Serviços']);
   for (const s of SERVICE_SLUGS) assert.deepEqual(current(`servicos/${s}/index.html`), V02_SERVICES.has(s) ? ['Serviços'] : ['Outros serviços'], s);
   assert.deepEqual(current('experiencia-tecnica/index.html'), ['Portfólio']);
@@ -304,11 +304,11 @@ test('navegação: "Empresa" deixa de ser eixo principal, mas a página e as URL
 
 // ---- conteúdo ---------------------------------------------------------------------------------------------------
 test('promessa de contato: toda página com CTA de estimativa diz que o contato só vem no final', () => {
-  // Infraestrutura (terraplanagem) não leva estimativa (decisão 97): o CTA vai a /contato/ e não há promessa de "contato só no final".
-  for (const file of ['construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html', 'metodologia/index.html', ...SERVICE_SLUGS.filter((s) => s !== 'projeto-terraplenagem').map((s) => `servicos/${s}/index.html`)]) {
+  // A pergunta de preço aponta à calculadora. O CTA principal de Terraplanagem mantém o contato.
+  for (const file of ['construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html', 'metodologia/index.html', ...SERVICE_SLUGS.filter((s) => s !== 'projeto-terraplanagem').map((s) => `servicos/${s}/index.html`)]) {
     assert.match(HTML[file], /Sem compromisso · contato somente no final/, file);
   }
-  assert.doesNotMatch(mainOf(HTML['servicos/projeto-terraplenagem/index.html']), /orcamento\/\?/, 'Infraestrutura não abre a estimativa');
+  assert.match(mainOf(HTML['servicos/projeto-terraplanagem/index.html']), /orcamento\/\?situacao=known&amp;servico=terraplanagem">calculadora/);
   // Home V02: a seção da estimativa foi reescrita; a promessa equivalente é que nada é enviado sem confirmação.
   assert.match(HTML['index.html'], /Nada é enviado sem a sua confirmação\./, 'Home V02: nada é enviado sem confirmação');
   for (const file of COMMERCIAL) assert.doesNotMatch(visibleText(mainOf(HTML[file])), /entraremos em contato (agora|imediatamente)|ligamos em|retornamos em \d/i, file);
@@ -366,7 +366,7 @@ test('experiência V02: portfólio aprovado, atribuição e duas demonstrações
   assert.doesNotMatch(html, /1720261245965|Único case|modelo estrutural original|Modelo 3D.IFC|three-d-stage/);
   assert.equal([...html.matchAll(/data-hidrantes-widget/g)].length, 1);
   assert.match(html, /experiencia-bim.js/);
-  assert.match(html, /href="..\/servicos\/projeto-terraplenagem\/"/);
+  assert.match(html, /href="..\/servicos\/projeto-terraplanagem\/"/);
 });
 
 test('proveniência: a prova técnica continua atribuída ao acervo profissional do responsável técnico, nunca ao CNPJ', () => {
@@ -381,10 +381,10 @@ test('proveniência: a prova técnica continua atribuída ao acervo profissional
     ['servicos/projeto-gas-glp/index.html', /O acervo profissional de Marcos de Mello Silva registra:/],
     ['servicos/projeto-arquitetura/index.html', /O acervo profissional de Marcos de Mello Silva registra 4\.981 m² de experiência técnica arquitetônica documentada/],
     ['servicos/projeto-prevencao-incendio/index.html', /registra 12\.879 m² de experiência técnica em prevenção contra incêndio/],
-    ['servicos/projeto-terraplenagem/index.html', /O acervo profissional de Marcos de Mello Silva registra:/],
-    ['servicos/projeto-terraplenagem/index.html', /4\.959 m³/],
+    ['servicos/projeto-terraplanagem/index.html', /O acervo profissional de Marcos de Mello Silva registra:/],
+    ['servicos/projeto-terraplanagem/index.html', /4\.959 m³/],
   ]) assert.match(HTML[file], re, file);
-  for (const slug of ['projeto-estrutural', 'projeto-hidrossanitario', 'projeto-arquitetura', 'projeto-terraplenagem']) assert.doesNotMatch(HTML[`servicos/${slug}/index.html`], /acervo (?:operacional )?(?:da|do) (?:DEMELLO|CNPJ|empresa)/i, `${slug}: acervo atribuído à empresa`);
+  for (const slug of ['projeto-estrutural', 'projeto-hidrossanitario', 'projeto-arquitetura', 'projeto-terraplanagem']) assert.doesNotMatch(HTML[`servicos/${slug}/index.html`], /acervo (?:operacional )?(?:da|do) (?:DEMELLO|CNPJ|empresa)/i, `${slug}: acervo atribuído à empresa`);
   assert.doesNotMatch(HTML['construir-ou-ampliar/index.html'], /acervo (?:operacional )?(?:da|do) (?:DEMELLO|CNPJ|empresa)/i, 'construir-ou-ampliar: acervo atribuído à empresa');
   // A manchete de imprensa da Arquitetura V11 ("... R$ 8,3 milhões ...") é título de terceiro, com veículo e link; fora desse bloco o valor continua proibido.
   const semImprensa = (html) => html.replace(/<div class="rico-imprensa">[\s\S]*?<\/div>/, '');
@@ -425,7 +425,8 @@ const PAGE_FACTS = {
   // rótulo do botão da maquete ("Construir 100%"): estado da interface, não afirmação
   'servicos/projeto-hidrossanitario/index.html': ['100'],
   // indicador de andamento da maquete ("Andamento 0%"): estado da interface, não afirmação
-  'servicos/projeto-terraplenagem/index.html': ['0'],
+  'servicos/projeto-terraplanagem/index.html': ['0'],
+  'empresa/index.html': ['67.761,78'],
 };
 
 test('nenhum número técnico, case ou credencial novo: todo numeral visível existe no conteúdo original (ou é limite/segurança documentado)', () => {
@@ -433,7 +434,12 @@ test('nenhum número técnico, case ou credencial novo: todo numeral visível ex
   // A política de privacidade traz só referências legais (Lei 13.709/2018, art. 7º, V) e "3D"; ela é conferida em privacy_and_sink.test.mjs.
   for (const file of ALL.filter((f) => f !== 'verificar/index.html' && f !== 'privacidade/index.html')) {
     // "3D" é notação de dimensão, não quantidade
-    for (const m of visibleText(HTML[file]).replace(/\b3D\b/g, ' ').matchAll(/\d[\d.,/-]*\d|\d/g)) if (!NUMERIC_FACTS.has(m[0]) && !(PAGE_FACTS[file] ?? []).includes(m[0])) unexpected.push(`${file}: ${m[0]}`);
+    let text = visibleText(HTML[file]).replace(/\b3D\b/g, ' ');
+    if (SERVICE_SLUGS.some((slug) => file === 'servicos/' + slug + '/index.html')) {
+      // O teste Python de SEO recalcula e confere este preço no HTML e no FAQPage.
+      text = text.replace(/A partir de R\$ \d+,\d{2} por m²/, '');
+    }
+    for (const m of text.matchAll(/\d[\d.,/-]*\d|\d/g)) if (!NUMERIC_FACTS.has(m[0]) && !(PAGE_FACTS[file] ?? []).includes(m[0])) unexpected.push(`${file}: ${m[0]}`);
   }
   assert.deepEqual(unexpected, []);
   // quantidade de disciplinas/etapas descritas por extenso continua batendo com a estrutura
@@ -557,7 +563,10 @@ test('JSON-LD das nove páginas de serviço: atendimento em todo o Brasil (não 
     const html = HTML[`servicos/${slug}/index.html`];
     const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
     const servico = ld['@graph'].find((n) => n['@type'] === 'Service');
-    assert.deepEqual(servico.areaServed, { '@type': 'Country', name: 'Brasil' }, `${slug}: areaServed`);
+    const brasil = { '@type': 'Country', name: 'Brasil' };
+    const local = [{ '@type': 'City', name: 'Curitiba' }, { '@type': 'State', name: 'Paraná' }, brasil];
+    const expected = ['projeto-prevencao-incendio', 'regularizacao'].includes(slug) ? local : brasil;
+    assert.deepEqual(servico.areaServed, expected, `${slug}: areaServed`);
     assert.doesNotMatch(html, /"name":"Paraná"\},\{"@type":"AdministrativeArea"/, `${slug}: cobertura restrita a PR e SP`);
   }
 });

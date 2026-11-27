@@ -8,7 +8,7 @@
 // - na vista Seção, o perfil do natural (tracejado), o do terreno atual e, entre os dois, o corte e o aterro.
 // Os prismas de corte e aterro do GLB ficam entre as duas superfícies (conferido: topo do corte no natural, fundo
 // no final). Nenhum número de volume aparece (decisão de Marcos de 02/11/2026: aterro medido ≠ memorial).
-import { maquete } from './motor.mjs?v=5';
+import { maquete } from './motor.mjs?v=6';
 import { blocoTerreno, curvasDeNivel, linhaDe, fatorLinha, corTerreno, secao, linear, CORTE, ATERRO } from './terreno.mjs?v=1';
 
 const caixa = document.getElementById('caixa');

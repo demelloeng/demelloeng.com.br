@@ -129,7 +129,8 @@ class Compatibilizacao(unittest.TestCase):
         # o que saiu e não volta
         for proibido in ['BIM é a ferramenta', 'terraplenagem', 'constituição', 'salvo quando', '9.451', 'CECM', 'BCF', 'planilha de interferências', 'NOTA EDITORIAL']:
             self.assertNotIn(proibido, texto, proibido)
-        self.assertEqual(sorted(set(re.findall(r'\d[\d.]*', texto))), ['16'], 'o único número visível é o desnível do Djalma')
+        sem_preco = re.sub(r'A partir de R\$ \d+,\d{2} por m²', '', texto)
+        self.assertEqual(sorted(set(re.findall(r'\d[\d.]*', sem_preco))), ['16'])
         svg = re.search(r'<svg class="bim-interfaces".*?</svg>', html, re.S).group(0)
         self.assertNotRegex(re.sub(r'<[^>]+>', ' ', svg), r'\d', 'a composição da abertura não traz números')
 
@@ -138,7 +139,7 @@ class Compatibilizacao(unittest.TestCase):
             target = Path(tmp)
             (target / 'scripts').mkdir()
             (target / 'docs/arquivo').mkdir(parents=True)
-            for script in ['conferir-paginas-servico-v02.py', 'copy_pscip_glp.py']:
+            for script in ['conferir-paginas-servico-v02.py', 'copy_pscip_glp.py', 'seo_servicos.py']:
                 shutil.copyfile(ROOT / 'scripts' / script, target / 'scripts' / script)
             shutil.copytree(DOC, target / 'docs/arquivo/paginas-servico-v02')
             page = target / f'servicos/{SLUG}/index.html'
@@ -156,7 +157,7 @@ class Compatibilizacao(unittest.TestCase):
 
     def test_pipeline_deterministico_e_outras_paginas_intactas(self):
         protegidas = ['index.html', 'contato/index.html', 'construir-ou-ampliar/index.html', 'servicos/index.html'] + [
-            f'servicos/{s}/index.html' for s in ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem',
+            f'servicos/{s}/index.html' for s in ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplanagem',
                                                   'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'orcamento-tecnico']]
         antes = {p: (ROOT / p).read_bytes() for p in protegidas}
         alvos = [f'servicos/{SLUG}/index.html', f'docs/arquivo/paginas-servico-v02/{SLUG}.copy.json']
@@ -164,6 +165,7 @@ class Compatibilizacao(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='bim-test-', dir=ROOT) as tmp:
             target = Path(tmp)
             shutil.copytree(ROOT / 'scripts', target / 'scripts')
+            shutil.copytree(ROOT / 'orcamento-src/src/pricing', target / 'orcamento-src/src/pricing')
             shutil.copytree(DOC, target / 'docs/arquivo/paginas-servico-v02')
             (target / f'servicos/{SLUG}').mkdir(parents=True)
 

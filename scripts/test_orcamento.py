@@ -65,7 +65,8 @@ class Orcamento(unittest.TestCase):
         visivel = re.sub(r'<[^>]+>', ' ', re.sub(r'<svg.*?</svg>', '', principal, flags=re.S))
         self.assertEqual(visivel.count('9.451'), 1, 'a metragem aparece uma vez, no destaque da prova técnica')
         self.assertIn('<div class="rico-numero orc-numero"><b>9.451 m²</b>', html)
-        self.assertEqual(sorted(set(re.findall(r'\d[\d.]*', visivel))), ['9.451'], 'o único número visível é o do acervo')
+        sem_preco = re.sub(r'A partir de R\$ \d+,\d{2} por m²', '', visivel)
+        self.assertEqual(sorted(set(re.findall(r'\d[\d.]*', sem_preco))), ['9.451'])
         svg = re.search(r'<svg class="orc-fluxo".*?</svg>', principal, re.S).group(0)
         self.assertNotRegex(re.sub(r'<[^>]+>', ' ', svg), r'\d', 'a composição da abertura não traz números')
 
@@ -74,7 +75,7 @@ class Orcamento(unittest.TestCase):
             target = Path(tmp)
             (target / 'scripts').mkdir()
             (target / 'docs/arquivo').mkdir(parents=True)
-            for script in ['conferir-paginas-servico-v02.py', 'copy_pscip_glp.py']:
+            for script in ['conferir-paginas-servico-v02.py', 'copy_pscip_glp.py', 'seo_servicos.py']:
                 shutil.copyfile(ROOT / 'scripts' / script, target / 'scripts' / script)
             shutil.copytree(DOC, target / 'docs/arquivo/paginas-servico-v02')
             page = target / f'servicos/{SLUG}/index.html'
@@ -92,7 +93,7 @@ class Orcamento(unittest.TestCase):
 
     def test_pipeline_deterministico_e_outras_paginas_intactas(self):
         protegidas = ['index.html', 'contato/index.html', 'construir-ou-ampliar/index.html', 'servicos/index.html'] + [
-            f'servicos/{s}/index.html' for s in ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplenagem',
+            f'servicos/{s}/index.html' for s in ['projeto-arquitetura', 'projeto-estrutural', 'projeto-hidrossanitario', 'projeto-terraplanagem',
                                                   'projeto-prevencao-incendio', 'projeto-gas-glp', 'regularizacao', 'compatibilizacao-bim']]
         antes = {p: (ROOT / p).read_bytes() for p in protegidas}
         alvos = [f'servicos/{SLUG}/index.html', f'docs/arquivo/paginas-servico-v02/{SLUG}.copy.json']
@@ -100,6 +101,7 @@ class Orcamento(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='orc-test-', dir=ROOT) as tmp:
             target = Path(tmp)
             shutil.copytree(ROOT / 'scripts', target / 'scripts')
+            shutil.copytree(ROOT / 'orcamento-src/src/pricing', target / 'orcamento-src/src/pricing')
             shutil.copytree(DOC, target / 'docs/arquivo/paginas-servico-v02')
             (target / f'servicos/{SLUG}').mkdir(parents=True)
 

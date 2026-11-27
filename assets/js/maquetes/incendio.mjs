@@ -3,7 +3,7 @@
 // (171 componentes; cores por vértice do IFC; decisão 103). A casca é o térreo do colégio lido da planta 1:75 do
 // projeto hidrossanitário (scripts/gerar-casca-luiz-carlos.py), já no sistema do GLB de hidrantes: nenhum encaixe a
 // ajustar aqui. Paredes até o nível da calha (5,53 m, do IFC); muro e calçada só no chão.
-import { maquete } from './motor.mjs?v=4';
+import { maquete } from './motor.mjs?v=5';
 
 const caixa = document.getElementById('caixa');
 // cotas do IfcBuildingStorey do mesmo IFC, no sistema do GLB (o 0 do GLB é o tubo mais fundo: Térreo = 2,25)
