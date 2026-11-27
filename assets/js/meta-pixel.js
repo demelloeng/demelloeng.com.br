@@ -36,9 +36,9 @@
   var MAP = {
     qualified_lead: ['trackCustom', 'QualifiedLead'],
     estimate_completed: ['trackCustom', 'EstimateCompleted'],
-    whatsapp_contact_started: ['track', 'Contact'],
-    phone_contact_started: ['track', 'Contact'],
-    email_contact_started: ['track', 'Contact']
+    whatsapp_contact_started: ['track', 'Contact', 'whatsapp'],
+    phone_contact_started: ['track', 'Contact', 'phone'],
+    email_contact_started: ['track', 'Contact', 'email']
   };
 
   function loadPixel() {
@@ -58,7 +58,10 @@
         if (!trackingAllowed()) return;
         var ev = e && e.detail;
         if (!ev || typeof ev.name !== 'string' || !Object.hasOwn(MAP, ev.name)) return;
-        window.fbq(MAP[ev.name][0], MAP[ev.name][1], safeParams(ev.params));
+        var mapping = MAP[ev.name];
+        var params = safeParams(ev.params);
+        if (mapping[2]) params.channel = mapping[2];
+        window.fbq(mapping[0], mapping[1], params);
       } catch (err) { /* medição nunca derruba a página */ }
     });
   }

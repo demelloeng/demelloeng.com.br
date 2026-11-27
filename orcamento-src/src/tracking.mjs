@@ -26,8 +26,24 @@ export function serviceParams(answers){
 const statusOf=kind=>kind==='calculated'?'calculated':kind==='held'?'safety_hold':'needs_review';
 
 export function createTracking({track=defaultTrack,pageView=defaultPageView}={}){
+ let previewClicks=0;
+ const contactParams=answers=>({route:answers.route,...serviceParams(answers),request_intent:answers.request_intent,step:'X4'});
  return {
   pageView:()=>pageView(),
+  contactReached(answers){
+   return track('estimate_contact_reached',contactParams(answers));
+  },
+  submissionFailed(answers,response,attempt){
+   if(response.ok!==false)return;
+   const status=response.status;
+   const failure_kind=status===0?'network':status>=500?'server':status>=400?'rejected':'unexpected';
+   return track('estimate_submission_failed',{...contactParams(answers),failure_kind},{dedupeKey:attempt});
+  },
+  previewDownload(answers){
+   return track('estimate_preview_download_clicked',{
+    route:answers.route,...serviceParams(answers),step:'X3A',
+   },{dedupeKey:++previewClicks});
+  },
   // Entrada na jornada: só quando a rota já está escolhida e o primeiro nó dela é exibido.
   situation({route,entry,service,step}){
    const fp=`${route}|${entry}|${service??''}`;

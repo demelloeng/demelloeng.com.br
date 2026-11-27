@@ -56,8 +56,8 @@ class SeoContracts(unittest.TestCase):
         canonical = f'<link rel="canonical" href="https://demelloeng.com.br/servicos/{new_slug}/">'
         self.assertIn(canonical, bridge)
         self.assertIn(canonical, current)
-        self.assertIn(f'<meta http-equiv="refresh" content="0; url={target}">', bridge)
-        self.assertIn(f'location.replace("{target}")', bridge)
+        self.assertIn(f'<noscript><meta http-equiv="refresh" content="0; url={target}"></noscript>', bridge)
+        self.assertIn(f'location.replace("{target}" + location.search + location.hash)', bridge)
         self.assertIn(f'<a href="{target}">', bridge)
         self.assertNotIn('noindex', bridge)
 

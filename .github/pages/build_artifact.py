@@ -38,7 +38,7 @@ FORBIDDEN_EXACT = [
 FORBIDDEN_PREFIX = ["orcamento-src/", ".github/"]
 
 # G5 anchors — bytes that must survive untouched (no rebuild / rename / minify).
-RUNTIME_BUNDLE = "orcamento/assets/index-JIoxV7ly.js"
+RUNTIME_BUNDLE = "orcamento/assets/index-BuAu848U.js"
 RUNTIME_CSS = "orcamento/assets/index-CAQjgmps.css"
 
 TERRAPLANAGEM = "servicos/projeto-terraplanagem/index.html"
@@ -65,7 +65,7 @@ SMOKE_POSITIVE_URLS = [
     "/assets/js/analytics.mjs", "/assets/js/site-analytics.mjs", "/assets/js/analytics-sink.js", "/assets/js/contact-clicks.mjs", "/assets/js/contato-flutuante.js",
     "/assets/models/guatupe.obj",
     "/privacidade/", "/assets/fonts/montserrat-var-latin.woff2",
-    "/orcamento/assets/index-JIoxV7ly.js", "/orcamento/assets/index-CAQjgmps.css",
+    "/orcamento/assets/index-BuAu848U.js", "/orcamento/assets/index-CAQjgmps.css",
 ]
 
 # §9 negative smoke — must be 404 after the new pipeline.
@@ -263,8 +263,8 @@ def cmd_smoke_local(a) -> int:
         text = bridge.read_text(encoding="utf-8")
         expected = (
             f'<link rel="canonical" href="https://demelloeng.com.br/servicos/projeto-terraplanagem/">',
-            f'<meta http-equiv="refresh" content="0; url={target}">',
-            f'location.replace("{target}")',
+            f'<noscript><meta http-equiv="refresh" content="0; url={target}"></noscript>',
+            f'location.replace("{target}" + location.search + location.hash)',
             f'<a href="{target}">',
         )
         if not all(part in text for part in expected) or "noindex" in text:
@@ -273,7 +273,7 @@ def cmd_smoke_local(a) -> int:
     orc = os.path.join(artifact, "orcamento", "index.html")
     if os.path.isfile(orc):
         html = open(orc, encoding="utf-8", errors="replace").read()
-        for asset in ("index-JIoxV7ly.js", "index-CAQjgmps.css"):
+        for asset in ("index-BuAu848U.js", "index-CAQjgmps.css"):
             if asset not in html:
                 fails.append(f"/orcamento/index.html does not reference {asset}")
             if not os.path.isfile(os.path.join(artifact, "orcamento", "assets", asset)):

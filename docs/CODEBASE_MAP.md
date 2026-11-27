@@ -551,3 +551,10 @@ A evidência fica em `.git/…/capacidades/evidencias.jsonl` da worktree (não v
 - A FAQ de preço sai de scripts/precos-servicos.mjs, que executa o motor da calculadora com o piso fixo. O gerador expõe os valores e a base em m² e inclui o hash da tabela para o --check detectar alterações.
 - A fonte consolidada do Portfólio alimenta os quantitativos mostrados na página da Empresa via indicadores_acervo().
 - As nove páginas individuais carregam Grafite, vidro e luz da Home e a folha local assets/css/servicos-pagina-gvl.css. O reflexo sob mouse vem do módulo assets/js/servicos-pagina-gvl.mjs. As maquetes mantêm carregamento por proximidade (300 px) e o giro fechado contínuo com pausa compartilhada. O gerador antecipa a capa existente para reduzir o atraso do elemento LCP.
+
+
+## Atribuição de IA e eventos da calculadora
+
+- `assets/js/acquisition.mjs` guarda aliases fechados de UTM de IA. O link para a calculadora conserva o alias original e `withAcquisition` converte o valor só no envio ao Worker. O módulo também concentra os caminhos reconhecidos da calculadora e o mapa de referrers de IA.
+- `site-analytics.mjs` mede a ativação dos links para a calculadora, e `orcamento-src/src/tracking.mjs` mede a chegada ao contato X4, a falha final de envio e o clique de download da prévia. `analytics.mjs` e `analytics-sink.js` validam os parâmetros. O contrato está em [`MENSURACAO_FUNIL.md`](MENSURACAO_FUNIL.md).
+- A ponte de `projeto-terraplenagem` é gerada por `scripts/gerar-paginas-servico-v02.py`. Seu redirecionamento JS mantém query e fragmento. O fallback HTML redireciona ao mesmo slug canônico com endereço fixo.

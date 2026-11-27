@@ -27,6 +27,8 @@
   const PARAMS = Object.freeze({
     page: (v) => typeof v === 'string' && v.length <= 100 && PAGE_RE.test(v),
     origin: (v) => ['direct', 'internal', 'external'].includes(v),
+    ai_source: (v) => ['chatgpt', 'perplexity', 'copilot', 'gemini', 'claude'].includes(v),
+    failure_kind: (v) => ['network', 'rejected', 'server', 'unexpected'].includes(v),
     origin_page: (v) => typeof v === 'string' && v.length <= 100 && PAGE_RE.test(v),
     route: (v) => ROUTES.includes(v),
     entry: (v) => ['deeplink', 'manual', 'redirect'].includes(v),
@@ -48,7 +50,11 @@
   const EVENTS = Object.freeze({
     service_showcase_selected: { emitters: ['site'], params: ['discipline'], stage: 'servicos' },
     service_showcase_model_opened: { emitters: ['site'], params: ['discipline'], stage: 'servicos' },
-    page_view: { emitters: ['site'], params: ['page', 'origin', 'origin_page'], stage: 'visita' },
+    page_view: { emitters: ['site'], params: ['page', 'origin', 'origin_page', 'ai_source'], stage: 'visita' },
+    estimate_link_clicked: { emitters: ['site'], params: ['page'], stage: 'estimativa' },
+    estimate_contact_reached: { emitters: ['site'], params: ['route', 'service', 'service_count', 'request_intent', 'step'], stage: 'pedido' },
+    estimate_submission_failed: { emitters: ['site'], params: ['route', 'service', 'service_count', 'request_intent', 'step', 'failure_kind'], stage: 'pedido' },
+    estimate_preview_download_clicked: { emitters: ['site'], params: ['route', 'service', 'service_count', 'step'], stage: 'estimativa' },
     estimate_started: { emitters: ['site'], params: ['route', 'entry', 'step'], stage: 'estimativa' },
     situation_selected: { emitters: ['site'], params: ['route', 'entry', 'service', 'step'], stage: 'estimativa' },
     estimate_completed: { emitters: ['site'], params: ['route', 'service', 'service_count', 'result_status', 'step'], stage: 'estimativa' },

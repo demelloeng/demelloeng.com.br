@@ -164,7 +164,7 @@ export function Result({answers,isPreview,cupom=COUPON_EMPTY,setCupom=()=>{},onE
      <p className="small-note">Registro verificável em {VERIFY_DISPLAY}. A imagem é uma representação da prévia registrada — não é proposta, contrato nem orçamento de obra.</p>
      {pngState==='generating'&&<p className="small-note">Gerando imagem PNG…</p>}
      {pngState==='error'&&<><p className="field-error" role="alert">A prévia foi emitida. Não foi possível gerar apenas a imagem PNG; o código e o valor registrado continuam disponíveis.</p><button type="button" className="secondary-button" onClick={()=>gerarPng()}>Tentar gerar PNG novamente</button></>}
-     {pngState==='ready'&&pngUrl&&<a className="secondary-button" href={pngUrl} download={`demello-previa-${pRecord.verification_code}.png`}><DownloadSimple size={20}/>Baixar prévia</a>}
+     {pngState==='ready'&&pngUrl&&<a className="secondary-button" href={pngUrl} download={`demello-previa-${pRecord.verification_code}.png`} onClick={()=>tracking.previewDownload(answers)}><DownloadSimple size={20}/>Baixar prévia</a>}
     </div>}
    </div>
   </div>;
@@ -200,6 +200,7 @@ export function App(){
   submitToCRM(withAcquisition(payload,acquisition),hp).then(r=>{
    if(r.ok)tracking.submissionAccepted({answers:payload.answers,sendResult:r,contactValid:valid('X4',{contact:payload.contact}),mode});
    if(attempt!==sendAttempt.current)return;
+   if(!r.ok)tracking.submissionFailed(payload.answers,r,attempt);
    setSendResult({...r,pricingStatus:payload.pricing_preview?.status});
    setSendState(r.ok?'sent':'error');
   });
@@ -238,6 +239,7 @@ export function App(){
  useEffect(()=>{tracking.pageView();},[]);
  useEffect(()=>{const route=answers.route;if(!route||id!==starts[route])return;let rec=entries.current.byRoute[route];if(!rec){const first=entries.current.first;entries.current.first=false;const entry=first&&deeplink&&deeplink.route===route?'deeplink':answers.redirectedFrom?'redirect':'manual';rec={entry,service:entry==='deeplink'?deeplink.analyticsService:null};entries.current.byRoute[route]=rec;}tracking.situation({route,entry:rec.entry,service:rec.service??undefined,step:id});},[id,answers.route]);
  useEffect(()=>{if(id==='X3A'||id==='X3B')tracking.result(answers,id,mode);},[id]);
+ useEffect(()=>{if(id==='X4'&&!submitted)tracking.contactReached(answers);},[id,submitted,answers.route,answers.request_intent]);
  const release=photos=>(photos??[]).forEach(p=>URL.revokeObjectURL(p.url));
  function change(value){if(id==='HOME'&&value!==answers.route)release(answers.photos);setAnswers(a=>updateAnswer(a,id,value));if(id!=='X4')setHistory(h=>h.filter(x=>!x.startsWith('X')));setSubmitted(false);setSendState('idle');setError('');}
  function patch(values){setAnswers(a=>({...a,...values}));setSubmitted(false);setSendState('idle');setError('');}
