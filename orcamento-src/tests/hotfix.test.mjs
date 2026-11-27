@@ -48,7 +48,7 @@ test('shared navigation: commercial order, estimate CTA highlighted, Contato and
     assert.match(nav, /<a class="nav-budget" href="(?:\.\/|(?:\.\.\/)+)orcamento\/"/);
     // O botão novo vem logo antes do orçamento e leva à jornada principal; só as páginas V02 o têm.
     if (['index.html', 'servicos/index.html', 'contato/index.html', 'construir-ou-ampliar/index.html', 'avaliar-um-problema/index.html', 'metodologia/index.html', 'experiencia-tecnica/index.html', 'empresa/index.html'].includes(page)) assert.match(nav, /<a class="nav-build" href="(?:\.\/|(?:\.\.\/)+)construir-ou-ampliar\/"(?: aria-current="page")?>Construir ou ampliar<\/a><a class="nav-budget"/, page);
-    assert.match(nav, /<a class="nav-extra nav-whatsapp" href="https:\/\/wa\.me\/5541985124056"/);
+    assert.match(nav, /<a class="nav-extra nav-whatsapp" href="https:\/\/wa\.me\/554498202552"/);
   }
 });
 
