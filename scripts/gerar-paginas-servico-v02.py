@@ -473,8 +473,8 @@ def gerar_ponte_terraplanagem(check=False):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Projeto de terraplanagem | DEMELLO</title>
 <link rel="canonical" href="https://demelloeng.com.br/servicos/{destino}/">
-<meta http-equiv="refresh" content="0; url={relativo}">
-<script>location.replace("{relativo}");</script>
+<script>location.replace("{relativo}" + location.search + location.hash);</script>
+<noscript><meta http-equiv="refresh" content="0; url={relativo}"></noscript>
 </head><body><p><a href="{relativo}">Abrir a página de projeto de terraplanagem</a></p></body></html>
 """
     gravar_ou_conferir(SERVICOS / legado / 'index.html', ponte, check)

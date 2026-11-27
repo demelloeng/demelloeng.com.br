@@ -231,7 +231,7 @@ test('jornada: pedidos só existem após o envio aceito; um por envio; qualifica
   const proposal = { ...calculable(), request_intent: 'proposal' };
   const ok = { ok: true, status: 202, submission_id: 'sub_1' };
 
-  assert.deepEqual(tracking.submissionAccepted({ answers: proposal, sendResult: { ok: false, status: 500 }, contactValid: true }), [], 'falha de envio não gera evento');
+  assert.deepEqual(tracking.submissionAccepted({ answers: proposal, sendResult: { ok: false, status: 500 }, contactValid: true }), [], 'falha de envio não gera evento de aceite');
   assert.deepEqual(tracking.submissionAccepted({ answers: proposal, sendResult: null, contactValid: true }), []);
   assert.equal(seen.length, 0);
 
@@ -325,7 +325,7 @@ test('a interface só usa a ponte controlada (nenhuma chamada direta ao adaptado
   assert.doesNotMatch(app, /analytics\.mjs/, 'a UI não importa o adaptador diretamente');
   assert.doesNotMatch(app, /\btrack\(/, 'nenhuma chamada track(...) com parâmetros montados na UI');
   const calls = [...app.matchAll(/tracking\.(\w+)\(/g)].map((m) => m[1]).sort();
-  assert.deepEqual(calls, ['pageView', 'result', 'situation', 'submissionAccepted']);
+  assert.deepEqual(calls, ['contactReached', 'pageView', 'previewDownload', 'result', 'situation', 'submissionAccepted', 'submissionFailed']);
 });
 
 // Adaptadores externos: fornecedor e DOM isolados; nenhuma rede real.
@@ -340,7 +340,7 @@ async function adapter(file, {navigator = {}, brokenDOM = false} = {}) {
  sent.length=0;
  return {sent,scripts,window,emit(detail){listeners['demello:analytics']?.({detail});}};
 }
-const values = {discipline:'estrutural',page:'/contato/',origin:'direct',origin_page:'/',route:'build',entry:'manual',service:'estrutural',service_count:1,step:'X3A',result_status:'calculated',request_intent:'proposal',rule:'R1',area_source:'USER_DECLARED',area_band:'60_100',lot_area_band:'200_360',program_size_band:'80_140',estimation_version:'ARQ_EST_V1',placement:'footer'};
+const values = {discipline:'estrutural',page:'/contato/',origin:'direct',origin_page:'/',route:'build',entry:'manual',service:'estrutural',service_count:1,step:'X3A',result_status:'calculated',request_intent:'proposal',rule:'R1',area_source:'USER_DECLARED',area_band:'60_100',lot_area_band:'200_360',program_size_band:'80_140',estimation_version:'ARQ_EST_V1',placement:'footer',failure_kind:'server'};
 
 test('Simple Analytics rejects unknown and back-office events from the public bus',async()=>{
  const a=await adapter('analytics-sink.js');
@@ -374,7 +374,7 @@ test('Meta only sends closed service codes for mapped events and rejects inherit
  a.emit({name:'__proto__',params:{}});
  assert.equal(a.sent.length,1);
  a.emit({name:'whatsapp_contact_started',params:{route:'known',service:'gas_glp'}});
- assert.equal(JSON.stringify(a.sent[1]),JSON.stringify(['track','Contact',{route:'known',service:'gas_glp'}]));
+ assert.equal(JSON.stringify(a.sent[1]),JSON.stringify(['track','Contact',{route:'known',service:'gas_glp',channel:'whatsapp'}]));
 });
 for(const file of ['analytics-sink.js','meta-pixel.js']){
  test(`${file}: a privacy signal enabled after load stops later explicit events`,async()=>{

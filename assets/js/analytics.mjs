@@ -15,6 +15,8 @@
 //   - eventos pós-venda (proposal_sent, contract_won) só podem ser emitidos pelo CRM/back-office,
 //     nunca pelo navegador — o site não conhece esses resultados e não os simula.
 
+import { AI_SOURCES, aiSourceOf } from './acquisition.mjs';
+
 export const SCHEMA = 'demello-analytics/1';
 
 const ROUTES = ['build', 'regularize', 'problem', 'known', 'support'];
@@ -29,6 +31,8 @@ const PAGE_RE = /^\/(?:[a-z0-9-]{1,40}\/){0,3}(?:[a-z0-9-]{1,60}\.html)?$/;
 export const PARAMS = Object.freeze({
   page: (v) => typeof v === 'string' && v.length <= 100 && PAGE_RE.test(v),
   origin: (v) => ['direct', 'internal', 'external'].includes(v),
+  ai_source: (v) => AI_SOURCES.includes(v),
+  failure_kind: (v) => ['network', 'rejected', 'server', 'unexpected'].includes(v),
   origin_page: (v) => typeof v === 'string' && v.length <= 100 && PAGE_RE.test(v),
   route: (v) => ROUTES.includes(v),
   entry: (v) => ['deeplink', 'manual', 'redirect'].includes(v),
@@ -54,7 +58,11 @@ export const PARAMS = Object.freeze({
 export const EVENTS = Object.freeze({
   service_showcase_selected: { emitters: ['site'], params: ['discipline'], stage: 'servicos' },
   service_showcase_model_opened: { emitters: ['site'], params: ['discipline'], stage: 'servicos' },
-  page_view: { emitters: ['site'], params: ['page', 'origin', 'origin_page'], stage: 'visita' },
+  page_view: { emitters: ['site'], params: ['page', 'origin', 'origin_page', 'ai_source'], stage: 'visita' },
+  estimate_link_clicked: { emitters: ['site'], params: ['page'], stage: 'estimativa' },
+  estimate_contact_reached: { emitters: ['site'], params: ['route', 'service', 'service_count', 'request_intent', 'step'], stage: 'pedido' },
+  estimate_submission_failed: { emitters: ['site'], params: ['route', 'service', 'service_count', 'request_intent', 'step', 'failure_kind'], stage: 'pedido' },
+  estimate_preview_download_clicked: { emitters: ['site'], params: ['route', 'service', 'service_count', 'step'], stage: 'estimativa' },
   estimate_started: { emitters: ['site'], params: ['route', 'entry', 'step'], stage: 'estimativa' },
   situation_selected: { emitters: ['site'], params: ['route', 'entry', 'service', 'step'], stage: 'estimativa' },
   estimate_completed: { emitters: ['site'], params: ['route', 'service', 'service_count', 'result_status', 'step'], stage: 'estimativa' },
@@ -192,7 +200,8 @@ export function originOf(referrer, ownOrigin) {
       const page = normalizePath(url.pathname);
       return page ? { origin: 'internal', origin_page: page } : { origin: 'direct' };
     }
-    return { origin: 'external' };
+    const aiSource = ['http:', 'https:'].includes(url.protocol) ? aiSourceOf(url.hostname) : undefined;
+    return { origin: 'external', ...(aiSource ? { ai_source: aiSource } : {}) };
   } catch {
     return { origin: 'direct' };
   }

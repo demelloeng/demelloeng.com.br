@@ -168,3 +168,18 @@ Uma futura integração de Ads só precisa se inscrever no barramento (`window.D
 ### Vitrine de Serviços
 
 `discipline` aceita apenas `arquitetura`, `estrutural`, `hidrossanitario`, `incendio` e `terraplanagem`. Os eventos da vitrine têm somente esse parâmetro. Carga, rolagem nativa e seleção do chip já ativo ficam fora da medição. O destino aplica os controles de DNT/GPC vigentes.
+
+### Atribuição de IA e eventos de interação
+
+- O repasse a `/orcamento/` conserva o `utm_source` recebido. Somente na montagem do envio, aliases exatos `chatgpt.com`, `perplexity.ai`, `copilot.microsoft.com`, `gemini.google.com` e `claude.ai` viram `chatgpt`, `perplexity`, `copilot`, `gemini` e `claude`. Os demais campos continuam com o formato de campanha original.
+- No barramento interno, `page_view` aceita `ai_source` com os cinco códigos acima, quando o domínio do referrer HTTP(S) consta na lista fechada. `chat.openai.com` também identifica ChatGPT. O valor de `origin` continua `external`. O Simple Analytics mede o próprio pageview e não recebe esse `page_view` customizado.
+- O Meta Pixel usa o evento padrão `Contact` com `channel` definido pelo emissor (`whatsapp`, `phone`, `email`). Os outros parâmetros continuam na lista fechada do Pixel.
+
+| Evento | Disparo e deduplicação | Parâmetros |
+|---|---|---|
+| `estimate_contact_reached` | Exibição do formulário X4, uma vez por conjunto de parâmetros por carga. | `route`, `service`, `service_count`, `request_intent`, `step` |
+| `estimate_submission_failed` | Falha final exibida após as tentativas do transporte, uma vez por acionamento do envio. | Os parâmetros da X4 e `failure_kind` (`network`, `server`, `rejected`, `unexpected`). |
+| `estimate_preview_download_clicked` | Cada clique em Baixar prévia com o PNG disponível. Mede a intenção de baixar. | `route`, `service`, `service_count`, `step` |
+| `estimate_link_clicked` | Cada ativação de link interno para a página da calculadora, incluindo os CTAs Calcular estimativa. Pode ocorrer sem que a página de destino carregue. | `page` |
+
+Esses eventos seguem a proteção DNT/GPC do barramento e do Simple Analytics. O Pixel mantém seu conjunto de eventos. As contagens de cliques não equivalem a pessoas únicas.
