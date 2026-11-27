@@ -544,7 +544,7 @@ A evidência fica em `.git/…/capacidades/evidencias.jsonl` da worktree (não v
 
 ## SEO, AEO e GEO V03
 - O sitemap é produzido por scripts/gerar-sitemap.py com datas do histórico Git. Antes de um commit com páginas staged, gere com a opção --staged.
-- Após o deploy, .github/pages/indexnow.py compara os lastmod do sitemap com o anterior. A chave pública da raiz faz parte do artefato Pages.
+- Após o smoke ao vivo, o job indexnow de pages.yml roda .github/pages/indexnow.py, que compara os lastmod do sitemap com o do push anterior e avisa o IndexNow (Bing) só das URLs alteradas. Em workflow_dispatch não há commit anterior e todas as URLs são enviadas. Falha do IndexNow não derruba a publicação. A chave pública da raiz faz parte do artefato Pages.
 - A Home e a Trajetória são fontes HTML diretas. A primeira declara a organização e aponta para a pessoa da segunda. O gerador de serviços monta a FAQ a partir das perguntas renderizadas.
 - orcamento-src/index.html é a fonte da descrição da calculadora e o build Vite atualiza orcamento/index.html.
 - A rota de terraplanagem tem conteúdo no slug atual e uma ponte mínima gerada separadamente no endereço legado. A ponte fica na allowlist, passa no smoke, e não integra o sitemap nem as listas de páginas de conteúdo.
