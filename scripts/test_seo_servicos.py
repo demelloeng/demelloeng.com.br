@@ -158,3 +158,27 @@ class SeoContracts(unittest.TestCase):
                 self.assertIsNotNone(final)
                 self.assertEqual(hero.groups(), final.groups()[:2])
                 self.assertNotIn('style=', final.group())
+
+    def test_indexnow_runs_after_live_smoke_with_the_published_key(self):
+        workflow = (ROOT / '.github/workflows/pages.yml').read_text(encoding='utf-8')
+        job = re.search(r'\n  indexnow:\n(.*?)(?=\n  \S|\Z)', workflow, re.S)
+        self.assertIsNotNone(job, 'pages.yml precisa do job indexnow')
+        self.assertIn('needs: smoke-live', job.group(1))
+        self.assertIn('fetch-depth: 0', job.group(1))
+        key = re.search(r'indexnow\.py "\$\{\{ github\.event\.before \}\}" ([0-9a-f]{32})',
+                        job.group(1)).group(1)
+        self.assertEqual((ROOT / f'{key}.txt').read_text(encoding='utf-8').strip(), key)
+        self.assertIn(f'{key}.txt', (ROOT / '.github/pages/allowlist.txt').read_text(encoding='utf-8'))
+
+    def test_indexnow_sends_only_changed_urls(self):
+        sys.path.insert(0, str(ROOT / '.github/pages'))
+        try:
+            import indexnow
+        finally:
+            sys.path.pop(0)
+        base = 'https://demelloeng.com.br/'
+        data = indexnow.payload({base: '2026-11-27', base + 'a/': '2026-11-01', base + 'b/': '2026-11-27'},
+                                {base: '2026-11-20', base + 'a/': '2026-11-01'}, 'k')
+        self.assertEqual(data['urlList'], [base, base + 'b/'])
+        self.assertEqual(data['keyLocation'], 'https://demelloeng.com.br/k.txt')
+        self.assertEqual(indexnow.previous_dates(''), {})

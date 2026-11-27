@@ -131,3 +131,17 @@ jobs:
           sparse-checkout: .github/pages
       - name: Smoke HTTP live (positivo + negativo)
         run: python3 .github/pages/build_artifact.py smoke-live https://demelloeng.com.br
+
+  # Avisa Bing/IndexNow das páginas cujo lastmod mudou desde o push anterior.
+  # Roda só depois do smoke ao vivo (a chave e as URLs já estão no ar). Falha do
+  # IndexNow não invalida a publicação: o passo fica amarelo no log, o site segue.
+  indexnow:
+    needs: smoke-live
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # indexnow.py lê o sitemap.xml do commit anterior
+      - name: Notificar IndexNow (Bing)
+        continue-on-error: true
+        run: python3 .github/pages/indexnow.py "${{ github.event.before }}" 7d84948f1ba6bfad09da3cb601be8377
