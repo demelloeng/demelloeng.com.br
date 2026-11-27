@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # o sitemap tira o lastmod de cada página do histórico do git
 
       # G1 — testes/guards do site e do /orcamento/ (sem build). O harness JSX usa
       # o Vite já declarado no projeto; instalar exatamente o lockfile antes dos testes.
