@@ -63,12 +63,12 @@ function structural() {
   return {
     terrea: byFoundation(area),
     sobrado: byFoundation(area / 2),
-    piso_motor: byFoundation('0.01'),
   };
 }
 
 const services = Object.fromEntries(Object.entries(disciplines)
   .map(([slug, [service, base, fields]]) => [slug, quote(service, base, fields)]));
 const cases = structural();
-services['projeto-estrutural'] = { ...cases.piso_motor, cenarios: cases };
+// Anúncio = sobrado (fundação em metade da área), menor caso real com o fator 0,60. Decisão de Marcos, 26/11.
+services['projeto-estrutural'] = { ...cases.sobrado, cenarios: cases };
 console.log(JSON.stringify(services, null, 2));

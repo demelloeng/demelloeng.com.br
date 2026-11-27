@@ -22,7 +22,8 @@ def structured_data(path):
 
 
 def text_of(fragment):
-    return ' '.join(html.unescape(re.sub('<[^>]*>', ' ', fragment)).split())
+    text = ' '.join(html.unescape(re.sub('<[^>]*>', ' ', fragment)).split())
+    return re.sub(r' ([,.;:!?])', r'\1', text)
 
 
 class SeoContracts(unittest.TestCase):
@@ -84,6 +85,22 @@ class SeoContracts(unittest.TestCase):
                     self.assertEqual({'@type': 'Country', 'name': 'Brasil'}, actual_area)
         self.assertEqual(count, 9)
 
+    def test_faq_schema_has_no_space_before_punctuation(self):
+        for path in (ROOT / 'servicos').glob('*/index.html'):
+            for node in (n for graph in structured_data(path) for n in graph.get('@graph', [])):
+                if node.get('@type') != 'FAQPage':
+                    continue
+                for item in node['mainEntity']:
+                    with self.subTest(page=path.parent.name, question=item['name']):
+                        self.assertNotRegex(item['acceptedAnswer']['text'], r'\s[,.;:!?]')
+
+    def test_structural_price_is_the_two_storey_case(self):
+        prices = json.loads(subprocess.check_output(['node', 'scripts/precos-servicos.mjs'],
+                                                   cwd=ROOT, encoding='utf-8'))
+        structural = prices['projeto-estrutural']
+        self.assertEqual('12.25', structural['valor'])
+        self.assertEqual(structural['cenarios']['sobrado']['entrada'], structural['entrada'])
+        self.assertNotIn('piso_motor', structural['cenarios'])
 
     def test_prices_come_from_the_current_engine_at_the_floor(self):
         prices = json.loads(subprocess.check_output(['node', 'scripts/precos-servicos.mjs'],

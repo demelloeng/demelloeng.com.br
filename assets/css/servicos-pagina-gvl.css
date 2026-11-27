@@ -1,21 +1,7 @@
 /* Grafite, vidro e luz nas páginas individuais de serviço. */
-@font-face {
-  font-family: "Host Grotesk Portfólio";
-  src: url("../fonts/host-grotesk-var-latin.woff2") format("woff2");
-  font-weight: 300 800;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Barlow Portfólio";
-  src: url("../fonts/barlow-400-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-display: optional;
-}
-
 body.gvl.servico-pagina-v02 {
-  --f-display: "Host Grotesk Portfólio", system-ui, sans-serif;
-  --f-text: "Barlow Portfólio", system-ui, sans-serif;
+  --f-display: "Host Grotesk", system-ui, sans-serif;
+  --f-text: "Barlow", system-ui, sans-serif;
   --pale: var(--g-deep);
   isolation: isolate;
   font-family: var(--f-text);

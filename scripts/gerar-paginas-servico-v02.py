@@ -121,7 +121,9 @@ PERGUNTA = re.compile(
 
 
 def texto_visivel(fragmento):
-    return ' '.join(html.unescape(re.sub('<[^>]*>', ' ', fragmento)).split())
+    texto = ' '.join(html.unescape(re.sub('<[^>]*>', ' ', fragmento)).split())
+    # A tag vira espaço para não grudar palavras; a pontuação logo depois de um link volta a colar.
+    return re.sub(r' ([,.;:!?])', r'\1', texto)
 
 
 def schema_servico(jsonld, principal, slug):
@@ -400,6 +402,10 @@ def gerar(slug, check=False):
             preload_capa = f'<link rel="preload" as="image" href="{capa[1]}" fetchpriority="high">\n'
             principal = principal.replace(capa[0], capa[0] + ' fetchpriority="high"', 1)
         classe_body += ' gvl'
+        # Fontes da primeira tela, como na Home: sem preload o texto do LCP espera HTML, CSS e só então o woff2.
+        preload_capa = ('<link rel="preload" href="../../assets/fonts/host-grotesk-var-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
+                        '<link rel="preload" href="../../assets/fonts/barlow-400-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
+                        + preload_capa)
     jsonld = schema_servico(jsonld, principal, slug)
 
     tabela_sha = hashlib.sha256(MOTOR.read_bytes()).hexdigest()
@@ -423,8 +429,8 @@ def gerar(slug, check=False):
 <link rel="stylesheet" href="../../assets/css/servicos-v02.css?v=7">
 <link rel="stylesheet" href="../../assets/css/servico-pagina-v02.css?v=6">
 {extra_head}
-<link rel="stylesheet" href="../../assets/css/home-grafite-vidro-luz.css">
-<link rel="stylesheet" href="../../assets/css/servicos-pagina-gvl.css?v=2">
+<link rel="stylesheet" href="../../assets/css/home-grafite-vidro-luz.css?v=2">
+<link rel="stylesheet" href="../../assets/css/servicos-pagina-gvl.css?v=3">
 {jsonld}
 </head>
 <body class="{classe_body}"><a class="skip" href="#conteudo">Pular para o conteúdo</a>
