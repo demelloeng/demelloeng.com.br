@@ -189,7 +189,7 @@ test('metadados: title, description, canonical, Open Graph e idioma em todas as 
 test('/orcamento/: título, descrição e canonical da experiência (código-fonte e página publicada)', async () => {
   for (const p of ['orcamento/index.html', 'orcamento-src/index.html']) {
     const html = await read(p);
-    assert.match(html, /<title>Calcular estimativa \| DEMELLO Engenharia<\/title>/, p);
+    assert.match(html, /<title>Estimativa de preço de projetos de engenharia \| DEMELLO<\/title>/, p);
     assert.match(html, /<link rel="canonical" href="https:\/\/demelloeng\.com\.br\/orcamento\/" \/>/, p);
     assert.match(html, /name="robots" content="index, follow"/, p);
     assert.doesNotMatch(html, /Faça seu orçamento|previsão inicial/i, p);
